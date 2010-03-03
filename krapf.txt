@@ -1,1 +1,3 @@
 This is Daniel Krapf's text file for CISC475 lab 3.
+
+This is an update to krapf.txt
