@@ -1,0 +1,2 @@
+This is my text file. This is for lab 3.
+Zach Hine just added this line.
