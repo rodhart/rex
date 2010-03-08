@@ -1,1 +1,1 @@
-This is Greg's version of the first line of code
+This is how we decided to resolve the conflict.
