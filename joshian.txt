@@ -1,1 +1,1 @@
-This is our file to test SVN stuff JOSH'S EDIT IS AT THE END OF THE LINE!
+This is our text file to test SVN updating with more than one user.
