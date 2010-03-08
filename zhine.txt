@@ -1,10 +1,6 @@
 This is my text file. This is for lab 3.
 Zach Hine just added this line.
-
+justin johnson
 Kevin Schultz's addition
-
-
-Zach Hine is the man
-
 
 I am attempting to edit this. This will cause a conflict. Lab 4
