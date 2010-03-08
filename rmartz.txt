@@ -1,9 +1,5 @@
 Hello world! I love SVN. But I want to know Hg.
 
-<<<<<<< .mine
-My name is George, I dont care so much about Hg.
-=======
 My name is definitely not Bill, I care so much about Hg.!!
->>>>>>> .r49
 
 Hey its keith, I think CVS is the best!
