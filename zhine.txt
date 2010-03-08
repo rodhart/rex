@@ -3,4 +3,10 @@ Zach Hine just added this line.
 
 Kevin Schultz's addition
 
-I am attempting to edit this. This will cause a conflict. Lab 4
+<<<<<<< .mine
+
+Zach Hine is the man
+
+
+=======
+I am attempting to edit this. This will cause a conflict. Lab 4>>>>>>> .r44
