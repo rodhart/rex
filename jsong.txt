@@ -1,1 +1,3 @@
+ am editing that line woohoo! This is fun!:w
+:w
 This is a new file. Jack's edit! Woo!
