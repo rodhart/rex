@@ -1,3 +1,17 @@
-Hello world
+Hello world!
+
+
+<<<<<<< .mine
+
+NOTES
+alandweh.txt
+aplatt.txt
+bouchard.txt
+carmona.txt
+kiernan.txt
+rmartz.txt
+verchick.txt
+=======
 New text
 Newer text
+>>>>>>> .r53
