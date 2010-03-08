@@ -2,3 +2,4 @@ This is a new file.
 This is another line in the new file
 Another new line.
 My favorite color is blue.  No, green!
+
