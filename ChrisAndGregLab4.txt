@@ -1,1 +1,2 @@
-This is how we decided to resolve the conflict.
+
+We resolved by fixing the code by hand.
