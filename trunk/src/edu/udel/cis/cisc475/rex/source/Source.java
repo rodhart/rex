@@ -1,11 +1,7 @@
-package edu.udel.cis.cisc475.rex.source.IF;
+//package edu.udel.cis.cisc475.rex.source.IF;
 
 import java.util.*;
 import java.io.*;
-
-/**
- * 
-
 
 /**
  * @version .001 
@@ -19,6 +15,11 @@ public Source(String filename) {
 	 fileName = filename;	
 	 startline = startcolumn = lastline = lastcolumn = 0;	
 	 Text = " ";
+
+	 //array list that will contain all of our lines of imported
+	 //text
+	 text_lines = new ArrayList<String>();
+	 
 }//end of constructor
 
 
@@ -39,8 +40,17 @@ public void setLastColumn(int column) 	{lastcolumn=column;}
 
 
 
-public void write(PrintWriter out) {} 
-public void addText(String text) {}
+public void write(PrintWriter out) {
+	for (int i = 0; i < text_lines.size(); i++)
+		//add code for what we are to do here
+
+// test line
+		out.printf("the %d line of text is \"%s\" \n", i, text_lines.get(i)); 
+} 
+
+public void addText(String text) {
+	 text_lines.add(text);
+}
 
 	
 //private vars
@@ -50,4 +60,6 @@ private int startline;
 private int startcolumn;
 private int lastline;
 private int lastcolumn;	
+		List<String> text_lines;
+
 }//end of class SourceFactoryIF 
