@@ -1,10 +1,9 @@
-//package edu.udel.cis.cisc475.rex.source.IF;
+//package edu.udel.cis.cisc475.rex.source;
 
 import java.util.*;
 import java.io.*;
 
 /**
- * @version .001 
  * @author team 5
  *
  */
@@ -14,7 +13,7 @@ public class Source implements SourceIF {
 public Source(String filename) {
 	 //init private vars
      startline = startcolumn = lastline = lastcolumn = 0;	
-	 Text = " "; //not using this one so far but it is listed in the IF
+	 Text = " "; //using this as temp string buffer only
 
     // create File object based on user input
 	fileName = filename;	
@@ -53,8 +52,8 @@ public Source(String filename) {
          while ( input.hasNext() )
          {
         	 Text = input.nextLine(); // read line
-        	 addText(Text); 
-        	 lastline++;
+        	 addText(Text); //add line to our string array
+        	 lastline++; //increment # of lines
 
          } // end while
 
@@ -95,7 +94,10 @@ public void setLastColumn(int column) 	{lastcolumn=column;}
 public void write(PrintWriter out) {
 	// loop through the array list and dump
 	//	the contents to out
-	for (int i = 0; i < text_lines.size(); i++)
+	// use delimiters set by requesting program of
+	//start and end rows
+	
+	for (int i = startline; (i < text_lines.size()) && (i < lastline); i++)
 		out.printf("%s\n", text_lines.get(i)); 
 } 
 
@@ -109,10 +111,10 @@ public void addText(String text) {
 private String fileName;
 private File name;		//our file object handle
 private Scanner input;  //our input object handle 
-private String Text;	//not using this one so far but it is listed in the IF
+private String Text;	//using this as temp string buffer only
 private int startline;
 private int startcolumn;
 private int lastline;
 private int lastcolumn;	
-		List<String> text_lines;
+		List<String> text_lines; //our string array
 }//end of class SourceFactoryIF 

@@ -1,4 +1,4 @@
-package edu.udel.cis.cisc475.rex.source.IF;
+//package edu.udel.cis.cisc475.rex.source.IF;
 
 import java.util.*;
 import java.io.*;
@@ -11,7 +11,7 @@ import java.io.*;
  * @author team 5
  *
  */
-interface SourceIF {
+public interface SourceIF {
 	String filename();
 	String text();
 	int startLine(); 
