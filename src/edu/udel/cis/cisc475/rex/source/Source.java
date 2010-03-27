@@ -12,14 +12,66 @@ public class Source implements SourceIF {
 
 //constructor
 public Source(String filename) {
-	 fileName = filename;	
-	 startline = startcolumn = lastline = lastcolumn = 0;	
-	 Text = " ";
+	 //init private vars
+     startline = startcolumn = lastline = lastcolumn = 0;	
+	 Text = " "; //not using this one so far but it is listed in the IF
 
-	 //array list that will contain all of our lines of imported
-	 //text
+    // create File object based on user input
+	fileName = filename;	
+    name = new File( fileName );
+	
+
+	 //array list object that will contain all of our lines of imported text
 	 text_lines = new ArrayList<String>();
 	 
+	 
+	 /*	check if the filename is an existing file (need try - catch statements) 
+	  * 
+	 	this instance of source is being used to read in
+	 	an ECF or UEF file and we will 
+	 	read in the whole file 
+	 	into our 
+	 	array list 
+	 	and 
+	 	set the markers along the way	 	
+	 */
+     if ( name.exists() ) // check if exists
+     { if ( name.isFile() ) // check if is file and not directory
+     { 
+
+    	 try
+         {
+            input = new Scanner( name );
+         } // end try
+         catch ( FileNotFoundException fileNotFoundException )
+         {
+            System.err.println( "Error opening file." );
+            System.exit( 1 );
+         } // end catch
+	 
+	 
+         while ( input.hasNext() )
+         {
+        	 Text = input.nextLine(); // read line
+        	 addText(Text); 
+        	 lastline++;
+
+         } // end while
+
+	 
+	 
+     }//end of if ( name.isFile() )
+     else {}
+     	// exception is a directory, not file
+     
+     
+     }//end of if ( name.exists() ) 
+     	else {}
+     	// exception file not found
+     	 
+     
+     
+     
 }//end of constructor
 
 
@@ -39,27 +91,28 @@ public void setLastLine(int line) 		{lastline=line;}
 public void setLastColumn(int column) 	{lastcolumn=column;}
 
 
-
+//output of our array list string object
 public void write(PrintWriter out) {
+	// loop through the array list and dump
+	//	the contents to out
 	for (int i = 0; i < text_lines.size(); i++)
-		//add code for what we are to do here
-
-// test line
-		out.printf("the %d line of text is \"%s\" \n", i, text_lines.get(i)); 
+		out.printf("%s\n", text_lines.get(i)); 
 } 
 
+// add text to our structure
 public void addText(String text) {
-	 text_lines.add(text);
+	text_lines.add(text);
 }
 
 	
 //private vars
 private String fileName;
-private String Text;
+private File name;		//our file object handle
+private Scanner input;  //our input object handle 
+private String Text;	//not using this one so far but it is listed in the IF
 private int startline;
 private int startcolumn;
 private int lastline;
 private int lastcolumn;	
 		List<String> text_lines;
-
 }//end of class SourceFactoryIF 
