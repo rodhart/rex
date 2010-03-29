@@ -14,4 +14,4 @@
 public interface randomizerIF {
      Object[]  choose(int numItems, Object[]  items);
    
-}
+}//end of interface

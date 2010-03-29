@@ -6,7 +6,7 @@
  * @author  team 5
  *
  */
-public class randomizerFacorIF {
+public class randomizerFactoryIF {
 //RandomizerIF newRandomizer(long seed);
 	
 	
