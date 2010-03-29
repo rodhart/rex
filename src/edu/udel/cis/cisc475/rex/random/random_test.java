@@ -1,3 +1,5 @@
+import java.util.*;
+import java.io.*;
 /**
  * 
  */
@@ -13,7 +15,21 @@ public class random_test {
 	 */
 	public static void main(String[] args) {
 
+		//create some objects
+		String a[] = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"};
+		for(int i = 0; i < 3; i++) {
+			System.out.printf("in random test main before call %s\n", a[i]);
+			}
 
-	}
+		Object[] b = new String[10];
+		
+		
+//crash here
+		b =  randomizer.choose (3, a);		
+		
+		for(int i = 0; i < 3; i++) {
+		System.out.printf("in random test main after return from call %s\n", b[i]);
+		}
 
-}
+	}//end of main
+}//end of class
