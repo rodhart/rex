@@ -22,10 +22,12 @@ public class random_test {
 			}
 
 		Object[] b = new String[10];
-		
-		
-//crash here
 		b =  randomizer.choose (3, a);		
+
+		//diff way to do the call
+		//String[] b = new String[10];
+		//b =  (String[]) randomizer.choose (3, a);		
+		
 		
 		for(int i = 0; i < 3; i++) {
 		System.out.printf("in random test main after return from call %s\n", b[i]);
