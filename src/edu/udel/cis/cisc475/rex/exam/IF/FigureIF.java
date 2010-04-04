@@ -11,5 +11,5 @@ public interface FigureIF extends ExamElementIF {
 	 * from \\\begin\{figure\} to \\\end\{figure\}
 	 * @return
 	 */
-	public SourceIF source(); 
+	SourceIF source(); 
 }

@@ -11,13 +11,13 @@ public interface ExamFactoryIF {
 	 * 
 	 * @return
 	 */
-    public ExamIF newMasterExam();
+    ExamIF newMasterExam();
     
     /**
      * 
      * @return
      */
-    public ExamIF newGeneratedExam();
+    ExamIF newGeneratedExam();
     
     /**
      * 
@@ -26,7 +26,7 @@ public interface ExamFactoryIF {
      * @param text
      * @return
      */
-    public BlockIF newBlock(String topic, String label, SourceIF text);
+    BlockIF newBlock(String topic, String label, SourceIF text);
     
     /**
      * 
@@ -34,7 +34,7 @@ public interface ExamFactoryIF {
      * @param text
      * @return
      */
-    public FigureIF newFigure(String label, SourceIF text);
+    FigureIF newFigure(String label, SourceIF text);
     
     /**
      * 
@@ -42,7 +42,7 @@ public interface ExamFactoryIF {
      * @param text
      * @return
      */
-    public AnswerIF newAnswer(boolean correct, SourceIF text);
+    AnswerIF newAnswer(boolean correct, SourceIF text);
     
     /**
      * 
@@ -51,7 +51,7 @@ public interface ExamFactoryIF {
      * @param text
      * @return
      */
-    public FixedAnswerIF newFixedAnswer(boolean correct, int index, SourceIF text);
+    FixedAnswerIF newFixedAnswer(boolean correct, int index, SourceIF text);
     
     /**
      * 
@@ -61,6 +61,6 @@ public interface ExamFactoryIF {
      * @param answers
      * @return
      */
-    public ProblemIF newProblem(String topic, String label, SourceIF question, AnswerIF[] answers);
+    ProblemIF newProblem(String topic, String label, SourceIF question, AnswerIF[] answers);
     
 }

@@ -13,44 +13,44 @@ public interface ExamIF {
 	 * 
 	 * @return
 	 */
-	public boolean isMaster();
+	boolean isMaster();
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public SourceIF preamble();
+	SourceIF preamble();
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public SourceIF frontMatter();
+	SourceIF frontMatter();
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public BlockIF finalBlock();
+	BlockIF finalBlock();
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public int numElements();
+	int numElements();
 	
 	/**
 	 * 
 	 * @param i
 	 * @return
 	 */
-	public ExamElementIF element(int i);
+	ExamElementIF element(int i);
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public Collection<ExamElementIF> elements();
+	Collection<ExamElementIF> elements();
 	
 	/**
 	 * Returns the set of all exam elements.  The iterator from this 
@@ -58,81 +58,81 @@ public interface ExamIF {
 	 * @param label
 	 * @return
 	 */
-	public ExamElementIF elementWithLabel(String label);
+	ExamElementIF elementWithLabel(String label);
 	
 	/**
 	 * 
 	 * @param topic
 	 * @return
 	 */
-	public Collection<ExamElementIF> elementsWithTopic(String topic);
+	Collection<ExamElementIF> elementsWithTopic(String topic);
 	
 	/**
 	 * 
 	 * @param element
 	 * @return
 	 */
-	public Collection<ExamElementIF> elementsUsingElement(ExamElementIF element);
+	Collection<ExamElementIF> elementsUsingElement(ExamElementIF element);
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public Collection<FigureIF> figures();
+	Collection<FigureIF> figures();
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public Collection<String> labels();
+	Collection<String> labels();
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public Collection<String> topics();
+	Collection<String> topics();
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public Collection<ProblemIF> problems();
+	Collection<ProblemIF> problems();
 	
 	/**
 	 * 
 	 * @param topic
 	 * @return
 	 */
-	public Collection<ProblemIF> problemsWithTopic(String topic);
+	Collection<ProblemIF> problemsWithTopic(String topic);
 	
 	/**
 	 * 
 	 * @param preamble
 	 */
-	public void setPreamble(SourceIF preamble);
+	void setPreamble(SourceIF preamble);
 	
 	/**
 	 * 
 	 * @param frontMatter
 	 */
-	public void setFrontMatter(SourceIF frontMatter);
+	void setFrontMatter(SourceIF frontMatter);
 	
 	/**
 	 * 
 	 * @param block
 	 */
-	public void setFinalBlock(BlockIF block);
+	void setFinalBlock(BlockIF block);
 	
 	/**
 	 * 
 	 * @param element
 	 */
-	public void addElementIF(ExamElementIF element);
+	void addElementIF(ExamElementIF element);
 	
 	/**
 	 * 
 	 * @param user
 	 * @param usee
 	 */
-	public void declareUse(ExamElementIF user, ExamElementIF usee);
+	void declareUse(ExamElementIF user, ExamElementIF usee);
 }

@@ -11,11 +11,11 @@ public interface BlockIF extends ExamElementIF {
 	 * 
 	 * @return
 	 */
-	public String topic();
+	String topic();
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public SourceIF source();  /* from \\\begin\{block\} to \\\end\{block\} */
+	SourceIF source();  /* from \\\begin\{block\} to \\\end\{block\} */
 }

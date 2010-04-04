@@ -11,6 +11,6 @@ public interface ExamElementIF {
 	 * 
 	 * @return
 	 */
-	public String label();
+	String label();
 	
 }

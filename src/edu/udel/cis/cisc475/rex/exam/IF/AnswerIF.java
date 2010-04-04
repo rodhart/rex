@@ -11,13 +11,13 @@ public interface AnswerIF {
 	 * 
 	 * @return
 	 */
-	public boolean isCorrect();
+	boolean isCorrect();
 
 	/**
 	 * from \\\answer to end of answer
 	 * 
 	 * @return
 	 */
-	public SourceIF source();
+	SourceIF source();
 
 }
