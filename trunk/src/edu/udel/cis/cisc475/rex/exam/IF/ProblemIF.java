@@ -13,54 +13,54 @@ public interface ProblemIF extends ExamElementIF {
 	 * may be null
 	 * @return
 	 */
-	public BlockIF requiredBlock(); 
+	BlockIF requiredBlock(); 
 
 	/**
 	 * 
 	 * @return
 	 */
-	public Collection<FigureIF> referencedFigures();
+	Collection<FigureIF> referencedFigures();
 
 	/**
 	 * 
 	 * @param points
 	 */
-	public void setPoints(int points);
+	void setPoints(int points);
 
 	/**
 	 * 
 	 * @return
 	 */
-	public String topic();
+	String topic();
 
 	/**
 	 * 
 	 * @return
 	 */
-	public Integer points();
+	Integer points();
 
 	/**
 	 * 
 	 * @return
 	 */
-	public SourceIF question();
+	SourceIF question();
 
 	/**
 	 * 
 	 * @return
 	 */
-	public AnswerIF[] answers();
+	AnswerIF[] answers();
 
 	/**
 	 * 
 	 * @return
 	 */
-	public AnswerIF[] correctAnswers();
+	AnswerIF[] correctAnswers();
 
 	/**
 	 * 
 	 * @return
 	 */
-	public double difficulty();
+	double difficulty();
 	
 }

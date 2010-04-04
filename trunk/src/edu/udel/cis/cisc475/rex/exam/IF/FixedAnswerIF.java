@@ -10,5 +10,5 @@ public interface FixedAnswerIF extends AnswerIF {
 	 * 
 	 * @return
 	 */
-	public int index(); 
+	int index(); 
 }
