@@ -1,4 +1,4 @@
-package edu.udel.cis.cisc475.rex.Key;
+package edu.udel.cis.cisc475.rex.key;
 
 import java.util.*;
 import java.io.*;
