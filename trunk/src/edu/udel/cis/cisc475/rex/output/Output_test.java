@@ -1,4 +1,4 @@
-package IF;
+package edu.udel.cis.cisc475.rex.output;
 
 import java.util.*;
 import java.io.*;
