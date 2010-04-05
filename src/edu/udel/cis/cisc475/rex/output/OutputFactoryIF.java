@@ -1,5 +1,4 @@
-package IF;
-//package edu.udel.cis.cisc475.rex.source.IF;
+package edu.udel.cis.cisc475.rex.output;
 
 /**
  * 
