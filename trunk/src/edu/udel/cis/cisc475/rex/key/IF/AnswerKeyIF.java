@@ -7,7 +7,7 @@ import java.util.Collection;
  * @author team 5
  *
  */
-public interface KeyIF {
+public interface AnswerKeyIF {
 	String version(); 
 	String examName(); 
 	String date(); 
