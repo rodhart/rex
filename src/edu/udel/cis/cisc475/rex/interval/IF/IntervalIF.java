@@ -1,7 +1,4 @@
-//package edu.udel.cis.cisc475.rex.interval;
-
-import java.util.*;
-import java.io.*;
+package edu.udel.cis.cisc475.rex.interval.IF;
 
 /*
  * @author team 2
@@ -10,8 +7,12 @@ import java.io.*;
 
 public interface IntervalIF {
 	Double low();
+
 	boolean strictLow();
+
 	Double high();
+
 	boolean strictHigh();
+
 	boolean contains(double value);
-}//end of interface
+}// end of interface

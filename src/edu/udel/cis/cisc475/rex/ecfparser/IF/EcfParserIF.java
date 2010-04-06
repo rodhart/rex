@@ -1,10 +1,13 @@
-package edu.udel.cis.cisc475.rex.ecfparser.IF
+package edu.udel.cis.cisc475.rex.ecfparser.IF;
 
-import edu.udel.cis.cisc475.rex.source.IF.*;
-import edu.udel.cis.cisc475.rex.config.IF.*;
+import java.io.File;
 
-public interface EcfParser {
-	void setPdfOption( boolean enable );
-	void setSeed( long value );
-	ConfigIF parse( File file );
+import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
+
+public interface EcfParserIF {
+	void setPdfOption(boolean enable);
+
+	void setSeed(long value);
+
+	ConfigIF parse(File file);
 }
