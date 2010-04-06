@@ -4,6 +4,7 @@ package edu.udel.cis.cisc475.rex.random;
 
 import java.util.*;
 import java.io.*;
+import edu.udel.cis.cisc475.rex.random.IF.*;
 /**
  * 
  */
@@ -26,7 +27,7 @@ public class random_test {
 			}
 
 		Object[] b = new String[10];
-		b =  randomizer.choose (3, a);		
+		b =  Randomizer.choose (3, a);		
 
 		//diff way to do the call
 		//String[] b = new String[10];

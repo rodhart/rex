@@ -14,6 +14,6 @@ package edu.udel.cis.cisc475.rex.random.IF;
  * (first filter then select)
  */
 public interface RandomizerIF {
-	Object[] choose(int numItems, Object[] items);
+abstract 	Object[] choose(int numItems, Object[] items);
 
 }// end of interface
