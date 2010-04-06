@@ -15,4 +15,3 @@ public interface IntervalIF {
 	boolean strictHigh();
 	boolean contains(double value);
 }//end of interface
-
