@@ -7,7 +7,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
-import edu.udel.cis.cisc475.rex.source.SourceIF;
+import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /**
  * 
