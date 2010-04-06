@@ -4,6 +4,7 @@ package edu.udel.cis.cisc475.rex.random;
 
 import java.util.*;
 import java.io.*;
+import edu.udel.cis.cisc475.rex.random.IF.*;
 
 /**
  * 
@@ -13,12 +14,11 @@ import java.io.*;
  * @author  team 5
  *
  */
-public class randomizer 
-	//implements randomizerIF 
+public class Randomizer implements RandomizerIF 
 							{
 
 	//constructor
-	public randomizer () {
+	public Randomizer () {
 	
 	}
 	
@@ -27,7 +27,7 @@ public class randomizer
 	 * (let numItems=items.length) 
 	 * permute topics, select problems 
 	 * satisfying constraints (first filter then select) */
-public static Object[] choose (int numItems, Object[] items) {
+public Object[] choose (int numItems, Object[] items) {
 
 	int numObjects = items.length; //total number of array elements
 	int pickedNums[] = new int[numItems];
