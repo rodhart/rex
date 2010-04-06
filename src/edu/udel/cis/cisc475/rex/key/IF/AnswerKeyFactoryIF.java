@@ -11,7 +11,7 @@ package edu.udel.cis.cisc475.rex.key.IF;
 
 // }
 
-public class KeyFactoryIF {
+public class AnswerKeyFactoryIF {
 	/**
 	 * factory method returns an object that implements SourceIF interface.
 	 */

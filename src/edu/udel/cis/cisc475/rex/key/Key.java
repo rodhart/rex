@@ -7,7 +7,7 @@ import java.io.*;
  * @author team 5
  *
  */
-public class Key implements KeyIF {
+public class Key implements AnswerKeyIF {
 
 
 //constructor
