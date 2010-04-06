@@ -1,10 +1,6 @@
-package edu.udel.cis.cisc475.rex.Key;
+package edu.udel.cis.cisc475.rex.key.IF;
 
-import java.util.*;
-import java.io.*;
-
-/**
- * 
+import java.util.Collection;
 
 
 /**

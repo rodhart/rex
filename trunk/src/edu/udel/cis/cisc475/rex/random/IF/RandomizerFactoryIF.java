@@ -1,17 +1,14 @@
-package edu.udel.cis.cisc475.rex.random;
-
-
+package edu.udel.cis.cisc475.rex.random.IF;
 
 /**
  * 
  */
 
 /**
- * @author  team 5
- *
+ * @author team 5
+ * 
  */
-public class RandomizerFactoryIF {
-RandomizerIF newRandomizer(long seed);
-	
-	
+public interface RandomizerFactoryIF {
+	RandomizerIF newRandomizer(long seed);
+
 }

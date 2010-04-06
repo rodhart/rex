@@ -1,5 +1,5 @@
-package edu.udel.cis.cisc475.rex.ecfparser.IF
+package edu.udel.cis.cisc475.rex.ecfparser.IF;
 
-public interface EcfParserFactory {
+public interface EcfParserFactoryIF {
 	EcfParserIF newParser(int numGeneratedExams);
 }

@@ -1,7 +1,4 @@
-//package edu.udel.cis.cisc475.rex.interval;
-
-import java.util.*;
-import java.io.*;
+package edu.udel.cis.cisc475.rex.interval.IF;
 
 /*
  * @author team 2
@@ -9,6 +6,7 @@ import java.io.*;
  */
 
 public interface IntervalFactoryIF {
-    IntervalIF interval(boolean strictLow, Double low, boolean strictHigh, Double high);
-}//end of interface
+	IntervalIF interval(boolean strictLow, Double low, boolean strictHigh,
+			Double high);
+}// end of interface
 

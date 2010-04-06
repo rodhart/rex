@@ -1,7 +1,6 @@
-package edu.udel.cis.cisc475.rex.output;
+package edu.udel.cis.cisc475.rex.output.IF;
 
-import java.util.*;
-import java.io.*;
+import java.io.PrintWriter;
 
 /**
  * 

@@ -1,8 +1,6 @@
-//package edu.udel.cis.cisc475.rex.config;
+package edu.udel.cis.cisc475.rex.config.IF;
 
-import java.util.*;
-import java.io.*;
-
+import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 
 /*
  * @author team 2
@@ -10,9 +8,12 @@ import java.io.*;
  */
 
 public interface GroupConstraintIF {
-    int numProblems();
-    IntervalIF difficultyInterval();
-    String topic();
-    int points();
+	int numProblems();
 
-}//end of interface
+	IntervalIF difficultyInterval();
+
+	String topic();
+
+	int points();
+
+}// end of interface

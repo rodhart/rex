@@ -1,12 +1,11 @@
-package edu.udel.cis.cisc475.rex.output;
+package edu.udel.cis.cisc475.rex.output.IF;
 
 /**
  * 
-
-
-/**
+ /**
+ * 
  * @author team 5
- *
+ * 
  */
 //public interface KeyFactoryIF {
 

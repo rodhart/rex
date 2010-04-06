@@ -1,8 +1,6 @@
-//package edu.udel.cis.cisc475.rex.config;
+package edu.udel.cis.cisc475.rex.config.IF;
 
-import java.util.*;
-import java.io.*;
-
+import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /*
  * @author team 2
@@ -10,6 +8,6 @@ import java.io.*;
  */
 
 public interface ConstraintIF {
-    SourceIF source();
+	SourceIF source();
 
-}//end of interface
+}// end of interface
