@@ -1,8 +1,4 @@
-//package edu.udel.cis.cisc475.rex.config;
-
-import java.util.*;
-import java.io.*;
-
+package edu.udel.cis.cisc475.rex.config.IF;
 
 /*
  * @author team 2
@@ -10,7 +6,8 @@ import java.io.*;
  */
 
 public interface RequiredProblemConstraintIF {
-    String label();
-    int points();
+	String label();
 
-}//end of interface
+	int points();
+
+}// end of interface

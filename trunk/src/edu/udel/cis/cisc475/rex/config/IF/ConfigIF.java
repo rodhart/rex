@@ -1,8 +1,9 @@
-//package edu.udel.cis.cisc475.rex.config;
+package edu.udel.cis.cisc475.rex.config.IF;
 
-import java.util.*;
-import java.io.*;
+import java.util.Collection;
 
+import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
+import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /*
  * @author team 2
@@ -10,17 +11,28 @@ import java.io.*;
  */
 
 public interface ConfigIF {
-       boolean pdfOption();
-       long seed();
-       Collection<ConstraintIF> constraints();
-       String finalBlock();
-       String[] versionStrings;
-       int seed();
-       int numVersions();
-       void setSeed(long value);
-       void setVersionStrings(String[] names);
-       void setFinalBlock(String label);
-       GroupConstraintIF addGroupConstraintIF(String topic, IntervalIF difficulty, int points, SourceIF source);
-       RequriedProblemConstraintIF addRequiredProblemConstraint(String label, int points SourceIF source);
+	boolean pdfOption();
 
-}//end of interface
+	long seed();
+
+	Collection<ConstraintIF> constraints();
+
+	String finalBlock();
+
+	String[] versionStrings();
+
+	int numVersions();
+
+	void setSeed(long value);
+
+	void setVersionStrings(String[] names);
+
+	void setFinalBlock(String label);
+
+	GroupConstraintIF addGroupConstraintIF(String topic, IntervalIF difficulty,
+			int points, SourceIF source);
+
+	RequiredProblemConstraintIF addRequiredProblemConstraint(String label,
+			int points, SourceIF source);
+
+}// end of interface
