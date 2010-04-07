@@ -11,11 +11,11 @@ package edu.udel.cis.cisc475.rex.key.IF;
 
 // }
 
-public class AnswerKeyFactoryIF {
+public interface AnswerKeyFactoryIF {
 	/**
 	 * factory method returns an object that implements SourceIF interface.
 	 */
-	// AnswerKeyIF newAnswerKey(String version, String examName, String date);
+	AnswerKeyIF newAnswerKey(String version, String examName, String date);
 
 	// }//end of newAnswerKey
 }// end of class

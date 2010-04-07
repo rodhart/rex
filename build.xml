@@ -9,7 +9,6 @@
 	<property name="jar-path" value="${basedir}/${jar-name}" />
 	<property name="main-class" value="edu.udel.cis.cisc475.rex.REX" />
 	<property name="64bit" value="-d64" />
-	<property name="exec-name" value="rex" />
 	
 	<property name="test.src.dir" location="${basedir}/test" />
 	<property name="test.bin.dir" location="${basedir}/bin-test" />
@@ -100,9 +99,6 @@
 	</target>
 
 	<target name="test-compile" depends="jar,test-init">
-		<javac destdir="${examples.bin.dir}" debug="true" includeAntRuntime="true" srcdir="${examples.src.dir}">
-			<classpath refid="test.compile.classpath" />
-		</javac>
 		<javac destdir="${test.bin.dir}" debug="true" includeAntRuntime="true" srcdir="${test.src.dir}">
 			<classpath refid="test.compile.classpath" />
 		</javac>
@@ -110,14 +106,11 @@
 
 	<target name="test" depends="test-compile">
 		<junit printsummary="false" errorProperty="test.failed" failureProperty="test.failed" fork="true" timeout="300000">
-			<jvmarg value="-d64" />
 			<jvmarg value="-ea" />
-			<jvmarg value="-Djava.library.path=${jni-lib.dir}" />
 			<classpath refid="test.execute.classpath" />
 			<formatter type="brief" usefile="false" />
 			<formatter type="xml" />
 			<batchtest todir="${junit.data.dir}">
-				<fileset dir="${examples.bin.dir}" includes="**/*Test.class" />
 				<fileset dir="${test.bin.dir}" includes="**/*Test.class" />
 			</batchtest>
 		</junit>
@@ -131,76 +124,10 @@
 	</target>
 
 
-	<!-- Cobertura + JUnit tasks -->
-
-	<target name="cobertura-init" depends="test-compile">
-		<delete dir="${cobertura.dir}" quiet="true" />
-		<delete file="${cob.ser.file}" quiet="true" />
-		<delete file="${cob.log.file}" quiet="true" />
-		<mkdir dir="${cobertura.dir}" />
-		<mkdir dir="${cob.instrumented.dir}" />
-		<mkdir dir="${cob.reports.xml.dir}" />
-		<mkdir dir="${cob.reports.html.dir}" />
-		<mkdir dir="${cob.coverage.xml.dir}" />
-		<mkdir dir="${cob.coverage.html.dir}" />
-	</target>
-
-	<target name="cobertura-instrument" depends="cobertura-init">
-		<cobertura-instrument todir="${cob.instrumented.dir}">
-			<ignore regex="org.apache.log4j.*" />
-			<fileset dir="${basedir}">
-				<include name="${jar-name}" />
-			</fileset>
-		</cobertura-instrument>
-	</target>
-
-	<path id="instrumented.classpath">
-		<pathelement location="${cob.instrumented.dir}/${jar-name}" />
-		<pathelement location="${examples.bin.dir}" />
-		<pathelement location="${test.bin.dir}" />
-		<pathelement location="${antlr3-lib.name}" />
-		<pathelement location="${cvc3-lib.name}" />
-		<pathelement location="${junit.name}" />
-	</path>
-
-	<target name="cobertura-test" depends="cobertura-instrument">
-		<junit fork="yes" dir="${basedir}" failureProperty="test.failed">
-			<jvmarg value="-d64" />
-			<jvmarg value="-Djava.library.path=${jni-lib.dir}" />
-			<jvmarg value="-ea" />
-			<classpath refid="instrumented.classpath" />
-			<classpath refid="cobertura.classpath" />
-			<formatter type="xml" />
-			<batchtest todir="${cob.reports.xml.dir}">
-				<fileset dir="${examples.bin.dir}" includes="**/*Test.class" />
-				<fileset dir="${test.bin.dir}" includes="**/*Test.class" />
-			</batchtest>
-		</junit>
-		<junitreport todir="${cob.reports.xml.dir}">
-			<fileset dir="${cob.reports.xml.dir}">
-				<include name="TEST-*.xml" />
-			</fileset>
-			<report format="frames" todir="${cob.reports.html.dir}" />
-		</junitreport>
-	</target>
-
-	<target name="cobertura-html-coverage-report" depends="cobertura-test">
-		<cobertura-report destdir="${cob.coverage.html.dir}">
-			<fileset dir="${src}">
-				<include name="**/*.java" />
-			</fileset>
-		</cobertura-report>
-	</target>
-
-	<target name="cobertura" depends="cobertura-html-coverage-report" />
-
-
 	<!-- Javadoc Tasks -->
 
 	<path id="javadoc.classpath">
 		<pathelement location="${src}" />
-		<pathelement location="${antlr3-lib.name}" />
-		<pathelement location="${cvc3-lib.name}" />
 		<pathelement location="${junit.name}" />
 	</path>
 
@@ -208,7 +135,7 @@
 	<target name="javadoc">
 		<delete dir="${javadoc.dir}" quiet="true" />
 		<mkdir dir="${javadoc.dir}" />
-		<javadoc destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="TASS API" access="public" classpathref="javadoc.classpath">
+		<javadoc destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="REX API" access="public" classpathref="javadoc.classpath">
 			<fileset dir="${src}" defaultexcludes="yes">
 			</fileset>
 		</javadoc>
