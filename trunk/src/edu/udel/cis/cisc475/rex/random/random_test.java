@@ -27,7 +27,7 @@ public class random_test {
 			}
 
 		Object[] b = new String[10];
-		b =  Randomizer.choose (3, a);		
+//		b =  Randomizer.choose (3, a);		
 
 		//diff way to do the call
 		//String[] b = new String[10];
