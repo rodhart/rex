@@ -5,7 +5,7 @@ import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
 
 public class Keys {
 
-	public AnswerKeyFactoryIF newAnswerKeyFactory() {
+	public static AnswerKeyFactoryIF newAnswerKeyFactory() {
 		return new AnswerKeyFactory();
 	}
 
