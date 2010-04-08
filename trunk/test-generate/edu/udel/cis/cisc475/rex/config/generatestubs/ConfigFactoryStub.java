@@ -7,7 +7,7 @@ public class ConfigFactoryStub implements ConfigFactoryIF {
 
 	@Override
 	public ConfigIF newConfig() {
-		return new Config();
+		return new ConfigStub();
 	}
 
 }

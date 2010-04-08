@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 
-public class AnswerKey implements AnswerKeyIF {
+public class AnswerKeyStub implements AnswerKeyIF {
 
 	private String[][] answers = { { "answer1" }, { "answer2a", "answer2b" } };
 

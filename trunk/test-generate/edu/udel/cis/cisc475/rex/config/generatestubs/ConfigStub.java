@@ -12,9 +12,9 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 /**
  * This is a STUB for the Config class. To be used for testing purposes only.
  */
-public class Config implements ConfigIF {
+public class ConfigStub implements ConfigIF {
 
-	public Config() {
+	public ConfigStub() {
 
 	}
 

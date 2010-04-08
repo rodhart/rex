@@ -7,7 +7,7 @@ public class AnswerKeyFactoryStub implements AnswerKeyFactoryIF {
 
 	@Override
 	public AnswerKeyIF newAnswerKey(String version, String examName, String date) {
-		return new AnswerKey();
+		return new AnswerKeyStub();
 	}
 
 }
