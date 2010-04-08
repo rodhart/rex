@@ -1,4 +1,4 @@
-package edu.udel.cis.cisc475.rex.exam;
+package edu.udel.cis.cisc475.rex.exam.impl;
 
 import java.util.Collection;
 
