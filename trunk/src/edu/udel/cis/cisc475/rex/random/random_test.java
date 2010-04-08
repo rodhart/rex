@@ -20,15 +20,12 @@ public class random_test {
 			System.out.printf("in random test main before call %s\n", a[i]);
 			}
 
-		Object[] b = new String[10];
 		long seed = 3;
 		Randomizer R = new Randomizer (seed);
-		b =  R.choose (3, a);		
 
-		//diff way to do the call
-		//String[] b = new String[10];
-		//b =  (String[]) randomizer.choose (3, a);		
-		
+		Object[] b = new String[10];
+		b =  R.choose (3, a);		
+	
 		
 		for(int i = 0; i < 3; i++) {
 		System.out.printf("in random test main after return from call %s\n", b[i]);
