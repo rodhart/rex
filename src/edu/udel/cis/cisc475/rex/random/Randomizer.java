@@ -2,24 +2,19 @@ package edu.udel.cis.cisc475.rex.random;
 
 
 
-import java.util.*;
-import java.io.*;
-import edu.udel.cis.cisc475.rex.random.IF.*;
-
-/**
- * 
- */
+import java.util.Random;
+import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
 
 /**
  * @author  team 5
  *
  */
-public class Randomizer implements RandomizerIF 
-							{
+public class Randomizer implements RandomizerIF {
 
-	//constructor
-	public Randomizer () {
 	
+	Randomizer (long seed){
+		Random randnum = new Random();
+		randnum.setSeed(seed); 
 	}
 	
 	/* General purpose random chooser: 
@@ -27,15 +22,13 @@ public class Randomizer implements RandomizerIF
 	 * (let numItems=items.length) 
 	 * permute topics, select problems 
 	 * satisfying constraints (first filter then select) */
-public Object[] choose (int numItems, Object[] items) {
+public static Object[] choose (int numItems, Object[] items) {
 
 	int numObjects = items.length; //total number of array elements
 	int pickedNums[] = new int[numItems];
 	int nextNum = 0;
 	int numofPickedNums = 0; //how many numbers have been already picked
-	Random randnum = new Random();
-	randnum.setSeed(1); 
-
+	
 	boolean done = false; 
 	boolean alreadyPicked = false;
 	

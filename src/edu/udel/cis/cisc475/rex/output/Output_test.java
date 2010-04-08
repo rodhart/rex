@@ -1,14 +1,11 @@
 package edu.udel.cis.cisc475.rex.output;
 
-import java.util.*;
-import java.io.*;
-import edu.udel.cis.cisc475.rex.key.IF.*;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collection;
 import edu.udel.cis.cisc475.rex.key.impl.Key;
-import edu.udel.cis.cisc475.rex.key.*;
-import edu.udel.cis.cisc475.rex.output.IF.*;
 
 /**
- * @version .001 
  * @author team 5
  *
  */
