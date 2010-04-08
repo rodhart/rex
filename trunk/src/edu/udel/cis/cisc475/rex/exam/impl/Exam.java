@@ -1,6 +1,7 @@
 package edu.udel.cis.cisc475.rex.exam.impl;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
@@ -19,6 +20,26 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
  *
  */
 public class Exam implements ExamIF {
+	
+	private boolean isMaster;
+
+	private LinkedHashSet elements;
+
+	private SourceIF preamble; 
+	
+	private SourceIF frontmatter;
+	
+	private BlockIF finalblock;
+	
+
+	/**
+	 * 
+	 */
+	public Exam(boolean isMaster) {
+		super();
+		this.isMaster = isMaster;
+	}
+
 
 	//@Override
 	public void addElementIF(ExamElementIF element) {
@@ -68,22 +89,16 @@ public class Exam implements ExamIF {
 		return null;
 	}
 
-	//@Override
 	public BlockIF finalBlock() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.finalblock;
 	}
 
-	//@Override
 	public SourceIF frontMatter() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.frontmatter;
 	}
 
-	//@Override
 	public boolean isMaster() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.isMaster;
 	}
 
 	//@Override
@@ -98,10 +113,8 @@ public class Exam implements ExamIF {
 		return 0;
 	}
 
-	//@Override
 	public SourceIF preamble() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.preamble;
 	}
 
 	//@Override
@@ -116,22 +129,16 @@ public class Exam implements ExamIF {
 		return null;
 	}
 
-	//@Override
 	public void setFinalBlock(BlockIF block) {
-		// TODO Auto-generated method stub
-
+		this.finalblock = block;
 	}
 
-	//@Override
 	public void setFrontMatter(SourceIF frontMatter) {
-		// TODO Auto-generated method stub
-
+		this.frontmatter = frontMatter;
 	}
 
-	//@Override
 	public void setPreamble(SourceIF preamble) {
-		// TODO Auto-generated method stub
-
+		this.preamble = preamble;
 	}
 
 	//@Override
