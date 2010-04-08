@@ -13,16 +13,16 @@ public class Randomizer implements RandomizerIF {
 
 	
 	Randomizer (long seed){
-		Random randnum = new Random();
-		randnum.setSeed(seed); 
-	}
+		randnum = new Random();
+		randnum.setSeed(seed);
+	}// end of constructor
 	
 	/* General purpose random chooser: 
 	 * can be used to permute answers 
 	 * (let numItems=items.length) 
 	 * permute topics, select problems 
 	 * satisfying constraints (first filter then select) */
-public static Object[] choose (int numItems, Object[] items) {
+public Object[] choose (int numItems, Object[] items) {
 
 	int numObjects = items.length; //total number of array elements
 	int pickedNums[] = new int[numItems];
@@ -70,6 +70,11 @@ public static Object[] choose (int numItems, Object[] items) {
 
 	return newItems;
 }//end of choose method
+
+
+//private vars
+private Random randnum;
+
 }//end of class 
 	   
 
