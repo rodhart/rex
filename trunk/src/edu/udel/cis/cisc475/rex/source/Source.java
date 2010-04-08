@@ -1,8 +1,13 @@
 package edu.udel.cis.cisc475.rex.source;
 
-import java.util.*;
-import java.io.*;
-import edu.udel.cis.cisc475.rex.source.IF.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /**
  * @author team 5

@@ -1,25 +1,17 @@
 package edu.udel.cis.cisc475.rex.output.IF;
 
+import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
+import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
+
 /**
- * 
- /**
  * 
  * @author team 5
  * 
  */
-//public interface KeyFactoryIF {
-
-//}
-
-
-public class OutputFactoryIF {
-/**
- * factory method returns an object that implements SourceIF interface.
- */
-//	ExamWriterIF newExamWriter(ExamIF); 
-//	AnswerKeyWriterIF newAnswerKeyWriter(AnswerKeyIF);
+public interface OutputFactoryIF {
+	ExamWriterIF newExamWriter(ExamIF exam); 
+	AnswerKeyWriterIF newAnswerKeyWriter(AnswerKeyIF answerKey);
 	
-//	}//end of newAnswerKey
-}//end of class 
+} 
 
 

@@ -1,12 +1,9 @@
 package edu.udel.cis.cisc475.rex.source;
 
-import java.util.*;
-import java.io.*;
-import edu.udel.cis.cisc475.rex.source.IF.*;
-import edu.udel.cis.cisc475.rex.source.IF.*;
+import java.io.PrintWriter;
+import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /**
- * @version .001 
  * @author team 5
  *
  */

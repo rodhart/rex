@@ -1,10 +1,7 @@
 package edu.udel.cis.cisc475.rex.output;
 
-import java.util.*;
-import java.io.*;
-import edu.udel.cis.cisc475.rex.key.IF.*;
-import edu.udel.cis.cisc475.rex.key.*;
-import edu.udel.cis.cisc475.rex.output.IF.*;
+import java.io.PrintWriter;
+import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
 
 /**
  * @author team 5

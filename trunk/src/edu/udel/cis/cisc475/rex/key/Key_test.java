@@ -2,10 +2,8 @@ package edu.udel.cis.cisc475.rex.key;
 
 import java.util.*;
 import java.io.*;
-
 import edu.udel.cis.cisc475.rex.key.impl.Key;
 /**
- * @version .001 
  * @author team 5
  *
  */
