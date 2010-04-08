@@ -9,7 +9,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
-public class Exam implements ExamIF {
+public class ExamStub implements ExamIF {
 
 	@Override
 	public void addElementIF(ExamElementIF element) {
