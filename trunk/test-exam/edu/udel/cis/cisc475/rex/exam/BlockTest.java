@@ -20,10 +20,16 @@ import org.junit.Test;
  *
  */
 public class BlockTest {
+	public final static boolean useStubs = true;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-	
+		if (useStubs) {
+			
+		}
+		else{
+			
+		}
 	}
 	
 	@AfterClass
