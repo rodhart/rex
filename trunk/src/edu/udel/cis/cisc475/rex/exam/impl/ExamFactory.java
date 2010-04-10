@@ -21,47 +21,44 @@ public class ExamFactory implements ExamFactoryIF {
 
 	// @Override
 	public AnswerIF newAnswer(boolean correct, SourceIF text) {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO Change this to use the specified Answer constructor.
+	return new Answer();
 	}
 
 	// @Override
 	public BlockIF newBlock(String topic, String label, SourceIF text) {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO Change this to use the specified Block constructor.
+	return new Block();
 	}
 
 	// @Override
 	public FigureIF newFigure(String label, SourceIF text) {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO Change this to use the specified Figure constructor.
+		return new Figure();
 	}
 
 	// @Override
 	public FixedAnswerIF newFixedAnswer(boolean correct, int index,
 			SourceIF text) {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO Change this to use the specified FixedAnswer constructor.
+		return new FixedAnswer();
 	}
 
 	// @Override
-	public ExamIF newGeneratedExam() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		public ExamIF newGeneratedExam() {
+			return new Exam(false);
+		}
 
 	// @Override
 	public ExamIF newMasterExam() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Exam(true);
 	}
 
 	// @Override
 	public ProblemIF newProblem(String topic, String label, SourceIF question,
 			AnswerIF[] answers) {
-		// TODO Auto-generated method stub
-	
-		return null;
+		// TODO Change this to use the specified Problem constructor.	
+		return new Problem();
 	}
 
 }
