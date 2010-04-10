@@ -85,8 +85,8 @@ public class BlockTest {
 	public void testGetSource() {
 		SourceIF result = block.source();
 		assertNotNull(result);
-		assertEquals(blockSource, result);
 		assertNotNull(result.text());
 		assertEquals(blockSource.text(), result.text());
+		assertEquals(blockSource, result);
 	}
 }

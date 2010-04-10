@@ -8,13 +8,11 @@ package edu.udel.cis.cisc475.rex.exam;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
@@ -74,9 +72,9 @@ public class FigureTest {
 	public void testGetSource() {
 		SourceIF result = figure.source();
 		assertNotNull(result);
-		assertEquals(figureSource, result);
 		assertNotNull(result.text());
 		assertEquals(figureSource.text(), result.text());
+		assertEquals(figureSource, result);
 	}
 	
 	@Test

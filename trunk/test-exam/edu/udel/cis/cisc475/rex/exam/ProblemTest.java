@@ -6,9 +6,11 @@
  */
 package edu.udel.cis.cisc475.rex.exam;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
@@ -19,8 +21,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
 
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
@@ -192,8 +192,8 @@ public class ProblemTest {
 	@Test
 	public void testGetQuestion() {
 		assertNotNull(problem.question());
-		assertEquals(testQuestionSource, problem.question());
 		assertEquals(testQuestionSource.text(), problem.question().text());
+		assertEquals(testQuestionSource, problem.question());
 	}
 	
 	@Test
