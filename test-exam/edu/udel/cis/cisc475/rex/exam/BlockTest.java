@@ -6,14 +6,21 @@
  */
 package edu.udel.cis.cisc475.rex.exam;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
+
+import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
+import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
+import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
+import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
+import edu.udel.cis.cisc475.rex.source.examstubs.SourceFactoryStub;
 
 /**
  * @author hboyd
@@ -22,14 +29,29 @@ import org.junit.Test;
 public class BlockTest {
 	public final static boolean useStubs = true;
 	
+	private static SourceFactoryIF sourceFactory;
+	private static ExamFactoryIF examFactory;
+	
+	private static SourceIF blockSource;
+	private static BlockIF block;
+	
+	private static String testUEFfilename = "testFileName.txt";
+	private static String testTopic = "test Topic";
+	private static String testLabel = "test Label";
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		if (useStubs) {
-			
+			sourceFactory = new SourceFactoryStub();
 		}
 		else{
-			
+			// TODO Uncomment when entry point is available
+			//sourceFactory = Sources.newSourceFactory();
+			sourceFactory = null;
 		}
+		// TODO Uncomment when entry point is available
+		//examFactory = Exams.newExamFactory();
+		examFactory = new ExamFactory();
 	}
 	
 	@AfterClass
@@ -38,6 +60,9 @@ public class BlockTest {
 
 	@Before
 	public void setUp() throws Exception {
+		blockSource = sourceFactory.newSource(testUEFfilename);
+		blockSource.addText("Test Block Source");
+		block = examFactory.newBlock(testTopic, testLabel, blockSource);
 	}
 
 	@After
@@ -45,14 +70,23 @@ public class BlockTest {
 	}
 
 	@Test
-	@Ignore
 	public void testGetTopic() {
-		fail("Not yet implemented");
+		assertNotNull(block.topic());
+		assertEquals(testTopic, block.topic());
 	}
 
 	@Test
-	@Ignore
+	public void testGetLabel() {
+		assertNotNull(block.label());
+		assertEquals(testLabel, block.label());
+	}
+	
+	@Test
 	public void testGetSource() {
-		fail("Not yet implemented");
+		SourceIF result = block.source();
+		assertNotNull(result);
+		assertEquals(blockSource, result);
+		assertNotNull(result.text());
+		assertEquals(blockSource.text(), result.text());
 	}
 }

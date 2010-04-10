@@ -10,11 +10,22 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
  *
  */
 public class SourceStub implements SourceIF {
+	String s_filename;
+	String s_text;
+	int s_startLine = 0;
+	int s_startColumn = 0;
+	int s_lastLine = 0;
+	int s_lastColumn = 0;
+	
+	
+	public SourceStub(String filename) {
+		this.s_filename = filename;
+	}
 
 	@Override
 	public void addText(String text) {
 		// TODO Auto-generated method stub
-		
+		this.s_text = text;
 	}
 
 	@Override

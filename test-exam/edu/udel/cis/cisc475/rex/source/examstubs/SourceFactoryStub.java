@@ -13,7 +13,8 @@ public class SourceFactoryStub implements SourceFactoryIF {
 	@Override
 	public SourceIF newSource(String filename) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		return new SourceStub(filename);
 	}
 
 }
