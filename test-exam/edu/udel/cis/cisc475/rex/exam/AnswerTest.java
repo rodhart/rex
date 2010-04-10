@@ -91,9 +91,9 @@ public class AnswerTest {
 	public void testGetSource() {
 		SourceIF result = answer1.source();
 		assertNotNull(result);
-		assertEquals(answerSource1, result);
-		assertNotSame(answerSource2, result);
 		assertNotNull(result.text());
 		assertEquals(answerSource1.text(), result.text());
+		assertEquals(answerSource1, result);
+		assertNotSame(answerSource2, result);
 	}
 }
