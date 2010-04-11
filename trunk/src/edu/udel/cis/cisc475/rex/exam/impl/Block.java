@@ -4,20 +4,18 @@ import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 public class Block implements BlockIF {
-
-	@Override
+	private String topic;
+	
 	public SourceIF source() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public String topic() {
 		// TODO Auto-generated method stub
-		return null;
+		return topic;
 	}
 
-	@Override
 	public String label() {
 		// TODO Auto-generated method stub
 		return null;

@@ -1,7 +1,6 @@
 package edu.udel.cis.cisc475.rex.exam.impl;
 
 import java.util.Collection;
-
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
@@ -9,29 +8,33 @@ import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 public class Problem implements ProblemIF {
-
+	private Integer points;
+	private double difficulty;
+	private String topic;
+	private String label;
+	private AnswerIF[] answers;
+	private AnswerIF[] correctAnswers;
+	
 	@Override
 	public AnswerIF[] answers() {
-		// TODO Auto-generated method stub
-		return null;
+		return answers;
 	}
 
 	@Override
 	public AnswerIF[] correctAnswers() {
-		// TODO Auto-generated method stub
-		return null;
+		return correctAnswers;
 	}
 
 	@Override
 	public double difficulty() {
 		// TODO Auto-generated method stub
-		return 0;
+		return difficulty;
 	}
 
 	@Override
 	public Integer points() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.points;
 	}
 
 	@Override
@@ -54,20 +57,12 @@ public class Problem implements ProblemIF {
 
 	@Override
 	public void setPoints(int points) {
-		// TODO Auto-generated method stub
-
+		this.points = points;
 	}
 
 	@Override
 	public String topic() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String label() {
-		// TODO Auto-generated method stub
-		return null;
+		return topic;
 	}
 
 }

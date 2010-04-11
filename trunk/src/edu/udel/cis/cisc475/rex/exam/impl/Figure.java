@@ -5,16 +5,16 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 public class Figure implements FigureIF {
 
-	@Override
+	private String label;
+
 	public SourceIF source() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public String label() {
 		// TODO Auto-generated method stub
-		return null;
+		return label;
 	}
 
 }

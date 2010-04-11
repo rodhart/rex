@@ -5,10 +5,12 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 public class Answer implements AnswerIF {
 
+	private boolean correct;
+	
 	@Override
 	public boolean isCorrect() {
 		// TODO Auto-generated method stub
-		return false;
+		return correct;
 	}
 
 	@Override
