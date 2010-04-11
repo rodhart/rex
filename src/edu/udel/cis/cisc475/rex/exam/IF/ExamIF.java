@@ -6,36 +6,43 @@ import java.util.Collection;
 
 /**
  * 
- * @author Team 1
- *
+ * @author Kevin Schultz (schultz)
+ * @author Tim McClory (tmcclory) 
  */
 public interface ExamIF {
 	
 	/**
+	 * The master exam contains all problems loaded from the UEF, 
+	 * non-master exams contain only a sub-set of all problems in the UEF
 	 * 
-	 * @return
+	 * @return true if master
 	 */
 	boolean isMaster();
 	
 	/**
+	 * Intro to a section
 	 * 
 	 * @return
 	 */
 	SourceIF preamble();
 	
 	/**
+	 * First page intro to exam  
 	 * 
-	 * @return
+	 * @return 
 	 */
 	SourceIF frontMatter();
 	
 	/**
+	 * Last 
 	 * 
 	 * @return
 	 */
 	BlockIF finalBlock();
 	
 	/**
+	 * Number of elements stored in an exam, includes all elements such 
+	 * as problems, figures, blocks, preambles, but not front matter
 	 * 
 	 * @return
 	 */
@@ -43,12 +50,14 @@ public interface ExamIF {
 	
 	/**
 	 * 
+	 * 
 	 * @param i
 	 * @return
 	 */
 	ExamElementIF element(int i);
 	
 	/**
+	 * 
 	 * 
 	 * @return
 	 */
@@ -77,6 +86,7 @@ public interface ExamIF {
 	Collection<ExamElementIF> elementsUsingElement(ExamElementIF element);
 	
 	/**
+	 * All figures stored in exam 
 	 * 
 	 * @return
 	 */
@@ -90,7 +100,9 @@ public interface ExamIF {
 	
 	/**
 	 * 
-	 * @return
+	 *
+	 * 
+	 * @return 
 	 */
 	Collection<String> topics();
 	

@@ -25,23 +25,45 @@ public class Exam implements ExamIF {
 	
 	private boolean isMaster;
 
+	/**
+	 * Stores all elements (problems, figures, blocks) in one collection
+	 * accessible both as a map (by key) and as a linked list using an iterator
+	 */
 	private LinkedHashMap<Integer, ExamElementIF> elements;
 	
+	/**
+	 * A list storing the keys of all the figures in the Map elements
+	 */
 	private LinkedList<Integer> figures;
 	
+	/**
+	 * A list storing the keys of all the blocks in the Map elements
+	 */
 	private LinkedList<Integer> blocks;
 	
+	/**
+	 * A list storing the keys of all the problems in the Map elements
+	 */
 	private LinkedList<Integer> problems;
 	
+	/**
+	 * TODO: What is the difference between the preamble and front matter?
+	 */
 	private SourceIF preamble; 
 	
+	/**
+	 * The first page(s) of an exam 
+	 */
 	private SourceIF frontmatter;
 	
+	/**
+	 * The last page(s) of an exam
+	 */
 	private BlockIF finalblock;
 	
 
 	/**
-	 * 
+	 * Default constructor
 	 */
 	public Exam(boolean isMaster) {
 		super();
@@ -54,6 +76,9 @@ public class Exam implements ExamIF {
 	}
 
 
+	/**
+	 *
+	 */
 	public void addElementIF(ExamElementIF element) {
 		int key = elements.size() + 1;
 		//put into linked hash set
@@ -74,6 +99,9 @@ public class Exam implements ExamIF {
 
 	}
 
+	/**
+	 * 
+	 */
 	public void declareUse(ExamElementIF user, ExamElementIF usee) {
 		// TODO Auto-generated method stub
 		
