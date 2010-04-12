@@ -3,19 +3,27 @@ package edu.udel.cis.cisc475.rex.random;
 
 
 import java.util.Random;
+
+import edu.udel.cis.cisc475.rex.random.IF.RandomizerFactoryIF;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
 
 /**
- * @author  team 5
+ * @author  CARDONA
  *
  */
 public class Randomizer implements RandomizerIF {
 
-	
-	Randomizer (long seed){
+// this is public, so we are not forced into using
+//the factory
+//if we put the factory call inside the class then
+//we could make the default constructor private which would
+//force the use of the factory
+public	Randomizer (long seed){
 		randnum = new Random();
 		randnum.setSeed(seed);
 	}// end of constructor
+
+	
 	
 	/* General purpose random chooser: 
 	 * can be used to permute answers 

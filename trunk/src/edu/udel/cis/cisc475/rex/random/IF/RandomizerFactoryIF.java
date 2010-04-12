@@ -1,10 +1,10 @@
 package edu.udel.cis.cisc475.rex.random.IF;
 
 /**
- * @author team 5
+ * @author CARDONA
  * 
  */
 public interface RandomizerFactoryIF {
-	RandomizerIF newRandomizer(long seed);
+		RandomizerIF newRandomizer(long seed);
 
 }

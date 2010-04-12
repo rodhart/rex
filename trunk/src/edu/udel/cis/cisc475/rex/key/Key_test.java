@@ -1,10 +1,14 @@
 package edu.udel.cis.cisc475.rex.key;
 
-import java.util.*;
-import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyFactoryIF;
+import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
+import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
 import edu.udel.cis.cisc475.rex.key.impl.Key;
+
 /**
- * @author team 5
+ * @author cardona
  *
  */
 
@@ -14,11 +18,14 @@ public class Key_test {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-//		newSource(filename);
+//		note to self
+//		without factory since constructor is public
+//		Key K = new Key ("version string name", "exam string name ", "date string");		
 		
-		//declare a pointer to an interface and
-		//create an object of the interface type
-		Key K = new Key ("version string name", "exam string name ", "date string");		
+
+// without using static, we must create instance of factory to use it
+		AnswerKeyFactoryIF AKF = new AnswerKeyFactory(); 
+		AnswerKeyIF K = AKF.newAnswerKey("version string name", "exam string name ", "date string");		
 		
 		
 	 	System.out.printf("version is:   %s \n", K.version());			
@@ -31,6 +38,7 @@ public class Key_test {
 	 	String a[] = {"one", "two", "three", "four", "five"};
 		String b[] = {"six", "seven", "eight", "nine", "ten"};
 	 	Collection <String> newProblem = new ArrayList<String>();
+
 	 	for (String c: a)
 	 		newProblem.add(c); 
 	 	//add problems to our class

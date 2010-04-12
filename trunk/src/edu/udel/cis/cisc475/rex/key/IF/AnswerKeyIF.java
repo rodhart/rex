@@ -4,7 +4,7 @@ import java.util.Collection;
 
 
 /**
- * @author team 5
+ * @author cardona
  *
  */
 public interface AnswerKeyIF {

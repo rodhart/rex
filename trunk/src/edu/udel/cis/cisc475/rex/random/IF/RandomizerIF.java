@@ -1,7 +1,7 @@
 package edu.udel.cis.cisc475.rex.random.IF;
 
 /**
- * @author team 5
+ * @author CARDONA
  * 
  */
 public interface RandomizerIF {
