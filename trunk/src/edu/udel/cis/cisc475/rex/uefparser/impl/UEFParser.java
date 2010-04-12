@@ -1,4 +1,4 @@
-package edu.udel.cis.cisc475.rex.uefparser;
+package edu.udel.cis.cisc475.rex.uefparser.impl;
 
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserIF;
