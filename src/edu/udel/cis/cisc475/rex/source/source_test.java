@@ -62,6 +62,9 @@ public class source_test {
 		System.out.printf("now display between bounds lines 6 to 7 - will show line 6\n");
 		S.write(pw); 
 
+		S.setStartColumn(3);
+		S.setLastColumn(82);
+		S.write(pw);
 	
 	
 	}//end of main
