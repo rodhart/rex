@@ -88,7 +88,8 @@ public class Exam implements ExamIF {
 		this.figures = new LinkedList<Integer>();
 		this.blocks = new LinkedList<Integer>();
 		this.problems = new LinkedList<Integer>();
-
+		this.labels = new HashSet<String>();
+		this.uses = new LinkedHashMap<ExamElementIF, HashSet<ExamElementIF>>();
 	}
 
 	/**

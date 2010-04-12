@@ -31,7 +31,7 @@ public class SourceStub implements SourceIF {
 	@Override
 	public String filename() {
 		// TODO Auto-generated method stub
-		return null;
+		return s_filename;
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class SourceStub implements SourceIF {
 	@Override
 	public String text() {
 		// TODO Auto-generated method stub
-		return null;
+		return s_text;
 	}
 
 	@Override
