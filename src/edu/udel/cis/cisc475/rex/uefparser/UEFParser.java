@@ -17,8 +17,6 @@ import java.util.Stack;
  *
  * FIXME: Does not handle optional arguments in the form of /command[].
  *
- * FIXME: Doesn't handle \begin{verbatim} \end{verbatim} environment.
- *
  * FIXME: Doesn't handle the \verb command.
  *
  * @author Aaron Myles Landwehr
@@ -168,6 +166,7 @@ public class UEFParser implements UEFParserIF
 	private class Command
 	{
 		//The beginning of the last command.
+
 		int lastPosition = -1;
 
 		/**
@@ -297,56 +296,88 @@ public class UEFParser implements UEFParserIF
 						uef.move();
 					}
 
-					// Below just returns the type of command we found.
-					if (command.equals("documentclass"))
-					{
-						uef.move();
-						return CommandTypes.documentclass;
-					}
-					else if (command.equals("begin"))
+					// Below handle the end command first to check for verbatim
+					if (command.equals("end"))
 					{
 						String arguments[] = getArguments(1);
 						String environment = arguments[0];
-						if (environment.equals("problem"))
+
+						//check for /end{verbatim} first!!!
+						if (environment.equals("verbatim"))
 						{
-							return CommandTypes.beginProblem;
+							//Needs to be treated differently than normal commands.
+							processEndVerbatim();
+							continue;
 						}
-						else if (environment.equals("answers"))
+
+						//If we are in verbatim ignore processing for other environments
+						if (state.peek() == States.verbatim)
 						{
-							return CommandTypes.beginAnswers;
-						}
-						else
-						{
-							return CommandTypes.none;
-						}
-					}
-					else if (command.equals("end"))
-					{
-						String arguments[] = getArguments(1);
-						String environment = arguments[0];
-						if (environment.equals("problem"))
-						{
-							return CommandTypes.endProblem;
-						}
-						else if (environment.equals("answers"))
-						{
-							return CommandTypes.endAnswers;
+							continue;
 						}
 						else
 						{
-							return CommandTypes.none;
+							if (environment.equals("problem"))
+							{
+								return CommandTypes.endProblem;
+							}
+							else if (environment.equals("answers"))
+							{
+								return CommandTypes.endAnswers;
+							}
+							else
+							{
+								return CommandTypes.none;
+							}
 						}
 					}
-					else if (command.equals("answer"))
+
+					//If we are in verbatim ignore processing for other commands
+					if (state.peek() == States.verbatim)
 					{
-						uef.move();
-						return CommandTypes.answer;
+						continue;
 					}
 					else
 					{
-						// A command we don't handle or care about.
-						uef.move();
-						return CommandTypes.none;
+						if (command.equals("documentclass"))
+						{
+							uef.move();
+							return CommandTypes.documentclass;
+						}
+						else if (command.equals("begin"))
+						{
+							String arguments[] = getArguments(1);
+							String environment = arguments[0];
+
+							if (environment.equals("verbatim"))
+							{
+								processBeginVerbatim();
+								continue;
+							}
+							else if (environment.equals("problem"))
+							{
+								return CommandTypes.beginProblem;
+							}
+							else if (environment.equals("answers"))
+							{
+								return CommandTypes.beginAnswers;
+							}
+							else
+							{
+								return CommandTypes.none;
+							}
+						}
+						else if (command.equals("answer"))
+						{
+							uef.move();
+							return CommandTypes.answer;
+						}
+						else
+						{
+							// A command we don't handle or care about.
+							uef.move();
+							return CommandTypes.none;
+						}
 					}
 				}
 
@@ -379,7 +410,8 @@ public class UEFParser implements UEFParserIF
 			}
 			else
 			{
-				System.out.println("Error: program reached an invalid state in processDocumentClass()");
+				System.out.println(
+						"Error: program reached an invalid state in processDocumentClass()");
 				System.exit(-1);
 			}
 		}
@@ -562,14 +594,6 @@ public class UEFParser implements UEFParserIF
 				else if (commandType.equals(CommandTypes.answer))
 				{
 					command.processAnswer();
-				}
-				else if (commandType.equals(CommandTypes.beginVerbatim))
-				{
-					command.processBeginVerbatim();
-				}
-				else if (commandType.equals(CommandTypes.endVerbatim))
-				{
-					command.processEndVerbatim();
 				}
 				else if (commandType.equals(CommandTypes.beginProblem))
 				{
