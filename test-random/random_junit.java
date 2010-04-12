@@ -33,6 +33,11 @@ long seed;
 			b 		=  R1.choose (9, a);		
 			b_check =  R1.choose (9, a);		
 
+			
+			for(int i = 0; i < 9; i++) {
+				System.out.printf("call: %d,  %s,    %s\n",i, b[i], b_check[i]);
+				}
+			
 			boolean result = b.equals(b_check);
 	    	assertEquals (true, result);
 		}//end of test_choose
