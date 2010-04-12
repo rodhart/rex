@@ -16,6 +16,15 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 	//constructor
 	public AnswerKeyWriter (Key K){
 	this.K = K;
+	numProblems = K.numProblems();
+//	C = new ArrayList<String> ();
+
+	for (int i = 0; i < numProblems; i++) {
+//	C.add(K.answers(i));	
+	}
+
+	C = new ArrayList<String> (K.answers(0));
+
 	}//end of constructor
 	
 	public void write(PrintWriter out){
@@ -24,7 +33,6 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 		out.printf("Date :      \t %s\n", K.date() ); 
 		out.printf("\nThis Exam contains %d problems. \n", K.numProblems() ); 
 
-		C = new ArrayList<String> (K.answers(0) );
 		int count = 1;
 		out.printf("\n\t  Answer Key  \n"); 
 
@@ -44,4 +52,5 @@ public void writeScantron(File file){
 //private vars
 private Key K;
 private ArrayList <String> C;	
+private int numProblems;
 }//end of class

@@ -5,10 +5,15 @@ import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 
 public class AnswerKeyFactory implements AnswerKeyFactoryIF {
 
-	@Override
+
+	//do nothing constructor	
+	public 	AnswerKeyFactory () {
+	}//end of constructor
+
+
+	
 	public AnswerKeyIF newAnswerKey(String version, String examName, String date) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Key(version, examName, date);
 	}
 
-}
+}//end of class

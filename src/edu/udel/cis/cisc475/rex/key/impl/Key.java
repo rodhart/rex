@@ -2,10 +2,11 @@ package edu.udel.cis.cisc475.rex.key.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 
 /**
- * @author team 5
+ * @author cardona
  *
  */
 public class Key implements AnswerKeyIF {
@@ -18,7 +19,7 @@ public Key(String version, String examName, String date) {
 	_version = version;
 	_examName = examName;	
 	_date = date;	
-	_Problem = new ArrayList <String>();
+	_Problem = new ArrayList<String>();
 }//end of constructor
 
 //getters
@@ -29,13 +30,18 @@ public  int 	numProblems() {return _numProblems;}
 
 
 public Collection <String> answers(int i) { 
-	//?????? what is this function supposed to do?????????	 
+	//given an index to a problem
+	//this function is supposed to return
+	//the correct answer?
+
+
+	//return one at index?
+	//
+	//_Problem.get(i);
 
 	//return all?
 	return _Problem;
 
-	//return one at index?
-	//return _Problem.get(i);
 } 
 
 //setters
@@ -49,5 +55,5 @@ private String _version;
 private String _examName;	
 private String _date;	
 private int _numProblems;
-private Collection <String> _Problem;
+private Collection<String> _Problem;
 }//end of class 
