@@ -1,16 +1,21 @@
 package edu.udel.cis.cisc475.rex.generate.impl;
 
 import java.util.Collection;
+import java.util.Iterator;
+
 
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
+import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerFactoryIF;
@@ -41,7 +46,7 @@ public class Generator implements GeneratorIF {
 		
 		RandomizerFactoryIF theRandomizerFactory = new RandomizerFactory();
 		RandomizerIF theRandomizer = theRandomizerFactory.newRandomizer(config.seed());
-		
+//		IntervalFactoryIF theIntervalFactory = new IntervalFactory();
 
 		for (int i = 0; i < numExams; i++)
 		{
@@ -66,7 +71,38 @@ public class Generator implements GeneratorIF {
 					int numProblems = gc.numProblems();
 					IntervalIF difficultyInterval = gc.difficultyInterval();
 					String topic = gc.topic();
-					int points = gc.points();
+					int points = gc.points();					
+
+					//	IntervalIF theInterval = 
+					//			theIntervalFactory.interval(difficultyInterval.strictLow(), 
+					//										difficultyInterval.low(),
+					//										difficultyInterval.strictHigh(),
+					//										difficultyInterval.high());
+					
+					
+					// container for holding elements in master with specified topic
+					Collection<ExamElementIF> elementsWithTopic = master.elementsWithTopic(topic);
+					Iterator<ExamElementIF> iterate = elementsWithTopic.iterator();
+					
+					while(iterate.hasNext())
+					{
+						ExamElementIF currentElement = iterate.next();
+						if (currentElement.getClass().isInstance(ProblemIF.class))
+						{
+							ProblemIF tempProblem = (ProblemIF) currentElement;
+						
+							
+						//	if (theInterval.low() <= tempProblem.difficulty() 
+						//			&& tempProblem.difficulty() <= theInterval.high())
+							{
+								if (tempProblem.points() == points)
+								{
+									// add it to our collection
+								}
+							}
+						}
+						
+					}
 				
 					// loop until 'master' END OF FILE
 					// we can probably define an Iterator i and do a while(i.hasNext())
