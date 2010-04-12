@@ -65,4 +65,10 @@ public class Problem implements ProblemIF {
 		return topic;
 	}
 
+	@Override
+	public String label() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
