@@ -128,8 +128,26 @@ public class Exam implements ExamIF {
 	}
 
 	public Collection<ExamElementIF> elementsWithTopic(String topic) {
-		// TODO Auto-generated method stub
-		return null;
+		HashSet<ExamElementIF> returnSet = new HashSet<ExamElementIF>();	
+		Collection<ExamElementIF> elementValues = elements.values();
+		Iterator<ExamElementIF> i = elementValues.iterator();
+		while(i.hasNext())	{
+			ProblemIF problem = null;
+			BlockIF block = null;
+			
+			ExamElementIF element = i.next();
+			if (element.getClass().equals(problem.getClass())) {
+				if(((ProblemIF) element).topic().equals(topic))
+					returnSet.add(element);
+			}
+			else if (element.getClass().equals(block.getClass())) {
+				if(((BlockIF) element).topic().equals(topic)) {
+					returnSet.add(element);
+				}
+			}
+		}
+		
+		return (Collection<ExamElementIF>) returnSet;
 	}
 
 	public Collection<FigureIF> figures() {
@@ -161,8 +179,7 @@ public class Exam implements ExamIF {
 	}
 
 	public int numElements() {
-		// TODO Auto-generated method stub
-		return 0;
+		return elements.size();
 	}
 
 	public SourceIF preamble() {
