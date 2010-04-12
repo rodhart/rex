@@ -3,33 +3,52 @@ package edu.udel.cis.cisc475.rex.random.impl;
 
 
 import java.util.Random;
-
-import edu.udel.cis.cisc475.rex.random.IF.RandomizerFactoryIF;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
 
 /**
+ * class creates an instance of a random object chooser
+ * when called it first creates the seed randomizer
+ * then when given a set of objects and a certain number to choose
+ * will return the chosen objects
+ * the choosing of these objects will be repeatable if given the
+ * same seed value
+ * 
  * @author  CARDONA
  *
  */
 public class Randomizer implements RandomizerIF {
 
-// this is public, so we are not forced into using
+// note to self
+// this constructor is public, so we are not forced into using
 //the factory
 //if we put the factory call inside the class then
 //we could make the default constructor private which would
 //force the use of the factory
-public	Randomizer (long seed){
+
+	
+/**
+ * class creates an instance of a random object chooser
+ * when called it first creates the seed randomizer
+ * @param the seed to be used to create the random numbers 
+*/
+	public	Randomizer (long seed){
 		randnum = new Random();
 		randnum.setSeed(seed);
 	}// end of constructor
 
 	
 	
-	/* General purpose random chooser: 
+	/**
+	 *  General purpose random chooser: 
 	 * can be used to permute answers 
 	 * (let numItems=items.length) 
 	 * permute topics, select problems 
-	 * satisfying constraints (first filter then select) */
+	 * satisfying constraints (first filter then select) 
+	 * 
+	 * @param number of items to return
+	 * @param the arrays of objects o choose from
+	 * @return an array of chosen objects
+	 */
 public Object[] choose (int numItems, Object[] items) {
 
 	int numObjects = items.length; //total number of array elements
@@ -82,7 +101,6 @@ public Object[] choose (int numItems, Object[] items) {
 
 //private vars
 private Random randnum;
-
 }//end of class 
 	   
 
