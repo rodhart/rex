@@ -35,7 +35,7 @@ public class UEFParser implements UEFParserIF
 	private enum States
 	{
 
-		top, comment, verbatim, problem, answers, answer
+		top, comment, documentclass, verbatim, problem, answers, answer
 	}
 	// Subclass that implements general parsing of the file.
 	private UEF uef;
@@ -361,6 +361,9 @@ public class UEFParser implements UEFParserIF
 		 */
 		private void processDocumentclass()
 		{
+			//push the new state.
+			state.push(States.documentclass);
+
 			// FIXME: code isn't finished in processDocumentclass()
 			String[] arguments = getArguments(1);
 			if (!arguments[0].equals("exam"))
@@ -368,6 +371,17 @@ public class UEFParser implements UEFParserIF
 				return; // throw an error or something
 			}
 			System.out.println("Found documentclass of type 'exam'");
+
+			if (state.peek() == States.documentclass)
+			{
+				//pop the old state.
+				state.pop();
+			}
+			else
+			{
+				System.out.println("Error: program reached an invalid state in processDocumentClass()");
+				System.exit(-1);
+			}
 		}
 
 		/**
@@ -376,6 +390,9 @@ public class UEFParser implements UEFParserIF
 		 */
 		private void processAnswer()
 		{
+			//push the new state.
+			state.push(States.answer);
+
 			// get text after Answer until the next command
 			String buffer = command.peekUntil();
 			System.out.println("Found an answer with the following text:");
@@ -383,6 +400,17 @@ public class UEFParser implements UEFParserIF
 			System.out.println(buffer);
 			System.out.println("-----------------------------------");
 			System.out.println();
+
+			if (state.peek() == States.answer)
+			{
+				//pop the old state.
+				state.pop();
+			}
+			else
+			{
+				System.out.println("Error: program reached an invalid state in processAnswer()");
+				System.exit(-1);
+			}
 		}
 
 		/**
@@ -391,6 +419,8 @@ public class UEFParser implements UEFParserIF
 		 */
 		private void processBeginVerbatim()
 		{
+			//push the new state.
+			state.push(States.verbatim);
 		}
 
 		/**
@@ -399,6 +429,16 @@ public class UEFParser implements UEFParserIF
 		 */
 		private void processEndVerbatim()
 		{
+			if (state.peek() == States.verbatim)
+			{
+				//pop the old state.
+				state.pop();
+			}
+			else
+			{
+				System.out.println("Error: \\end{verbatim} without a matching \\begin{verbatim}");
+				System.exit(-1);
+			}
 		}
 
 		/**
@@ -407,6 +447,9 @@ public class UEFParser implements UEFParserIF
 		 */
 		private void processBeginProblem()
 		{
+			//push the new state.
+			state.push(States.problem);
+
 			// get the arguments for Problem
 			String[] arguments = getArguments(2);
 
@@ -432,6 +475,16 @@ public class UEFParser implements UEFParserIF
 		 */
 		private void processEndProblem()
 		{
+			if (state.peek() == States.problem)
+			{
+				//pop the old state.
+				state.pop();
+			}
+			else
+			{
+				System.out.println("Error: \\end{problem} without a matching \\begin{problem}");
+				System.exit(-1);
+			}
 		}
 
 		/**
@@ -440,7 +493,7 @@ public class UEFParser implements UEFParserIF
 		 */
 		private void processBeginAnswers()
 		{
-			// FIXME: we need to process this.
+			//push the new state.
 			state.push(States.answers);
 			System.out.println("Found Answers Environment");
 		}
@@ -453,6 +506,7 @@ public class UEFParser implements UEFParserIF
 		{
 			if (state.peek() == States.answers)
 			{
+				//pop the old state.
 				state.pop();
 			}
 			else
@@ -515,7 +569,7 @@ public class UEFParser implements UEFParserIF
 				}
 				else if (commandType.equals(CommandTypes.endVerbatim))
 				{
-					command.processBeginVerbatim();
+					command.processEndVerbatim();
 				}
 				else if (commandType.equals(CommandTypes.beginProblem))
 				{
