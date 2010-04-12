@@ -1,21 +1,22 @@
 package edu.udel.cis.cisc475.rex.random;
 
-
-
-
-import java.util.Random;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerFactoryIF;
 import edu.udel.cis.cisc475.rex.random.impl.RandomizerFactory;
 
 /**
+ * general purpose tester of the random method
+ * this does not replace junit but complements it
+ * 
  * @author  CARDONA
  *
  */
 public class random_test {
 
 	/**
-	 * @param args
+	 * general purpose tester of the random method
+	 * this does not replace junit but complements it
+ 	 * @param args - not accepting any arguments
 	 */
 	public static void main(String[] args) {
 
@@ -55,7 +56,4 @@ public class random_test {
 		}
 
 	}//end of main
-
-
-
 }//end of class
