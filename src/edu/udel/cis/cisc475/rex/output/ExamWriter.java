@@ -10,17 +10,22 @@ import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
 public class ExamWriter implements ExamWriterIF {
 
 
-// Notes for creation:
-// loop with exam.numElements through a hash(?) to find 
-// out what to print
-// Does not include front matter.
-	
-//constructor	
-public ExamWriter() {
-}//end of constructor
+	// Notes for creation:
+	// loop with exam.numElements through a hash(?) to find 
+	// out what to print
+	// Does not include front matter.
+
+	//constructor	
+	public ExamWriter(Exam exam) {
+
+		this.exam = exam;
+		numElements = exam.numElements();
+		
+
+	}//end of constructor
 
 
-public void write(PrintWriter out){
-}//end of write(PrintWriter out)
-	
+	public void write(PrintWriter out){
+	}//end of write(PrintWriter out)
+
 }//end of class 
