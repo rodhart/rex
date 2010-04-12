@@ -66,7 +66,7 @@ public class ExamTest {
 		examFactory = new ExamFactory();
 		
 		masterExam = examFactory.newMasterExam();
-		generatedExam = examFactory.newMasterExam();
+		generatedExam = examFactory.newGeneratedExam();
 	}
 	
 	@AfterClass
@@ -102,7 +102,6 @@ public class ExamTest {
 	}
 	
 	@Test
-	@Ignore
 	public void testGetBadPreamble() {
 		masterExam.setPreamble(null);
 		
@@ -124,7 +123,6 @@ public class ExamTest {
 	}
 	
 	@Test
-	@Ignore
 	public void testGetBadFrontMatter() {
 		masterExam.setFrontMatter(null);
 		
@@ -149,7 +147,6 @@ public class ExamTest {
 	}
 	
 	@Test
-	@Ignore
 	public void testGetBadFinalBlock() {
 		masterExam.setFinalBlock(null);
 		

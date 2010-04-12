@@ -10,11 +10,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
@@ -93,12 +95,24 @@ public class ExamFactoryTest {
 	}
 	
 	@Test
+	@Ignore
+	public void testNewBlockBadImput() {
+		fail("Not yet implemented");
+	}
+	
+	@Test
 	public void testNewFigure() {
 		SourceIF figureSource = sourceFactory.newSource(testUEFfilename);
 		figureSource.addText("test Figure Source");
 		ExamElementIF figure = examFactory.newFigure("test figure label", figureSource);
 		assertNotNull(figure);
 		assertTrue(figure instanceof FigureIF);
+	}
+	
+	@Test
+	@Ignore
+	public void testNewFigureBadImput() {
+		fail("Not yet implemented");
 	}
 	
 	@Test
@@ -113,6 +127,12 @@ public class ExamFactoryTest {
 	}
 	
 	@Test
+	@Ignore
+	public void testNewAnswerBadImput() {
+		fail("Not yet implemented");
+	}
+	
+	@Test
 	public void testNewFixedAnswer() {
 		SourceIF answerSource = sourceFactory.newSource(testUEFfilename);
 		answerSource.addText("test Answer Source");
@@ -123,6 +143,12 @@ public class ExamFactoryTest {
 		assertNotNull(answer2);
 		assertTrue(answer1 instanceof FixedAnswerIF);
 		assertNotSame(answer1, answer2);
+	}
+	
+	@Test
+	@Ignore
+	public void testNewFixedAnswerBadImput() {
+		fail("Not yet implemented");
 	}
 	
 	@Test
@@ -142,4 +168,11 @@ public class ExamFactoryTest {
 		assertNotNull(problem);
 		assertTrue(problem instanceof ProblemIF);
 	}
+	
+	@Test
+	@Ignore
+	public void testNewProblemBadImput() {
+		fail("Not yet implemented");
+	}
+	
 }

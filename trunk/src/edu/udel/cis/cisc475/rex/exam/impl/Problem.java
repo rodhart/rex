@@ -26,7 +26,7 @@ public class Problem implements ProblemIF {
 		this.topic = topic;
 		this.label = label;
 		this.question = question;
-		this.correctAnswers = answers;
+		this.answers = answers;
 	}
 	@Override
 	public AnswerIF[] answers() {
