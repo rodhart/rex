@@ -8,13 +8,18 @@ import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
 
 /**
- * @author cardona
+ * general purpose tester of the answer key methods
+ * this does not replace junit but complements it
+ * 
+ * @author  CARDONA
  *
  */
 public class Key_test {
 
 	/**
-	 * @param args
+     * general purpose tester of the answer key methods
+	 * this does not replace junit but complements it
+ 	 * @param args - not accepting any arguments
 	 */
 	public static void main(String[] args) {
 //		note to self
