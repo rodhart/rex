@@ -36,6 +36,9 @@ public class UEFParser implements UEFParserIF
 	private Command command = new Command();
 
 	// The latex commands that we currently understand.
+	//Be careful to not add any commands that we don't want to be peaked ahead.
+	//Otherwise Command.peakUntil() will break.
+	//FIXME: Command.peakUntil() should have a list of commands it treats specially.
 	private enum CommandTypes {
 
 		documentclass, begin, end, answer, none
@@ -174,7 +177,7 @@ public class UEFParser implements UEFParserIF
 			 * @return The environment type found if any. If no environment is
 			 *         found then returns EnvironmentTypes.none.
 			 */
-			private Enum<EnvironmentTypes> process(String environment)
+			private EnvironmentTypes process(String environment)
 			{
 				if (environment.equals("problem"))
 				{
@@ -239,7 +242,7 @@ public class UEFParser implements UEFParserIF
 			int currentPosition = uef.getPosition();
 
 			// process until we find a command
-			Enum<CommandTypes> commandType = command.process();
+			CommandTypes commandType = command.process();
 
 			// loop until we find one of our commands
 			while (commandType.equals(CommandTypes.none))
@@ -251,8 +254,8 @@ public class UEFParser implements UEFParserIF
 			// grap all the characters inbetween our original position and our
 			// new position
 			String peakedData = uef.getContent(currentPosition, uef
-					.getPosition()
-					- commandType.toString().length() - 1);
+					.getPosition() -
+					commandType.toString().length() - 2);
 
 			// reset our position
 			uef.setPosition(currentPosition);
@@ -263,11 +266,11 @@ public class UEFParser implements UEFParserIF
 
 		/**
 		 * Reads until a command and then gets the command and returns it as a
-		 * String
+		 * String. Always moves passed the commands characters in the file.
 		 * 
 		 * @return the current command as a string without the '\' prefix
 		 */
-		private Enum<CommandTypes> process()
+		private CommandTypes process()
 		{
 
 			// FIXME: while(true) is bad form
@@ -292,36 +295,49 @@ public class UEFParser implements UEFParserIF
 					// move forward in the file.
 					uef.move();
 
+					//check to see if the command is an escape character
+					if(uef.read()=='\\')
+					{
+					    //move forward because we don't care about this command
+					    uef.move();
+					    return CommandTypes.none;
+					}
+
 					// Grab each letter in the command while there are letters
 					// to grab
 					// remember only letters are valid for command names
 					while (Character.isLetter(uef.read()))
 					{
-						command = command + uef.read();
-						uef.move();
+					    command = command + uef.read();
+					    uef.move();
 					}
 
 					// Below just returns the type of command we found.
 					if (command.equals("documentclass"))
 					{
-						return CommandTypes.documentclass;
+					    uef.move();
+					    return CommandTypes.documentclass;
 					}
 					else if (command.equals("begin"))
 					{
-						return CommandTypes.begin;
+					    uef.move();
+					    return CommandTypes.begin;
 					}
 					else if (command.equals("end"))
 					{
-						return CommandTypes.end;
+					    uef.move();
+					    return CommandTypes.end;
 					}
 					else if (command.equals("answer"))
 					{
-						return CommandTypes.answer;
+					    uef.move();
+					    return CommandTypes.answer;
 					}
 					else
 					{
-						// A command we don't handle or care about.
-						return CommandTypes.none;
+					    // A command we don't handle or care about.
+					    uef.move();
+					    return CommandTypes.none;
 					}
 				}
 			}
@@ -350,7 +366,7 @@ public class UEFParser implements UEFParserIF
 		{
 			// get the type of environment
 			String[] arguments = getArguments(1);
-			Enum<EnvironmentTypes> environmentType = environment
+			EnvironmentTypes environmentType = environment
 					.process(arguments[0]);
 			// check for environments we handle
 			if (environmentType.equals(EnvironmentTypes.problem))
@@ -371,7 +387,7 @@ public class UEFParser implements UEFParserIF
 		{
 			// get the type of environment
 			String[] arguments = getArguments(1);
-			Enum<EnvironmentTypes> environmentType = environment
+			EnvironmentTypes environmentType = environment
 					.process(arguments[0]);
 
 			if (environmentType.equals(EnvironmentTypes.problem))
@@ -457,6 +473,8 @@ public class UEFParser implements UEFParserIF
 			arguments[i] = argument.toString().trim();
 		}
 
+		//Move past the last argument delimeter and return the arguments
+		uef.move();
 		return arguments;
 	}
 
@@ -472,7 +490,7 @@ public class UEFParser implements UEFParserIF
 		try
 		{
 			uef.openFile(file);
-			Enum<CommandTypes> commandType;
+			CommandTypes commandType;
 
 			// Read each command until the end of the file.
 			while ((commandType = command.process()) != null)
