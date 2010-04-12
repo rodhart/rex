@@ -32,8 +32,10 @@ public class source_test {
 
 	 	System.out.printf("now display what is in our array \n");
 		PrintWriter pw = new PrintWriter(System.out,true); 
-		S.write(pw); 
+//		S.write(pw); 
 
+	 	
+	 	
 	 	System.out.printf("now add some text to our array \n\n");
 		S.addText("this is test line 1");
 		S.addText("      this is the second test line");
@@ -49,8 +51,8 @@ public class source_test {
 		S.setStartLine(0);			
 		System.out.printf("startline is %d \n", S.startLine());			
 		System.out.printf("setting lastline to 3\n");
-		S.setLastLine(3);			
-		System.out.printf("lastline is %d \n", S.startLine());			
+		S.setLastLine(1);			
+		System.out.printf("lastline is %d \n", S.lastLine());			
 		System.out.printf("now display between bounds lines 0 to 3 - will show lines 0, 1, 2\n");
 		S.write(pw); 
 		
