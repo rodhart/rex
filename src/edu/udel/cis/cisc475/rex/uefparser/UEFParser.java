@@ -512,18 +512,4 @@ public class UEFParser implements UEFParserIF
 		}
 		return null;
 	}
-
-	/**
-	 * Program Entry Test
-	 * 
-	 * @param args
-	 * @throws FileNotFoundException
-	 */
-	public static void main(String[] args)
-	{
-		UEFParserIF parser = new UEFParser();
-		File file = new File("C:\\test.tex");
-		parser.parse(file);
-		return;
-	}
 }
