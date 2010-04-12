@@ -19,7 +19,6 @@ public class Problem implements ProblemIF {
 	private String label;
 	private SourceIF question;
 	private AnswerIF[] answers;
-	private AnswerIF[] correctAnswers;
 	
 	protected Problem(String topic, String label, SourceIF question,
 			AnswerIF[] answers) {
@@ -35,7 +34,11 @@ public class Problem implements ProblemIF {
 
 	@Override
 	public AnswerIF[] correctAnswers() {
-		return this.correctAnswers;
+		// TODO Take out .correctAnswers, and have it loop through
+		// all of the answers and see which ones are correct.
+		
+		// CURRENTLY RETURNS ALL ANSWERS! NOT JUST CORRECT ONES!
+		return this.answers;
 	}
 
 	@Override

@@ -21,17 +21,17 @@ public class FixedAnswer implements FixedAnswerIF {
 	
 	@Override
 	public int index() {
-		return index;
+		return this.index;
 	}
 
 	@Override
 	public boolean isCorrect() {
-		return isCorrect;
+		return this.isCorrect;
 	}
 
 	@Override
 	public SourceIF source() {
-		return source;
+		return this.source;
 	}
 
 }

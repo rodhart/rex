@@ -5,8 +5,10 @@ import java.util.Collection;
 import edu.udel.cis.cisc475.rex.source.IF.*;
 
 /**
- * 
- * @author Team 1
+ * The interface for a Problem. This interface allows access to any
+ * required blocks, figures, the problem's points, answers, and 
+ * difficulty.
+ * @author fxfitz
  * 
  */
 public interface ProblemIF extends ExamElementIF {
@@ -18,50 +20,44 @@ public interface ProblemIF extends ExamElementIF {
 	BlockIF requiredBlock(); 
 
 	/**
-	 * 
-	 * @return
+	 * @return Collection of FigureIF.
 	 */
 	Collection<FigureIF> referencedFigures();
 
 	/**
-	 * 
-	 * @param points
+	 * @param points set amount of points the problem is worth
 	 */
 	void setPoints(int points);
 
 	/**
-	 * 
-	 * @return
+	 * @return problem topic
 	 */
 	String topic();
 
 	/**
-	 * 
-	 * @return
+	 * @return the number of points a problem is worth
 	 */
 	Integer points();
 
 	/**
-	 * 
-	 * @return
+	 * @return reference to question in the source UEF file
 	 */
 	SourceIF question();
 
 	/**
-	 * 
-	 * @return
+	 * @return array of answers (correct and incorrect) to the 
+	 * question
 	 */
 	AnswerIF[] answers();
 
 	/**
 	 * 
-	 * @return
+	 * @return array of correct answers to the question 
 	 */
 	AnswerIF[] correctAnswers();
 
 	/**
-	 * 
-	 * @return
+	 * @return difficulty of the problem
 	 */
 	double difficulty();
 	
