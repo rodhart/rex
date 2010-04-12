@@ -61,7 +61,20 @@ public class Exam implements ExamIF {
 	 */
 	private BlockIF finalblock;
 	
-
+	/**
+	 * Set of topics throughout all ExamElements
+	 */
+	private HashSet<String> topics;
+	
+	/**
+	 * Set of labels throughout all ExamElements
+	 */
+	private HashSet<String> labels;
+	
+	/**
+	 * 
+	 */
+	private LinkedHashMap<ExamElementIF, HashSet<ExamElementIF>> uses;
 	/**
 	 * Default constructor
 	 */
@@ -82,15 +95,20 @@ public class Exam implements ExamIF {
 	public void addElementIF(ExamElementIF element) {
 		int key = elements.size() + 1;
 		//put into linked hash set
-		elements.put(key,element);
 		//also need to make some kind of record of whether it is
-		//a problem, a block, or a figure. 
+		//a problem, a block, or a figure.
+		labels.add(element.label());
+		//Allocate a new HashSet for the uses map
+		HashSet<ExamElementIF> useesOfElement = new HashSet();
+		uses.put(element, useesOfElement);
 		if (element.getClass().isInstance(FigureIF.class)) {
 			figures.add(key);
 		} else if (element.getClass().isInstance(BlockIF.class)) {
 			blocks.add(key);
+			topics.add(((ProblemIF) element).topic());
 		} else if (element.getClass().isInstance(ProblemIF.class)) {
 			problems.add(key);
+			topics.add(((ProblemIF) element).topic());
 		} else {
 			//Do we need to do anything in this case? It definitely is not good if it isn't one of the 3
 		}
@@ -103,28 +121,60 @@ public class Exam implements ExamIF {
 	 * 
 	 */
 	public void declareUse(ExamElementIF user, ExamElementIF usee) {
-		// TODO Auto-generated method stub
-		
+		uses.get(user).add(usee);
 	}
 
 	public ExamElementIF element(int i) {
-		// TODO Auto-generated method stub
+		HashSet<ExamElementIF> returnSet = new HashSet<ExamElementIF>();	
+		Collection<ExamElementIF> elementValues = elements.values();
+		Iterator<ExamElementIF> itr = elementValues.iterator();
+		int count = 0;
+		ExamElementIF element=itr.next();
+		while(itr.hasNext() && count<i)	{
+			element = itr.next();
+			returnSet.add(element);
+		}
+		if(count==i) {
+			return element;
+		}
 		return null;
 	}
 
-	public ExamElementIF elementWithLabel(String label) {
-		// TODO Auto-generated method stub
+	public ExamElementIF elementWithLabel(String label) {		
+		Collection<ExamElementIF> elementValues = elements.values();
+		Iterator<ExamElementIF> i = elementValues.iterator();
+		while(i.hasNext())	{
+			ExamElementIF element = i.next();
+			if(element.label().equals(label))
+			{
+				return element;
+			}
+		}
 		return null;
 	}
 
 	public Collection<ExamElementIF> elements() {
-		// TODO Auto-generated method stub
-		return null;
+		HashSet<ExamElementIF> returnSet = new HashSet<ExamElementIF>();	
+		Collection<ExamElementIF> elementValues = elements.values();
+		Iterator<ExamElementIF> i = elementValues.iterator();
+		while(i.hasNext())	{
+			ExamElementIF element = i.next();
+			returnSet.add(element);
+		}
+		return (Collection<ExamElementIF>) returnSet;
 	}
 
 	public Collection<ExamElementIF> elementsUsingElement(ExamElementIF element) {
-		// TODO Auto-generated method stub
-		return null;
+		HashSet<ExamElementIF> returnSet = new HashSet<ExamElementIF>();	
+		Collection<ExamElementIF> elementValues = elements.values();
+		Iterator<ExamElementIF> i = elementValues.iterator();
+		while(i.hasNext())	{
+			ExamElementIF newElement = i.next();
+			if(uses.get(newElement).contains(element)) {
+				returnSet.add(element);
+			}
+		}
+		return (Collection<ExamElementIF>) returnSet;
 	}
 
 	public Collection<ExamElementIF> elementsWithTopic(String topic) {
@@ -132,21 +182,17 @@ public class Exam implements ExamIF {
 		Collection<ExamElementIF> elementValues = elements.values();
 		Iterator<ExamElementIF> i = elementValues.iterator();
 		while(i.hasNext())	{
-			ProblemIF problem = null;
-			BlockIF block = null;
-			
 			ExamElementIF element = i.next();
-			if (element.getClass().equals(problem.getClass())) {
+			if (element.getClass().isInstance(ProblemIF.class)) {
 				if(((ProblemIF) element).topic().equals(topic))
 					returnSet.add(element);
 			}
-			else if (element.getClass().equals(block.getClass())) {
+			else if (element.getClass().isInstance(BlockIF.class)) {
 				if(((BlockIF) element).topic().equals(topic)) {
 					returnSet.add(element);
 				}
 			}
 		}
-		
 		return (Collection<ExamElementIF>) returnSet;
 	}
 
@@ -174,8 +220,7 @@ public class Exam implements ExamIF {
 	}
 
 	public Collection<String> labels() {
-		// TODO Auto-generated method stub
-		return null;
+		return labels;
 	}
 
 	public int numElements() {
@@ -230,8 +275,7 @@ public class Exam implements ExamIF {
 
 	//@Override
 	public Collection<String> topics() {
-		// TODO Auto-generated method stub
-		return null;
+		return (Collection<String>) topics;
 	}
 
 }
