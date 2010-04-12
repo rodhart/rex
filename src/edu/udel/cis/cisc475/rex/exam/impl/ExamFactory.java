@@ -58,7 +58,7 @@ public class ExamFactory implements ExamFactoryIF {
 	public ProblemIF newProblem(String topic, String label, SourceIF question,
 			AnswerIF[] answers) {
 		// TODO Change this to use the specified Problem constructor.	
-		return new Problem();
+		return new Problem(topic, label, question, answers);
 	}
 
 }
