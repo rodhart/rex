@@ -206,8 +206,8 @@ public class ProblemTest {
 	
 	@Test
 	public void testGetCorrectAnswers() {
-		AnswerIF[] answers = problem.answers();
-		assertTrue(answers.length == 2);
+		AnswerIF[] answers = problem.correctAnswers();
+		assertEquals(2, answers.length);
 		assertTrue(Arrays.asList(answers).contains(testAnswer2));
 		assertTrue(Arrays.asList(answers).contains(testAnswer4));
 	}
