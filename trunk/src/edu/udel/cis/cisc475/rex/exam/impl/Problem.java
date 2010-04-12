@@ -7,6 +7,11 @@ import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
+/**
+ *
+ * @author fxfitz
+ *
+ */
 public class Problem implements ProblemIF {
 	private Integer points;
 	private double difficulty;
@@ -48,7 +53,7 @@ public class Problem implements ProblemIF {
 	@Override
 	public SourceIF question() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.question;
 	}
 
 	@Override
