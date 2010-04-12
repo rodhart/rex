@@ -34,12 +34,11 @@ public class UEFParser implements UEFParserIF
 	//States.top is just so we know we are at the top of the stack
 	private enum States
 	{
-		top, comment, verbatim
-	}
 
+		top, comment, verbatim, problem, answers, answer
+	}
 	// Subclass that implements general parsing of the file.
 	private UEF uef;
-
 	// Subclass that implements parsing of commands.
 	private Command command;
 
@@ -52,7 +51,7 @@ public class UEFParser implements UEFParserIF
 	}
 
 	public UEFParser()
-		{
+	{
 		// Stack to maintain a hiearchary of states.
 		state = new Stack<States>();
 		state.push(States.top);
@@ -62,7 +61,7 @@ public class UEFParser implements UEFParserIF
 		// Subclass that implements parsing of commands.
 		command = new Command();
 
-	}	
+	}
 
 	/**
 	 * Class that handles the underlying file character by character.
@@ -77,7 +76,7 @@ public class UEFParser implements UEFParserIF
 
 		/**
 		 * Opens a file and completely reads it into a StringBuffer for easy
-		 * parsing.
+		 * parsing. Set's the position to the first character of the file.
 		 *
 		 * @param file
 		 *            The file to read from.
@@ -96,6 +95,7 @@ public class UEFParser implements UEFParserIF
 				fileContents.append('\n');
 			}
 			reader.close();
+			position = 0;
 		}
 
 		/**
@@ -252,8 +252,8 @@ public class UEFParser implements UEFParserIF
 		}
 
 		/**
-		 * Reads until a command and then gets the command and returns it as a
-		 * String. Always moves passed the commands characters in the file.
+		 * Stating at the current position reads until a command and then gets the command and
+		 * returns it as a String. Always moves passed the commands characters in the file.
 		 *
 		 * @return the current command as a string without the '\' prefix
 		 */
@@ -263,8 +263,6 @@ public class UEFParser implements UEFParserIF
 			// FIXME: while(true) is bad form
 			while (true)
 			{
-				uef.move();
-
 				// pre-process to set some flags (only comment detection at this
 				// moment).
 				preprocessCurrentCharacter();
@@ -351,6 +349,9 @@ public class UEFParser implements UEFParserIF
 						return CommandTypes.none;
 					}
 				}
+
+				//move to the next character
+				uef.move();
 			}
 		}
 
@@ -440,6 +441,7 @@ public class UEFParser implements UEFParserIF
 		private void processBeginAnswers()
 		{
 			// FIXME: we need to process this.
+			state.push(States.answers);
 			System.out.println("Found Answers Environment");
 		}
 
@@ -449,6 +451,15 @@ public class UEFParser implements UEFParserIF
 		 */
 		private void processEndAnswers()
 		{
+			if (state.peek() == States.answers)
+			{
+				state.pop();
+			}
+			else
+			{
+				System.out.println("Error: \\end{answers} without a matching \\begin{answers}");
+				System.exit(-1);
+			}
 		}
 	}
 
@@ -465,8 +476,10 @@ public class UEFParser implements UEFParserIF
 		else if (uef.read() == '\n')
 		{
 			// new line so unset that we are at a comment
-			if(state.peek() == States.comment)
+			if (state.peek() == States.comment)
+			{
 				state.pop();
+			}
 		}
 	}
 
