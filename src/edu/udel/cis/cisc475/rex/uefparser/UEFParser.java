@@ -154,8 +154,53 @@ public class UEFParser implements UEFParserIF
 	 */
 	private class Command
 	{
-
+		//The beginning of the last command.
 		int lastPosition = -1;
+
+		/**
+		 * Starting at the currently retrieved character from the stream this method
+		 * returns arguments surrounded by squiggle brackets. Yes, misspelled
+		 * squiggle brackets.
+		 *
+		 * FIXME: Needs error checking for when there are any character other than
+		 * spaces and new lines between arguments.
+		 *
+		 * FIXME: Needs to check for comments and ignore arguments found within
+		 * those.
+		 *
+		 * @param numberOfArguments
+		 *            The number of arguments you want to retrieve
+		 * @return A string array with the arguments as Strings
+		 */
+		private String[] getArguments(int numberOfArguments)
+		{
+			String[] arguments = new String[numberOfArguments];
+			for (int i = 0; i < numberOfArguments; i++)
+			{
+				// Read until the first argument
+				while (uef.read() != '{')
+				{
+					uef.move();
+				}
+
+				// Read until the end of the first argument
+				uef.move();
+
+				StringBuffer argument = new StringBuffer();
+				while (uef.read() != '}')
+				{
+					argument.append(uef.read());
+					uef.move();
+				}
+
+				// Add the argument to our array after trimming it
+				arguments[i] = argument.toString().trim();
+			}
+
+			//Move past the last argument delimeter and return the arguments
+			uef.move();
+			return arguments;
+		}
 
 		/**
 		 * Starting at the current position in the file this reads until the
@@ -409,51 +454,6 @@ public class UEFParser implements UEFParserIF
 			// new line so unset that we are at a comment
 			this.isComment = false;
 		}
-	}
-
-	/**
-	 * Starting at the currently retrieved character from the stream this method
-	 * returns arguments surrounded by squiggle brackets. Yes, misspelled
-	 * squiggle brackets.
-	 *
-	 * FIXME: Needs error checking for when there are any character other than
-	 * spaces and new lines between arguments.
-	 *
-	 * FIXME: Needs to check for comments and ignore arguments found within
-	 * those.
-	 *
-	 * @param numberOfArguments
-	 *            The number of arguments you want to retrieve
-	 * @return A string array with the arguments as Strings
-	 */
-	private String[] getArguments(int numberOfArguments)
-	{
-		String[] arguments = new String[numberOfArguments];
-		for (int i = 0; i < numberOfArguments; i++)
-		{
-			// Read until the first argument
-			while (uef.read() != '{')
-			{
-				uef.move();
-			}
-
-			// Read until the end of the first argument
-			uef.move();
-
-			StringBuffer argument = new StringBuffer();
-			while (uef.read() != '}')
-			{
-				argument.append(uef.read());
-				uef.move();
-			}
-
-			// Add the argument to our array after trimming it
-			arguments[i] = argument.toString().trim();
-		}
-
-		//Move past the last argument delimeter and return the arguments
-		uef.move();
-		return arguments;
 	}
 
 	/**
