@@ -22,26 +22,24 @@ public class ExamFactory implements ExamFactoryIF {
 	// @Override
 	public AnswerIF newAnswer(boolean correct, SourceIF text) {
 		// TODO Change this to use the specified Answer constructor.
-	return new Answer();
+	return new Answer(correct, text);
 	}
 
 	// @Override
 	public BlockIF newBlock(String topic, String label, SourceIF text) {
-		// TODO Change this to use the specified Block constructor.
-	return new Block();
+	return new Block(topic, label, text);
 	}
 
 	// @Override
 	public FigureIF newFigure(String label, SourceIF text) {
-		// TODO Change this to use the specified Figure constructor.
-		return new Figure();
+		return new Figure(label, text);
 	}
 
 	// @Override
 	public FixedAnswerIF newFixedAnswer(boolean correct, int index,
 			SourceIF text) {
-		// TODO Change this to use the specified FixedAnswer constructor.
-		return new FixedAnswer();
+		// TODO Change this to use the specified Answer constructor.
+		return new FixedAnswer(index, correct, text);
 	}
 
 	// @Override
@@ -57,7 +55,6 @@ public class ExamFactory implements ExamFactoryIF {
 	// @Override
 	public ProblemIF newProblem(String topic, String label, SourceIF question,
 			AnswerIF[] answers) {
-		// TODO Change this to use the specified Problem constructor.	
 		return new Problem(topic, label, question, answers);
 	}
 
