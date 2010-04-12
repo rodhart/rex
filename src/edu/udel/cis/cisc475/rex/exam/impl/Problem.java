@@ -30,41 +30,38 @@ public class Problem implements ProblemIF {
 	}
 	@Override
 	public AnswerIF[] answers() {
-		return answers;
+		return this.answers;
 	}
 
 	@Override
 	public AnswerIF[] correctAnswers() {
-		return correctAnswers;
+		return this.correctAnswers;
 	}
 
 	@Override
 	public double difficulty() {
-		// TODO Auto-generated method stub
-		return difficulty;
+		return this.difficulty;
 	}
 
 	@Override
 	public Integer points() {
-		// TODO Auto-generated method stub
 		return this.points;
 	}
 
 	@Override
 	public SourceIF question() {
-		// TODO Auto-generated method stub
 		return this.question;
 	}
 
 	@Override
 	public Collection<FigureIF> referencedFigures() {
-		// TODO Auto-generated method stub
+		// TODO Figure out what to do here :-P
 		return null;
 	}
 
 	@Override
 	public BlockIF requiredBlock() {
-		// TODO Auto-generated method stub
+		// TODO Figure out what to do here :-P
 		return null;
 	}
 
@@ -75,13 +72,12 @@ public class Problem implements ProblemIF {
 
 	@Override
 	public String topic() {
-		return topic;
+		return this.topic;
 	}
 
 	@Override
 	public String label() {
-		// TODO Auto-generated method stub
-		return label;
+		return this.label;
 	}
 
 }

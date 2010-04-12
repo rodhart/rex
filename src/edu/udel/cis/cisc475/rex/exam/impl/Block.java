@@ -20,17 +20,14 @@ public class Block implements BlockIF {
 	}
 	
 	public SourceIF source() {
-		// TODO Auto-generated method stub
 		return source;
 	}
 
 	public String topic() {
-		// TODO Auto-generated method stub
 		return topic;
 	}
 
 	public String label() {
-		// TODO Auto-generated method stub
 		return this.label;
 	}
 

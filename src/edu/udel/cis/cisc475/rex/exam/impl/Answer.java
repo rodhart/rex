@@ -12,20 +12,18 @@ public class Answer implements AnswerIF {
 	private boolean correct;
 	private SourceIF source;
 	
-	public Answer(String text, boolean correct, SourceIF source){
+	public Answer(boolean correct, SourceIF source){
 		this.correct = correct;
 		this.source = source;
 	}
 	
 	@Override
 	public boolean isCorrect() {
-		// TODO Auto-generated method stub
 		return correct;
 	}
 
 	@Override
 	public SourceIF source() {
-		// TODO Auto-generated method stub
 		return source;
 	}
 

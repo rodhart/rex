@@ -21,19 +21,16 @@ public class FixedAnswer implements FixedAnswerIF {
 	
 	@Override
 	public int index() {
-		// TODO Auto-generated method stub
 		return index;
 	}
 
 	@Override
 	public boolean isCorrect() {
-		// TODO Auto-generated method stub
 		return isCorrect;
 	}
 
 	@Override
 	public SourceIF source() {
-		// TODO Auto-generated method stub
 		return source;
 	}
 
