@@ -1,6 +1,8 @@
 package edu.udel.cis.cisc475.rex.exam.impl;
 
 import java.util.Collection;
+import java.util.HashSet;
+
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
@@ -35,10 +37,18 @@ public class Problem implements ProblemIF {
 	@Override
 	public AnswerIF[] correctAnswers() {
 		// TODO Take out .correctAnswers, and have it loop through
-		// all of the answers and see which ones are correct.
+		// all of the answers and see which ones are correct.	
 		
-		// CURRENTLY RETURNS ALL ANSWERS! NOT JUST CORRECT ONES!
-		return this.answers;
+		Collection<AnswerIF> correct = new HashSet<AnswerIF>();
+		int i = 0;
+		
+		for(i=0;i<this.answers.length;i++){
+			if (this.answers[i].isCorrect() == true){
+				correct.add(this.answers[i]);
+			}
+		}
+
+		return (AnswerIF[]) correct.toArray(new AnswerIF[correct.size()]);
 	}
 
 	@Override
