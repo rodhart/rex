@@ -53,14 +53,14 @@ public Object[] choose (int numItems, Object[] items) {
 	if (numObjects == 0) {
 		System.err.printf("	in method " +
 				"public Object[] choose (int numItems, Object[] items)" +
-				"numObjects == 0");
+				"number of Objects == 0");
 		return null;		
 	}
 
 	if (numObjects < numItems) {
 		System.err.printf("	in method " +
 				"public Object[] choose (int numItems, Object[] items)" +
-				"numItems larger than numObjects");
+				"numItems larger than number of Objects");
 		return null;		
 	}
 
