@@ -37,9 +37,6 @@ public class Problem implements ProblemIF {
 	}
 	@Override
 	public AnswerIF[] correctAnswers() {
-		// TODO Take out .correctAnswers, and have it loop through
-		// all of the answers and see which ones are correct.	
-		
 		Collection<AnswerIF> correct = new HashSet<AnswerIF>();
 		int i = 0;
 		
@@ -65,8 +62,7 @@ public class Problem implements ProblemIF {
 	}
 	@Override
 	public Collection<FigureIF> referencedFigures() {
-		// TODO Figure out what to do here :-P
-		return null;
+		return this.referencedFigures;
 	}
 	public void addReferencedFigure(FigureIF fig){
 		referencedFigures.add(fig);
