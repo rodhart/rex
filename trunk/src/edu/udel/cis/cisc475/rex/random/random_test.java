@@ -6,7 +6,7 @@ package edu.udel.cis.cisc475.rex.random;
 import java.util.Random;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerFactoryIF;
-import edu.udel.cis.cisc475.rex.random.RandomizerFactory;
+import edu.udel.cis.cisc475.rex.random.impl.RandomizerFactory;
 
 /**
  * @author  CARDONA

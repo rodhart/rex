@@ -13,9 +13,9 @@ import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
-import edu.udel.cis.cisc475.rex.random.RandomizerFactory;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerFactoryIF;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
+import edu.udel.cis.cisc475.rex.random.impl.RandomizerFactory;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 public class Generator implements GeneratorIF {

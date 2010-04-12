@@ -1,4 +1,4 @@
-package edu.udel.cis.cisc475.rex.random;
+package edu.udel.cis.cisc475.rex.random.impl;
 
 
 
