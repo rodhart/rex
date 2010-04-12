@@ -5,7 +5,11 @@ import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
 
 /**
  * @author team 5
+<<<<<<< .mine
+ * hello
+=======
  * Outputs a randomized, completed exam file
+>>>>>>> .r212
  */
 public class ExamWriter implements ExamWriterIF {
 
@@ -20,12 +24,20 @@ public class ExamWriter implements ExamWriterIF {
 
 		this.exam = exam;
 		numElements = exam.numElements();
-		
 
 	}//end of constructor
 
 
 	public void write(PrintWriter out){
+		// output begining of exam file
+		out.printf("%s\n", exam.preamble());
+		out.printf("%s\n", exam.frontMatter());
+		
+		// output problems with respective answers
+		
+		// output the end block for exam
+		out.printf("%s\n", exam.finalblock());
+		
 	}//end of write(PrintWriter out)
 
 }//end of class 
