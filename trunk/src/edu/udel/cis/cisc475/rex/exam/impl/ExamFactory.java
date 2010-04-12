@@ -21,13 +21,12 @@ public class ExamFactory implements ExamFactoryIF {
 
 	// @Override
 	public AnswerIF newAnswer(boolean correct, SourceIF text) {
-		// TODO Change this to use the specified Answer constructor.
-	return new Answer(correct, text);
+		return new Answer(correct, text);
 	}
 
 	// @Override
 	public BlockIF newBlock(String topic, String label, SourceIF text) {
-	return new Block(topic, label, text);
+		return new Block(topic, label, text);
 	}
 
 	// @Override
@@ -38,14 +37,13 @@ public class ExamFactory implements ExamFactoryIF {
 	// @Override
 	public FixedAnswerIF newFixedAnswer(boolean correct, int index,
 			SourceIF text) {
-		// TODO Change this to use the specified Answer constructor.
 		return new FixedAnswer(index, correct, text);
 	}
 
 	// @Override
-		public ExamIF newGeneratedExam() {
-			return new Exam(false);
-		}
+	public ExamIF newGeneratedExam() {
+		return new Exam(false);
+	}
 
 	// @Override
 	public ExamIF newMasterExam() {
@@ -53,9 +51,7 @@ public class ExamFactory implements ExamFactoryIF {
 	}
 
 	// @Override
-	public ProblemIF newProblem(String topic, String label, SourceIF question,
-			AnswerIF[] answers) {
+	public ProblemIF newProblem(String topic, String label, SourceIF question, AnswerIF[] answers) {
 		return new Problem(topic, label, question, answers);
 	}
-
 }
