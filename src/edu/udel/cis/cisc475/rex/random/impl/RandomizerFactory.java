@@ -1,4 +1,4 @@
-package edu.udel.cis.cisc475.rex.random;
+package edu.udel.cis.cisc475.rex.random.impl;
 
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerFactoryIF;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
@@ -12,10 +12,9 @@ import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
 
 public class RandomizerFactory implements RandomizerFactoryIF {
 
-	@Override
+
 	public RandomizerIF newRandomizer(long seed) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Randomizer(seed);
 	}
 	
 }
