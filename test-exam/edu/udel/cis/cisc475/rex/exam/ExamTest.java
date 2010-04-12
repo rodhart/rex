@@ -45,9 +45,6 @@ public class ExamTest {
 	private static SourceFactoryIF sourceFactory;
 	private static ExamFactoryIF examFactory;
 	
-	private static ExamIF masterExam;
-	private static ExamIF generatedExam;
-	
 	private static String testUEFfilename = "testFileName.txt";
 
 	
@@ -64,9 +61,6 @@ public class ExamTest {
 		// TODO Uncomment when entry point is available
 		//examFactory = Exams.newExamFactory();
 		examFactory = new ExamFactory();
-		
-		masterExam = examFactory.newMasterExam();
-		generatedExam = examFactory.newGeneratedExam();
 	}
 	
 	@AfterClass
@@ -83,18 +77,23 @@ public class ExamTest {
 
 	@Test
 	public void testIsMaster() {
-		assertTrue(masterExam.isMaster());
-		assertFalse(generatedExam.isMaster());
+		ExamIF exam = examFactory.newMasterExam();
+		
+		assertTrue(exam.isMaster());
+		exam = examFactory.newGeneratedExam();
+		assertFalse(exam.isMaster());
 	}
 
 	@Test
 	public void testGetPreamble() {
+		ExamIF exam = examFactory.newMasterExam();
+		
 		SourceIF preambleSource = sourceFactory.newSource(testUEFfilename);
 		preambleSource.addText("Test Preamble Source");
 		
-		masterExam.setPreamble(preambleSource);
+		exam.setPreamble(preambleSource);
 		
-		SourceIF result = masterExam.preamble();
+		SourceIF result = exam.preamble();
 		assertNotNull(result);
 		assertNotNull(result.text());
 		assertEquals(preambleSource.text(), result.text());
@@ -103,19 +102,23 @@ public class ExamTest {
 	
 	@Test
 	public void testGetBadPreamble() {
-		masterExam.setPreamble(null);
+		ExamIF exam = examFactory.newMasterExam();
 		
-		assertNull(masterExam.preamble());
+		exam.setPreamble(null);
+		
+		assertNull(exam.preamble());
 	}
 	
 	@Test
 	public void testGetFrontMatter() {
+		ExamIF exam = examFactory.newMasterExam();
+		
 		SourceIF frontMatterSource = sourceFactory.newSource(testUEFfilename);
 		frontMatterSource.addText("Test Front Matter Source");
 		
-		masterExam.setFrontMatter(frontMatterSource);
+		exam.setFrontMatter(frontMatterSource);
 		
-		SourceIF result = masterExam.frontMatter();
+		SourceIF result = exam.frontMatter();
 		assertNotNull(result);
 		assertNotNull(result.text());
 		assertEquals(frontMatterSource.text(), result.text());
@@ -124,20 +127,24 @@ public class ExamTest {
 	
 	@Test
 	public void testGetBadFrontMatter() {
-		masterExam.setFrontMatter(null);
+		ExamIF exam = examFactory.newMasterExam();
 		
-		assertNull(masterExam.frontMatter());
+		exam.setFrontMatter(null);
+		
+		assertNull(exam.frontMatter());
 	}
 	
 	@Test
 	public void testGetFinalBlock() {
+		ExamIF exam = examFactory.newMasterExam();
+		
 		SourceIF blockSource = sourceFactory.newSource(testUEFfilename);
 		blockSource.addText("Test Block Source");
 		BlockIF block = examFactory.newBlock("Test Block Topic", "Test Block Label", blockSource);
 		
-		masterExam.setFinalBlock(block);
+		exam.setFinalBlock(block);
 		
-		BlockIF result = masterExam.finalBlock();
+		BlockIF result = exam.finalBlock();
 		assertNotNull(result);
 		assertNotNull(result.topic());
 		assertNotNull(result.label());
@@ -148,63 +155,208 @@ public class ExamTest {
 	
 	@Test
 	public void testGetBadFinalBlock() {
-		masterExam.setFinalBlock(null);
+		ExamIF exam = examFactory.newMasterExam();
 		
-		assertNull(masterExam.finalBlock());
+		exam.setFinalBlock(null);
+		
+		assertNull(exam.finalBlock());
 	}
 	
 	@Test
-	@Ignore
 	public void testGetNumElements() {
-		fail("Not yet implemented");
+		ExamIF exam = examFactory.newGeneratedExam();
+		
+		ProblemIF problem = createTestProblem();
+		FigureIF figure = createTestFigure();
+		BlockIF block = createTestBlock();
+		
+		assertEquals(0, exam.numElements());
+		
+		exam.addElementIF(problem);
+		exam.addElementIF(figure);
+		exam.addElementIF(block);
+		
+		assertEquals(3, exam.numElements());
 	}
 	
 	@Test
-	@Ignore
 	public void testGetElement() {
-		fail("Not yet implemented");
+		ExamIF exam = examFactory.newGeneratedExam();
+		
+		ProblemIF problem = createTestProblem();
+		FigureIF figure = createTestFigure();
+		BlockIF block = createTestBlock();
+		
+		ExamElementIF element = exam.element(0);
+		
+		assertNull(element);
+		
+		exam.addElementIF(problem);
+		exam.addElementIF(figure);
+		exam.addElementIF(block);
+		
+		element = exam.element(0);
+		
+		assertNotNull(element);
 	}
 	
 	@Test
-	@Ignore
 	public void testGetElements() {
-		fail("Not yet implemented");
+		ExamIF exam = examFactory.newGeneratedExam();
+		
+		ProblemIF problem = createTestProblem();
+		FigureIF figure = createTestFigure();
+		BlockIF block = createTestBlock();
+		
+		Collection<ExamElementIF> elements = exam.elements();
+		
+		assertNotNull(elements);
+		assertEquals(0, elements.size());
+		
+		exam.addElementIF(problem);
+		exam.addElementIF(figure);
+		exam.addElementIF(block);
+		
+		elements = exam.elements();
+		
+		assertNotNull(elements);
+		// size should be 2 because problem doesn't extend ExamElementIF
+		assertEquals(2, elements.size());
 	}
 	
 	@Test
-	@Ignore
 	public void testGetElementWithLabel() {
-		fail("Not yet implemented");
+		ExamIF exam = examFactory.newGeneratedExam();
+		
+		ProblemIF problem = createTestProblem();
+		FigureIF figure = createTestFigure();
+		BlockIF block = createTestBlock();
+		
+		ExamElementIF element = exam.elementWithLabel("Test Problem Label");
+		assertNull(element);
+		
+		exam.addElementIF(problem);
+		exam.addElementIF(figure);
+		exam.addElementIF(block);
+		
+		element = exam.elementWithLabel("Test Problem Label");
+		assertNotNull(element);
+		assertEquals(problem, element);
+		
+		element = exam.elementWithLabel("Test Figure Label");
+		assertNotNull(element);
+		assertEquals(figure, element);
+		
+		element = exam.elementWithLabel("Test Block Label");
+		assertNotNull(element);
+		assertEquals(block, element);
 	}
 	
 	@Test
-	@Ignore
 	public void testGetElementsWithTopic() {
-		fail("Not yet implemented");
+		ExamIF exam = examFactory.newGeneratedExam();
+		
+		ProblemIF problem1 = createTestProblem();
+		ProblemIF problem2 = createTestProblem();
+		FigureIF figure = createTestFigure();
+		BlockIF block = createTestBlock();
+		
+		Collection<ExamElementIF> elements = exam.elementsWithTopic("Test Problem Topic");
+		assertNotNull(elements);
+		assertEquals(0, elements.size());
+		
+		exam.addElementIF(problem1);
+		exam.addElementIF(problem2);
+		exam.addElementIF(figure);
+		exam.addElementIF(block);
+		
+		elements = exam.elementsWithTopic("Test Problem Topic");
+		assertNotNull(elements);
+		assertEquals(2, elements.size());
+		
 	}
 	
 	@Test
 	@Ignore
 	public void testGetElementsUsingElement() {
 		fail("Not yet implemented");
+		
+		
 	}
 	
 	@Test
-	@Ignore
 	public void testGetFigures() {
-		fail("Not yet implemented");
+		ExamIF exam = examFactory.newMasterExam();
+		
+		exam = examFactory.newGeneratedExam();
+		
+		
+		FigureIF figure1 = createTestFigure();
+		FigureIF figure2 = createTestFigure();
+		
+		Collection<FigureIF> figures = exam.figures();
+		assertNotNull(figures);
+		assertEquals(0, figures.size());
+		
+		exam.addElementIF(figure1);
+		exam.addElementIF(figure2);
+		
+		figures = exam.figures();
+		assertNotNull(figures);
+		assertEquals(2, figures.size());
+		assertTrue(figures.contains(figure1));
+		assertTrue(figures.contains(figure2));
 	}
 	
 	@Test
-	@Ignore
 	public void testGetLabels() {
-		fail("Not yet implemented");
+		ExamIF exam = examFactory.newMasterExam();
+		
+		exam = examFactory.newGeneratedExam();
+		
+		ProblemIF problem = createTestProblem();
+		FigureIF figure = createTestFigure();
+		BlockIF block = createTestBlock();
+		
+		Collection<String> labels = exam.labels();
+		assertNotNull(labels);
+		assertEquals(0, labels.size());
+		
+		exam.addElementIF(problem);
+		exam.addElementIF(figure);
+		exam.addElementIF(block);
+		
+		labels = exam.labels();
+		assertNotNull(labels);
+		assertEquals(3, labels.size());
+		assertTrue(labels.contains("Test Problem Label"));
+		assertTrue(labels.contains("Test Figure Label"));
+		assertTrue(labels.contains("Test Block Label"));
 	}
 	
 	@Test
-	@Ignore
 	public void testGetTopics() {
-		fail("Not yet implemented");
+		ExamIF exam = examFactory.newMasterExam();
+		
+		exam = examFactory.newGeneratedExam();
+		
+		ProblemIF problem = createTestProblem();
+		FigureIF figure = createTestFigure();
+		BlockIF block = createTestBlock();
+		
+		Collection<String> topics = exam.topics();
+		assertNotNull(topics);
+		assertEquals(0, topics.size());
+		
+		exam.addElementIF(problem);
+		exam.addElementIF(figure);
+		exam.addElementIF(block);
+		
+		topics = exam.labels();
+		assertNotNull(topics);
+		assertEquals(2, topics.size());
+		assertTrue(topics.contains("Test Problem Topic"));
+		assertTrue(topics.contains("Test Block Topic"));
 	}
 	
 	@Test
@@ -239,21 +391,23 @@ public class ExamTest {
 	
 	@Test
 	public void testAddElement() {
-		generatedExam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newMasterExam();
+		
+		exam = examFactory.newGeneratedExam();
 		
 		ProblemIF problem = createTestProblem();
 		FigureIF figure = createTestFigure();
 		BlockIF block = createTestBlock();
 		
-		Collection<ExamElementIF> elements = generatedExam.elements();
+		Collection<ExamElementIF> elements = exam.elements();
 		assertNotNull(elements);
 		assertEquals(0, elements.size());
 		
-		generatedExam.addElementIF(problem);
-		generatedExam.addElementIF(figure);
-		generatedExam.addElementIF(block);
+		exam.addElementIF(problem);
+		exam.addElementIF(figure);
+		exam.addElementIF(block);
 		
-		elements = generatedExam.elements();
+		elements = exam.elements();
 		assertNotNull(elements);
 		assertEquals(3, elements.size());
 		assertTrue(elements.contains(problem));
@@ -264,11 +418,13 @@ public class ExamTest {
 	@Test
 	@Ignore
 	public void testAddBadElement() {
-		generatedExam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newMasterExam();
 		
-		generatedExam.addElementIF(null);
+		exam = examFactory.newGeneratedExam();
 		
-		Collection<ExamElementIF> elements = generatedExam.elements();
+		exam.addElementIF(null);
+		
+		Collection<ExamElementIF> elements = exam.elements();
 		assertNotNull(elements);
 		assertEquals(0, elements.size());
 	}
@@ -310,14 +466,14 @@ public class ExamTest {
 		testAnswers[3] = testAnswer4;
 		
 		// create test problem
-		return examFactory.newProblem("Test Topic", "Test Problem Label", testQuestionSource, testAnswers);
+		return examFactory.newProblem("Test Problem Topic", "Test Problem Label", testQuestionSource, testAnswers);
 	}
 	
 	private static FigureIF createTestFigure() {
 		SourceIF figureSource;
 		
-		String testUEFfilename = "testFileName.txt";
-		String testLabel = "test Label";
+		String testUEFfilename = "TestFileName.txt";
+		String testLabel = "Test Figure Label";
 		
 		figureSource = sourceFactory.newSource(testUEFfilename);
 		figureSource.addText("Test Figure Source");
@@ -328,11 +484,12 @@ public class ExamTest {
 		SourceIF blockSource;
 		
 		String testUEFfilename = "testFileName.txt";
-		String testTopic = "test Topic";
-		String testLabel = "test Label";
+		String testTopic = "Test Block Topic";
+		String testLabel = "Test Block Label";
 		
 		blockSource = sourceFactory.newSource(testUEFfilename);
 		blockSource.addText("Test Block Source");
 		return examFactory.newBlock(testTopic, testLabel, blockSource);
 	}
+	
 }
