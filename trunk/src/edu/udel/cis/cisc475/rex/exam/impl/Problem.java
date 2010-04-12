@@ -12,9 +12,17 @@ public class Problem implements ProblemIF {
 	private double difficulty;
 	private String topic;
 	private String label;
+	private SourceIF question;
 	private AnswerIF[] answers;
 	private AnswerIF[] correctAnswers;
 	
+	protected Problem(String topic, String label, SourceIF question,
+			AnswerIF[] answers) {
+		this.topic = topic;
+		this.label = label;
+		this.question = question;
+		this.correctAnswers = answers;
+	}
 	@Override
 	public AnswerIF[] answers() {
 		return answers;
@@ -68,7 +76,7 @@ public class Problem implements ProblemIF {
 	@Override
 	public String label() {
 		// TODO Auto-generated method stub
-		return null;
+		return label;
 	}
 
 }
