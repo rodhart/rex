@@ -19,5 +19,6 @@ public interface SourceIF {
 	void setLastColumn(int column);
 	void write(PrintWriter out); 
 	void addText(String text);
+	
 }//end of interface SourceIF 
  

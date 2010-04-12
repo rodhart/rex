@@ -10,7 +10,9 @@ import java.util.Scanner;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /**
- * @author team 5
+ * @author Jim Cardona
+ * @author Justin Johnson
+ * @author Jack Song
  *
  */
 public class Source implements SourceIF {
@@ -22,10 +24,9 @@ public Source(String filename) {
 	 Text = " "; //using this as temp string buffer only
 
     // create File object based on user input
-	fileName = filename;	
-    name = new File( fileName );
+	 fileName = filename;	
+	 name = new File( fileName );
 	
-
 	 //array list object that will contain all of our lines of imported text
 	 text_lines = new ArrayList<String>();
 	 
@@ -62,7 +63,7 @@ public Source(String filename) {
         	 lastline++; //increment # of lines
 
          } // end while
-
+         lastline--;
 	 
 	 
      }//end of if ( name.isFile() )
@@ -73,9 +74,6 @@ public Source(String filename) {
      }//end of if ( name.exists() ) 
      	else {}
      	// exception file not found
-     	 
-     
-     
      
 }//end of constructor
 
@@ -95,25 +93,33 @@ public void setStartColumn(int column)  {startcolumn=column;}
 public void setLastLine(int line) 		{lastline=line;}
 public void setLastColumn(int column) 	{lastcolumn=column;}
 
-
 //output of our array list string object
 public void write(PrintWriter out) {
 	// loop through the array list and dump
 	//	the contents to out
 	// use delimiters set by requesting program of
 	//start and end rows
+	
 	String tempString = "";
-	for(int i = startcolumn; i<text_lines.get(startline).length(); i++)
-		tempString += text_lines.get(startline).charAt(i);
-	out.printf("%s\n", tempString);
+	if(startcolumn < text_lines.get(startline).length())
+	{
+		for(int i = startcolumn; i<text_lines.get(startline).length(); i++)
+			tempString += text_lines.get(startline).charAt(i);
+		out.printf("%s\n", tempString);
+	}
 	
 	for (int i = startline + 1; (i < text_lines.size()) && (i < lastline - 1); i++)
 		out.printf("%s\n", text_lines.get(i)); 
 	tempString = "";
 	
-	for(int i = 0; (i<text_lines.get(lastline).length() && i < lastcolumn); i++)
-		tempString += text_lines.get(lastline).charAt(i);
-	out.printf("%s\n", tempString);
+	if(lastcolumn == 0)
+		out.printf("%s\n", text_lines.get(lastline));
+	else
+	{
+		for(int i = 0; (i<text_lines.get(lastline).length() && i < lastcolumn); i++)
+			tempString += text_lines.get(lastline).charAt(i);
+		out.printf("%s\n", tempString);
+	}
 } 
 
 // add text to our structure
