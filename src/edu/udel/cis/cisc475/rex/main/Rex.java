@@ -15,11 +15,10 @@ public class Rex {
 		File uef = null;
 		
 		/*
-		 * Test Usage
+		 * Test Usage Failure
 		 */
 		if (numArgs < 3) {
-			System.err
-					.println("Usage: rex [options] <UEF filename> <ECF filename>");
+			printUsage();
 			System.exit(-1);
 		}
 		int i = 1;
@@ -53,7 +52,7 @@ public class Rex {
 			 */
 			else{
 				System.err.println(args[i] + " is not a valid option!");
-				
+				printUsage();
 				System.exit(-1);
 			}
 		}
@@ -66,6 +65,7 @@ public class Rex {
 		else{
 			System.err.println(args[numArgs-2] + " does not appear to" +
 					"be a valid .tex file!");
+			printUsage();
 			System.exit(-1);
 		}
 		/*
@@ -77,8 +77,22 @@ public class Rex {
 		else{
 			System.err.println(args[numArgs-2] + " does not appear to" +
 					"be a valid .ecf file!");
+			printUsage();
 			System.exit(-1);
 		}
 		
+	}
+	private static void printUsage(){
+		
+		System.err
+		.println("Usage: rex [options] <UEF filename> <ECF filename>");
+		System.err.println("Options: ");
+		System.err.println("    -n numExams : int numExams declares"+
+				" number of exams");
+		System.err.println("    -seed seed : long seed declares"+ 
+				"the seed for randomization");
+		System.err.println("    -pdf       : sets the pdf option"+ 
+				"in order to have the exams output in pdf as well"+ 
+				" as .tex files.");
 	}
 }
