@@ -21,6 +21,8 @@ public class Problem implements ProblemIF {
 	private String label;
 	private SourceIF question;
 	private AnswerIF[] answers;
+	private Collection<FigureIF> referencedFigures;
+	private BlockIF requiredBlock;
 	
 	protected Problem(String topic, String label, SourceIF question,
 			AnswerIF[] answers) {
@@ -33,7 +35,6 @@ public class Problem implements ProblemIF {
 	public AnswerIF[] answers() {
 		return this.answers;
 	}
-
 	@Override
 	public AnswerIF[] correctAnswers() {
 		// TODO Take out .correctAnswers, and have it loop through
@@ -50,44 +51,44 @@ public class Problem implements ProblemIF {
 
 		return (AnswerIF[]) correct.toArray(new AnswerIF[correct.size()]);
 	}
-
 	@Override
 	public double difficulty() {
 		return this.difficulty;
 	}
-
 	@Override
 	public Integer points() {
 		return this.points;
 	}
-
 	@Override
 	public SourceIF question() {
 		return this.question;
 	}
-
 	@Override
 	public Collection<FigureIF> referencedFigures() {
 		// TODO Figure out what to do here :-P
 		return null;
 	}
-
+	public void addReferencedFigure(FigureIF fig){
+		referencedFigures.add(fig);
+	}
 	@Override
 	public BlockIF requiredBlock() {
-		// TODO Figure out what to do here :-P
-		return null;
+		return this.requiredBlock;
 	}
-
+	public void setRequiredBlock(BlockIF block){
+		this.requiredBlock = block;
+	}
 	@Override
 	public void setPoints(int points) {
 		this.points = points;
 	}
-
+	public void setDifficulty(double difficulty){
+		this.difficulty = difficulty;
+	}
 	@Override
 	public String topic() {
 		return this.topic;
 	}
-
 	@Override
 	public String label() {
 		return this.label;
