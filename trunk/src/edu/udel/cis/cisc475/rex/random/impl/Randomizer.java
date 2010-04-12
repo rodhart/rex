@@ -39,26 +39,38 @@ public class Randomizer implements RandomizerIF {
 	
 	
 	/**
-	 *  General purpose random chooser: 
-	 * can be used to permute answers 
-	 * (let numItems=items.length) 
-	 * permute topics, select problems 
+	 *  General purpose random chooser: can be used to permute answers 
+	 * (let numItems=items.length) permute topics, select problems 
 	 * satisfying constraints (first filter then select) 
 	 * 
-	 * @param number of items to return
-	 * @param the arrays of objects o choose from
+	 * @param numItems  number of items to return
+	 * @param items  the arrays of objects o choose from
 	 * @return an array of chosen objects
 	 */
 public Object[] choose (int numItems, Object[] items) {
 
 	int numObjects = items.length; //total number of array elements
+	if (numObjects == 0) {
+		System.err.printf("	in method " +
+				"public Object[] choose (int numItems, Object[] items)" +
+				"numObjects == 0");
+		return null;		
+	}
+
+	if (numObjects < numItems) {
+		System.err.printf("	in method " +
+				"public Object[] choose (int numItems, Object[] items)" +
+				"numItems larger than numObjects");
+		return null;		
+	}
+
+	
 	int pickedNums[] = new int[numItems];
 	int nextNum = 0;
 	int numofPickedNums = 0; //how many numbers have been already picked
-	
 	boolean done = false; 
 	boolean alreadyPicked = false;
-	
+		
 	//do the first one outside of the loop
 	//this assumes that user wants at least
 	//one object back

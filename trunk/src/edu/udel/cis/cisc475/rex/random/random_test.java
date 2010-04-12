@@ -21,10 +21,10 @@ public class random_test {
 	public static void main(String[] args) {
 
 		//create some objects
-		String a[] = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"};
-		for(int i = 0; i < 3; i++) {
-			System.out.printf("in random test main before call %s\n", a[i]);
-			}
+		String a[] = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+				"two_one", "two_two", "two_three", "two_four", "two_five", "two_six", "two_seven", "two_eight", "two_nine", "two_ten",
+				"three_one", "three_two", "three_three", "three_four", "three_five", "three_six", "three_seven", "three_eight", "three_nine", "three_ten",
+				"four_one", "four_two", "four_three", "four_four", "four_five", "four_six", "four_seven", "four_eight", "four_nine", "four_ten"};
 
 		long seed = 3;
 		
@@ -48,10 +48,10 @@ public class random_test {
 		RandomizerIF R = RF.newRandomizer(seed);
 		
 		Object[] b = new String[10];
-		b =  R.choose (3, a);		
+		b =  R.choose (10, a);		
 	
 		
-		for(int i = 0; i < 3; i++) {
+		for(int i = 0; i < 10; i++) {
 		System.out.printf("in random test main after return from call %s\n", b[i]);
 		}
 
