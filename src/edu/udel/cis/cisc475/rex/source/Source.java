@@ -102,9 +102,18 @@ public void write(PrintWriter out) {
 	//	the contents to out
 	// use delimiters set by requesting program of
 	//start and end rows
+	String tempString = "";
+	for(int i = startcolumn; i<text_lines.get(startline).length(); i++)
+		tempString += text_lines.get(startline).charAt(i);
+	out.printf("%s\n", tempString);
 	
-	for (int i = startline; (i < text_lines.size()) && (i < lastline); i++)
+	for (int i = startline + 1; (i < text_lines.size()) && (i < lastline - 1); i++)
 		out.printf("%s\n", text_lines.get(i)); 
+	tempString = "";
+	
+	for(int i = 0; (i<text_lines.get(lastline).length() && i < lastcolumn); i++)
+		tempString += text_lines.get(lastline).charAt(i);
+	out.printf("%s\n", tempString);
 } 
 
 // add text to our structure
