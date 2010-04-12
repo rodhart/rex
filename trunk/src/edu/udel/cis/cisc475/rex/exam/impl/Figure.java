@@ -19,12 +19,10 @@ public class Figure implements FigureIF {
 	}
 
 	public SourceIF source() {
-		// TODO Auto-generated method stub
 		return source;
 	}
 
 	public String label() {
-		// TODO Auto-generated method stub
 		return label;
 	}
 
