@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Stack;
 
 /**
  * Parser for the Universal Exam File (UEF).
@@ -26,12 +27,21 @@ import java.io.InputStreamReader;
 public class UEFParser implements UEFParserIF
 {
 
-	// Some useful states
-	private boolean isComment = false;
-	// Subclass that implements general parsing of the file
-	private UEF uef = new UEF();
+	// Stack to maintain a hiearchary of states.
+	Stack<States> state;
+
+	// The list of states we have.
+	//States.top is just so we know we are at the top of the stack
+	private enum States
+	{
+		top, comment, verbatim
+	}
+
+	// Subclass that implements general parsing of the file.
+	private UEF uef;
+
 	// Subclass that implements parsing of commands.
-	private Command command = new Command();
+	private Command command;
 
 	// The latex commands that we currently understand.
 	private enum CommandTypes
@@ -41,15 +51,18 @@ public class UEFParser implements UEFParserIF
 		endAnswers, answer, none
 	}
 
-	/**
-	 * Returns whether our current position in the stream is within a comment.
-	 *
-	 * @return true if we are in a comment and false if we are not.
-	 */
-	private boolean isComment()
-	{
-		return isComment;
-	}
+	public UEFParser()
+		{
+		// Stack to maintain a hiearchary of states.
+		state = new Stack<States>();
+		state.push(States.top);
+
+		// Subclass that implements general parsing of the file
+		uef = new UEF();
+		// Subclass that implements parsing of commands.
+		command = new Command();
+
+	}	
 
 	/**
 	 * Class that handles the underlying file character by character.
@@ -209,7 +222,7 @@ public class UEFParser implements UEFParserIF
 		 *
 		 * @return A String with all characters read
 		 */
-		private String peakUntil()
+		private String peekUntil()
 		{
 			// get the current position in the file
 			int currentPosition = uef.getPosition();
@@ -261,7 +274,7 @@ public class UEFParser implements UEFParserIF
 
 				// Check to see if the current character begins a command and
 				// whether it is in a comment or not.
-				if (uef.read() == '\\' && !isComment())
+				if (uef.read() == '\\' && state.peek() != States.comment)
 				{
 					lastPosition = uef.getPosition();
 					String command = new String();
@@ -363,7 +376,7 @@ public class UEFParser implements UEFParserIF
 		private void processAnswer()
 		{
 			// get text after Answer until the next command
-			String buffer = command.peakUntil();
+			String buffer = command.peekUntil();
 			System.out.println("Found an answer with the following text:");
 			System.out.println("-----------------------------------");
 			System.out.println(buffer);
@@ -405,7 +418,7 @@ public class UEFParser implements UEFParserIF
 							   + "' with the following text:");
 
 			// get text for the problem
-			String buffer = peakUntil();
+			String buffer = peekUntil();
 			System.out.println("-----------------------------------");
 			System.out.println(buffer);
 			System.out.println("-----------------------------------");
@@ -447,12 +460,13 @@ public class UEFParser implements UEFParserIF
 		if (uef.read() == '%')
 		{
 			// comment character to set that we are at a comment
-			this.isComment = true;
+			state.push(States.comment);
 		}
 		else if (uef.read() == '\n')
 		{
 			// new line so unset that we are at a comment
-			this.isComment = false;
+			if(state.peek() == States.comment)
+				state.pop();
 		}
 	}
 
