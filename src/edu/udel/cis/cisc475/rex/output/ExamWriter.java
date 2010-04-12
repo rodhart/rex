@@ -5,7 +5,7 @@ import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
 
 /**
  * @author team 5
- *
+ * Outputs a randomized, completed exam file
  */
 public class ExamWriter implements ExamWriterIF {
 
