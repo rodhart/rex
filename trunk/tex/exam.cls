@@ -12,7 +12,6 @@
         %example:
         %       \documentclass[master]{exam}
 \DeclareOption{master}{\printanswerstrue}
-%\DeclareOption{foo}{\typeout{Saw foo.}}
 \ProcessOptions
 
 	%example:
@@ -30,26 +29,37 @@
 	%	end{answers}
 \newenvironment{answers}{\begin{enumerate}}{\end{enumerate}}
 
+       %compares two string, returns \sametrue if strings equal
+\newif\ifsame
+\newcommand{\strcfstr}[2]{%
+\samefalse
+\begingroup
+\def\1{#1}\def\2{#2}%
+\ifx\1\2\endgroup \sametrue
+\else \endgroup
+\fi}
+
+
 	%example: 
 	%	\answer[correct,fixed] text
         % 0 arguements, 1 optional arguement
-\newcommand{\answer}[1][\@empty]{
- \ifprintanswers
-   \ifx\@empty#1
-     \item
+\newcommand{\answer}[1][]{
+ \ifprintanswers %if master option present
+   \strcfstr{#1}{correct}
+   \ifsame %if correct, mark w/star
+       \item
+       $\star$
     \else
-      \item
-	$\star$
+      \strcfstr{#1}{correct,fixed}
+      \ifsame %if correct,fixed, mark w/star
+         \item
+	 $\star$
+      \else 
+         \item
+      \fi
    \fi	
- \else
+ \else %not master option
    \item
  \fi
 }
-
-%prints to commandline if master is present
-%\ifprintanswers
-%typeout{MASTER HERE}
-%\else
-%\typeout{NOT HERE}
-%\fi
 
