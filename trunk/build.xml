@@ -9,13 +9,11 @@
 	<property name="jar-path" value="${basedir}/${jar-name}" />
 	<property name="main-class" value="edu.udel.cis.cisc475.rex.REX" />
 	<property name="64bit" value="-d64" />
-	
-	<property name="test.src.dir" location="${basedir}/test" />
-	<property name="test.bin.dir" location="${basedir}/bin-test" />
+
 
 
 	<!-- Junit: automated unit tester Properties  -->
-
+	<property name="test.bin.dir" location="${basedir}/bin-test" />
 	<property name="junit.dir" location="${basedir}/junit" />
 	<property name="junit.data.dir" location="${junit.dir}/data" />
 	<property name="junit.reports.dir" location="${junit.dir}/reports" />
@@ -46,7 +44,7 @@
 	</path>
 
 
-	<target name="compile"  description="Compile all java source files.">
+	<target name="compile" description="Compile all java source files.">
 		<mkdir dir="${bin}" />
 		<javac debug="true" srcdir="${src}" destdir="${bin}" includes="edu/udel/cis/cisc475/rex/**" classpathref="classpath">
 		</javac>
@@ -66,41 +64,46 @@
 		<delete file="${cob.log.file}" />
 	</target>
 
-	
+
 	<!-- Plain JUnit tests -->
 
 
 	<path id="test.compile.classpath">
-		<pathelement location="${jar-path}" />
-		<pathelement location="${test.src.dir}" />
+		<pathelement location="${basedir}/test-exam" />
+		<pathelement location="${basedir}/test-generate" />
+		<pathelement location="${basedir}/test-key" />
+		<pathelement location="${basedir}/test-output" />
+		<pathelement location="${basedir}/test-random" />
+		<pathelement location="${basedir}/test-source" />
+		<pathelement location="${basedir}/test-uefparser" />
+		<pathelement location="${bin}" />
 		<pathelement location="${junit.name}" />
 	</path>
 
 	<path id="test.execute.classpath">
-		<pathelement location="${jar-path}" />
 		<pathelement location="${test.bin.dir}" />
+		<pathelement location="${bin}" />
 		<pathelement location="${junit.name}" />
 	</path>
 
 	<target name="test-init">
-		<tstamp>
-			<format property="DSTAMP" pattern="d-MMMM-yyyy" timezone="America/New_York" />
-			<format property="TODAY" pattern="d-MMMM-yyyy" timezone="America/New_York" />
-			<format property="TSTAMP" pattern="d-MMMM-yyyy" timezone="America/New_York" />
-		</tstamp>
 		<delete dir="${junit.dir}" quiet="true" />
-		<delete dir="${examples.bin.dir}" quiet="true" />
-		<delete dir="${test.bin.dir}" quiet="true" />
+		<delete dir="${basedir}/test-bin" quiet="true" />
 		<mkdir dir="${junit.dir}" />
 		<mkdir dir="${junit.data.dir}" />
 		<mkdir dir="${junit.reports.dir}" />
-		<mkdir dir="${examples.bin.dir}" />
 		<mkdir dir="${test.bin.dir}" />
 	</target>
 
-	<target name="test-compile" depends="jar,test-init">
-		<javac destdir="${test.bin.dir}" debug="true" includeAntRuntime="true" srcdir="${test.src.dir}">
-			<classpath refid="test.compile.classpath" />
+	<target name="test-compile" depends="compile,test-init">
+		<javac destdir="${test.bin.dir}" debug="true" failonerror="false" classpathref="test.compile.classpath">
+			<src path="${basedir}/test-exam" />
+			<src path="${basedir}/test-generate" />
+			<src path="${basedir}/test-key" />
+			<src path="${basedir}/test-output" />
+			<src path="${basedir}/test-random" />
+			<src path="${basedir}/test-source" />
+			<src path="${basedir}/test-uefparser" />
 		</javac>
 	</target>
 
