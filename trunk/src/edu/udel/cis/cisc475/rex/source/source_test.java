@@ -53,11 +53,11 @@ public class source_test {
 		System.out.printf("now display between bounds lines 0 to 3 - will show lines 0, 1, 2\n");
 		S.write(pw); 
 		
-		System.out.printf("setting startline to 6\n");
-		S.setStartLine(6);			
+		System.out.printf("setting startline to 7\n");
+		S.setStartLine(655);			
 		System.out.printf("startline is %d \n", S.startLine());			
 		System.out.printf("setting lastline to 7\n");
-		S.setLastLine(7);			
+		S.setLastLine(1000);			
 		System.out.printf("lastline is %d \n", S.startLine());			
 		System.out.printf("now display between bounds lines 6 to 7 - will show line 6\n");
 		S.write(pw); 
