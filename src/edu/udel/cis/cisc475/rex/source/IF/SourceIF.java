@@ -3,7 +3,9 @@ package edu.udel.cis.cisc475.rex.source.IF;
 import java.io.PrintWriter;
 
 /**
- * @author team 5
+ * Interface for Source class
+ * 
+ * @author Jim Cardona
  *
  */
 public interface SourceIF {

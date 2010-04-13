@@ -10,14 +10,23 @@ import java.util.Scanner;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /**
+ * A class that reads in a text-based input and writes it 
+ * with a PrintWriter.  A section can be selected with starting
+ * line, ending line, starting column, and ending column.
+ * 
  * @author Jim Cardona
  * @author Justin Johnson
  * @author Jack Song
+ * @version .3, 12 Apr 2010
  *
  */
 public class Source implements SourceIF {
 
-//constructor
+/**
+ * Constructor for the class
+ * 
+ * @param filename The name of the file to be read
+ */
 public Source(String filename) {
 	 //init private vars
      startline = startcolumn = lastline = lastcolumn = 0;	
@@ -94,35 +103,73 @@ public void setLastLine(int line) 		{lastline=line;}
 public void setLastColumn(int column) 	{lastcolumn=column;}
 
 //output of our array list string object
+/**
+ * Writes selected lines and columns to a PrintWriter object.
+ * 
+ * @param out PrintWriter object to output to
+ */
 public void write(PrintWriter out) {
 	// loop through the array list and dump
 	//	the contents to out
 	// use delimiters set by requesting program of
 	//start and end rows
+	int size = text_lines.size();
 	
 	String tempString = "";
-	if(startcolumn < text_lines.get(startline).length())
+	if(startline < 0 || lastline < 0 || startline > lastline)
 	{
-		for(int i = startcolumn; i<text_lines.get(startline).length(); i++)
+		System.err.println("Startline = " + startline);
+		System.err.println("Lastline = " + lastline);
+		System.err.println("Boundary error");
+	}
+	else if(startline > size)
+	{
+		System.err.println("Startline is past the end of file");
+	}
+	else if(lastline > size)
+	{
+		lastline = size-1;
+	}
+	else if(startline == lastline)
+	{
+		for(int i = startcolumn; i < text_lines.get(startline).length(); i++)
+		{
 			tempString += text_lines.get(startline).charAt(i);
-		out.printf("%s\n", tempString);
+		}
+		System.out.printf("%s\n", tempString);
 	}
 	
-	for (int i = startline + 1; (i < text_lines.size()) && (i < lastline - 1); i++)
-		out.printf("%s\n", text_lines.get(i)); 
-	tempString = "";
-	
-	if(lastcolumn == 0)
-		out.printf("%s\n", text_lines.get(lastline));
 	else
 	{
-		for(int i = 0; (i<text_lines.get(lastline).length() && i < lastcolumn); i++)
-			tempString += text_lines.get(lastline).charAt(i);
-		out.printf("%s\n", tempString);
+		if(startcolumn < text_lines.get(startline).length())
+		{
+			for(int i = startcolumn; i<text_lines.get(startline).length(); i++)
+				tempString += text_lines.get(startline).charAt(i);
+			out.printf("%s\n", tempString);
+		}
+
+		for (int i = startline + 1; (i < size) && (i < lastline - 1); i++)
+			out.printf("%s\n", text_lines.get(i)); 
+		tempString = "";
+
+		if(lastcolumn == 0)
+			out.printf("%s\n", text_lines.get(lastline));
+		else
+		{
+			for(int i = 0; (i<text_lines.get(lastline).length() && i < lastcolumn); i++)
+				tempString += text_lines.get(lastline).charAt(i);
+			out.printf("%s\n", tempString);
+		}
 	}
 } 
 
 // add text to our structure
+
+/**
+ * Adds a line of text to the bottom of the data structure
+ * 
+ * @param text Text to be added
+ */
 public void addText(String text) {
 	text_lines.add(text);
 }
