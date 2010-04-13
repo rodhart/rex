@@ -29,6 +29,6 @@ system("$ant cobertura >>$out 2>>$err");
 system("cp -r cobertura/reports /home/www/cisc475/htdocs/cobertura");
 
 system("cp $out /home/www/cisc475/htdocs/build.out");
-system("cp $err /home/www/cisc475/htdocs/buiod.err");
+system("cp $err /home/www/cisc475/htdocs/build.err");
 
 1;
