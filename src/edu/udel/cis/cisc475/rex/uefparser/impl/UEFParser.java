@@ -30,14 +30,14 @@ public class UEFParser implements UEFParserIF {
 	 * top of the stack
 	 */
 	enum States {
-		top, comment, documentclass, verbatim, problem, answers, answer
+
+		top, comment, documentclass, verb, verbatim, problem, answers, answer
 	}
 
 	/**
 	 * Subclass that implements general parsing of the file.
 	 */
 	UEFCharHandler uefCharHandler;
-
 	/**
 	 * Subclass that implements parsing of commands.
 	 */
