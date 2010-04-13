@@ -28,6 +28,11 @@ public interface ProblemIF extends ExamElementIF {
 	 * @param points set amount of points the problem is worth
 	 */
 	void setPoints(int points);
+	
+	/**
+	 * @param sets the difficulty of the problems
+	 */
+	void setDifficulty(double difficulty);
 
 	/**
 	 * @return problem topic
