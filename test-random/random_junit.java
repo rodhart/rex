@@ -1,4 +1,4 @@
-import static org.junit.Assert.*;
+	import static org.junit.Assert.*;
 
 import org.junit.BeforeClass;
 	import org.junit.Test;
@@ -26,20 +26,27 @@ long seed;
 			seed = 3;
 			RandomizerFactoryIF RF = new RandomizerFactory(); 
 			RandomizerIF R1 = RF.newRandomizer(seed);
+			
+			RandomizerFactoryIF RF_2 = new RandomizerFactory(); 
+			RandomizerIF R1_2 = RF.newRandomizer(seed);
+			
+			
 			// initialize several blank objects
 			//these are where we will stuff our randomized string arrays
 			Object[] b = new String[10];
 			Object[] b_check = new String[10];
 			b 		=  R1.choose (9, a);		
-			b_check =  R1.choose (9, a);		
+			b_check =  R1_2.choose (9, a);		
 
-			
+			boolean result;
 			for(int i = 0; i < 9; i++) {
-				System.out.printf("call: %d,  %s,    %s\n",i, b[i], b_check[i]);
-				}
+				//System.out.printf("call: %d,  %s,    %s\n",i, b[i], b_check[i]);
+				result = b[i].equals(b_check[i]);
+				assertEquals (true, result);
+			}
 			
-			boolean result = b.equals(b_check);
-	    	assertEquals (true, result);
+			//boolean result = b.equals(b_check);
+	    	//assertEquals (true, result);
 		}//end of test_choose
 		
 		
@@ -48,34 +55,75 @@ long seed;
 			//init a few different randomizers
 			seed = 4236;
 			RandomizerFactoryIF RF = new RandomizerFactory(); 
-			RandomizerIF R2 = RF.newRandomizer(seed);
+			RandomizerIF R1 = RF.newRandomizer(seed);
+			
+			RandomizerFactoryIF RF_2 = new RandomizerFactory(); 
+			RandomizerIF R1_2 = RF.newRandomizer(seed);
+			
 			// initialize several blank objects
 			//these are where we will stuff our randomized string arrays
 			Object[] c = new String[10];
 			Object[] c_check = new String[10];
-			c 		=  R2.choose (9, a);		
-			c_check =  R2.choose (9, a);		
+			c 		=  R1.choose (9, a);		
+			c_check =  R1_2.choose (9, a);		
 
 			boolean result = c.equals(c_check);
-	    	assertEquals (true, result);
-		}//end of test_choose
+			for(int i = 0; i < 9; i++) {
+				//System.out.printf("call: %d,  %s,    %s\n",i, b[i], b_check[i]);
+				result = c[i].equals(c_check[i]);
+				assertEquals (true, result);
+			}		}//end of test_choose
 		
 		@Test
 		public void test_choose_d() {
 			//init a few different randomizers
 			seed = 36;
 			RandomizerFactoryIF RF = new RandomizerFactory(); 
-			RandomizerIF R3 = RF.newRandomizer(seed);
+			RandomizerIF R1 = RF.newRandomizer(seed);
+			
+			RandomizerFactoryIF RF_2 = new RandomizerFactory(); 
+			RandomizerIF R1_2 = RF.newRandomizer(seed);
+			
 			// initialize several blank objects
 			//these are where we will stuff our randomized string arrays
 			Object[] d = new String[10];
 			Object[] d_check = new String[10];
-			d 		=  R3.choose (9, a);		
-			d_check =  R3.choose (9, a);		
+			d 		=  R1.choose (9, a);		
+			d_check =  R1_2.choose (9, a);		
 
-			boolean result = d.equals(d_check);
-	    	assertEquals (true, result);
+			boolean result;
+			for(int i = 0; i < 9; i++) {
+				//System.out.printf("call: %d,  %s,    %s\n",i, b[i], b_check[i]);
+				result = d[i].equals(d_check[i]);
+				assertEquals (true, result);
+			}
+		}//end of test_choose
+
+		@Test
+		public void test_choose_e() {
+			//init a few different randomizers
+			seed = 36;
+			RandomizerFactoryIF RF = new RandomizerFactory(); 
+			RandomizerIF R1 = RF.newRandomizer(seed);
+			
+			RandomizerFactoryIF RF_2 = new RandomizerFactory(); 
+			RandomizerIF R1_2 = RF.newRandomizer(seed);
+			
+			// initialize several blank objects
+			//these are where we will stuff our randomized string arrays
+			Object[] e = new String[10];
+			Object[] e_check = new String[10];
+			e 		=  R1.choose (40, a);		
+			e_check =  R1_2.choose (40, a);		
+
+			boolean result;
+			for(int i = 0; i < 40; i++) {
+				//System.out.printf("call: %d,  %s,    %s\n",i, b[i], b_check[i]);
+				result = e[i].equals(e_check[i]);
+				assertEquals (true, result);
+			}
 		}//end of test_choose
 		
 }//end of class
+
 
