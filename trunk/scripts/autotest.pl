@@ -1,5 +1,7 @@
 #!/usr/local/bin/perl
 
+# Perl script to do automatic testing and coverage analysis of REX project
+
 $home = "/usa/siegel/tmp";
 $ant = "/usr/local/ant/bin/ant";
 
