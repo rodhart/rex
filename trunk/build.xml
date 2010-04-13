@@ -95,6 +95,7 @@
 		<javac destdir="${test.bin.dir}" debug="true" failonerror="false" classpathref="test.compile.classpath">
 			<src path="${basedir}/test-exam" />
 			<src path="${basedir}/test-generate" />
+			<src path="${basedir}/test-interval" />
 			<src path="${basedir}/test-key" />
 			<src path="${basedir}/test-output" />
 			<src path="${basedir}/test-random" />
