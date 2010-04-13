@@ -2,6 +2,18 @@ package edu.udel.cis.cisc475.rex.main;
 
 import java.io.File;
 
+import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
+import edu.udel.cis.cisc475.rex.ecfparser.IF.EcfParserFactoryIF;
+import edu.udel.cis.cisc475.rex.ecfparser.IF.EcfParserIF;
+import edu.udel.cis.cisc475.rex.ecfparser.impl.EcfParserFactory;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
+import edu.udel.cis.cisc475.rex.generate.IF.GeneratorFactoryIF;
+import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
+import edu.udel.cis.cisc475.rex.generate.impl.GeneratorFactory;
+import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserFactoryIF;
+import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserIF;
+import edu.udel.cis.cisc475.rex.uefparser.impl.UEFParserFactory;
+
 public class Rex {
 
 	static void main(String[] args)
@@ -15,7 +27,7 @@ public class Rex {
 		File uef = null;
 		
 		/*
-		 * Test Usage Failure
+		 * Test Usage
 		 */
 		if (numArgs < 3) {
 			printUsage();
@@ -80,6 +92,27 @@ public class Rex {
 			printUsage();
 			System.exit(-1);
 		}
+		/*
+		 * Create an EcfParserFactory
+		 * Get a new parser
+		 * Parse the ECF to get theConfig
+		 */
+		EcfParserFactoryIF theEcfParserFactory = new EcfParserFactory();
+		EcfParserIF theEcfParser = theEcfParserFactory.newParser(numExams);
+		ConfigIF theConfig = theEcfParser.parse(ecf);
+		/*
+		 * Create an UefParserFactory
+		 * Get a new parser
+		 * Parse the UEF to get theMaster
+		 */
+		UEFParserFactoryIF theUefParserFactory = new UEFParserFactory(); 
+		UEFParserIF theUefParser = theUefParserFactory.newUEFParser();
+		ExamIF theMaster = theUefParser.parse(uef);
+		/*
+		 * 
+		 */
+		GeneratorFactoryIF theGeneratorFactory = new GeneratorFactory();
+		GeneratorIF theGenerator = theGeneratorFactory.newGenerator(theMaster, theConfig);
 		
 	}
 	private static void printUsage(){
