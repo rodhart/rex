@@ -1,8 +1,11 @@
 package edu.udel.cis.cisc475.rex.output;
 
 import java.io.PrintWriter;
-import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
+import java.util.Collection;
 
+import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
+import edu.udel.cis.cisc475.rex.exam.impl.Exam;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 /**
  * @author team 5
 <<<<<<< .mine
@@ -37,7 +40,7 @@ public class ExamWriter implements ExamWriterIF {
 		
 		
 		// output the end block for exam
-		out.printf("%s\n", E.finalblock());
+		out.printf("%s\n", E.finalBlock());
 		
 	}//end of write(PrintWriter out)
 
