@@ -28,7 +28,7 @@ class UEFCommand {
 	 */
 	enum CommandTypes {
 
-		documentclass, beginVerbatim, endVerbatim, beginProblem, endProblem, beginAnswers, endAnswers, answer, none
+		documentclass, verb, beginVerbatim, endVerbatim, beginProblem, endProblem, beginAnswers, endAnswers, answer, none
 	}
 
 	/**
@@ -52,9 +52,11 @@ class UEFCommand {
 	 * @return the optional argument.
 	 */
 	String getOptionalArgument() {
-
+		int position = uefCharHandler.getPosition();
 		while (uefCharHandler.read() != '[') {
 			if (uefCharHandler.read() == '{') {
+				// reset the position back since there are no optional arguments
+				uefCharHandler.setPosition(position);
 				return null;
 			}
 			uefCharHandler.move();
@@ -241,8 +243,9 @@ class UEFCommand {
 				if (state.peek() == States.verbatim) {
 					continue;
 				} else {
-					if (command.equals("documentclass")) {
-						uefCharHandler.move();
+					if (command.equals("verb")) {
+						return CommandTypes.verb;
+					} else if (command.equals("documentclass")) {
 						return CommandTypes.documentclass;
 					} else if (command.equals("begin")) {
 						String arguments[] = getArguments(1);
@@ -259,11 +262,9 @@ class UEFCommand {
 							return CommandTypes.none;
 						}
 					} else if (command.equals("answer")) {
-						uefCharHandler.move();
 						return CommandTypes.answer;
 					} else {
 						// A command we don't handle or care about.
-						uefCharHandler.move();
 						return CommandTypes.none;
 					}
 				}
@@ -294,7 +295,7 @@ class UEFCommand {
 			state.pop();
 		} else {
 			System.out
-			.println("Error: program reached an invalid state in processDocumentClass()");
+					.println("Error: program reached an invalid state in processDocumentClass()");
 			System.exit(-1);
 		}
 	}
@@ -312,7 +313,7 @@ class UEFCommand {
 
 		// get text after Answer until the next command
 		String buffer = peekUntil();
-		System.out.println("Found an answer with the optional argument'"
+		System.out.println("Found an answer with the optional argument '"
 				+ optionalArgument + "' the following text:");
 		System.out.println("-----------------------------------");
 		System.out.println(buffer);
@@ -324,8 +325,30 @@ class UEFCommand {
 			state.pop();
 		} else {
 			System.out
-			.println("Error: program reached an invalid state in processAnswer()");
+					.println("Error: program reached an invalid state in processAnswer()");
 			System.exit(-1);
+		}
+	}
+
+	/**
+	 * Handles the \verb* command
+	 * 
+	 */
+	void processVerb() {
+		// push the new state.
+		state.push(States.verb);
+		char delimeter = uefCharHandler.read();
+		uefCharHandler.move();
+
+		while (uefCharHandler.read() != delimeter) {
+			uefCharHandler.move();
+		}
+
+		uefCharHandler.move();
+
+		if (state.peek() == States.verb) {
+			// pop the old state.
+			state.pop();
 		}
 	}
 
@@ -348,7 +371,7 @@ class UEFCommand {
 			state.pop();
 		} else {
 			System.out
-			.println("Error: \\end{verbatim} without a matching \\begin{verbatim}");
+					.println("Error: \\end{verbatim} without a matching \\begin{verbatim}");
 			System.exit(-1);
 		}
 	}
@@ -394,7 +417,7 @@ class UEFCommand {
 			state.pop();
 		} else {
 			System.out
-			.println("Error: \\end{problem} without a matching \\begin{problem}");
+					.println("Error: \\end{problem} without a matching \\begin{problem}");
 			System.exit(-1);
 		}
 	}
@@ -419,7 +442,7 @@ class UEFCommand {
 			state.pop();
 		} else {
 			System.out
-			.println("Error: \\end{answers} without a matching \\begin{answers}");
+					.println("Error: \\end{answers} without a matching \\begin{answers}");
 			System.exit(-1);
 		}
 	}
