@@ -1,17 +1,18 @@
 // Author: Tim Armstrong
 
-/*
-one sig Totality
+
+one sig RexTotality
 {
-	master: one MasterExam
+	master: one MasterExam,
+	config: one Config,
+	generated: set GeneratedExam
 }
-*/
+
 
 // all fields accounted for
 abstract sig Exam {
 	preamble: one Source,
 	frontMatter: one Source,
-	finalBlock: lone Block,
 	elements: set ExamElement // needs to be an *ordered list*. Implementing that looks difficult.
 														// See pg 157-9 in Jackson's book for lists in Alloy
 }
@@ -19,10 +20,11 @@ abstract sig Exam {
 
 one sig MasterExam extends Exam {}
 
+
 sig GeneratedExam extends Exam {
-	master: one MasterExam,
-	config: one Config
+	finalBlock: lone Block  // master exam does not have a final Block
 }
+
 
 
 
@@ -33,13 +35,15 @@ one sig Config {
 	constraints: set Constraint   // no order necessary
 }
 
+
+
 // fields complete
 abstract sig Constraint {
 	source: one Source,
 	points: one Int  // maybe would want real number?
 }
 fact {
-	all c: Constraint | some conf: Config | c in conf.constraints
+	all c: Constraint | some conf: Config | c in conf.constraints  //correct?
 }
 
 // fields not complete
@@ -52,10 +56,12 @@ sig GroupConstraint extends Constraint {
 sig RequiredProblemConstraint extends Constraint {
 	problemNames: set String
 }
+/*  ???
 fact {
 	all r: RequiredProblemConstraint | #r.problemNames > 1
 }
- 
+ */
+
 
 // Booleans are difficult to implement in Alloy (see Jackson pg 136).
 // Therefore I omit here the Boolean values for the range being / not being inclusive.
@@ -71,6 +77,10 @@ sig Interval {
 abstract sig ExamElement {
 	label: lone String
 }
+fact allElementsInMaster {
+	all e: ExamElement | some m: MasterExam | e in m.elements
+}
+
 
 // all fields accounted for
 sig Problem extends ExamElement {
@@ -134,11 +144,12 @@ fact doNotPrintUnusedBlock {
 }
 
 
+/* needs fixing
 //"REX guarantees that if given the same arguments and seed twice, it will produce the exact same outputs."
 fact seedDeterminesOutput {
 	all g1, g2: GeneratedExam | g1.config.seed = g2.config.seed implies g1 = g2   // is this == or .equals???
 }
-
+*/
 
 
 /*
@@ -187,14 +198,10 @@ fact fixedAtCorrectPosition {
 //TODO
 }
 
-
-
-
 // no problem will occur in a generated exam more than once (even if it satisfies more than one constraint)
 fact problemsUnique {
 //TODO
 }
-
 
 // Say that in the generated exams, problems group into categories.  If our model included a Category class
 // in the hierarchy, we could make this an assertion rahter than a fact: ie, we could say that this constraint
@@ -203,28 +210,18 @@ fact generatedIsGrouped {
 // TODO
 }
 
-
-
 // Says that in a generated exam, all questions that refer to a block will be grouped together, with the
 // block immediately preceding.
 fact blockWithQuestions {
 //TODO
 }
 
-
 // Says front matter in document environment must appear before anything else.
 fact frontMatterFirst {
 //TODO
 }
 
-
-
-
-
 // fact regarding probability?
-
-
-
 
 //A problem refers to a figure if a \ref to the figure's label occurs anywhere in that problem's
 // environment. If at least one problem referring to a figure A is included in a generated exam,
@@ -233,17 +230,9 @@ fact frontMatterFirst {
 
 
 
-
-
-
-
-
-
-
-
 pred show{}
 
-run show for 3 but 1 GeneratedExam
+run show for 3
 
 
 /*  Dr. Siegel's original:
