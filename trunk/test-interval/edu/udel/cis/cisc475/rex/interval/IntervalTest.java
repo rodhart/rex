@@ -1,4 +1,4 @@
-import junit.framework.Assert;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -6,11 +6,6 @@ import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
 
-/**
- * 
- * @author Team 2
- *
- */
 
 public class IntervalTest {
 
@@ -23,7 +18,7 @@ public class IntervalTest {
 		IntervalIF I = intervalFactory.interval(true, 5.0, true, 10.0);
 		
 		boolean test = (I.low() == 5.0);
-		Assert.assertTrue(test);
+		assertTrue(test);
 	}
 
 	/*
@@ -36,7 +31,7 @@ public class IntervalTest {
 		IntervalIF I2 = intervalFactory.interval(false, 5.0, true, 10.0);
 		
 		boolean test = (I.strictLow() == true) && (I2.strictLow() == false);
-		Assert.assertTrue(test);
+		assertTrue(test);
 	}
 
 	/*
@@ -48,7 +43,7 @@ public class IntervalTest {
 		IntervalIF I = intervalFactory.interval(true, 5.0, true, 10.0);
 		
 		boolean test = (I.high() == 10.0);
-		Assert.assertTrue(test);
+		assertTrue(test);
 	}
 
 	/*
@@ -61,7 +56,7 @@ public class IntervalTest {
 		IntervalIF I2 = intervalFactory.interval(true, 5.0, false, 10.0);
 		
 		boolean test = (I.strictHigh() == true) && (I2.strictHigh() == false);
-		Assert.assertTrue(test);
+		assertTrue(test);
 	}
 
 	/*
@@ -72,10 +67,10 @@ public class IntervalTest {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
-		Assert.assertTrue(I.strictLow() == false);
-		Assert.assertTrue(I.strictHigh() == true);
-		Assert.assertTrue(I.low() == 5.0);
-		Assert.assertTrue(I.high() == 10.0);
+		assertTrue(I.strictLow() == false);
+		assertTrue(I.strictHigh() == true);
+		assertTrue(I.low() == 5.0);
+		assertTrue(I.high() == 10.0);
 	}
 
 	/*
@@ -87,17 +82,17 @@ public class IntervalTest {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
-		Assert.assertFalse(I.contains(2.0));
-		Assert.assertTrue(I.contains(5.0));
-		Assert.assertTrue(I.contains(8.0));
-		Assert.assertFalse(I.contains(10.0));
+		assertFalse(I.contains(2.0));
+		assertTrue(I.contains(5.0));
+		assertTrue(I.contains(8.0));
+		assertFalse(I.contains(10.0));
 		
 		IntervalIF I2 = intervalFactory.interval(true, 5.0, false, 10.0);
 		
-		Assert.assertFalse(I.contains(11.0));
-		Assert.assertFalse(I2.contains(5.0));
-		Assert.assertTrue(I2.contains(8.0));
-		Assert.assertTrue(I2.contains(10.0));
+		assertFalse(I.contains(11.0));
+		assertFalse(I2.contains(5.0));
+		assertTrue(I2.contains(8.0));
+		assertTrue(I2.contains(10.0));
 	}
 
 }
