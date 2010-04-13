@@ -10,12 +10,15 @@ $err = "$home/build.err";
 
 $maindir = "rex-test";
 
+system("date >$out");
+system("echo \"\n\" >>$out");
+
 chdir($home) || die "Could not chdir $home";
 if (-e $maindir) {
     system("rm -rf $maindir");
 }
 $cmd = "svn checkout file:///home/www/repos/cisc475/trunk $maindir";
-system("$cmd >$out 2>$err");
+system("$cmd >>$out 2>$err");
 chdir("$home/$maindir") || die "Could not chdir $home/maindir";
 system("cp build-configs/build.properties-cisc475 build.properties");
 
