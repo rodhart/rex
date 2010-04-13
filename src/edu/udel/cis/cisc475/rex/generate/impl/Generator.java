@@ -125,14 +125,14 @@ public class Generator implements GeneratorIF {
 						// second check determines if it's a figure
 						if (currentElement.getClass().isInstance(FigureIF.class))
 						{
-							// is this possible?
+							// Place holder -- pretty sure this isn't necessary
 							
 						}
 						
 						// third check determines if it's a block
 						if (currentElement.getClass().isInstance(BlockIF.class))
 						{
-							// is this possible?
+							// Place holder -- pretty sure this isn't necessary
 						}
 						
 						else
