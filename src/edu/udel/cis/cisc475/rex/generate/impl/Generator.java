@@ -161,6 +161,9 @@ public class Generator implements GeneratorIF {
 					/**
 					 * THIS WHOLE PART HERE IS A MESS
 					 * CAN'T FIGURE OUT HOW TO CONVERT Object[] BACK TO Collection<ExamElementIF>
+					 *
+					 * Keith: you can just loop through the array and do 
+					 * 		  Collection.add() for each element
 					 */
 					
 		//			List<ExamElementIF> finalDesiredElements = Arrays.asList(passableDesiredElements);
