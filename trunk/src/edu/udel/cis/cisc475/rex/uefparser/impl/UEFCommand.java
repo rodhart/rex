@@ -28,7 +28,7 @@ class UEFCommand {
 	 */
 	enum CommandTypes {
 
-		documentclass, verb, beginVerbatim, endVerbatim, beginProblem, endProblem, beginAnswers, endAnswers, answer, none
+		documentclass, label, verb, beginVerbatim, endVerbatim, beginProblem, endProblem, beginAnswers, endAnswers, answer, none
 	}
 
 	/**
@@ -243,6 +243,9 @@ class UEFCommand {
 				if (state.peek() == States.verbatim) {
 					continue;
 				} else {
+					if (command.equals("label")) {
+						processLabel();
+					}
 					if (command.equals("verb")) {
 						return CommandTypes.verb;
 					} else if (command.equals("documentclass")) {
@@ -327,6 +330,25 @@ class UEFCommand {
 			System.out
 					.println("Error: program reached an invalid state in processAnswer()");
 			System.exit(-1);
+		}
+	}
+
+	/**
+	 * Handles the \label command
+	 * 
+	 */
+	void processLabel() {
+		// push the new state.
+		state.push(States.label);
+
+		String[] arguments = getArguments(1);
+
+		String label = arguments[0];
+		System.out.println("Found label '" + label + "'");
+
+		if (state.peek() == States.label) {
+			// pop the old state.
+			state.pop();
 		}
 	}
 
