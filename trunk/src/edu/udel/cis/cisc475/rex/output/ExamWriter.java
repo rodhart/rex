@@ -35,6 +35,7 @@ public class ExamWriter implements ExamWriterIF {
 		
 		// output problems with respective answers
 		
+		
 		// output the end block for exam
 		out.printf("%s\n", E.finalblock());
 		
@@ -43,6 +44,6 @@ public class ExamWriter implements ExamWriterIF {
 	
 	//private vars
 	private Exam E;
-	private ArrayList <String> C;	
+	private Collection <ExamElementIF> C;	
 	private int numElements;
 }//end of class 
