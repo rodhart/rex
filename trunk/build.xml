@@ -138,8 +138,9 @@
 	<target name="javadoc">
 		<delete dir="${javadoc.dir}" quiet="true" />
 		<mkdir dir="${javadoc.dir}" />
-		<javadoc destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="REX API" access="public" classpathref="javadoc.classpath">
+		<javadoc destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="REX API" access="public" classpathref="javadoc.classpath" failonerror="false">
 			<fileset dir="${src}" defaultexcludes="yes">
+			<include name="**/*.java"/>
 			</fileset>
 		</javadoc>
 	</target>
