@@ -21,13 +21,11 @@ public class GroupConstraint implements GroupConstraintIF {
 	
 	@Override
 	public IntervalIF difficultyInterval() {
-		// TODO Auto-generated method stub
 		return this.difficultyInterval;
 	}
 
 	@Override
 	public int numProblems() {
-		// TODO Auto-generated method stub
 		return this.numProblems;
 	}
 
