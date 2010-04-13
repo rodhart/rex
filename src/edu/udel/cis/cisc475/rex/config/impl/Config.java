@@ -16,8 +16,8 @@ public class Config implements ConfigIF {
 	private boolean pdfOption;
 	private int numVersions;
 	
-	public Config(boolean pdf, int versions){
-		this.numVersions = versions;
+	public Config(boolean pdf, int numVersions){
+		this.numVersions = numVersions;
 		this.pdfOption = pdf;
 	}
 	
