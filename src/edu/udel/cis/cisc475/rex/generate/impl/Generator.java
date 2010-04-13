@@ -1,7 +1,9 @@
 package edu.udel.cis.cisc475.rex.generate.impl;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
@@ -123,15 +125,14 @@ public class Generator implements GeneratorIF {
 						// second check determines if it's a figure
 						if (currentElement.getClass().isInstance(FigureIF.class))
 						{
-							FigureIF tempFigure = (FigureIF) currentElement;
-							// more?
+							// is this possible?
 							
 						}
 						
 						// third check determines if it's a block
 						if (currentElement.getClass().isInstance(BlockIF.class))
 						{
-							// necessary?
+							// is this possible?
 						}
 						
 						else
@@ -140,21 +141,33 @@ public class Generator implements GeneratorIF {
 						}
 						
 					}
-				
-					// loop until 'master' END OF FILE
-					// we can probably define an Iterator i and do a while(i.hasNext())
-					// fill a container with all problems that match the difficulty / topic / points constraints
-					// (will be of type ExamElementIF)
 					
-					// then make a call the randomizer's choose() method
-					// like, theRandomizer.choose(numProblems, Collection<ExamElementIF> theProblems)
+					// fill an array with the contents of the desiredElements collection
+					Object[] passableDesiredElements = desiredElements.toArray();
 					
-					// the choose() method returns a randomized array of Objects[] equal to numProblems
+					/**
+					 * Question: WHY DOES THE choose() METHOD HAVE TO TAKE AN ARRAY OF OBJECTS?
+					 * IT'D BE A LOT EASIER IF ITS SECOND ARGUMENT WAS A COLLECTION
+					 * THE WAY I HAVE IT CODED ABOVE IS FINE, BUT A CLUNKY STEP
+					 */
 					
-					// now, do any necessary type casting
+					// now, make a call to the randomizer, and choose [numProblems] problems
+					// from the set of these corresponding problems
+					passableDesiredElements = theRandomizer.choose(numProblems, passableDesiredElements);
+					
+					// now, convert it back to a Collection of ExamElementIFs (seems wasteful)
+		
+					
+					/**
+					 * THIS WHOLE PART HERE IS A MESS
+					 * CAN'T FIGURE OUT HOW TO CONVERT Object[] BACK TO Collection<ExamElementIF>
+					 */
+					
+		//			List<ExamElementIF> finalDesiredElements = Arrays.asList(passableDesiredElements);
+		//			finalDesiredElements = (Collection<ExamElementIF>) finalDesiredElements;
 					
 					// now call the ExamFactory addProblem method and add it to generatedExams[i]
-					
+		//			generatedExams[i].addElementIF(finalDesiredElements);
 				}
 				
 				else if (c.getClass().isInstance(RequiredProblemConstraintIF.class))	
