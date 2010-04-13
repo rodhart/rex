@@ -15,7 +15,7 @@ sig GeneratedExam extends Exam {}
 
 
 
-
+// ???
 one sig Config {
   count: Category ->one Int
 }
@@ -29,10 +29,11 @@ sig ExamElement {
 
 // all fields accounted for
 sig Problem extends ExamElement {
+	category: one Category,
 	block: lone Block,
 	figures: set Figure,
 	points: lone Int,   // lone because will be null in master exam.  (It is an integer, not a real number in the design.)
-	category: one Category,
+
 	source: one Source,
 	difficulty: one Int   //actually REAL NUMBER, I have still to find how to say that
 }
@@ -48,7 +49,7 @@ sig OtherProblem extends Problem {} // no answers field
 
 
 sig Block extends ExamElement {
-	topic: one String, // or lone if we say the final block's topic may be null
+	category: one Category, // or lone if we say the final block's category may be null
 	source: one Source
 }
 
@@ -67,11 +68,11 @@ sig Source{}
 
 
 
-// A Problem may refer to a Block only of the same topic.
+// A Problem may refer to a Block only of the same category.
 // This includes the constraint that all problems
-// referring to a block must be of the same topic
+// referring to a block must be of the same category
 fact problemBlockSameTopic{
-	all p: Problem, b: Block | p.block = b implies p.topic = b.topic
+	all p: Problem, b: Block | p.block = b implies p.category = b.category
 }
 
 
@@ -85,7 +86,9 @@ fact problemBlockSameTopic{
 
 
 
-// Say that in the generated exams, problems group into topics
+// Say that in the generated exams, problems group into categories.  If our model included a Category class
+// in the hierarchy, we could make this an assertion rahter than a fact: ie, we could say that this constraint
+// would logically follow from our model.
 fact generatedIsGrouped {
 // TODO
 }
