@@ -1,6 +1,9 @@
 package edu.udel.cis.cisc475.rex.main;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.ecfparser.IF.EcfParserFactoryIF;
@@ -10,6 +13,11 @@ import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorFactoryIF;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
 import edu.udel.cis.cisc475.rex.generate.impl.GeneratorFactory;
+import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
+import edu.udel.cis.cisc475.rex.output.OutputFactory;
+import edu.udel.cis.cisc475.rex.output.IF.AnswerKeyWriterIF;
+import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
+import edu.udel.cis.cisc475.rex.output.IF.OutputFactoryIF;
 import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserFactoryIF;
 import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserIF;
 import edu.udel.cis.cisc475.rex.uefparser.impl.UEFParserFactory;
@@ -25,7 +33,6 @@ public class Rex {
 		int numExams = 1;
 		File ecf = null;
 		File uef = null;
-		
 		/*
 		 * Test Usage
 		 */
@@ -76,7 +83,7 @@ public class Rex {
 		}
 		else{
 			System.err.println(args[numArgs-2] + " does not appear to" +
-					"be a valid .tex file!");
+			"be a valid .tex file!");
 			printUsage();
 			System.exit(-1);
 		}
@@ -88,7 +95,7 @@ public class Rex {
 		}
 		else{
 			System.err.println(args[numArgs-2] + " does not appear to" +
-					"be a valid .ecf file!");
+			"be a valid .ecf file!");
 			printUsage();
 			System.exit(-1);
 		}
@@ -109,23 +116,117 @@ public class Rex {
 		UEFParserIF theUefParser = theUefParserFactory.newUEFParser();
 		ExamIF theMaster = theUefParser.parse(uef);
 		/*
-		 * 
+		 * Create the GeneratorFactory
+		 * Create the Generator
 		 */
 		GeneratorFactoryIF theGeneratorFactory = new GeneratorFactory();
 		GeneratorIF theGenerator = theGeneratorFactory.newGenerator(theMaster, theConfig);
-		
+		/*
+		 * Create the container for the generated exams
+		 * and answer keys
+		 */
+		ExamIF [] theExams = new ExamIF[numExams];
+		AnswerKeyIF [] theAnswerKeys = new AnswerKeyIF[numExams];
+
+		/*
+		 * Fill the containers using theGenerator
+		 */
+		for(i = 0; i < numExams; i++){
+			theExams[i] = theGenerator.getGeneratedExam(i);
+			theAnswerKeys[i] = theGenerator.getAnswerKey(i);
+		}
+		/*
+		 * Set up output files and file streams
+		 */
+		File [] theLatexFiles = new File[numExams];
+		File [] theKeyFiles = new File[numExams];
+		PrintWriter [] theLatexWriters = new PrintWriter[numExams];
+		PrintWriter [] theKeyWriters = new PrintWriter[numExams];
+		/*
+		 * Set up the output module containers
+		 */
+		OutputFactoryIF theOutputFactory = new OutputFactory();
+		ExamWriterIF [] theExamWriters = new ExamWriterIF[numExams];
+		AnswerKeyWriterIF [] theAnswerKeyWriters = new AnswerKeyWriterIF[numExams];
+
+		/*
+		 * Create the actual files
+		 * Initiate the PrintWriters
+		 * Use the output module to fill the files
+		 */
+		for (i = 0; i < numExams; i++){
+			theLatexFiles[i] = new File("exam"+(i+1)+".tex");
+			theKeyFiles[i] = new File("key"+(i+1)+".txt");
+			try{
+				/*
+				 * create the exam(i).tex file on the file system
+				 */
+				theLatexFiles[i].createNewFile();
+
+			}
+			catch (Exception e){
+				System.err.println("Error creating "+ 
+						theLatexFiles[i].getAbsolutePath());
+				e.printStackTrace();
+			}
+			/*
+			 * create the key(i).txt file on the file system
+			 */
+			try{
+				theKeyFiles[i].createNewFile();
+
+			}
+			catch (Exception e){
+				System.err.println("Error creating "+ 
+						theKeyFiles[i].getAbsolutePath());
+				e.printStackTrace();
+			}
+			/*
+			 * Create the PrintWriters from the newly created files
+			 */
+			try {
+				theLatexWriters[i] = new PrintWriter(
+						new FileOutputStream(theLatexFiles[i]));
+				theKeyWriters[i] = new PrintWriter(
+						new FileOutputStream(theKeyFiles[i]));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+
+			/*
+			 * Set up the exam writers and answer key writers
+			 */
+
+			theExamWriters[i] = 
+				theOutputFactory.newExamWriter(theExams[i]);
+			theAnswerKeyWriters[i] = 
+				theOutputFactory.newAnswerKeyWriter(theAnswerKeys[i]);
+
+
+			/*
+			 * Write the Exams and answer keys
+			 * to their proper files
+			 */
+
+			theExamWriters[i].write(theLatexWriters[i]);
+			theAnswerKeyWriters[i].write(theKeyWriters[i]);
+
+			theLatexWriters[i].close();
+			theKeyWriters[i].close();
+		}
+
 	}
 	private static void printUsage(){
-		
+
 		System.err
 		.println("Usage: rex [options] <UEF filename> <ECF filename>");
 		System.err.println("Options: ");
 		System.err.println("    -n numExams : int numExams declares"+
-				" number of exams");
+		" number of exams");
 		System.err.println("    -seed seed : long seed declares"+ 
-				"the seed for randomization");
+		"the seed for randomization");
 		System.err.println("    -pdf       : sets the pdf option"+ 
 				"in order to have the exams output in pdf as well"+ 
-				" as .tex files.");
+		" as .tex files.");
 	}
 }
