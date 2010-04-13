@@ -4,6 +4,7 @@
 
 $home = "/usa/siegel/tmp";
 $ant = "/usr/local/ant/bin/ant";
+$svn = "/usr/local/bin/svn";
 
 $out = "$home/build.out";
 $err = "$home/build.err";
@@ -17,7 +18,7 @@ chdir($home) || die "Could not chdir $home";
 if (-e $maindir) {
     system("rm -rf $maindir");
 }
-$cmd = "svn checkout file:///home/www/repos/cisc475/trunk $maindir";
+$cmd = "$svn checkout file:///home/www/repos/cisc475/trunk $maindir";
 system("$cmd >>$out 2>$err");
 chdir("$home/$maindir") || die "Could not chdir $home/maindir";
 system("cp build-configs/build.properties-cisc475 build.properties");
