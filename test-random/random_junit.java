@@ -8,7 +8,7 @@ import org.junit.BeforeClass;
 import edu.udel.cis.cisc475.rex.random.impl.Randomizer;
 
 	/**
-	 * @author cardona
+	 * @author cardona, justin
 	 *
 	 */
 public class random_junit {
@@ -72,7 +72,8 @@ long seed;
 				//System.out.printf("call: %d,  %s,    %s\n",i, b[i], b_check[i]);
 				result = c[i].equals(c_check[i]);
 				assertEquals (true, result);
-			}		}//end of test_choose
+			}		
+		}//end of test_choose
 		
 		@Test
 		public void test_choose_d() {
@@ -93,7 +94,6 @@ long seed;
 
 			boolean result;
 			for(int i = 0; i < 9; i++) {
-				//System.out.printf("call: %d,  %s,    %s\n",i, b[i], b_check[i]);
 				result = d[i].equals(d_check[i]);
 				assertEquals (true, result);
 			}
@@ -118,7 +118,6 @@ long seed;
 
 			boolean result;
 			for(int i = 0; i < 40; i++) {
-				//System.out.printf("call: %d,  %s,    %s\n",i, b[i], b_check[i]);
 				result = e[i].equals(e_check[i]);
 				assertEquals (true, result);
 			}
