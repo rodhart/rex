@@ -1,19 +1,18 @@
 // Author: Tim Armstrong
 
 
-
+// all fields accounted for
 sig Exam {
 	preamble: one Source,
 	frontMatter: one Source,
-	finalBlock: lone Block,   // we don't need this since the exam is
-											  // (<problem> | <block> | <figure>)*.  Or is this expression not correct?  Need
-												// to modify requirements?
+	finalBlock: lone Block,
 	elements: set ExamElement
 }
 
 one sig MasterExam extends Exam {}
 
 sig GeneratedExam extends Exam {}
+
 
 
 
@@ -39,7 +38,7 @@ sig Problem extends ExamElement {
 }
 
 sig MultipleChoice extends Problem {
-	answers: set Answer,   //MAY NOT HAVE for true/false, fill in the blank... - FIX!******  Subclass?
+	answers: set Answer
 }
 
 sig OtherProblem extends Problem {} // no answers field
@@ -49,14 +48,12 @@ sig OtherProblem extends Problem {} // no answers field
 
 
 sig Block extends ExamElement {
-	topic: one String,   //should this be optional (lone)?  "might still be included in the exam after the front-matter,
-										// between the problems, or at the end of the exam after all problems."  We don't always 
-										// need a topic.  OR: the design says a Block had a topic, whereas the requirements document 
-										// does not say that.  Must we update the requirements?
+	topic: one String, // or lone if we say the final block's topic may be null
 	source: one Source
 }
 
 sig Figure extends ExamElement {}
+
 
 
 
@@ -113,21 +110,21 @@ fact frontMatterFirst {
 
 
 //"REX guarantees that if given the same arguments and seed twice, it will produce the exact same outputs."
-CAN DO!
+
 
 
 
 //If the answers environment is used, it must include at least one answer
 //The maximum number of answers is 26.
-CAN DO!
+
 
 
 //[fixed]: signifying that this answer must appear in its given position in the answer sequence
-CAN DO?
+
 
 
 //At least one answer must be labeled as correct.
-CAN DO
+
 
 
 
@@ -139,11 +136,8 @@ CAN DO
 //no problem will occur in a generated exam more than once (even if it satisfies more than one constraint)
 
 
-//*******
-// ECF: *
-//*******
 
-//The first <integer> is a positive integer: it is the number of problems satisfying the constraint that
+//ECF:  The first <integer> is a positive integer: it is the number of problems satisfying the constraint that
 // should be included.
 
 
