@@ -36,7 +36,17 @@ public class Interval implements IntervalIF
 	public boolean contains(double value)
 	{
 		/* tests for outright out of range */
-		if((value > high) || (value < low)){return false;}
+		if(this.strictLow && (value <= this.low))
+			return false;
+		else if(this.strictHigh && (value >= this.high))
+			return false;
+		else if(!this.strictLow && (value < this.low))
+			return false;
+		else if(!this.strictHigh && (value > this.high))
+			return false;
+		else 
+			return true;
+		//if((value > high) || (value < low)){return false;}
 			
 		/* if strictLow is on, x > low, so if x is low, false */
 //		if(strictLow && (x == low)){return false;}
@@ -48,7 +58,7 @@ public class Interval implements IntervalIF
 		
 		/*otherwise, the value is inside the range and can be 
 		 * equal to high and low so return true */
-		return true;
+		//return true;
 	}
 
 }
