@@ -20,24 +20,29 @@ public class ExamWriter implements ExamWriterIF {
 	// Does not include front matter.
 
 	//constructor	
-	public ExamWriter(Exam exam) {
+	public ExamWriter(Exam E) {
 
-		this.exam = exam;
-		numElements = exam.numElements();
+		this.E = E;
+		numElements = E.numElements();
 
 	}//end of constructor
 
 
 	public void write(PrintWriter out){
 		// output begining of exam file
-		out.printf("%s\n", exam.preamble());
-		out.printf("%s\n", exam.frontMatter());
+		out.printf("%s\n", E.preamble());
+		out.printf("%s\n", E.frontMatter());
 		
 		// output problems with respective answers
 		
 		// output the end block for exam
-		out.printf("%s\n", exam.finalblock());
+		out.printf("%s\n", E.finalblock());
 		
 	}//end of write(PrintWriter out)
 
+	
+	//private vars
+	private Exam E;
+	private ArrayList <String> C;	
+	private int numElements;
 }//end of class 
