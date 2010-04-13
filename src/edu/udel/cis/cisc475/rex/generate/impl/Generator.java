@@ -3,20 +3,22 @@ package edu.udel.cis.cisc475.rex.generate.impl;
 import java.util.Collection;
 import java.util.Iterator;
 
-
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
+import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
+import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
+import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerFactoryIF;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
@@ -29,7 +31,9 @@ public class Generator implements GeneratorIF {
 	private ConfigIF config;
 	private AnswerKeyIF[] keys;
 	private ExamIF[] generatedExams;
+	private int numExams = config.numVersions();
 
+	
 	Generator(ExamIF master, ConfigIF config) {
 		this.master = master;
 		this.config = config;
@@ -38,7 +42,6 @@ public class Generator implements GeneratorIF {
 
 	private void generate() 
 	{
-		int numExams = config.numVersions();
 		Collection<ConstraintIF> theConstraints = config.constraints();
 			
 		generatedExams = new ExamIF[numExams];
@@ -46,7 +49,7 @@ public class Generator implements GeneratorIF {
 		
 		RandomizerFactoryIF theRandomizerFactory = new RandomizerFactory();
 		RandomizerIF theRandomizer = theRandomizerFactory.newRandomizer(config.seed());
-//		IntervalFactoryIF theIntervalFactory = new IntervalFactory();
+		IntervalFactoryIF theIntervalFactory = new IntervalFactory();
 
 		for (int i = 0; i < numExams; i++)
 		{
@@ -73,33 +76,67 @@ public class Generator implements GeneratorIF {
 					String topic = gc.topic();
 					int points = gc.points();					
 
-					//	IntervalIF theInterval = 
-					//			theIntervalFactory.interval(difficultyInterval.strictLow(), 
-					//										difficultyInterval.low(),
-					//										difficultyInterval.strictHigh(),
-					//										difficultyInterval.high());
+					IntervalIF theInterval = 
+						theIntervalFactory.interval(difficultyInterval.strictLow(), 
+													difficultyInterval.low(),
+													difficultyInterval.strictHigh(),
+													difficultyInterval.high());
 					
 					
 					// container for holding elements in master with specified topic
 					Collection<ExamElementIF> elementsWithTopic = master.elementsWithTopic(topic);
 					Iterator<ExamElementIF> iterate = elementsWithTopic.iterator();
 					
+					// container for holding elements in master with specified topic/difficulty/points
+					Collection<ExamElementIF> desiredElements = null;
+					
 					while(iterate.hasNext())
 					{
 						ExamElementIF currentElement = iterate.next();
+						
+						// see what kind of element the current element is (problem, block, figure)
+						// first check determines if it's a problem
 						if (currentElement.getClass().isInstance(ProblemIF.class))
 						{
 							ProblemIF tempProblem = (ProblemIF) currentElement;
 						
-							
-						//	if (theInterval.low() <= tempProblem.difficulty() 
-						//			&& tempProblem.difficulty() <= theInterval.high())
+							// check to make sure it satisfies the difficulty constraint
+							if (theInterval.low() <= tempProblem.difficulty() 
+									&& tempProblem.difficulty() <= theInterval.high())
 							{
+								// assuming it did, make sure it satisfies the points constraint
 								if (tempProblem.points() == points)
 								{
-									// add it to our collection
+									// this means it has the correct topic, difficulty, and points 
+									// add it to our collection container
+									desiredElements.add(tempProblem);
 								}
 							}
+						}
+						
+						/**
+						 * Question: ARE BLOCKS AND FIGURES ALWAYS RequiredProblemConstraints?
+						 * OR WILL THEY BE ENCOUNTERED AS WE ITERATE THROUGH ALL GroupConstraints?
+						 */
+						
+						
+						// second check determines if it's a figure
+						if (currentElement.getClass().isInstance(FigureIF.class))
+						{
+							FigureIF tempFigure = (FigureIF) currentElement;
+							// more?
+							
+						}
+						
+						// third check determines if it's a block
+						if (currentElement.getClass().isInstance(BlockIF.class))
+						{
+							// necessary?
+						}
+						
+						else
+						{
+							// throw new RexUnsatisfiableException();
 						}
 						
 					}
@@ -175,7 +212,7 @@ public class Generator implements GeneratorIF {
 
 	@Override
 	public int numGeneratedExams() {
-		return config.numVersions(); // CHECK THIS!!!
+		return numExams;
 	}
 
 }
