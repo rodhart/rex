@@ -31,7 +31,7 @@ public class UEFParser implements UEFParserIF {
 	 */
 	enum States {
 
-		top, comment, documentclass, verb, verbatim, problem, answers, answer
+		top, comment, documentclass, label, verb, verbatim, problem, answers, answer
 	}
 
 	/**
