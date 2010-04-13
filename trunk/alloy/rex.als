@@ -11,17 +11,21 @@ sig Exam {
 
 one sig MasterExam extends Exam {}
 
-sig GeneratedExam extends Exam {}
-
-
-
-// ???
-one sig Config {
-  count: Category ->one Int
+sig GeneratedExam extends Exam {
+	master: one MasterExam,
+	config: one Config
 }
 
 
 
+
+one sig Config {
+  //count: Category ->one Int // ??? From Dr. Siegel
+	seed: one Int
+}
+
+
+ 
 
 sig ExamElement {
 	label: lone String
@@ -77,11 +81,24 @@ fact problemBlockSameTopic{
 
 
 //A block cannot both be required by a problem and appended to the exam.
-
+fact usedBlockNotAppended {
+	all e: Exam, p: Problem | e.finalBlock not in p.block
+}
 
 
 // If a block is not required by any problem occurring in the generated exam, 
 // and it is not appended, then that block will not occur in the exam.
+fact doNotPrintUnusedBlock {
+	all b: Block, g: GeneratedExam, p: Problem | (b not in g.finalBlock) and (b not in p.block) implies b not in g.elements
+}
+
+
+//"REX guarantees that if given the same arguments and seed twice, it will produce the exact same outputs."
+fact seedDeterminesOutput {
+	all g1, g2: GeneratedExam | g1.config.seed = g2.config.seed implies g1 = g2   // is this == or .equals???
+}
+
+
 
 
 
@@ -109,11 +126,6 @@ fact frontMatterFirst {
 
 
 // fact regarding probability?
-
-
-
-//"REX guarantees that if given the same arguments and seed twice, it will produce the exact same outputs."
-
 
 
 
