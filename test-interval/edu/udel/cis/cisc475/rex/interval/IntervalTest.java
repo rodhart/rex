@@ -1,3 +1,5 @@
+package edu.udel.cis.cisc475.rex.interval;
+
 import static org.junit.Assert.*;
 
 import org.junit.Test;
@@ -5,7 +7,6 @@ import org.junit.Test;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
-
 
 public class IntervalTest {
 
@@ -94,5 +95,6 @@ public class IntervalTest {
 		assertTrue(I2.contains(8.0));
 		assertTrue(I2.contains(10.0));
 	}
+
 
 }
