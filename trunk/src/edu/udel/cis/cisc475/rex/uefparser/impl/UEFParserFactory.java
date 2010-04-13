@@ -10,7 +10,7 @@ import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserIF;
  * @author Ahmed El-Hassany
  * 
  */
-public class UEFParsersFactory implements UEFParserFactoryIF {
+public class UEFParserFactory implements UEFParserFactoryIF {
 
 	@Override
 	public UEFParserIF newUEFParser() {
