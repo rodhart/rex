@@ -129,11 +129,10 @@ public class Rex {
 		AnswerKeyIF [] theAnswerKeys = new AnswerKeyIF[numExams];
 
 		/*
-		 * Fill the containers using theGenerator
+		 
 		 */
 		for(i = 0; i < numExams; i++){
-			theExams[i] = theGenerator.getGeneratedExam(i);
-			theAnswerKeys[i] = theGenerator.getAnswerKey(i);
+			
 		}
 		/*
 		 * Set up output files and file streams
@@ -150,11 +149,20 @@ public class Rex {
 		AnswerKeyWriterIF [] theAnswerKeyWriters = new AnswerKeyWriterIF[numExams];
 
 		/*
+		 * Get an exam and key
 		 * Create the actual files
 		 * Initiate the PrintWriters
 		 * Use the output module to fill the files
 		 */
 		for (i = 0; i < numExams; i++){
+			/*
+			 * Fill the containers with the generated material
+			 */
+			theExams[i] = theGenerator.getGeneratedExam(i);
+			theAnswerKeys[i] = theGenerator.getAnswerKey(i);
+			/*
+			 * create the File
+			 */
 			theLatexFiles[i] = new File("exam"+(i+1)+".tex");
 			theKeyFiles[i] = new File("key"+(i+1)+".txt");
 			try{
@@ -202,7 +210,6 @@ public class Rex {
 			theAnswerKeyWriters[i] = 
 				theOutputFactory.newAnswerKeyWriter(theAnswerKeys[i]);
 
-
 			/*
 			 * Write the Exams and answer keys
 			 * to their proper files
@@ -210,11 +217,14 @@ public class Rex {
 
 			theExamWriters[i].write(theLatexWriters[i]);
 			theAnswerKeyWriters[i].write(theKeyWriters[i]);
-
+			/*
+			 * Close the output streams
+			 */
 			theLatexWriters[i].close();
 			theKeyWriters[i].close();
 		}
 
+		printCompletionMessage(pdfOpt);
 	}
 	private static void printUsage(){
 
@@ -228,5 +238,15 @@ public class Rex {
 		System.err.println("    -pdf       : sets the pdf option"+ 
 				"in order to have the exams output in pdf as well"+ 
 		" as .tex files.");
+	}
+	private static void printCompletionMessage(boolean pdf){
+		System.out.println("Rex has completed your request!");
+		System.out.println("The exam(n).tex files hold your exams"+
+				" in latex format.");
+		System.out.println("The key(n).txt files hold your answer keys"+
+				" in plain text format.");
+		if(pdf)
+			System.out.println("The exam(n).pdf files hold your exams"+
+			" in PDF format.");
 	}
 }
