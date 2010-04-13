@@ -19,6 +19,16 @@ public class Interval implements IntervalIF
 	public Double high(){return high;}
 	public boolean strictHigh(){return strictHigh;}
 
+	/* constructor */
+	Interval(boolean strictLow, Double low,
+			boolean strictHigh, Double high)
+			{
+				this.strictLow = strictLow;
+				this.strictHigh = strictHigh;
+				this.low = low;
+				this.high = high;
+			}
+	
 	/* when "high" is 5: 
 	 * strictHigh: x < 5
 	 * !strictHigh: x <= 5 */
