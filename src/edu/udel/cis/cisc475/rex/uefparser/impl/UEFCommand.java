@@ -14,42 +14,73 @@ class UEFCommand {
 	// The beginning of the last command.
 
 	int lastPosition = -1;
-
 	/**
 	 * Reference to UEF char handler
 	 */
 	private UEFCharHandler uefCharHandler;
-	
 	/**
 	 * Reference to the parser state
 	 */
 	private Stack<States> state;
-	
+
 	/**
-	 *  The latex commands used by UEF as in the requirements.
+	 * The latex commands used by UEF as in the requirements.
 	 */
 	enum CommandTypes {
 
 		documentclass, beginVerbatim, endVerbatim, beginProblem, endProblem, beginAnswers, endAnswers, answer, none
 	}
-	
+
 	/**
 	 * Create new object of the command handler
-	 * @param uefCharHandler reference to the UEFCharHandler
-	 * @param state reference to the stack of states
+	 * 
+	 * @param uefCharHandler
+	 *            reference to the UEFCharHandler
+	 * @param state
+	 *            reference to the stack of states
 	 */
-	UEFCommand(UEFCharHandler uefCharHandler, Stack<States> state){
+	UEFCommand(UEFCharHandler uefCharHandler, Stack<States> state) {
 		this.uefCharHandler = uefCharHandler;
 		this.state = state;
 	}
-	
+
 	/**
-	 * Starting at the currently retrieved character from the stream this
-	 * method returns arguments surrounded by squiggle brackets. Yes,
-	 * misspelled squiggle brackets.
+	 * Starting from the current position in the file returns the optional
+	 * argument as a string. Always positions the file one character past ']'
+	 * closing bracket.
 	 * 
-	 * FIXME: Needs error checking for when there are any character other
-	 * than spaces and new lines between arguments.
+	 * @return the optional argument.
+	 */
+	String getOptionalArgument() {
+
+		while (uefCharHandler.read() != '[') {
+			if (uefCharHandler.read() == '{') {
+				return null;
+			}
+			uefCharHandler.move();
+		}
+
+		// Read until the end of the first argument
+		uefCharHandler.move();
+
+		StringBuffer argument = new StringBuffer();
+		while (uefCharHandler.read() != ']') {
+			argument.append(uefCharHandler.read());
+			uefCharHandler.move();
+		}
+
+		// Move past the last argument delimeter and return the arguments
+		uefCharHandler.move();
+		return argument.toString();
+	}
+
+	/**
+	 * Starting at the currently retrieved character from the stream this method
+	 * returns arguments surrounded by squiggle brackets. Yes, misspelled
+	 * squiggle brackets.
+	 * 
+	 * FIXME: Needs error checking for when there are any character other than
+	 * spaces and new lines between arguments.
 	 * 
 	 * FIXME: Needs to check for comments and ignore arguments found within
 	 * those.
@@ -85,9 +116,9 @@ class UEFCommand {
 	}
 
 	/**
-	 * Starting at the current position in the file this reads until the
-	 * next one of our handled commands and returns a String with all the
-	 * characters read.
+	 * Starting at the current position in the file this reads until the next
+	 * one of our handled commands and returns a String with all the characters
+	 * read.
 	 * 
 	 * @return A String with all characters read
 	 */
@@ -134,11 +165,11 @@ class UEFCommand {
 			}
 		}
 	}
-	
+
 	/**
-	 * Stating at the current position reads until a command and then gets
-	 * the command and returns it as a String. Always moves passed the
-	 * commands characters in the file.
+	 * Stating at the current position reads until a command and then gets the
+	 * command and returns it as a String. Always moves passed the commands
+	 * characters in the file.
 	 * 
 	 * @return the current command as a string without the '\' prefix
 	 */
@@ -263,7 +294,7 @@ class UEFCommand {
 			state.pop();
 		} else {
 			System.out
-					.println("Error: program reached an invalid state in processDocumentClass()");
+			.println("Error: program reached an invalid state in processDocumentClass()");
 			System.exit(-1);
 		}
 	}
@@ -276,9 +307,13 @@ class UEFCommand {
 		// push the new state.
 		state.push(States.answer);
 
+		// get optional argument for Problem
+		String optionalArgument = getOptionalArgument();
+
 		// get text after Answer until the next command
 		String buffer = peekUntil();
-		System.out.println("Found an answer with the following text:");
+		System.out.println("Found an answer with the optional argument'"
+				+ optionalArgument + "' the following text:");
 		System.out.println("-----------------------------------");
 		System.out.println(buffer);
 		System.out.println("-----------------------------------");
@@ -289,7 +324,7 @@ class UEFCommand {
 			state.pop();
 		} else {
 			System.out
-					.println("Error: program reached an invalid state in processAnswer()");
+			.println("Error: program reached an invalid state in processAnswer()");
 			System.exit(-1);
 		}
 	}
@@ -313,7 +348,7 @@ class UEFCommand {
 			state.pop();
 		} else {
 			System.out
-					.println("Error: \\end{verbatim} without a matching \\begin{verbatim}");
+			.println("Error: \\end{verbatim} without a matching \\begin{verbatim}");
 			System.exit(-1);
 		}
 	}
@@ -326,6 +361,9 @@ class UEFCommand {
 		// push the new state.
 		state.push(States.problem);
 
+		// get optional argument for Problem
+		String optionalArgument = getOptionalArgument();
+
 		// get the arguments for Problem
 		String[] arguments = getArguments(2);
 
@@ -335,6 +373,7 @@ class UEFCommand {
 		// do some stuff we don't need to do
 		System.out.println("Found Problem Environment with topic '" + topic
 				+ "' of difficulty '" + difficulty
+				+ "' with optional argument '" + optionalArgument
 				+ "' with the following text:");
 
 		// get text for the problem
@@ -355,7 +394,7 @@ class UEFCommand {
 			state.pop();
 		} else {
 			System.out
-					.println("Error: \\end{problem} without a matching \\begin{problem}");
+			.println("Error: \\end{problem} without a matching \\begin{problem}");
 			System.exit(-1);
 		}
 	}
@@ -380,7 +419,7 @@ class UEFCommand {
 			state.pop();
 		} else {
 			System.out
-					.println("Error: \\end{answers} without a matching \\begin{answers}");
+			.println("Error: \\end{answers} without a matching \\begin{answers}");
 			System.exit(-1);
 		}
 	}

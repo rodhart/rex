@@ -1,21 +1,16 @@
 package edu.udel.cis.cisc475.rex.uefparser.impl;
 
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
+import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserFactoryIF;
 import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserIF;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Stack;
 
 /**
  * Parser for the Universal Exam File (UEF).
  * 
  * FIXME: Doesn't handle /labels{}.
- * 
- * FIXME: Does not handle optional arguments in the form of /command[].
  * 
  * FIXME: Doesn't handle the \verb command.
  * 
@@ -48,11 +43,10 @@ public class UEFParser implements UEFParserIF {
 	 */
 	UEFCommand command;
 
-	
-
 	/**
-	 * Creates new object of the parser.
-	 * UEFParserFactory should be used to create this object.
+	 * Creates new object of the parser. UEFParserFactory should be used to
+	 * create this object.
+	 * 
 	 * @see UEFParserFactoryIF
 	 */
 	UEFParser() {
@@ -65,8 +59,6 @@ public class UEFParser implements UEFParserIF {
 		// Subclass that implements parsing of commands.
 		command = new UEFCommand(uefCharHandler, state);
 	}
-
-	
 
 	/**
 	 * Parse UEF file and generate ExamIF from it.
@@ -87,13 +79,17 @@ public class UEFParser implements UEFParserIF {
 					command.processDocumentclass();
 				} else if (commandType.equals(UEFCommand.CommandTypes.answer)) {
 					command.processAnswer();
-				} else if (commandType.equals(UEFCommand.CommandTypes.beginProblem)) {
+				} else if (commandType
+						.equals(UEFCommand.CommandTypes.beginProblem)) {
 					command.processBeginProblem();
-				} else if (commandType.equals(UEFCommand.CommandTypes.endProblem)) {
+				} else if (commandType
+						.equals(UEFCommand.CommandTypes.endProblem)) {
 					command.processEndProblem();
-				} else if (commandType.equals(UEFCommand.CommandTypes.beginAnswers)) {
+				} else if (commandType
+						.equals(UEFCommand.CommandTypes.beginAnswers)) {
 					command.processBeginAnswers();
-				} else if (commandType.equals(UEFCommand.CommandTypes.endAnswers)) {
+				} else if (commandType
+						.equals(UEFCommand.CommandTypes.endAnswers)) {
 					command.processEndAnswers();
 				}
 
