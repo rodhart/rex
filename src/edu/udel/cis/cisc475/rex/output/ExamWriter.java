@@ -5,7 +5,10 @@ import java.util.Collection;
 
 import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
 import edu.udel.cis.cisc475.rex.exam.impl.Exam;
+import edu.udel.cis.cisc475.rex.exam.impl.Problem;
+import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
+import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 /**
  * @author team 5
 <<<<<<< .mine
@@ -37,7 +40,33 @@ public class ExamWriter implements ExamWriterIF {
 		out.printf("%s\n", E.frontMatter());
 		
 		// output problems with respective answers
-		
+		for(int i=0; i< E.elements().toArray().length; i++){
+			ExamElementIF temp = (ExamElementIF) E.elements().toArray()[i];
+
+
+			if(temp instanceof BlockIF){
+				BlockIF tempBlockIF  = (BlockIF)temp;
+				out.printf("%s\n", tempBlockIF.source().text());
+			}
+			else if(temp instanceof FigureIF){
+				FigureIF tempFigureIF = (FigureIF)temp;
+				out.printf("%s\n",tempFigureIF.source().text());
+			}
+			else if(temp instanceof Problem){
+				Problem tempProblem = (Problem)temp;
+				
+				//prints the required block if it does not equal null
+				if(tempProblem.requiredBlock()!= null)
+					out.printf("%s\n",tempProblem.requiredBlock());
+				//prints the question
+				out.printf("%s\n",tempProblem.question().text());
+				
+				//prints all the answers
+				for(int index=0; index<tempProblem.answers().length; index++){
+					out.printf("%s\n",tempProblem.answers()[index].source().text());
+				}
+			}
+		}
 		
 		// output the end block for exam
 		out.printf("%s\n", E.finalBlock());
