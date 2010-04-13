@@ -1,13 +1,21 @@
 // Author: Tim Armstrong
 
+/*
+one sig Totality
+{
+	master: one MasterExam
+}
+*/
 
 // all fields accounted for
-sig Exam {
+abstract sig Exam {
 	preamble: one Source,
 	frontMatter: one Source,
 	finalBlock: lone Block,
-	elements: set ExamElement
+	elements: set ExamElement // needs to be an *ordered list*. Implementing that looks difficult.
+														// See pg 157-9 in Jackson's book for lists in Alloy
 }
+
 
 one sig MasterExam extends Exam {}
 
@@ -18,16 +26,49 @@ sig GeneratedExam extends Exam {
 
 
 
-
+// fields not complete
 one sig Config {
-  //count: Category ->one Int // ??? From Dr. Siegel
-	seed: one Int
+	//count: Category ->one Int // ??? From Dr. Siegel
+	seed: one Int,
+	constraints: set Constraint   // no order necessary
+}
+
+// fields complete
+abstract sig Constraint {
+	source: one Source,
+	points: one Int  // maybe would want real number?
+}
+fact {
+	all c: Constraint | some conf: Config | c in conf.constraints
+}
+
+// fields not complete
+sig GroupConstraint extends Constraint {
+	numProblems: one Int,
+	category: one Category,
+	interval: one Interval
+}
+
+sig RequiredProblemConstraint extends Constraint {
+	problemNames: set String
+}
+fact {
+	all r: RequiredProblemConstraint | #r.problemNames > 1
+}
+ 
+
+// Booleans are difficult to implement in Alloy (see Jackson pg 136).
+// Therefore I omit here the Boolean values for the range being / not being inclusive.
+// They have no real bearing on the model.  I also omit the possibilities of infinity values.
+sig Interval {
+	low: one Int,
+	high: one Int
 }
 
 
- 
 
-sig ExamElement {
+
+abstract sig ExamElement {
 	label: lone String
 }
 
@@ -100,7 +141,59 @@ fact seedDeterminesOutput {
 
 
 
+/*
+If the answers environment is used, it must include at least one answer
+The maximum number of answers is 26.
 
+ATTEMPT:
+fact validNumAnswers {
+	all m: MultipleChoice | #m.answers >= 1 and #m.answers <= 26
+}
+
+ERROR message:
+"A type error has occured:
+Current bitwidth is set to 4, thus this integer constant 26
+is bigger than the maximum integer 7"
+
+Though in any case we CAN do:
+*/
+fact validNumAnswers {
+	all m: MultipleChoice | #m.answers >= 1
+}
+
+
+
+
+
+
+//ECF:  The first <integer> is a positive integer: it is the number of problems satisfying the constraint that
+// should be included.
+
+//assert sumConstraintProblems {
+
+
+
+
+
+
+
+//At least one answer must be labeled as correct.
+fact atLeastOneCorrect {
+//TODO
+}
+
+//[fixed]: signifying that this answer must appear in its given position in the answer sequence
+fact fixedAtCorrectPosition {
+//TODO
+}
+
+
+
+
+// no problem will occur in a generated exam more than once (even if it satisfies more than one constraint)
+fact problemsUnique {
+//TODO
+}
 
 
 // Say that in the generated exams, problems group into categories.  If our model included a Category class
@@ -125,20 +218,10 @@ fact frontMatterFirst {
 }
 
 
+
+
+
 // fact regarding probability?
-
-
-
-//If the answers environment is used, it must include at least one answer
-//The maximum number of answers is 26.
-
-
-
-//[fixed]: signifying that this answer must appear in its given position in the answer sequence
-
-
-
-//At least one answer must be labeled as correct.
 
 
 
@@ -148,12 +231,11 @@ fact frontMatterFirst {
 // the figure will also be included automatically.
 
 
-//no problem will occur in a generated exam more than once (even if it satisfies more than one constraint)
 
 
 
-//ECF:  The first <integer> is a positive integer: it is the number of problems satisfying the constraint that
-// should be included.
+
+
 
 
 
@@ -161,7 +243,7 @@ fact frontMatterFirst {
 
 pred show{}
 
-run show for 3
+run show for 3 but 1 GeneratedExam
 
 
 /*  Dr. Siegel's original:
