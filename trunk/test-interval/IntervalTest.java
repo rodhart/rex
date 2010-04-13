@@ -87,12 +87,14 @@ public class IntervalTest {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
+		Assert.assertFalse(I.contains(2.0));
 		Assert.assertTrue(I.contains(5.0));
 		Assert.assertTrue(I.contains(8.0));
 		Assert.assertFalse(I.contains(10.0));
 		
 		IntervalIF I2 = intervalFactory.interval(true, 5.0, false, 10.0);
 		
+		Assert.assertFalse(I.contains(11.0));
 		Assert.assertFalse(I2.contains(5.0));
 		Assert.assertTrue(I2.contains(8.0));
 		Assert.assertTrue(I2.contains(10.0));
