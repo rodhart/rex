@@ -6,7 +6,7 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 public interface ConfigFactoryIF {
 
-	ConfigIF Config(boolean pdf, int versions);
+	ConfigIF Config(boolean pdf, int numVersions);
 
 	ConstraintIF Constraint(SourceIF source);
 
