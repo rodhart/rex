@@ -6,8 +6,8 @@ import java.util.Collection;
 import edu.udel.cis.cisc475.rex.key.impl.Key;
 
 /**
- * @author team 5
- *
+ * @author cardona
+ * 
  */
 
 public class Output_test {
