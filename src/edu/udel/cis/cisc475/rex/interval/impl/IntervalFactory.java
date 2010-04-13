@@ -16,7 +16,7 @@ public class IntervalFactory implements IntervalFactoryIF
 	public IntervalIF interval(boolean strictLow, Double low,
 			boolean strictHigh, Double high) {
 		// TODO Auto-generated method stub
-		return null;
+		return new Interval(strictLow, low, strictHigh, high);
 	}
 
 }
