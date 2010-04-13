@@ -6,9 +6,17 @@ import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
 
+/**
+ * 
+ * @author Team 2
+ *
+ */
 
 public class IntervalTest {
 
+	/*
+	 * Tests that low() returns the correct low value
+	 */
 	@Test
 	public void testLow() {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
@@ -18,6 +26,9 @@ public class IntervalTest {
 		Assert.assertTrue(test);
 	}
 
+	/*
+	 * Tests that strictLow() returns the correct strictLow value
+	 */
 	@Test
 	public void testStrictLow() {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
@@ -28,6 +39,9 @@ public class IntervalTest {
 		Assert.assertTrue(test);
 	}
 
+	/*
+	 * Tests that high() returns the correct high value
+	 */
 	@Test
 	public void testHigh() {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
@@ -37,6 +51,9 @@ public class IntervalTest {
 		Assert.assertTrue(test);
 	}
 
+	/*
+	 * Tests that strictHigh() returns the correct strictHigh value
+	 */
 	@Test
 	public void testStrictHigh() {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
@@ -47,6 +64,9 @@ public class IntervalTest {
 		Assert.assertTrue(test);
 	}
 
+	/*
+	 * Tests that the interval constructor sets the correct values
+	 */
 	@Test
 	public void testInterval() {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
@@ -58,6 +78,10 @@ public class IntervalTest {
 		Assert.assertTrue(I.high() == 10.0);
 	}
 
+	/*
+	 * Tests that contains() returns whether the value is inside the interval
+	 * depending on the constraints set by the constructor.
+	 */
 	@Test
 	public void testContains() {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
