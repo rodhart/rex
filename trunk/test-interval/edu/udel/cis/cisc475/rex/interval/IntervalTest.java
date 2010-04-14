@@ -8,6 +8,12 @@ import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
 
+/**
+ * 
+ * @author aplatt
+ *
+ */
+
 public class IntervalTest {
 
 	/*
