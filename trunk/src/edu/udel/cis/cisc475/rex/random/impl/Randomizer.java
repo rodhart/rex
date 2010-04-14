@@ -44,47 +44,51 @@ public class Randomizer implements RandomizerIF {
 	 * satisfying constraints (first filter then select) 
 	 * 
 	 * @param numItems  number of items to return
-	 * @param items  the arrays of objects o choose from
+	 * @param items  the arrays of objects to choose from
 	 * @return an array of chosen objects
 	 */
 public Object[] choose (int numItems, Object[] items) {
 
 	int numObjects = items.length; //total number of array elements
-	if (numObjects == 0) {
+	if (numObjects <= 0) {
 		System.err.printf("	in method " +
-				"public Object[] choose (int numItems, Object[] items)" +
-				"number of Objects == 0");
+				"public Object[] choose (int numItems, Object[] items)   " +
+				"number of Objects <= 0");
 		return null;		
-	}
+	}//end of    if (numObjects == 0) 
 
 	if (numObjects < numItems) {
 		System.err.printf("	in method " +
-				"public Object[] choose (int numItems, Object[] items)" +
+				"public Object[] choose (int numItems, Object[] items)   " +
 				"numItems larger than number of Objects");
 		return null;		
-	}
+	}//end of    	if (numObjects < numItems) 
 
-	
+
+	//pickedNums will store the indexes to the final random set
 	int pickedNums[] = new int[numItems];
-	int nextNum = 0;
 	int numofPickedNums = 0; //how many numbers have been already picked
+	//these are vars used in loop
+	int nextNum = 0;
 	boolean done = false; 
 	boolean alreadyPicked = false;
 		
 	//do the first one outside of the loop
 	//this assumes that user wants at least
-	//one object back
+	//one object back (we checked for tht above already)
 	pickedNums[0] = randnum.nextInt(numObjects); 
 
+	//now loop through and pick the rest of them
 	while (!done) {
 	nextNum = randnum.nextInt(numObjects); //pick next random int 
 	alreadyPicked = false;					//reset the loop checker
 	
-	//loop through and verify num is not repeat	
+	//loop through and verify num has not already been picked
+	//since we do not want duplicate questions or duplicate
+	//answers on a multiple choice test
 	for(int i = 0; i<=numofPickedNums; i++) { 
 			if (pickedNums[i] == nextNum )
 				alreadyPicked = true;
-
 	}//end of for loop
 
 	//if our num hasn't been picked yet 
@@ -107,6 +111,8 @@ public Object[] choose (int numItems, Object[] items) {
 		newItems[i] = items[pickedNums[i]];
 	}//end of for loop
 
+	//send our sorted object array on its way to its new home
+	//bye bye baby! have a nice life!
 	return newItems;
 }//end of choose method
 
@@ -114,6 +120,4 @@ public Object[] choose (int numItems, Object[] items) {
 //private vars
 private Random randnum;
 }//end of class 
-	   
-
 
