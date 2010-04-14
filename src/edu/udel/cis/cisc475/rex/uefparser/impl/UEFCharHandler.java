@@ -39,7 +39,7 @@ class UEFCharHandler {
 	 * the name of the file being handled
 	 */
 	private String fileName;
-	
+
 	/**
 	 * Opens a file and completely reads it into a StringBuffer for easy
 	 * parsing. Set's the position to the first character of the file.
@@ -60,8 +60,8 @@ class UEFCharHandler {
 			fileContents.append('\n');
 		}
 		reader.close();
-		
-		//Reset local state
+
+		// Reset local state
 		position = 0;
 		lineNo = 0;
 		charPos = 0;
@@ -116,8 +116,8 @@ class UEFCharHandler {
 	}
 
 	/**
-	 * Returns the current position in the file.
-	 * This return linear position including counting the newlines chars
+	 * Returns the current position in the file. This return linear position
+	 * including counting the newlines chars
 	 * 
 	 * @return The current position in the file.
 	 */
@@ -134,26 +134,27 @@ class UEFCharHandler {
 	void setPosition(int position) {
 		this.position = position;
 	}
-	
+
 	/**
 	 * Get the file name of the file being handled
+	 * 
 	 * @return
 	 */
 	String getFileName() {
 		return this.fileName;
 	}
-	
+
 	/**
 	 * Get the line number
 	 */
-	int getLineNo(){
+	int getLineNo() {
 		return this.lineNo;
 	}
 
 	/**
 	 * Get the column number
 	 */
-	int getColumnNo(){
+	int getColumnNo() {
 		return this.charPos;
 	}
 }

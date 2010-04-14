@@ -12,11 +12,11 @@ public class Source implements SourceIF {
 	private int startLine;
 	private int lastColumn;
 	private int lastLine;
-	
-	public Source(String filename){
+
+	public Source(String filename) {
 		this.filename = filename;
 	}
-	
+
 	@Override
 	public void addText(String text) {
 		this.text = text;
