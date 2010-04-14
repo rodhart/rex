@@ -36,6 +36,11 @@ class UEFCharHandler {
 	private StringBuffer fileContents = new StringBuffer();
 
 	/**
+	 * the name of the file being handled
+	 */
+	private String fileName;
+	
+	/**
 	 * Opens a file and completely reads it into a StringBuffer for easy
 	 * parsing. Set's the position to the first character of the file.
 	 * 
@@ -60,6 +65,7 @@ class UEFCharHandler {
 		position = 0;
 		lineNo = 0;
 		charPos = 0;
+		this.fileName = file.getName();
 	}
 
 	/**
@@ -69,11 +75,13 @@ class UEFCharHandler {
 		position++;
 
 		// keep track of the current line number and chat number on that line
-		if (fileContents.charAt(position) == '\n') {
-			lineNo++;
-			charPos = 0;
-		} else {
-			charPos++;
+		if (fileContents.length() < position) {
+			if (fileContents.charAt(position) == '\n') {
+				lineNo++;
+				charPos = 0;
+			} else {
+				charPos++;
+			}
 		}
 	}
 
@@ -125,5 +133,27 @@ class UEFCharHandler {
 	 */
 	void setPosition(int position) {
 		this.position = position;
+	}
+	
+	/**
+	 * Get the file name of the file being handled
+	 * @return
+	 */
+	String getFileName() {
+		return this.fileName;
+	}
+	
+	/**
+	 * Get the line number
+	 */
+	int getLineNo(){
+		return this.lineNo;
+	}
+
+	/**
+	 * Get the column number
+	 */
+	int getColumnNo(){
+		return this.charPos;
 	}
 }
