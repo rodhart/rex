@@ -101,7 +101,7 @@ public class Exam implements ExamIF {
 	public int addElementIF(ExamElementIF element) {
 		// Even though we are using a map, we really want a set so should not
 		// add duplicate entries in a single exam
-		if (elements.containsValue(element)) {
+		if (!elements.containsValue(element)) {
 			int key = elements.size() + 1;
 			// put into linked hash set
 			elements.put(key,element);
