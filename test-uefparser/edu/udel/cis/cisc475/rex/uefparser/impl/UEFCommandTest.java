@@ -105,18 +105,18 @@ public class UEFCommandTest
 		uefCharHandler.setPosition(98);
 		String[] arguments = this.uefCommand.getArguments(1);
 		assertEquals("argument1", arguments[0]);
-		assertEquals(110,uefCharHandler.getPosition());
-		
+		assertEquals(110, uefCharHandler.getPosition());
+
 		arguments = this.uefCommand.getArguments(2);
 		assertEquals("argument2", arguments[0]);
 		assertEquals("argument3", arguments[1]);
-		assertEquals(137,uefCharHandler.getPosition());
-		
+		assertEquals(137, uefCharHandler.getPosition());
+
 		arguments = this.uefCommand.getArguments(3);
 		assertEquals("argument 4", arguments[0]);
 		assertEquals("argument5", arguments[1]);
 		assertEquals("argument6", arguments[2]);
-		assertEquals(185,uefCharHandler.getPosition());
+		assertEquals(185, uefCharHandler.getPosition());
 
 	}
 
@@ -146,6 +146,20 @@ public class UEFCommandTest
 		argument = this.uefCommand.getOptionalArgument();
 		assertEquals("oargument3", argument);
 		assertEquals(224, this.uefCharHandler.getPosition());
+	}
+
+	/**
+	 * Test the peakUntil() method.
+	 */
+	@Test
+	public void peekUntilTest()
+	{
+		this.uefCharHandler.setPosition(224);
+		String buffer = this.uefCommand.peekUntil();
+		assertEquals(
+				"\n\n  some text that should be peeked at. Peekaboo!\nAnother line that should be peaked at.\n ",
+					 buffer);
+
 	}
 
 	/**
