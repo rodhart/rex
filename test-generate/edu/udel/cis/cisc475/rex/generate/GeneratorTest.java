@@ -23,6 +23,7 @@ import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
 import edu.udel.cis.cisc475.rex.generate.impl.GeneratorFactory;
 import edu.udel.cis.cisc475.rex.key.Keys;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyFactoryIF;
+import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 import edu.udel.cis.cisc475.rex.key.generatestubs.AnswerKeyFactoryStub;
 
 public class GeneratorTest {
@@ -47,6 +48,8 @@ public class GeneratorTest {
 	
 	private static ExamIF master1;
 	
+	private static AnswerKeyIF key1;
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		if (useStubs) {
@@ -59,8 +62,6 @@ public class GeneratorTest {
 			configFactory = Configs.newConfigFactory();
 			answerKeyFactory = Keys.newAnswerKeyFactory();
 		}
-		//generatorFactory = Generators.newGeneratorFactory();
-		//generatorFactory = new GeneratorFactory();
 		
 		config1 = configFactory.newConfig(true, 1);
 		master1 = masterFactory.newMasterExam();
@@ -103,4 +104,11 @@ public class GeneratorTest {
 		generatedexam = generator1.getGeneratedExam(1);
 		assertEquals(masterFactory.newGeneratedExam(),generatedexam);
 	}
+
+	@Test
+	public void testGetAnswerKey(){
+		assertEquals(key1,generator1.getAnswerKey(1));
+		
+	}
+	
 }
