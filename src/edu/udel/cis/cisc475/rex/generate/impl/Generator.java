@@ -9,6 +9,7 @@ import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
+import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
@@ -33,13 +34,13 @@ public class Generator implements GeneratorIF {
 	private int numExams = config.numVersions();
 
 	
-	Generator(ExamIF master, ConfigIF config) {
+	Generator(ExamIF master, ConfigIF config) throws RexUnsatisfiableException {
 		this.master = master;
 		this.config = config;
 		generate();
 	}
 
-	private void generate() 
+	private void generate() throws RexUnsatisfiableException 
 	{
 		Collection<ConstraintIF> theConstraints = config.constraints();
 			
@@ -49,6 +50,11 @@ public class Generator implements GeneratorIF {
 		RandomizerFactoryIF theRandomizerFactory = new RandomizerFactory();
 		RandomizerIF theRandomizer = theRandomizerFactory.newRandomizer(config.seed());
 		IntervalFactoryIF theIntervalFactory = new IntervalFactory();
+		
+		// this will be implemented later once we figure out how to iterate through
+		// or we make it so choose() doesn't return an array [Beta]
+		Object[] constraintArray = theConstraints.toArray();
+		constraintArray = randomizeConstraints(theRandomizer, theConstraints.size(), theConstraints.toArray());
 
 		for (int i = 0; i < numExams; i++)
 		{
@@ -109,7 +115,7 @@ public class Generator implements GeneratorIF {
 						
 						else
 						{
-						//	throw new RexUnsatisfiableException();
+							throw new RexUnsatisfiableException();
 						}
 						
 					}
@@ -117,32 +123,29 @@ public class Generator implements GeneratorIF {
 					// fill an array with the contents of the desiredElements collection
 					Object[] passableDesiredElements = desiredProblems.toArray();
 					
-					
-					
+					// now a linked hash map
 					LinkedHashMap<Integer, Object> lhm = new LinkedHashMap<Integer, Object>();
-					for(int n = 0; n < desiredProblems.size(); n++) {
+					for (int n = 0; n < desiredProblems.size(); n++) 
+					{
 						lhm.put(n, passableDesiredElements[n]);
 					}
 					
-					
-					// now, make a call to the randomizer, and choose [numProblems] problems
-					// from the set of these corresponding problems
+					// create an array of the keys
 					Object[] keys = theRandomizer.choose(numProblems, lhm.keySet().toArray());
 					
-					// now, convert it back to a Collection of ExamElementIFs (seems wasteful)
-		
-					
+					// create a linked hash set of final desired problems
 					LinkedHashSet<ProblemIF> finalDesiredProblems = new LinkedHashSet<ProblemIF>();
 					
+					// now add the elements returned from the randomizer to the hash set
 					for (int j=0; j < passableDesiredElements.length; j++)
 					{
 						finalDesiredProblems.add((ProblemIF) lhm.get((Integer) keys[j]));
 					}
 					
 					// now call the ExamFactory addProblem method and add it to generatedExams[i]
-					for (int m=0; m < finalDesiredProblems.size(); m++)
+					for (ExamElementIF e : finalDesiredProblems)
 					{
-				//		generatedExams[i].addElementIF(finalDesiredProblems);
+						generatedExams[i].addElementIF(e);
 					}
 				}
 				
@@ -202,6 +205,19 @@ public class Generator implements GeneratorIF {
 	@Override
 	public int numGeneratedExams() {
 		return numExams;
+	}
+	
+	/**
+	 * Takes a RandomizerIF, a number of constraints, and an object array of constraints,
+	 * and returns an array of randomized constraint objects
+	 * @param r
+	 * @param numConstraints
+	 * @param constraints
+	 * @return
+	 */
+	public Object[] randomizeConstraints(RandomizerIF r, int numConstraints, Object[] constraints)
+	{
+		return r.choose(numConstraints, constraints);
 	}
 
 }
