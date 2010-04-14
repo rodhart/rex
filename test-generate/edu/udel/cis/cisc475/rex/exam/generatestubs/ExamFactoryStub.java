@@ -45,7 +45,7 @@ public class ExamFactoryStub implements ExamFactoryIF {
 	@Override
 	public ExamIF newMasterExam() {
 		// TODO Auto-generated method stub
-		return null;
+		return new ExamStub();
 	}
 
 	@Override
