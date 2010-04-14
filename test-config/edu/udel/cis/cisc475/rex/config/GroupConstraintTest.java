@@ -37,10 +37,10 @@ public class GroupConstraintTest {
 		
 		IntervalIF J = GroupConstraint.difficultyInterval();
 		
-		assertTrue(I.strictLow() == false);
-		assertTrue(I.strictHigh() == true);
-		assertTrue(I.low() == 5.0);
-		assertTrue(I.high() == 10.0);
+		assertTrue(J.strictLow() == false);
+		assertTrue(J.strictHigh() == true);
+		assertTrue(J.low() == 5.0);
+		assertTrue(J.high() == 10.0);
 	}
 	
 	/*
@@ -60,10 +60,10 @@ public class GroupConstraintTest {
 		
 		IntervalIF J = GroupConstraint.difficultyInterval();
 		
-		assertTrue(I.strictLow() == true);
-		assertTrue(I.strictHigh() == false);
-		assertTrue(I.low() == 50.5);
-		assertTrue(I.high() == 100.2);
+		assertTrue(J.strictLow() == true);
+		assertTrue(J.strictHigh() == false);
+		assertTrue(J.low() == 50.5);
+		assertTrue(J.high() == 100.2);
 	}
 	
 	/*
