@@ -14,7 +14,7 @@ public interface RandomizerFactoryIF {
 	* this method is a factory which creates a new instance of 
 	* a random object chooser
 	* 
-	* @param the seed to be used to create the random numbers 
+	* @param seed used to create the random numbers 
 	* @return a pointer to an instance of a random object chooser
 	*/ 
 	RandomizerIF newRandomizer(long seed);

@@ -51,7 +51,7 @@ public interface AnswerKeyIF {
 	/**
 	 * getter that returns answer(s) given a problem index
 	 * 
-	 * @param index is the problem number that we want answers for
+	 * @param i index of the problem number that we want answers for
 	 * @return a collection of correct answers (maybe just one) 
 	 */
 	Collection <String> answers(int i); 
@@ -62,7 +62,7 @@ public interface AnswerKeyIF {
 	 * it is assumed that the problem answers will be given in order
 	 * so the index is merely incremented
 	 * 
-	 * @param collection of answers (maybe just one) 
+	 * @param problem collection of answers (maybe just one) 
 	 */
 	void addProblem( Collection <String> Problem);
 }//end of interface 
