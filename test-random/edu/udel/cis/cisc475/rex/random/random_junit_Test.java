@@ -21,7 +21,24 @@ public class random_junit_Test {
 
 
 
+	@Test
+	public void test_choose_b() {
+		//init a few different randomizers
+		seed = 3;
+		RandomizerFactoryIF RF = new RandomizerFactory(); 
+		RandomizerIF R1 = RF.newRandomizer(seed);
+		Object[] b = new String[10];
+		b 		=  R1.choose (0, a);		
+		boolean result;
+		for(int i = 0; i < 9; i++) {
+			//System.out.printf("call: %d,  %s,    %s\n",i, b[i], b_check[i]);
+			result = b[i].equals(b_check[i]);
+			assertEquals (false, result);
+		}
+	}//end of test
 
+	
+	
 	@Test
 	public void test_choose_b() {
 		//init a few different randomizers
