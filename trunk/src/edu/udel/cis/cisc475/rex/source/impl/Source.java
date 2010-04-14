@@ -93,7 +93,7 @@ public Source(String filename) {
  * 
  * @param filename The name of the file to be read
  */
-
+/*
 public Source(String filename,
 		int startLine, 
 		int startColumn,
@@ -125,7 +125,7 @@ public Source(String filename,
 	 	array list 
 	 	and 
 	 	set the markers along the way	 	
-	 */
+	 *//*
     if ( name.exists() ) // check if exists
     { if ( name.isFile() ) // check if is file and not directory
     { 
@@ -161,7 +161,7 @@ public Source(String filename,
     	// exception file not found
     
 }//end of constructor
-
+*/
 
 
 

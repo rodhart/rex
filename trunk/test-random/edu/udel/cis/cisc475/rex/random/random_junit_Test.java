@@ -22,7 +22,7 @@ public class random_junit_Test {
 
 
 	@Test
-	public void test_choose_b() {
+	public void test_choose_a() {
 		//init a few different randomizers
 		seed = 3;
 		RandomizerFactoryIF RF = new RandomizerFactory(); 

@@ -34,9 +34,10 @@ public class SourceFactory implements SourceFactoryIF {
 	 *  @return Returns a new Source object with the file parsed
 	 *  
 	 */
-	public SourceIF newSource(String filename, int startLine, int startColumn,
+/*	public SourceIF newSource(String filename, int startLine, int startColumn,
 								int lastLine, int lastColumn){
 
 		return new Source(filename,	startLine, startColumn, lastLine, lastColumn);
 	}//end of method
+*/
 }//end of class
