@@ -29,8 +29,12 @@ import edu.udel.cis.cisc475.rex.random.impl.RandomizerFactory;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 public class GeneratorStub implements GeneratorIF {
+	ExamIF g_master;
+	ConfigIF g_config;
 	
 	public GeneratorStub(ExamIF master, ConfigIF config) {
+		this.g_master = master;
+		this.g_config = config;
 	}
 
 	private void generate() throws RexUnsatisfiableException 
@@ -44,7 +48,7 @@ public class GeneratorStub implements GeneratorIF {
 
 	@Override
 	public ConfigIF getConfig() {
-		return null;
+		return g_config;
 	}
 
 	@Override
@@ -54,7 +58,7 @@ public class GeneratorStub implements GeneratorIF {
 
 	@Override
 	public ExamIF getMaster() {
-		return null;
+		return g_master;
 	}
 
 	@Override
