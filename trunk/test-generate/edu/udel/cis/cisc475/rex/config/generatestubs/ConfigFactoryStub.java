@@ -8,7 +8,7 @@ public class ConfigFactoryStub implements ConfigFactoryIF {
 	@Override
 	public ConfigIF newConfig(boolean pdf, int numVersions) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ConfigStub();
 	}
 
 }
