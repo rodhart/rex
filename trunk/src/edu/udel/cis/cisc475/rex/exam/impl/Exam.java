@@ -146,19 +146,7 @@ public class Exam implements ExamIF {
 	 * @return
 	 */
 	public ExamElementIF element(int i) {
-		HashSet<ExamElementIF> returnSet = new HashSet<ExamElementIF>();
-		Collection<ExamElementIF> elementValues = elements.values();
-		Iterator<ExamElementIF> itr = elementValues.iterator();
-		int count = 0;
-		ExamElementIF element = itr.next();
-		while (itr.hasNext() && count < i) {
-			element = itr.next();
-			returnSet.add(element);
-		}
-		if (count == i) {
-			return element;
-		}
-		return null;
+		return elements.get(i);
 	}
 
 	/**
