@@ -278,11 +278,32 @@ public class ExamTest {
 	}
 	
 	@Test
-	@Ignore
 	public void testGetElementsUsingElement() {
-		fail("Not yet implemented");
+		ExamIF exam = examFactory.newGeneratedExam();
 		
+		FigureIF figure = createTestFigure();
+		ProblemIF problem1 = createTestProblem();
+		ProblemIF problem2 = createTestProblem();
 		
+		Collection<ExamElementIF> elements = exam.elementsUsingElement(figure);
+		
+		assertNotNull(elements);
+		assertEquals(0, elements.size());
+		
+		exam.declareUse(problem1, figure);
+		
+		elements = exam.elementsUsingElement(figure);
+		
+		assertEquals(1, elements.size());
+		assertTrue(elements.toArray()[0] instanceof ProblemIF);
+		assertTrue(elements.contains(problem1));
+		
+		exam.declareUse(problem2, figure);
+		
+		elements = exam.elementsUsingElement(figure);
+		
+		assertEquals(2, elements.size());
+		assertTrue(elements.contains(problem2));
 	}
 	
 	@Test
@@ -349,6 +370,7 @@ public class ExamTest {
 		
 		topics = exam.labels();
 		assertNotNull(topics);
+		// should only return 2 topics since figure doesnt have a topic
 		assertEquals(2, topics.size());
 		assertTrue(topics.contains("Test Problem Topic"));
 		assertTrue(topics.contains("Test Block Topic"));
