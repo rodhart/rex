@@ -133,7 +133,10 @@ public class Exam implements ExamIF {
 	/**
 	 * Allow one element to use another element. For example a problem can
 	 * depend on a figure, so the problem will be the user and the figure will
-	 * be the usee. Multiple users can be associated with a usee.
+	 * be the usee. Multiple users can be associated with a usee. Both elements
+	 * should be added to the exam BEFORE this method is called using the addElementIF
+	 * method
+	 * 
 	 * 
 	 * @param user
 	 *            - one of several elements to depend on the usee
@@ -141,7 +144,13 @@ public class Exam implements ExamIF {
 	 *            - singular element others are connected with
 	 */
 	public void declareUse(ExamElementIF user, ExamElementIF usee) {
-		uses.get(user).add(usee);
+		if (elements.containsValue(user) && elements.containsValue(usee)) {
+			uses.get(user).add(usee);
+		} else {
+			System.err.println("error calling exam.DeclareUse(user, usee), must add elements to the exam before declaring a relationship");
+		}
+		
+		
 	}
 
 	/**
