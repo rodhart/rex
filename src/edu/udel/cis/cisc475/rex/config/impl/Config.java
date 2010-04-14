@@ -9,12 +9,17 @@ import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
+/*
+ *  NOTE:   In the addGroupConstraintIF() method there is a numProblems attribute that does what??
+ */
+
 public class Config implements ConfigIF {
 	private long seed;
 	private String[] versionStrings;
 	private String finalBlock;
 	private boolean pdfOption;
 	private int numVersions;
+	private Collection<ConstraintIF> constraints;
 	
 	public Config(boolean pdf, int numVersions){
 		this.numVersions = numVersions;
@@ -24,21 +29,25 @@ public class Config implements ConfigIF {
 	@Override
 	public GroupConstraintIF addGroupConstraintIF(String topic,
 			IntervalIF difficulty, int points, SourceIF source) {
-		// TODO Auto-generated method stub
-		return null;
+		GroupConstraintIF constraint = new GroupConstraint(difficulty, 10, points, topic, source);
+		constraints.add(constraint);
+		// TODO figure out what numProblems is for
+		
+		return constraint;
 	}
 
 	@Override
 	public RequiredProblemConstraintIF addRequiredProblemConstraint(
 			String label, int points, SourceIF source) {
-		// TODO Auto-generated method stub
-		return null;
+		RequiredProblemConstraintIF constraint = new RequiredProblemConstraint(label, points, source);
+		constraints.add(constraint);
+		
+		return constraint;
 	}
 
 	@Override
 	public Collection<ConstraintIF> constraints() {
-		// TODO Auto-generated method stub
-		return null;
+		return constraints;
 	}
 
 	@Override
