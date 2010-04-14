@@ -26,28 +26,28 @@ public interface AnswerKeyIF {
 	 * @return the exam version that is set by user
 	 */
 	String version(); 
-	
+
 	/**
 	 * simple getter that returns data about the answer key
 	 * 
 	 * @return the exam name that is set by user
 	 */
 	String examName(); 
-	
+
 	/**
 	 * simple getter that returns data about the answer key
 	 * 
 	 * @return the exam date that is set by user, may not be true date
 	 */
 	String date(); 
-	
+
 	/**
 	 * simple getter that returns data about the answer key
 	 * 
 	 * @return the number of problems that have been inputted 
 	 */
 	int numProblems(); 
-	
+
 	/**
 	 * getter that returns answer(s) given a problem index
 	 * 
@@ -55,7 +55,7 @@ public interface AnswerKeyIF {
 	 * @return a collection of correct answers (maybe just one) 
 	 */
 	Collection <String> answers(int i); 
-	
+
 
 	/**
 	 * setter that adds answer(s) 
@@ -66,4 +66,4 @@ public interface AnswerKeyIF {
 	 */
 	void addProblem( Collection <String> Problem);
 }//end of interface 
- 
+

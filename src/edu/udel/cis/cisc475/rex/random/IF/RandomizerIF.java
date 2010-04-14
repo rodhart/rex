@@ -13,9 +13,9 @@ package edu.udel.cis.cisc475.rex.random.IF;
  */
 public interface RandomizerIF {
 
-	
-	
-	
+
+
+
 	/**
 	 *  General purpose random chooser: 
 	 * can be used to permute answers 
