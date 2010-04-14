@@ -24,11 +24,11 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 	 * @param K a pointer to answer key representation stored in our program
 	 */
 	public AnswerKeyWriter (Key K){
-	this.K = K;
-}//end of constructor
-	
+		this.K = K;
+	}//end of constructor
 
-	
+
+
 	/**
 	 * 
 	 * writes the answer key
@@ -46,19 +46,19 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 
 		for (int i = 0; i < K.numProblems(); i ++) {
 			out.printf("problem %d :   %s\n", i, K.answers(i) ); 
-	 	}
-}//end of write(PrintWriter out)
+		}
+	}//end of write(PrintWriter out)
 
-	
+
 	/**
 	 * 
 	 * writes the answer key data to a scantron
 	 * 
 	 * @param file pointer to a file
 	 */
-public void writeScantron(File file){
-}//end of writeScantron(File file)
+	public void writeScantron(File file){
+	}//end of writeScantron(File file)
 
-//private vars
-private Key K;
+	//private vars
+	private Key K;
 }//end of class

@@ -1,12 +1,12 @@
 package edu.udel.cis.cisc475.rex.key.IF;
 
 /**	
-* this class is a factory which creates a new instance of 
-* an answer key
-* 
-*   @author CARDONA
-* 
-*/
+ * this class is a factory which creates a new instance of 
+ * an answer key
+ * 
+ *   @author CARDONA
+ * 
+ */
 public interface AnswerKeyFactoryIF {
 
 	/**
@@ -19,6 +19,6 @@ public interface AnswerKeyFactoryIF {
 	 * @param examName describes the exam name that is set by user
 	 * @param date describes the exam date that is set by user, may not be true date
 	 */
-AnswerKeyIF newAnswerKey(String version, String examName, String date);
+	AnswerKeyIF newAnswerKey(String version, String examName, String date);
 }//end of interface
 

@@ -16,7 +16,7 @@ public class random__main_example {
 	/**
 	 * general purpose tester of the random method
 	 * this does not replace junit but complements it
- 	 * @param args - not accepting any arguments
+	 * @param args - not accepting any arguments
 	 */
 	public static void main(String[] args) {
 
@@ -27,32 +27,32 @@ public class random__main_example {
 				"four_one", "four_two", "four_three", "four_four", "four_five", "four_six", "four_seven", "four_eight", "four_nine", "four_ten"};
 
 		long seed = 3;
-		
-//		note to self
-//		without factory since constructor is public
-//		RandomizerIF R = new Randomizer (seed);
 
-		
-//		note to self
-//		with static factory method
-//		-note that since interfaces cannot have
-//		factory methods, this example
-//		will only work with classes that are not implementing
-//		interfaces
-//		RandomizerIF R = RandomizerFactory.newRandomizer (seed);
+		//	note to self
+		//	without factory since constructor is public
+		//	RandomizerIF R = new Randomizer (seed);
 
-		
-// without using static, we must create instance 
-// of factory to use it
+
+		//	note to self
+		//	with static factory method
+		//	-note that since interfaces cannot have
+		//	factory methods, this example
+		//	will only work with classes that are not implementing
+		//	interfaces
+		//	RandomizerIF R = RandomizerFactory.newRandomizer (seed);
+
+
+		// without using static, we must create instance 
+		// of factory to use it
 		RandomizerFactoryIF RF = new RandomizerFactory(); 
 		RandomizerIF R = RF.newRandomizer(seed);
-		
+
 		Object[] b = new String[10];
 		b =  R.choose (10, a);		
-	
-		
+
+
 		for(int i = 0; i < 10; i++) {
-		System.out.printf("in random test main after return from call %s\n", b[i]);
+			System.out.printf("in random test main after return from call %s\n", b[i]);
 		}
 
 	}//end of main
