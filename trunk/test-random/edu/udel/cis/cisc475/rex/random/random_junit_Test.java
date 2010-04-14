@@ -20,7 +20,7 @@ public class random_junit_Test {
 
 
 
-
+/*
 	@Test
 	public void test_choose_a() {
 		//init a few different randomizers
@@ -28,16 +28,16 @@ public class random_junit_Test {
 		RandomizerFactoryIF RF = new RandomizerFactory(); 
 		RandomizerIF R1 = RF.newRandomizer(seed);
 		Object[] b = new String[10];
-		b 		=  R1.choose (0, a);		
+		b 		=  R1.choose (-1, a);		
+	
 		boolean result;
-		for(int i = 0; i < 9; i++) {
-			//System.out.printf("call: %d,  %s,    %s\n",i, b[i], b_check[i]);
-			result = b[i].equals(b_check[i]);
-			assertEquals (false, result);
-		}
+		if (b==null) result =true;
+		else result =false;
+		assertEquals (true, result);
+	
 	}//end of test
 
-	
+	*/
 	
 	@Test
 	public void test_choose_b() {
