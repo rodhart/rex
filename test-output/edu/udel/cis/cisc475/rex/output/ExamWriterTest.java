@@ -1,4 +1,4 @@
-//package edu.udel.cis.cisc475.rex.output;
+package edu.udel.cis.cisc475.rex.output;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -6,7 +6,7 @@ import org.junit.Test;
 import edu.udel.cis.cisc475.rex.exam.impl.Exam;
 import edu.udel.cis.cisc475.rex.output.ExamWriter;
 
-public class ExamWriterTest2 {
+public class ExamWriterTest {
 	
     @Test
     public void testExamWriterNull() {
