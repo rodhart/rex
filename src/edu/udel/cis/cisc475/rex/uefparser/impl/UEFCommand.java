@@ -360,7 +360,7 @@ class UEFCommand {
 			if (args[i].equals("correct"))
 				isCorrect = true;
 		}
-		
+
 		answer = this.examFactory.newAnswer(isCorrect, s);
 
 		if (state.peek() == States.answer) {
@@ -450,6 +450,12 @@ class UEFCommand {
 	 * 
 	 */
 	ProblemIF processBeginProblem() {
+		ProblemIF problem;
+		SourceIF source = sourceFactory.newSource(this.uefCharHandler
+				.getFileName());
+		source.setStartColumn(this.uefCharHandler.getColumnNo());
+		source.setStartLine(this.uefCharHandler.getLineNo());
+
 		// push the new state.
 		state.push(States.problem);
 
@@ -470,11 +476,16 @@ class UEFCommand {
 
 		// get text for the problem
 		String buffer = peekUntil();
+		source.setLastColumn(this.uefCharHandler.getColumnNo());
+		source.setLastLine(this.uefCharHandler.getLineNo());
+
 		System.out.println("-----------------------------------");
 		System.out.println(buffer);
 		System.out.println("-----------------------------------");
 		System.out.println();
-		return null;
+
+		problem = this.examFactory.newProblem(topic, "", source, null);
+		return problem;
 	}
 
 	/**
