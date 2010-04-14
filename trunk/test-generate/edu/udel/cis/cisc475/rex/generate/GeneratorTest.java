@@ -40,13 +40,14 @@ public class GeneratorTest {
 	private static GeneratorIF generator1;
 
 	private static ConfigIF config1;
-
+	
 	private static ExamIF master1;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		if (useStubs) {
 			configFactory = new ConfigFactoryStub();
+			masterFactory = new ExamFactoryStub();
 			answerKeyFactory = new AnswerKeyFactoryStub();
 			masterFactory = new ExamFactoryStub();
 			generatorFactory = new GeneratorFactoryStub();
