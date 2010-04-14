@@ -1,12 +1,14 @@
 // Author: Tim Armstrong
 
 
-one sig RexTotality
+// do I need this?
+one sig Generator
 {
 	master: one MasterExam,
 	config: one Config,
 	generated: set GeneratedExam
 }
+
 
 
 // all fields accounted for
@@ -88,9 +90,8 @@ sig Problem extends ExamElement {
 	block: lone Block,
 	figures: set Figure,
 	points: lone Int,   // lone because will be null in master exam.  (It is an integer, not a real number in the design.)
-
 	source: one Source,
-	difficulty: one Int   //actually REAL NUMBER, I have still to find how to say that
+	difficulty: one Int   //actually REAL NUMBER, but it doesn't matter for the Alloy model
 }
 
 sig MultipleChoice extends Problem {
@@ -150,6 +151,8 @@ fact seedDeterminesOutput {
 	all g1, g2: GeneratedExam | g1.config.seed = g2.config.seed implies g1 = g2   // is this == or .equals???
 }
 */
+
+
 
 
 /*
