@@ -14,8 +14,13 @@ import edu.udel.cis.cisc475.rex.config.Configs;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.config.generatestubs.ConfigFactoryStub;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
+import edu.udel.cis.cisc475.rex.exam.generatestubs.ExamFactoryStub;
+import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorFactoryIF;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
+import edu.udel.cis.cisc475.rex.generate.impl.GeneratorFactory;
 import edu.udel.cis.cisc475.rex.key.Keys;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyFactoryIF;
 import edu.udel.cis.cisc475.rex.key.generatestubs.AnswerKeyFactoryStub;
@@ -29,23 +34,32 @@ public class GeneratorTest {
 	private static GeneratorFactoryIF generatorFactory;
 	
 	private static AnswerKeyFactoryIF answerKeyFactory;
+	
+	private static ExamFactoryIF masterFactory;
 
 	private static GeneratorIF generator1;
 
 	private static ConfigIF config1;
 
+	private static ExamIF master1;
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		if (useStubs) {
 			configFactory = new ConfigFactoryStub();
 			answerKeyFactory = new AnswerKeyFactoryStub();
+			masterFactory = new ExamFactoryStub();
+			generatorFactory = new GeneratorFactoryStub();
 		} else {
 			configFactory = Configs.newConfigFactory();
 			answerKeyFactory = Keys.newAnswerKeyFactory();
 		}
-		generatorFactory = Generators.newGeneratorFactory();
+		//generatorFactory = Generators.newGeneratorFactory();
+		//generatorFactory = new GeneratorFactory();
+		
 		config1 = configFactory.newConfig(true, 1);
-		generator1 = generatorFactory.newGenerator(null, config1);
+		master1 = masterFactory.newMasterExam();
+		generator1 = generatorFactory.newGenerator(master1, config1);
 	}
 
 	@AfterClass
@@ -61,16 +75,17 @@ public class GeneratorTest {
 	}
 
 	@Test
+	@Ignore
+	public void testGetMaster() {
+		ExamIF master = generator1.getMaster();
+		assertEquals(master1, master);
+	}
+	
+	@Test
+	@Ignore
 	public void testGetConfig() {
 		ConfigIF config = generator1.getConfig();
 
 		assertEquals(config1, config);
-	}
-
-	@Test
-	@Ignore
-	public void testGetMaster() {
-		fail("Not yet implemented");
-	}
-
+	}	
 }
