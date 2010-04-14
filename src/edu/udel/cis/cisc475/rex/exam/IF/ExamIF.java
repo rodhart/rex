@@ -120,8 +120,10 @@ public interface ExamIF {
 
 	/**
 	 * Adds an element to the exam. Duplicate elements will not be added.
+	 * 
+     * @return the key for the element, or -1 if a duplicate
 	 */
-	void addElementIF(ExamElementIF element);
+	int addElementIF(ExamElementIF element);
 
 	/**
 	 * Allow one element to use another element. For example a problem can
