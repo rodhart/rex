@@ -96,6 +96,31 @@ public class UEFCommandTest
 	}
 
 	/**
+	 * Test the getArguments() method. Makes sure arguments are returned correctly and the
+	 * position in the file is updated correctly after each call.
+	 */
+	@Test
+	public void getArgumentsTest()
+	{
+		uefCharHandler.setPosition(98);
+		String[] arguments = this.uefCommand.getArguments(1);
+		assertEquals("argument1", arguments[0]);
+		assertEquals(110,uefCharHandler.getPosition());
+		
+		arguments = this.uefCommand.getArguments(2);
+		assertEquals("argument2", arguments[0]);
+		assertEquals("argument3", arguments[1]);
+		assertEquals(137,uefCharHandler.getPosition());
+		
+		arguments = this.uefCommand.getArguments(3);
+		assertEquals("argument4", arguments[0]);
+		assertEquals("argument5", arguments[1]);
+		assertEquals("argument6", arguments[2]);
+		assertEquals(184,uefCharHandler.getPosition());
+
+	}
+
+	/**
 	 * Clean up our used resources after a test
 	 * @throws Exception
 	 */
