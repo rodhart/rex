@@ -9,8 +9,10 @@ import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
-/*
- *  NOTE:   In the addGroupConstraintIF() method there is a numProblems attribute that does what??
+/**
+ * 
+ * @author aplatt + verchick
+ * 
  */
 
 public class Config implements ConfigIF {
@@ -28,10 +30,10 @@ public class Config implements ConfigIF {
 	
 	@Override
 	public GroupConstraintIF addGroupConstraintIF(String topic,
-			IntervalIF difficulty, int points, SourceIF source) {
-		GroupConstraintIF constraint = new GroupConstraint(difficulty, 10, points, topic, source);
+			IntervalIF difficulty, int numProblems, int points, SourceIF source) {
+		
+		GroupConstraintIF constraint = new GroupConstraint(difficulty, numProblems, points, topic, source);
 		constraints.add(constraint);
-		// TODO figure out what numProblems is for
 		
 		return constraint;
 	}
