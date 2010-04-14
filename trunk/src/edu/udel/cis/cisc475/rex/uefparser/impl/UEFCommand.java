@@ -378,7 +378,7 @@ class UEFCommand {
 	 * Handles the \label command
 	 * 
 	 */
-	void processLabel() {
+	String processLabel() {
 		// push the new state.
 		state.push(States.label);
 
@@ -391,6 +391,7 @@ class UEFCommand {
 			// pop the old state.
 			state.pop();
 		}
+		return label.trim();
 	}
 
 	/**

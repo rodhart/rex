@@ -77,17 +77,17 @@ public class UEFParser implements UEFParserIF {
 	public ExamIF parse(File file) {
 		ExamFactoryIF examFactory = new ExamFactory();
 		ExamIF exam = examFactory.newMasterExam();
-		
+
 		try {
 			uefCharHandler.openFile(file);
 			UEFCommand.CommandTypes commandType;
-			
+
 			// reference to the last problem handled;
 			ProblemIF problem = null;
 			// reference to the last answer handled
 			AnswerIF answer;
 
-			//List of answers for the problem
+			// List of answers for the problem
 			List<AnswerIF> answers = new ArrayList<AnswerIF>();
 
 			// Read each command until the end of the file.
@@ -96,11 +96,21 @@ public class UEFParser implements UEFParserIF {
 				if (commandType.equals(UEFCommand.CommandTypes.documentclass)) {
 					command.processDocumentclass();
 				} else if (commandType.equals(UEFCommand.CommandTypes.answer)) {
-					answer = command.processAnswer();
-					answers.add(answer);
+					if (state.peek() == States.answers) {
+						answer = command.processAnswer();
+						answers.add(answer);
+					} else {
+						// FIXME: through an exception
+						System.out.println("Found answer in wrong place");
+					}
 				} else if (commandType
 						.equals(UEFCommand.CommandTypes.beginProblem)) {
-					problem = command.processBeginProblem();
+					if (state.peek() == States.top) {
+						problem = command.processBeginProblem();
+					} else {
+						// FIXME: through an exception
+						System.out.println("Found problem in wrong place");
+					}
 				} else if (commandType
 						.equals(UEFCommand.CommandTypes.endProblem)) {
 					command.processEndProblem();
