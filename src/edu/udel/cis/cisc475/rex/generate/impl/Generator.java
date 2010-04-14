@@ -1,20 +1,17 @@
 package edu.udel.cis.cisc475.rex.generate.impl;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
-import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
-import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
-import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
@@ -86,24 +83,18 @@ public class Generator implements GeneratorIF {
 					
 					
 					// container for holding elements in master with specified topic
-					Collection<ExamElementIF> elementsWithTopic = master.elementsWithTopic(topic);
-					Iterator<ExamElementIF> iterate = elementsWithTopic.iterator();
+					Collection<ProblemIF> problemsWithTopic = master.problemsWithTopic(topic);
+					Iterator<ProblemIF> iterate = problemsWithTopic.iterator();
 					
 					// container for holding elements in master with specified topic/difficulty/points
-					Collection<ExamElementIF> desiredElements = null;
+					Collection<ProblemIF> desiredProblems = null;
 					
 					while(iterate.hasNext())
 					{
-						ExamElementIF currentElement = iterate.next();
-						
-						// see what kind of element the current element is (problem, block, figure)
-						// first check determines if it's a problem
-						if (currentElement.getClass().isInstance(ProblemIF.class))
-						{
-							ProblemIF tempProblem = (ProblemIF) currentElement;
-						
-							// check to make sure it satisfies the difficulty constraint
-							if (theInterval.low() <= tempProblem.difficulty() 
+						ProblemIF tempProblem = iterate.next();
+				
+						// check to make sure it satisfies the difficulty constraint
+						if (theInterval.low() <= tempProblem.difficulty() 
 									&& tempProblem.difficulty() <= theInterval.high())
 							{
 								// assuming it did, make sure it satisfies the points constraint
@@ -111,66 +102,48 @@ public class Generator implements GeneratorIF {
 								{
 									// this means it has the correct topic, difficulty, and points 
 									// add it to our collection container
-									desiredElements.add(tempProblem);
+									desiredProblems.add(tempProblem);
 								}
 							}
-						}
 						
-						/**
-						 * Question: ARE BLOCKS AND FIGURES ALWAYS RequiredProblemConstraints?
-						 * OR WILL THEY BE ENCOUNTERED AS WE ITERATE THROUGH ALL GroupConstraints?
-						 */
-						
-						
-						// second check determines if it's a figure
-						if (currentElement.getClass().isInstance(FigureIF.class))
-						{
-							// Place holder -- pretty sure this isn't necessary
-							
-						}
-						
-						// third check determines if it's a block
-						if (currentElement.getClass().isInstance(BlockIF.class))
-						{
-							// Place holder -- pretty sure this isn't necessary
-						}
 						
 						else
 						{
-							// throw new RexUnsatisfiableException();
+						//	throw new RexUnsatisfiableException();
 						}
 						
 					}
 					
 					// fill an array with the contents of the desiredElements collection
-					Object[] passableDesiredElements = desiredElements.toArray();
+					Object[] passableDesiredElements = desiredProblems.toArray();
 					
-					/**
-					 * Question: WHY DOES THE choose() METHOD HAVE TO TAKE AN ARRAY OF OBJECTS?
-					 * IT'D BE A LOT EASIER IF ITS SECOND ARGUMENT WAS A COLLECTION
-					 * THE WAY I HAVE IT CODED ABOVE IS FINE, BUT A CLUNKY STEP
-					 */
+					
+					
+					LinkedHashMap<Integer, Object> lhm = new LinkedHashMap<Integer, Object>();
+					for(int n = 0; n < desiredProblems.size(); n++) {
+						lhm.put(n, passableDesiredElements[n]);
+					}
+					
 					
 					// now, make a call to the randomizer, and choose [numProblems] problems
 					// from the set of these corresponding problems
-					passableDesiredElements = theRandomizer.choose(numProblems, passableDesiredElements);
+					Object[] keys = theRandomizer.choose(numProblems, lhm.keySet().toArray());
 					
 					// now, convert it back to a Collection of ExamElementIFs (seems wasteful)
 		
 					
-					/**
-					 * THIS WHOLE PART HERE IS A MESS
-					 * CAN'T FIGURE OUT HOW TO CONVERT Object[] BACK TO Collection<ExamElementIF>
-					 *
-					 * Keith: you can just loop through the array and do 
-					 * 		  Collection.add() for each element
-					 */
+					LinkedHashSet<ProblemIF> finalDesiredProblems = new LinkedHashSet<ProblemIF>();
 					
-		//			List<ExamElementIF> finalDesiredElements = Arrays.asList(passableDesiredElements);
-		//			finalDesiredElements = (Collection<ExamElementIF>) finalDesiredElements;
+					for (int j=0; j < passableDesiredElements.length; j++)
+					{
+						finalDesiredProblems.add((ProblemIF) lhm.get((Integer) keys[j]));
+					}
 					
 					// now call the ExamFactory addProblem method and add it to generatedExams[i]
-		//			generatedExams[i].addElementIF(finalDesiredElements);
+					for (int m=0; m < finalDesiredProblems.size(); m++)
+					{
+				//		generatedExams[i].addElementIF(finalDesiredProblems);
+					}
 				}
 				
 				else if (c.getClass().isInstance(RequiredProblemConstraintIF.class))	
