@@ -30,6 +30,8 @@ public class GeneratorTest {
 	public final static boolean useStubs = true;
 	
 	public int numexams;
+	
+	public static ExamIF generatedexam;
 
 	private static ConfigFactoryIF configFactory;
 
@@ -94,5 +96,11 @@ public class GeneratorTest {
 	public void testNumGeneratedExams() {
 		numexams = generator1.numGeneratedExams();
 		assertEquals(config1.numVersions(),numexams);
+	}
+	
+	@Test
+	public void testGetGeneratedExam(){
+		generatedexam = generator1.getGeneratedExam(1);
+		assertEquals(masterFactory.newGeneratedExam(),generatedexam);
 	}
 }
