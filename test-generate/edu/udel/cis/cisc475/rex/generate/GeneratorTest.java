@@ -44,7 +44,7 @@ public class GeneratorTest {
 			answerKeyFactory = Keys.newAnswerKeyFactory();
 		}
 		generatorFactory = Generators.newGeneratorFactory();
-		config1 = configFactory.newConfig();
+		config1 = configFactory.newConfig(true, 1);
 		generator1 = generatorFactory.newGenerator(null, config1);
 	}
 
