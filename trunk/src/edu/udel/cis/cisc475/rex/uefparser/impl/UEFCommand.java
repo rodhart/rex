@@ -27,7 +27,6 @@ class UEFCommand {
 	 * The latex commands used by UEF as in the requirements.
 	 */
 	enum CommandTypes {
-
 		documentclass, label, verb, beginVerbatim, endVerbatim, beginProblem, endProblem, beginAnswers, endAnswers, answer, none
 	}
 
@@ -71,7 +70,7 @@ class UEFCommand {
 			uefCharHandler.move();
 		}
 
-		// Move past the last argument delimeter and return the arguments
+		// Move past the last argument delimiter and return the arguments
 		uefCharHandler.move();
 		return argument.toString();
 	}
@@ -188,7 +187,7 @@ class UEFCommand {
 
 			// Check to see if the current character begins a command and
 			// whether it is in a comment or not.
-			if (uefCharHandler.read() == '\\' && state.peek() != States.comment) {
+			if (uefCharHandler.read() == '\\' && state.peek() != States.comment ) {
 				lastPosition = uefCharHandler.getPosition();
 				String command = new String();
 
@@ -247,7 +246,8 @@ class UEFCommand {
 						processLabel();
 					}
 					if (command.equals("verb")) {
-						return CommandTypes.verb;
+						processVerb();
+						continue;
 					} else if (command.equals("documentclass")) {
 						return CommandTypes.documentclass;
 					} else if (command.equals("begin")) {
@@ -359,10 +359,17 @@ class UEFCommand {
 	void processVerb() {
 		// push the new state.
 		state.push(States.verb);
-		char delimeter = uefCharHandler.read();
+		char delimiter = uefCharHandler.read();
 		uefCharHandler.move();
+		
+		//make sure that the delimiter is the first none white space char
+		while (Character.isWhitespace(delimiter)) {
+			delimiter = uefCharHandler.read();
+			uefCharHandler.move();
+		}
+		
 
-		while (uefCharHandler.read() != delimeter) {
+		while (uefCharHandler.read() != delimiter) {
 			uefCharHandler.move();
 		}
 
