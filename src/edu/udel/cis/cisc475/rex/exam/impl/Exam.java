@@ -102,6 +102,7 @@ public class Exam implements ExamIF {
 		if (!elements.containsValue(element)) {
 			int key = elements.size() + 1;
 			// put into linked hash set
+			elements.put(key,element);
 			// also need to make some kind of record of whether it is
 			// a problem, a block, or a figure.
 			labels.add(element.label());
