@@ -11,7 +11,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.Collection;
 
@@ -262,9 +261,6 @@ public class ExamTest {
 		ProblemIF problem1 = createTestProblem();
 		ProblemIF problem2 = createTestProblem();
 		
-		FigureIF figure = createTestFigure();
-		BlockIF block = createTestBlock();
-		
 		Collection<ExamElementIF> elements = exam.elementsWithTopic("Test Problem Topic");
 		assertNotNull(elements);
 		assertEquals(0, elements.size());
@@ -290,6 +286,11 @@ public class ExamTest {
 		ProblemIF problem1 = createTestProblem();
 		ProblemIF problem2 = createTestProblem();
 		
+		// Elements must be added to exam before declareUse can be called
+		exam.addElementIF(problem1);
+		exam.addElementIF(problem2);
+		exam.addElementIF(figure);
+		
 		Collection<ExamElementIF> elements = exam.elementsUsingElement(figure);
 		
 		assertNotNull(elements);
@@ -300,7 +301,7 @@ public class ExamTest {
 		elements = exam.elementsUsingElement(figure);
 		
 		assertEquals(1, elements.size());
-		assertTrue(elements.toArray()[0] instanceof ProblemIF);
+		assertEquals(problem1, elements.toArray()[0]);
 		assertTrue(elements.contains(problem1));
 		
 		exam.declareUse(problem2, figure);
