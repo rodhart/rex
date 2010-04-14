@@ -2,10 +2,15 @@ package edu.udel.cis.cisc475.rex.uefparser.impl;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
+import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserFactoryIF;
 import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserIF;
 
@@ -73,6 +78,15 @@ public class UEFParser implements UEFParserIF {
 		try {
 			uefCharHandler.openFile(file);
 			UEFCommand.CommandTypes commandType;
+			ExamFactoryIF examFactory = new ExamFactory();
+
+			// reference to the last problem handled;
+			ProblemIF problem = null;
+			// reference to the last answer handled
+			AnswerIF answer;
+
+			//List of answers for the problem
+			List<AnswerIF> answers = new ArrayList<AnswerIF>();
 
 			// Read each command until the end of the file.
 			while ((commandType = command.process()) != null) {
@@ -80,13 +94,24 @@ public class UEFParser implements UEFParserIF {
 				if (commandType.equals(UEFCommand.CommandTypes.documentclass)) {
 					command.processDocumentclass();
 				} else if (commandType.equals(UEFCommand.CommandTypes.answer)) {
-					AnswerIF a = command.processAnswer();
+					answer = command.processAnswer();
+					answers.add(answer);
 				} else if (commandType
 						.equals(UEFCommand.CommandTypes.beginProblem)) {
-					command.processBeginProblem();
+					problem = command.processBeginProblem();
 				} else if (commandType
 						.equals(UEFCommand.CommandTypes.endProblem)) {
 					command.processEndProblem();
+					// FIXME: need more error checking for closed problem
+					// without begin
+					// FIXME: Creating new problem each time is not good idea,
+					// may be add addAnswer to the problem interface will help.
+					if (problem != null) {
+						problem = examFactory.newProblem(problem.topic(),
+								problem.label(), problem.question(), answers
+										.toArray(new AnswerIF[0]));
+						answers.clear();
+					}
 				} else if (commandType
 						.equals(UEFCommand.CommandTypes.beginAnswers)) {
 					command.processBeginAnswers();
@@ -94,7 +119,6 @@ public class UEFParser implements UEFParserIF {
 						.equals(UEFCommand.CommandTypes.endAnswers)) {
 					command.processEndAnswers();
 				}
-
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
