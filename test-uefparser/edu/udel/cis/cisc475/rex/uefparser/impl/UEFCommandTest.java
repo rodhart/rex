@@ -158,8 +158,20 @@ public class UEFCommandTest
 		String buffer = this.uefCommand.peekUntil();
 		assertEquals(
 				"\n\n  some text that should be peeked at. Peekaboo!\nAnother line that should be peaked at.\n ",
-					 buffer);
+				buffer);
 
+	}
+
+	/**
+	 * Test the processOptionalArguments() method.
+	 */
+	@Test
+	public void processOptionalArgumentsTest()
+	{
+		String arguments[] = this.uefCommand.processOptionalArguments(" test, test2 ,test3 ");
+		assertEquals("test", arguments[0]);
+		assertEquals("test2", arguments[1]);
+		assertEquals("test3", arguments[2]);
 	}
 
 	/**
