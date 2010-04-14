@@ -1,11 +1,13 @@
 package edu.udel.cis.cisc475.rex.uefparser.impl;
 
-import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
-import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserFactoryIF;
-import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserIF;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Stack;
+
+import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
+import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserFactoryIF;
+import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserIF;
 
 /**
  * Parser for the Universal Exam File (UEF).
@@ -78,7 +80,7 @@ public class UEFParser implements UEFParserIF {
 				if (commandType.equals(UEFCommand.CommandTypes.documentclass)) {
 					command.processDocumentclass();
 				} else if (commandType.equals(UEFCommand.CommandTypes.answer)) {
-					command.processAnswer();
+					AnswerIF a = command.processAnswer();
 				} else if (commandType
 						.equals(UEFCommand.CommandTypes.beginProblem)) {
 					command.processBeginProblem();

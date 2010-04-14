@@ -2,6 +2,13 @@ package edu.udel.cis.cisc475.rex.uefparser.impl;
 
 import java.util.Stack;
 
+import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
+import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
+import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
+import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
+import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 import edu.udel.cis.cisc475.rex.uefparser.impl.UEFParser.States;
 
 /**
@@ -24,6 +31,17 @@ class UEFCommand {
 	private Stack<States> state;
 
 	/**
+	 * Exam factory is only created once at the constructor and used every time
+	 */
+	private ExamFactoryIF examFactory;
+
+	/**
+	 * Source factory is only created once at the constructor and used every
+	 * time
+	 */
+	private SourceFactoryIF sourceFactory;
+
+	/**
 	 * The latex commands used by UEF as in the requirements.
 	 */
 	enum CommandTypes {
@@ -41,6 +59,8 @@ class UEFCommand {
 	UEFCommand(UEFCharHandler uefCharHandler, Stack<States> state) {
 		this.uefCharHandler = uefCharHandler;
 		this.state = state;
+		this.examFactory = new ExamFactory();
+		this.sourceFactory = new SourceFactory();
 	}
 
 	/**
@@ -187,7 +207,7 @@ class UEFCommand {
 
 			// Check to see if the current character begins a command and
 			// whether it is in a comment or not.
-			if (uefCharHandler.read() == '\\' && state.peek() != States.comment ) {
+			if (uefCharHandler.read() == '\\' && state.peek() != States.comment) {
 				lastPosition = uefCharHandler.getPosition();
 				String command = new String();
 
@@ -307,7 +327,13 @@ class UEFCommand {
 	 * Handles the Answer command.
 	 * 
 	 */
-	void processAnswer() {
+	AnswerIF processAnswer() {
+		AnswerIF answer;
+		SourceIF s = this.sourceFactory.newSource(this.uefCharHandler
+				.getFileName());
+		s.setStartColumn(this.uefCharHandler.getColumnNo());
+		s.setStartLine(this.uefCharHandler.getLineNo());
+
 		// push the new state.
 		state.push(States.answer);
 
@@ -323,6 +349,20 @@ class UEFCommand {
 		System.out.println("-----------------------------------");
 		System.out.println();
 
+		s.addText(buffer);
+		s.setLastColumn(this.uefCharHandler.getColumnNo());
+		s.setLastLine(this.uefCharHandler.getLineNo());
+
+		String args[] = this.processOptionalArguments(optionalArgument);
+		boolean isCorrect = false;
+
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].equals("correct"))
+				isCorrect = true;
+		}
+		
+		answer = this.examFactory.newAnswer(isCorrect, s);
+
 		if (state.peek() == States.answer) {
 			// pop the old state.
 			state.pop();
@@ -331,6 +371,7 @@ class UEFCommand {
 					.println("Error: program reached an invalid state in processAnswer()");
 			System.exit(-1);
 		}
+		return answer;
 	}
 
 	/**
@@ -361,13 +402,12 @@ class UEFCommand {
 		state.push(States.verb);
 		char delimiter = uefCharHandler.read();
 		uefCharHandler.move();
-		
-		//make sure that the delimiter is the first none white space char
+
+		// make sure that the delimiter is the first none white space char
 		while (Character.isWhitespace(delimiter)) {
 			delimiter = uefCharHandler.read();
 			uefCharHandler.move();
 		}
-		
 
 		while (uefCharHandler.read() != delimiter) {
 			uefCharHandler.move();
@@ -409,7 +449,7 @@ class UEFCommand {
 	 * Handles the \begin{problem} environment.
 	 * 
 	 */
-	void processBeginProblem() {
+	ProblemIF processBeginProblem() {
 		// push the new state.
 		state.push(States.problem);
 
@@ -434,6 +474,7 @@ class UEFCommand {
 		System.out.println(buffer);
 		System.out.println("-----------------------------------");
 		System.out.println();
+		return null;
 	}
 
 	/**
@@ -474,5 +515,22 @@ class UEFCommand {
 					.println("Error: \\end{answers} without a matching \\begin{answers}");
 			System.exit(-1);
 		}
+	}
+
+	/**
+	 * This method will take the optional arguments delimited by comma can broke
+	 * them into array of strings
+	 * 
+	 * @param args
+	 *            string of comma delimited string
+	 * @return
+	 */
+	String[] processOptionalArguments(String args) {
+		args = args.trim();
+		String r[] = args.split(",");
+		for (int i = 0; i < r.length; i++) {
+			r[i] = r[i].trim();
+		}
+		return r;
 	}
 }
