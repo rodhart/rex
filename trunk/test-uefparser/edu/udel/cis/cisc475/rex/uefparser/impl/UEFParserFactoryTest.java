@@ -1,7 +1,7 @@
 /**
  * Test Suite of UEFParserFactory
  */
-package edu.udel.cis.cisc475.rex.uefparser;
+package edu.udel.cis.cisc475.rex.uefparser.impl;
 
 import org.junit.After;
 import org.junit.Before;
@@ -11,7 +11,6 @@ import static org.junit.Assert.assertTrue;
 
 import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserFactoryIF;
 import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserIF;
-import edu.udel.cis.cisc475.rex.uefparser.impl.UEFParserFactory;
 
 /**
  * Testing for UEFParserFactory
