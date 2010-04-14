@@ -65,8 +65,11 @@
 
 
 	<path id="test.compile.classpath">
+		<pathelement location="${basedir}/test-config" />
+		<pathelement location="${basedir}/test-ecfparser" />
 		<pathelement location="${basedir}/test-exam" />
 		<pathelement location="${basedir}/test-generate" />
+		<pathelement location="${basedir}/test-interval" />
 		<pathelement location="${basedir}/test-key" />
 		<pathelement location="${basedir}/test-output" />
 		<pathelement location="${basedir}/test-random" />
@@ -93,6 +96,8 @@
 
 	<target name="test-compile" depends="compile,test-init">
 		<javac destdir="${test.bin.dir}" debug="true" failonerror="false" classpathref="test.compile.classpath">
+			<src path="${basedir}/test-config" />
+			<src path="${basedir}/test-ecfparser" />
 			<src path="${basedir}/test-exam" />
 			<src path="${basedir}/test-generate" />
 			<src path="${basedir}/test-interval" />
