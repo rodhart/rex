@@ -8,7 +8,7 @@ one sig Generator
 	config: one Config,
 	generated: set GeneratedExam
 }
- 
+
 
 
 // all fields accounted for
@@ -17,11 +17,10 @@ abstract sig Exam {
 	frontMatter: one Source,
 	elements: set ExamElement // needs to be an *ordered list*. Implementing that looks difficult.
 														// See pg 157-9 in Jackson's book for lists in Alloy
+
 }
 
-
 one sig MasterExam extends Exam {}
-
 
 sig GeneratedExam extends Exam {
 	finalBlock: lone Block  // master exam does not have a final Block
@@ -58,7 +57,7 @@ sig GroupConstraint extends Constraint {
 sig RequiredProblemConstraint extends Constraint {
 	problemNames: set String
 }
-/*  ???
+/*  ??
 fact {
 	all r: RequiredProblemConstraint | #r.problemNames > 1
 }
@@ -102,12 +101,22 @@ sig OtherProblem extends Problem {} // no answers field
 
 
 
+sig Answer {}
 
 
-sig Block extends ExamElement {
-	category: one Category, // or lone if we say the final block's category may be null
+
+abstract sig Block extends ExamElement {
 	source: one Source
 }
+
+sig FinalBlock extends Block {}
+
+sig NormalBlock extends Block {
+	category: one Category
+}
+
+
+
 
 sig Figure extends ExamElement {}
 
@@ -115,8 +124,6 @@ sig Figure extends ExamElement {}
 
 
 sig Category {} // this is not a real object, it is just a Java String.  We can't give it many properties.
-
-sig Answer{}
 
 sig Source{}
 
@@ -145,17 +152,7 @@ fact doNotPrintUnusedBlock {
 }
 
 
-/* needs fixing
-//"REX guarantees that if given the same arguments and seed twice, it will produce the exact same outputs."
-fact seedDeterminesOutput {
-	all g1, g2: GeneratedExam | g1.config.seed = g2.config.seed implies g1 = g2   // is this == or .equals???
-}
-*/
-
-
-
-
-/*
+/* Only partially solved:
 If the answers environment is used, it must include at least one answer
 The maximum number of answers is 26.
 
@@ -177,19 +174,34 @@ fact validNumAnswers {
 
 
 
+/* needs fixing
+//"REX guarantees that if given the same arguments and seed twice, it will produce the exact same outputs."
+fact seedDeterminesOutput {
+	all g1, g2: GeneratedExam | g1.config.seed = g2.config.seed implies g1 = g2   // is this == or .equals???
+}
+*/
 
 
 
-//ECF:  The first <integer> is a positive integer: it is the number of problems satisfying the constraint that
+
+
+
+
+
+
+
+
+//ECF-oriented:
+//  The first <integer> is a positive integer: it is the number of problems satisfying the constraint that
 // should be included.
-
-//assert sumConstraintProblems {
-
+//assert?? sumConstraintProblems {
 
 
 
 
 
+
+// Answer-oriented:
 
 //At least one answer must be labeled as correct.
 fact atLeastOneCorrect {
@@ -201,10 +213,9 @@ fact fixedAtCorrectPosition {
 //TODO
 }
 
-// no problem will occur in a generated exam more than once (even if it satisfies more than one constraint)
-fact problemsUnique {
-//TODO
-}
+
+
+// Need an ordered list:
 
 // Say that in the generated exams, problems group into categories.  If our model included a Category class
 // in the hierarchy, we could make this an assertion rahter than a fact: ie, we could say that this constraint
@@ -224,7 +235,13 @@ fact frontMatterFirst {
 //TODO
 }
 
+
+
+
 // fact regarding probability?
+
+
+
 
 //A problem refers to a figure if a \ref to the figure's label occurs anywhere in that problem's
 // environment. If at least one problem referring to a figure A is included in a generated exam,
@@ -235,7 +252,7 @@ fact frontMatterFirst {
 
 pred show{}
 
-run show for 3
+run show for 3 but exactly 1 GeneratedExam//, exactly 1 MultipleChoice
 
 
 /*  Dr. Siegel's original:
