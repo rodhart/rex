@@ -13,9 +13,12 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
  * This is a STUB for the Config class. To be used for testing purposes only.
  */
 public class ConfigStub implements ConfigIF {
+	Boolean c_pdf;
+	int c_numVersions;
 
-	public ConfigStub() {
-
+	public ConfigStub(boolean pdf, int numVersions) {
+		this.c_pdf = pdf;
+		this.c_numVersions = numVersions;
 	}
 
 
@@ -41,13 +44,13 @@ public class ConfigStub implements ConfigIF {
 	@Override
 	public int numVersions() {
 		// TODO Auto-generated method stub
-		return 0;
+		return c_numVersions;
 	}
 
 	@Override
 	public boolean pdfOption() {
 		// TODO Auto-generated method stub
-		return false;
+		return c_pdf;
 	}
 
 	@Override

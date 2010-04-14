@@ -76,14 +76,12 @@ public class GeneratorTest {
 	}
 
 	@Test
-	@Ignore
 	public void testGetMaster() {
 		ExamIF master = generator1.getMaster();
 		assertEquals(master1, master);
 	}
 	
 	@Test
-	@Ignore
 	public void testGetConfig() {
 		ConfigIF config = generator1.getConfig();
 
