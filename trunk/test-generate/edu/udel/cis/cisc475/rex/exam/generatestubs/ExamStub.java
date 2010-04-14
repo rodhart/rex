@@ -12,9 +12,8 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 public class ExamStub implements ExamIF {
 
 	@Override
-	public void addElementIF(ExamElementIF element) {
-		// TODO Auto-generated method stub
-
+	public int addElementIF(ExamElementIF element) {
+		return 0;
 	}
 
 	@Override

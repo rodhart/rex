@@ -102,7 +102,7 @@ public class Exam implements ExamIF {
 		// Even though we are using a map, we really want a set so should not
 		// add duplicate entries in a single exam
 		if (!elements.containsValue(element)) {
-			int key = elements.size() + 1;
+			int key = elements.size();
 			// put into linked hash set
 			elements.put(key,element);
 			// also need to make some kind of record of whether it is
@@ -111,12 +111,12 @@ public class Exam implements ExamIF {
 			// Allocate a new HashSet for the uses map
 			HashSet<ExamElementIF> useesOfElement = new HashSet<ExamElementIF>();
 			uses.put(element, useesOfElement);
-			if (element.getClass().isInstance(FigureIF.class)) {
+			if (element instanceof FigureIF) {
 				figures.add(key);
-			} else if (element.getClass().isInstance(BlockIF.class)) {
+			} else if (element instanceof BlockIF) {
 				blocks.add(key);
-				topics.add(((ProblemIF) element).topic());
-			} else if (element.getClass().isInstance(ProblemIF.class)) {
+				topics.add(((BlockIF) element).topic());
+			} else if (element instanceof ProblemIF) {
 				problems.add(key);
 				topics.add(((ProblemIF) element).topic());
 			} else {
@@ -214,10 +214,10 @@ public class Exam implements ExamIF {
 		Iterator<ExamElementIF> i = elementValues.iterator();
 		while (i.hasNext()) {
 			ExamElementIF element = i.next();
-			if (element.getClass().isInstance(ProblemIF.class)) {
+			if (element instanceof ProblemIF) {
 				if (((ProblemIF) element).topic().equals(topic))
 					returnSet.add(element);
-			} else if (element.getClass().isInstance(BlockIF.class)) {
+			} else if (element instanceof BlockIF) {
 				if (((BlockIF) element).topic().equals(topic)) {
 					returnSet.add(element);
 				}

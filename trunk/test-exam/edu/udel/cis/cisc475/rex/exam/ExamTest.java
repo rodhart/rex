@@ -196,9 +196,11 @@ public class ExamTest {
 		exam.addElementIF(figure);
 		exam.addElementIF(block);
 		
+		assertEquals(3, exam.elements().size());
+		
 		element = exam.element(0);
 		
-		assertNotNull(element);
+		assertEquals(problem, element);
 	}
 	
 	@Test
@@ -221,8 +223,8 @@ public class ExamTest {
 		elements = exam.elements();
 		
 		assertNotNull(elements);
-		// size should be 2 because problem doesn't extend ExamElementIF
-		assertEquals(2, elements.size());
+		
+		assertEquals(3, elements.size());
 	}
 	
 	@Test
@@ -259,6 +261,7 @@ public class ExamTest {
 		
 		ProblemIF problem1 = createTestProblem();
 		ProblemIF problem2 = createTestProblem();
+		
 		FigureIF figure = createTestFigure();
 		BlockIF block = createTestBlock();
 		
@@ -268,13 +271,15 @@ public class ExamTest {
 		
 		exam.addElementIF(problem1);
 		exam.addElementIF(problem2);
-		exam.addElementIF(figure);
-		exam.addElementIF(block);
+		//exam.addElementIF(figure); //Figures currently do not have topics
+		//exam.addElementIF(block);    //Blocks currently do not have topics
 		
 		elements = exam.elementsWithTopic("Test Problem Topic");
 		assertNotNull(elements);
 		assertEquals(2, elements.size());
 		
+		//TODO need to test case where there are problems in the exam WITHOUT the topic we are looking for
+		//to make sure that they are not included by method
 	}
 	
 	@Test
