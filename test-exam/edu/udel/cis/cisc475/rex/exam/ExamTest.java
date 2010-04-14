@@ -34,6 +34,7 @@ import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 import edu.udel.cis.cisc475.rex.source.examstubs.SourceFactoryStub;
+import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 
 /**
  * @author hboyd
@@ -56,7 +57,7 @@ public class ExamTest {
 		else{
 			// TODO Uncomment when entry point is available
 			//sourceFactory = Sources.newSourceFactory();
-			sourceFactory = null;
+			sourceFactory = new SourceFactory();
 		}
 		// TODO Uncomment when entry point is available
 		//examFactory = Exams.newExamFactory();
@@ -136,7 +137,7 @@ public class ExamTest {
 	
 	@Test
 	public void testGetFinalBlock() {
-		ExamIF exam = examFactory.newMasterExam();
+		ExamIF exam = examFactory.newGeneratedExam();
 		
 		SourceIF blockSource = sourceFactory.newSource(testUEFfilename);
 		blockSource.addText("Test Block Source");
@@ -155,7 +156,7 @@ public class ExamTest {
 	
 	@Test
 	public void testGetBadFinalBlock() {
-		ExamIF exam = examFactory.newMasterExam();
+		ExamIF exam = examFactory.newGeneratedExam();
 		
 		exam.setFinalBlock(null);
 		
@@ -286,9 +287,7 @@ public class ExamTest {
 	
 	@Test
 	public void testGetFigures() {
-		ExamIF exam = examFactory.newMasterExam();
-		
-		exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam();
 		
 		
 		FigureIF figure1 = createTestFigure();
@@ -310,9 +309,7 @@ public class ExamTest {
 	
 	@Test
 	public void testGetLabels() {
-		ExamIF exam = examFactory.newMasterExam();
-		
-		exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam();
 		
 		ProblemIF problem = createTestProblem();
 		FigureIF figure = createTestFigure();
@@ -336,9 +333,7 @@ public class ExamTest {
 	
 	@Test
 	public void testGetTopics() {
-		ExamIF exam = examFactory.newMasterExam();
-		
-		exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam();
 		
 		ProblemIF problem = createTestProblem();
 		FigureIF figure = createTestFigure();
@@ -360,33 +355,46 @@ public class ExamTest {
 	}
 	
 	@Test
-	@Ignore
 	public void testGetProblems() {
-		fail("Not yet implemented");
+		ExamIF exam = examFactory.newGeneratedExam();
+		
+		ProblemIF problem1 = createTestProblem();
+		ProblemIF problem2 = createTestProblem();
+		
+		Collection<ProblemIF> problems = exam.problems();
+		assertNotNull(problems);
+		assertEquals(0, problems.size());
+		
+		exam.addElementIF(problem1);
+		exam.addElementIF(problem2);
+		
+		problems = exam.problems();
+		assertNotNull(problems);
+		assertEquals(2, problems.size());
+		assertTrue(problems.contains(problem1));
+		assertTrue(problems.contains(problem2));
 	}
 	
 	@Test
-	@Ignore
 	public void testGetProblemsWithTopic() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	@Ignore
-	public void testSetPreamble() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	@Ignore
-	public void testSetFrontMatter() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	@Ignore
-	public void testSetFinalBlock() {
-		fail("Not yet implemented");
+		ExamIF exam = examFactory.newGeneratedExam();
+		
+		ProblemIF problem1 = createTestProblem();
+		ProblemIF problem2 = createTestProblem();
+		
+		Collection<ProblemIF> problems = 
+			exam.problemsWithTopic("Test Problem Topic");
+		assertNotNull(problems);
+		assertEquals(0, problems.size());
+		
+		exam.addElementIF(problem1);
+		exam.addElementIF(problem2);
+		
+		problems = exam.problemsWithTopic("Test Problem Topic");
+		assertNotNull(problems);
+		assertEquals(2, problems.size());
+		assertTrue(problems.contains(problem1));
+		assertTrue(problems.contains(problem2));
 	}
 	
 	@Test

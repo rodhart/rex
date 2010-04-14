@@ -31,6 +31,7 @@ import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 import edu.udel.cis.cisc475.rex.source.examstubs.SourceFactoryStub;
+import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 
 /**
  * @author hboyd
@@ -52,7 +53,7 @@ public class ExamFactoryTest {
 		else{
 			// TODO Uncomment when entry point is available
 			//sourceFactory = Sources.newSourceFactory();
-			sourceFactory = null;
+			sourceFactory = new SourceFactory();
 		}
 		// TODO Uncomment when entry point is available
 		//examFactory = Exams.newExamFactory();

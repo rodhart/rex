@@ -14,6 +14,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -23,14 +24,17 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
+import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FixedAnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
+import edu.udel.cis.cisc475.rex.exam.impl.Problem;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 import edu.udel.cis.cisc475.rex.source.examstubs.SourceFactoryStub;
+import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 
 /**
  * @author hboyd
@@ -63,7 +67,7 @@ public class ProblemTest {
 		else{
 			// TODO Uncomment when entry point is available
 			//sourceFactory = Sources.newSourceFactory();
-			sourceFactory = null;
+			sourceFactory = new SourceFactory();
 		}
 		// TODO Uncomment when entry point is available
 		//examFactory = Exams.newExamFactory();
@@ -112,7 +116,6 @@ public class ProblemTest {
 	}
 
 	@Test
-	@Ignore
 	public void testGetRequiredBlock() {
 		
 		assertNull(problem.requiredBlock());
@@ -120,17 +123,26 @@ public class ProblemTest {
 		// TODO: How do we mark a problem as being in a required block?
 		
 		// create required block
+		SourceIF blockSource = sourceFactory.newSource(testUEFfilename);
+		blockSource.addText("Test Block Source");
+		
+		BlockIF block = examFactory.newBlock("Test Block Topic", "Test Block Label", blockSource);
 		
 		// make problem part of required block
+		((Problem)problem).setRequiredBlock(block);
 		
 		// test returned block is same as created
-		fail("Not yet implemented");
+		BlockIF returned = problem.requiredBlock();
+		
+		assertNotNull(returned);
+		assertEquals(block, returned);
 	}
 
 	@Test
-	@Ignore
 	public void testGetReferencedFigures() {
 		
+		// I would rather have referenced figures be empty
+		// so as to avoid null pointer exceptions...
 		assertNotNull(problem.referencedFigures());
 		assertTrue(problem.referencedFigures().isEmpty());
 		
@@ -143,17 +155,29 @@ public class ProblemTest {
 		FigureIF figure1 = examFactory.newFigure("testFigure1", figureSource);
 		
 		// make problem reference figure
+		((Problem)problem).addReferencedFigure(figure1);
 		
 		// test set returned contains referenced figure
+		Collection<FigureIF> figures = problem.referencedFigures();
+		
+		assertNotNull(figures);
+		assertEquals(1, figures.size());
+		assertTrue(figures.contains(figure1));
 		
 		// create another figure
 		figureSource = sourceFactory.newSource(testUEFfilename);
 		figureSource.addText("TestFigureSource");
 		FigureIF figure2 = examFactory.newFigure("testFigure2", figureSource);
+		
 		// add to problem the reference to figure
+		((Problem)problem).addReferencedFigure(figure2);
 		
 		// test set returned contains reference figure
-		fail("Not yet implemented");
+		figures = problem.referencedFigures();
+		
+		assertNotNull(figures);
+		assertEquals(2, figures.size());
+		assertTrue(figures.contains(figure2));
 	}
 	
 	@Test
@@ -213,9 +237,17 @@ public class ProblemTest {
 	}
 	
 	@Test
-	@Ignore
 	public void testGetDifficulty() {
-		// TODO: How do we set a problems difficulty?
-		fail("Not yet implemented");
+		problem.setDifficulty(0);
+		
+		double difficulty = problem.difficulty();
+		
+		assertEquals(0, difficulty, 0);
+		
+		problem.setDifficulty(23.75);
+		
+		difficulty = problem.difficulty();
+		
+		assertEquals(23.75, difficulty, 0);
 	}
 }

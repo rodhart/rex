@@ -21,7 +21,7 @@ public class Problem implements ProblemIF {
 	private String label;
 	private SourceIF question;
 	private AnswerIF[] answers;
-	private Collection<FigureIF> referencedFigures;
+	private HashSet<FigureIF> referencedFigures;
 	private BlockIF requiredBlock;
 	
 	protected Problem(String topic, String label, SourceIF question,
@@ -30,6 +30,7 @@ public class Problem implements ProblemIF {
 		this.label = label;
 		this.question = question;
 		this.answers = answers;
+		this.referencedFigures = new HashSet<FigureIF>();
 	}
 	@Override
 	public AnswerIF[] answers() {
@@ -62,7 +63,7 @@ public class Problem implements ProblemIF {
 	}
 	@Override
 	public Collection<FigureIF> referencedFigures() {
-		return this.referencedFigures;
+		return (Collection<FigureIF>)this.referencedFigures;
 	}
 	public void addReferencedFigure(FigureIF fig){
 		referencedFigures.add(fig);
