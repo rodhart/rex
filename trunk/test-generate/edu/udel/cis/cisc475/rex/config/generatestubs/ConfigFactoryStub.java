@@ -6,8 +6,9 @@ import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 public class ConfigFactoryStub implements ConfigFactoryIF {
 
 	@Override
-	public ConfigIF newConfig() {
-		return new ConfigStub();
+	public ConfigIF newConfig(boolean pdf, int numVersions) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

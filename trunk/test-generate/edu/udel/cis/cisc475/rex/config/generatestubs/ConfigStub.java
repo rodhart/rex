@@ -18,12 +18,6 @@ public class ConfigStub implements ConfigIF {
 
 	}
 
-	@Override
-	public GroupConstraintIF addGroupConstraintIF(String topic,
-			IntervalIF difficulty, int points, SourceIF source) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public RequiredProblemConstraintIF addRequiredProblemConstraint(
@@ -82,6 +76,13 @@ public class ConfigStub implements ConfigIF {
 
 	@Override
 	public String[] versionStrings() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public GroupConstraintIF addGroupConstraintIF(String topic,
+			IntervalIF difficulty, int numProblems, int points, SourceIF source) {
 		// TODO Auto-generated method stub
 		return null;
 	}
