@@ -88,6 +88,91 @@ public Source(String filename) {
 
 
 
+/**
+ * alternate Constructor for the class
+ * 
+ * @param filename The name of the file to be read
+ */
+
+public Source(String filename,
+		int startLine, 
+		int startColumn,
+		int lastLine,
+		int lastColumn){
+
+	 //init private vars
+    startline = startLine;
+    startcolumn = startColumn;
+    lastline = lastLine;
+    lastcolumn = lastColumn;
+    					
+	 Text = " "; //using this as temp string buffer only
+
+   // create File object based on user input
+	 fileName = filename;	
+	 name = new File( fileName );
+	
+	 //array list object that will contain all of our lines of imported text
+	 text_lines = new ArrayList<String>();
+	 
+	 
+	 /*	check if the filename is an existing file (need try - catch statements) 
+	  * 
+	 	this instance of source is being used to read in
+	 	an ECF or UEF file and we will 
+	 	read in the whole file 
+	 	into our 
+	 	array list 
+	 	and 
+	 	set the markers along the way	 	
+	 */
+    if ( name.exists() ) // check if exists
+    { if ( name.isFile() ) // check if is file and not directory
+    { 
+
+   	 try
+        {
+           input = new Scanner( name );
+        } // end try
+        catch ( FileNotFoundException fileNotFoundException )
+        {
+           System.err.println( "Error opening file." );
+           System.exit( 1 );
+        } // end catch
+	 
+	 
+        while ( input.hasNext() )
+        {
+       	 Text = input.nextLine(); // read line
+       	 addText(Text); //add line to our string array
+       	 lastline++; //increment # of lines
+
+        } // end while
+        lastline--;
+	 
+	 
+    }//end of if ( name.isFile() )
+    else {}
+    	// exception is a directory, not file
+    
+    
+    }//end of if ( name.exists() ) 
+    	else {}
+    	// exception file not found
+    
+}//end of constructor
+
+
+
+
+
+
+
+
+
+
+
+
 //getters
 public String filename() {return fileName;}
 public String text()	 {return Text;}
