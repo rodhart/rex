@@ -28,6 +28,8 @@ import edu.udel.cis.cisc475.rex.key.generatestubs.AnswerKeyFactoryStub;
 public class GeneratorTest {
 
 	public final static boolean useStubs = true;
+	
+	public int numexams;
 
 	private static ConfigFactoryIF configFactory;
 
@@ -87,4 +89,10 @@ public class GeneratorTest {
 
 		assertEquals(config1, config);
 	}	
+	
+	@Test
+	public void testNumGeneratedExams() {
+		numexams = generator1.numGeneratedExams();
+		assertEquals(config1.numVersions(),numexams);
+	}
 }
