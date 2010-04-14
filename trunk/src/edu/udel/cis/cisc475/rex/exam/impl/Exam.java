@@ -208,7 +208,7 @@ public class Exam implements ExamIF {
 		while (i.hasNext()) {
 			ExamElementIF newElement = i.next();
 			if (uses.get(newElement).contains(element)) {
-				returnSet.add(element);
+				returnSet.add(newElement);
 			}
 		}
 		return (Collection<ExamElementIF>) returnSet;
