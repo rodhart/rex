@@ -95,11 +95,13 @@ public class Exam implements ExamIF {
 
 	/**
 	 * Adds an element to the exam. Duplicate elements will not be added.
+	 * 
+	 * @return the key for the element, or -1 if a duplicate
 	 */
-	public void addElementIF(ExamElementIF element) {
+	public int addElementIF(ExamElementIF element) {
 		// Even though we are using a map, we really want a set so should not
 		// add duplicate entries in a single exam
-		if (!elements.containsValue(element)) {
+		if (elements.containsValue(element)) {
 			int key = elements.size() + 1;
 			// put into linked hash set
 			elements.put(key,element);
@@ -121,7 +123,11 @@ public class Exam implements ExamIF {
 				// Do we need to do anything in this case? It definitely is not
 				// good if it isn't one of the 3
 			}
+			return key;
+		} else {
+			return -1;
 		}
+		
 	}
 
 	/**
