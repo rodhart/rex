@@ -11,7 +11,7 @@ import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
  *
  */
 
-public class source_test {
+public class source_main_example {
 
 	/**
 	 * @param args
@@ -68,4 +68,4 @@ public class source_test {
 	
 	
 	}//end of main
-}//end of class source_test
+}//end of class source_main_example
