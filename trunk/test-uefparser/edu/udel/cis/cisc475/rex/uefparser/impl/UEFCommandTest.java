@@ -113,11 +113,39 @@ public class UEFCommandTest
 		assertEquals(137,uefCharHandler.getPosition());
 		
 		arguments = this.uefCommand.getArguments(3);
-		assertEquals("argument4", arguments[0]);
+		assertEquals("argument 4", arguments[0]);
 		assertEquals("argument5", arguments[1]);
 		assertEquals("argument6", arguments[2]);
-		assertEquals(184,uefCharHandler.getPosition());
+		assertEquals(185,uefCharHandler.getPosition());
 
+	}
+
+	/**
+	 * Test the getOptionalArgument() method. Makes sure the argument is returned correctly and the
+	 * position in the file is updated correctly after each call.
+	 */
+	@Test
+	public void getOptionalArgumentTest()
+	{
+		//should return null, because it will hit an argument before an optional argument.
+		//Should also reset the position of UEFCharHandler.
+		String argument = this.uefCommand.getOptionalArgument();
+		assertEquals(null, argument);
+		assertEquals(0, this.uefCharHandler.getPosition());
+
+		//testing with actual optional arguments now.
+		this.uefCharHandler.setPosition(185);
+		argument = this.uefCommand.getOptionalArgument();
+		assertEquals("oargument 1", argument);
+		assertEquals(199, this.uefCharHandler.getPosition());
+
+		argument = this.uefCommand.getOptionalArgument();
+		assertEquals("oargument2", argument);
+		assertEquals(211, this.uefCharHandler.getPosition());
+
+		argument = this.uefCommand.getOptionalArgument();
+		assertEquals("oargument3", argument);
+		assertEquals(224, this.uefCharHandler.getPosition());
 	}
 
 	/**
