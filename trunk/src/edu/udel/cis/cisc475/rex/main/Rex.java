@@ -9,6 +9,7 @@ import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.ecfparser.IF.EcfParserFactoryIF;
 import edu.udel.cis.cisc475.rex.ecfparser.IF.EcfParserIF;
 import edu.udel.cis.cisc475.rex.ecfparser.impl.EcfParserFactory;
+import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorFactoryIF;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
@@ -120,7 +121,12 @@ public class Rex {
 		 * Create the Generator
 		 */
 		GeneratorFactoryIF theGeneratorFactory = new GeneratorFactory();
+		
+
 		GeneratorIF theGenerator = theGeneratorFactory.newGenerator(theMaster, theConfig);
+
+			//TODO Write an appropriate error.
+		
 		/*
 		 * Create the container for the generated exams
 		 * and answer keys
@@ -158,8 +164,14 @@ public class Rex {
 			/*
 			 * Fill the containers with the generated material
 			 */
-			theExams[i] = theGenerator.getGeneratedExam(i);
-			theAnswerKeys[i] = theGenerator.getAnswerKey(i);
+			
+				theExams[i] = theGenerator.getGeneratedExam(i);
+				theAnswerKeys[i] = theGenerator.getAnswerKey(i);
+			
+			
+				//TODO Write appropriate error message
+			
+			
 			/*
 			 * create the File
 			 */

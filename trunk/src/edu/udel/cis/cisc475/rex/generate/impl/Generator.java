@@ -1,5 +1,6 @@
 package edu.udel.cis.cisc475.rex.generate.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -19,7 +20,9 @@ import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
+import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyFactoryIF;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
+import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerFactoryIF;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
 import edu.udel.cis.cisc475.rex.random.impl.RandomizerFactory;
@@ -34,7 +37,7 @@ public class Generator implements GeneratorIF {
 	private int numExams = config.numVersions();
 
 	
-	Generator(ExamIF master, ConfigIF config) throws RexUnsatisfiableException {
+	Generator(ExamIF master, ConfigIF config) throws RexUnsatisfiableException{
 		this.master = master;
 		this.config = config;
 		generate();
@@ -46,6 +49,9 @@ public class Generator implements GeneratorIF {
 			
 		generatedExams = new ExamIF[numExams];
 		ExamFactoryIF theExamFactory = new ExamFactory();
+		
+		keys = new AnswerKeyIF[numExams];
+		AnswerKeyFactoryIF theAnswerKeyFactory = new AnswerKeyFactory();
 		
 		RandomizerFactoryIF theRandomizerFactory = new RandomizerFactory();
 		RandomizerIF theRandomizer = theRandomizerFactory.newRandomizer(config.seed());
@@ -59,6 +65,10 @@ public class Generator implements GeneratorIF {
 		for (int i = 0; i < numExams; i++)
 		{
 			generatedExams[i] = theExamFactory.newGeneratedExam();
+			
+			//Keys takes a version number (as a string), a name, and a date.
+			//Could not find a name or date field in Exam.
+			keys[i] = theAnswerKeyFactory.newAnswerKey(Integer.toString(i), "Test", "?/?/??");
 			
 			for (ConstraintIF c : theConstraints)
 			{
@@ -81,6 +91,8 @@ public class Generator implements GeneratorIF {
 					String topic = gc.topic();
 					int points = gc.points();					
 
+					//Greg: Pretty sure theInterval is unnecessary; won't it be exactly the
+					//the same as difficultyInterval?
 					IntervalIF theInterval = 
 						theIntervalFactory.interval(difficultyInterval.strictLow(), 
 													difficultyInterval.low(),
@@ -89,11 +101,16 @@ public class Generator implements GeneratorIF {
 					
 					
 					// container for holding elements in master with specified topic
+					//Greg: We're only getting problems here, no figures or blocks.
+					//While ExamIF.java has some methods that *might* be useful, significant
+					//logic will be needed here to pair each figure and block with its respective
+					//problem (see method elementsUsingElement in ExamIF.java)
+					
 					Collection<ProblemIF> problemsWithTopic = master.problemsWithTopic(topic);
 					Iterator<ProblemIF> iterate = problemsWithTopic.iterator();
 					
 					// container for holding elements in master with specified topic/difficulty/points
-					Collection<ProblemIF> desiredProblems = null;
+					Collection<ProblemIF> desiredProblems = new ArrayList<ProblemIF>();
 					
 					while(iterate.hasNext())
 					{
@@ -111,13 +128,11 @@ public class Generator implements GeneratorIF {
 									desiredProblems.add(tempProblem);
 								}
 							}
-						
-						
-						else
-						{
-							throw new RexUnsatisfiableException();
-						}
-						
+					}
+					
+					if (desiredProblems.size() < numProblems)
+					{
+						throw new RexUnsatisfiableException();
 					}
 					
 					// fill an array with the contents of the desiredElements collection
@@ -131,7 +146,11 @@ public class Generator implements GeneratorIF {
 					}
 					
 					// create an array of the keys
-					Object[] keys = theRandomizer.choose(numProblems, lhm.keySet().toArray());
+					
+					//Greg: I'm surprised this isn't giving an error; keys is a private AnswerKeyIF[] in
+					//Generator. I've renamed Object[] keys to theKeys.
+					
+					Object[] theKeys = theRandomizer.choose(numProblems, lhm.keySet().toArray());
 					
 					// create a linked hash set of final desired problems
 					LinkedHashSet<ProblemIF> finalDesiredProblems = new LinkedHashSet<ProblemIF>();
@@ -139,13 +158,26 @@ public class Generator implements GeneratorIF {
 					// now add the elements returned from the randomizer to the hash set
 					for (int j=0; j < passableDesiredElements.length; j++)
 					{
-						finalDesiredProblems.add((ProblemIF) lhm.get((Integer) keys[j]));
+						finalDesiredProblems.add((ProblemIF) lhm.get((Integer) theKeys[j]));
 					}
 					
 					// now call the ExamFactory addProblem method and add it to generatedExams[i]
 					for (ExamElementIF e : finalDesiredProblems)
 					{
 						generatedExams[i].addElementIF(e);
+						
+						if (e.getClass().isInstance(ProblemIF.class))
+						{
+							ProblemIF eAsProblem = (ProblemIF) e;
+							
+							//Method for getting the correct answer from a problem?
+							//addProblem in Key.java is expecting a Collection of Strings.
+							//answers in Problem.java is returning an AnswerIF[]
+							
+							//keys[i].addProblem(eAsProblem.answers());
+						}
+						
+						//keys[i].addProblem(e.answers());
 					}
 				}
 				

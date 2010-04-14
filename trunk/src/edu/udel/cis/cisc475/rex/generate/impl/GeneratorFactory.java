@@ -8,7 +8,7 @@ import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
 
 public class GeneratorFactory implements GeneratorFactoryIF {
 
-	public GeneratorIF newGenerator(ExamIF master, ConfigIF config) {
+	public GeneratorIF newGenerator(ExamIF master, ConfigIF config){
 		try {
 			return new Generator(master, config);
 		} catch (RexUnsatisfiableException e) {
