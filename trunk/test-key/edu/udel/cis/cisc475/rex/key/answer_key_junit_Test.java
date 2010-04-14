@@ -1,3 +1,4 @@
+package edu.udel.cis.cisc475.rex.key;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
  * @author cardona
  *
  */
-public class answer_key_junit_tester {
+public class answer_key_junit_Test {
 
 
 	

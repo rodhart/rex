@@ -1,3 +1,4 @@
+package edu.udel.cis.cisc475.rex.random;
 	import static org.junit.Assert.*;
 
 import org.junit.BeforeClass;
@@ -11,7 +12,7 @@ import edu.udel.cis.cisc475.rex.random.impl.Randomizer;
 	 * @author cardona, justin
 	 *
 	 */
-public class random_junit {
+public class random_junit_Test {
 private String a[] = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
 		"two_one", "two_two", "two_three", "two_four", "two_five", "two_six", "two_seven", "two_eight", "two_nine", "two_ten",
 		"three_one", "three_two", "three_three", "three_four", "three_five", "three_six", "three_seven", "three_eight", "three_nine", "three_ten",
@@ -19,6 +20,9 @@ private String a[] = {"one", "two", "three", "four", "five", "six", "seven", "ei
  
 long seed;
 	
+
+
+
 	
 		@Test
 		public void test_choose_b() {
@@ -44,10 +48,7 @@ long seed;
 				result = b[i].equals(b_check[i]);
 				assertEquals (true, result);
 			}
-			
-			//boolean result = b.equals(b_check);
-	    	//assertEquals (true, result);
-		}//end of test_choose
+}//end of test_choose
 		
 		
 		@Test
@@ -74,6 +75,8 @@ long seed;
 				assertEquals (true, result);
 			}		
 		}//end of test_choose
+
+		
 		
 		@Test
 		public void test_choose_d() {
@@ -99,6 +102,8 @@ long seed;
 			}
 		}//end of test_choose
 
+		
+		
 		@Test
 		public void test_choose_e() {
 			//init a few different randomizers
@@ -122,6 +127,8 @@ long seed;
 				assertEquals (true, result);
 			}
 		}//end of test_choose
+
+		
 		
 }//end of class
 

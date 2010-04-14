@@ -14,7 +14,7 @@ import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
  * @author  CARDONA
  *
  */
-public class Key_test {
+public class Key__main_example {
 
 	/**
      * general purpose tester of the answer key methods
@@ -61,4 +61,4 @@ public class Key_test {
 
 	 	
 	}//end of main
-}//end of class source_test
+}//end of class 

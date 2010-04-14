@@ -11,7 +11,7 @@ import edu.udel.cis.cisc475.rex.random.impl.RandomizerFactory;
  * @author  CARDONA
  *
  */
-public class random_test {
+public class random__main_example {
 
 	/**
 	 * general purpose tester of the random method
