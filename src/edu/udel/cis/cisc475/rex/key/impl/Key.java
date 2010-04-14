@@ -77,7 +77,7 @@ public  int 	numProblems() {return _numAnswers;}
 /**
  * getter that returns answer(s) given a problem index
  * 
- * @param index is the problem number that we want answers for
+ * @param index the problem number that we want answers for
  * @return a collection of correct answers (maybe just one) 
  */
 public Collection <String> answers(int index) {	
@@ -98,7 +98,7 @@ public Collection <String> answers(int index) {
  * it is assumed that the problem answers will be given in order
  * so the index is merely incremented
  * 
- * @param collection of answers (maybe just one) 
+ * @param nextAnswer collection of answers (maybe just one) 
  */
 public void addProblem( Collection <String> nextAnswer) {
 	_Answers.add(nextAnswer);

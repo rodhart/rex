@@ -23,8 +23,8 @@ public interface RandomizerIF {
 	 * permute topics, select problems 
 	 * satisfying constraints (first filter then select) 
 	 * 
-	 * @param number of items to return
-	 * @param the arrays of objects o choose from
+	 * @param numItems number of items to return
+	 * @param items the arrays of objects o choose from
 	 * @return an array of chosen objects
 	 */
 	Object[] choose(int numItems, Object[] items);

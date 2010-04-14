@@ -29,7 +29,7 @@ public class Randomizer implements RandomizerIF {
 /**
  * class creates an instance of a random object chooser
  * when called it first creates the seed randomizer
- * @param the seed to be used to create the random numbers 
+ * @param seed used to create the random numbers 
 */
 	public	Randomizer (long seed){
 		randnum = new Random();
