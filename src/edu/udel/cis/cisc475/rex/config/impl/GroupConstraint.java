@@ -4,6 +4,11 @@ import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
+/** 
+ * 
+ * @author aplatt + verchick
+ *
+ */
 public class GroupConstraint implements GroupConstraintIF {
 	private IntervalIF difficultyInterval;
 	private int numProblems;

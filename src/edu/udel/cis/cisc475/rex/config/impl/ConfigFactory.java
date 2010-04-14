@@ -3,6 +3,11 @@ package edu.udel.cis.cisc475.rex.config.impl;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 
+/**
+ * 
+ * @author aplatt + verchick
+ *
+ */
 public class ConfigFactory implements ConfigFactoryIF {
 
 	@Override

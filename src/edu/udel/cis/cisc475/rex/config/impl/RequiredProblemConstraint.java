@@ -3,6 +3,11 @@ package edu.udel.cis.cisc475.rex.config.impl;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
+/**
+ * 
+ * @author aplatt + verchick
+ *
+ */
 public class RequiredProblemConstraint implements RequiredProblemConstraintIF {
 
 	private String label;
