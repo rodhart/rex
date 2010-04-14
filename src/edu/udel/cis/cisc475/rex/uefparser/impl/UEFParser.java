@@ -75,11 +75,13 @@ public class UEFParser implements UEFParserIF {
 	 * @return ExamIF of the uef file.
 	 */
 	public ExamIF parse(File file) {
+		ExamFactoryIF examFactory = new ExamFactory();
+		ExamIF exam = examFactory.newMasterExam();
+		
 		try {
 			uefCharHandler.openFile(file);
 			UEFCommand.CommandTypes commandType;
-			ExamFactoryIF examFactory = new ExamFactory();
-
+			
 			// reference to the last problem handled;
 			ProblemIF problem = null;
 			// reference to the last answer handled
@@ -111,6 +113,7 @@ public class UEFParser implements UEFParserIF {
 								problem.label(), problem.question(), answers
 										.toArray(new AnswerIF[0]));
 						answers.clear();
+						exam.addElementIF(problem);
 					}
 				} else if (commandType
 						.equals(UEFCommand.CommandTypes.beginAnswers)) {
@@ -130,6 +133,6 @@ public class UEFParser implements UEFParserIF {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return exam;
 	}
 }
