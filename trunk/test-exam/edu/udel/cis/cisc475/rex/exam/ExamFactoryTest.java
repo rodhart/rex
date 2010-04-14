@@ -97,7 +97,7 @@ public class ExamFactoryTest {
 	
 	@Test
 	@Ignore
-	public void testNewBlockBadImput() {
+	public void testNewBlockBadInput() {
 		fail("Not yet implemented");
 	}
 	
@@ -112,7 +112,7 @@ public class ExamFactoryTest {
 	
 	@Test
 	@Ignore
-	public void testNewFigureBadImput() {
+	public void testNewFigureBadInput() {
 		fail("Not yet implemented");
 	}
 	
@@ -129,7 +129,7 @@ public class ExamFactoryTest {
 	
 	@Test
 	@Ignore
-	public void testNewAnswerBadImput() {
+	public void testNewAnswerBadInput() {
 		fail("Not yet implemented");
 	}
 	
@@ -148,7 +148,7 @@ public class ExamFactoryTest {
 	
 	@Test
 	@Ignore
-	public void testNewFixedAnswerBadImput() {
+	public void testNewFixedAnswerBadInput() {
 		fail("Not yet implemented");
 	}
 	
@@ -172,7 +172,7 @@ public class ExamFactoryTest {
 	
 	@Test
 	@Ignore
-	public void testNewProblemBadImput() {
+	public void testNewProblemBadInput() {
 		fail("Not yet implemented");
 	}
 	
