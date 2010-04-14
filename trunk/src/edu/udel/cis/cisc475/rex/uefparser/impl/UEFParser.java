@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Stack;
 
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
+import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserFactoryIF;
 import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserIF;
+import edu.udel.cis.cisc475.rex.uefparser.impl.UEFCommand.CommandTypes;
 
 /**
  * Parser for the Universal Exam File (UEF).
@@ -38,7 +40,7 @@ public class UEFParser implements UEFParserIF {
 	 */
 	enum States {
 
-		top, comment, documentclass, label, verb, verbatim, problem, answers, answer
+		top, comment, documentclass, block, label, verb, verbatim, problem, answers, answer
 	}
 
 	/**
@@ -80,7 +82,7 @@ public class UEFParser implements UEFParserIF {
 
 		try {
 			uefCharHandler.openFile(file);
-			UEFCommand.CommandTypes commandType;
+			CommandTypes commandType;
 
 			// reference to the last problem handled;
 			ProblemIF problem = null;
@@ -93,9 +95,9 @@ public class UEFParser implements UEFParserIF {
 			// Read each command until the end of the file.
 			while ((commandType = command.process()) != null) {
 				// Check to see what the current command is and process it.
-				if (commandType.equals(UEFCommand.CommandTypes.documentclass)) {
+				if (commandType.equals(CommandTypes.documentclass)) {
 					command.processDocumentclass();
-				} else if (commandType.equals(UEFCommand.CommandTypes.answer)) {
+				} else if (commandType.equals(CommandTypes.answer)) {
 					if (state.peek() == States.answers) {
 						answer = command.processAnswer();
 						answers.add(answer);
@@ -103,16 +105,23 @@ public class UEFParser implements UEFParserIF {
 						// FIXME: through an exception
 						System.out.println("Found answer in wrong place");
 					}
-				} else if (commandType
-						.equals(UEFCommand.CommandTypes.beginProblem)) {
+				} else if (commandType.equals(CommandTypes.beginBlock)) {
+					// FIXME: Actually do something with the block returned.
+					BlockIF block = command.processBeginBlock();
+					if (block == null) {
+						System.out
+								.println("Some kind of error with blocks found.");
+					}
+				} else if (commandType.equals(CommandTypes.endBlock)) {
+					command.processEndBlock();
+				} else if (commandType.equals(CommandTypes.beginProblem)) {
 					if (state.peek() == States.top) {
 						problem = command.processBeginProblem();
 					} else {
 						// FIXME: through an exception
 						System.out.println("Found problem in wrong place");
 					}
-				} else if (commandType
-						.equals(UEFCommand.CommandTypes.endProblem)) {
+				} else if (commandType.equals(CommandTypes.endProblem)) {
 					command.processEndProblem();
 					// FIXME: need more error checking for closed problem
 					// without begin
@@ -125,11 +134,9 @@ public class UEFParser implements UEFParserIF {
 						answers.clear();
 						exam.addElementIF(problem);
 					}
-				} else if (commandType
-						.equals(UEFCommand.CommandTypes.beginAnswers)) {
+				} else if (commandType.equals(CommandTypes.beginAnswers)) {
 					command.processBeginAnswers();
-				} else if (commandType
-						.equals(UEFCommand.CommandTypes.endAnswers)) {
+				} else if (commandType.equals(CommandTypes.endAnswers)) {
 					command.processEndAnswers();
 				}
 			}

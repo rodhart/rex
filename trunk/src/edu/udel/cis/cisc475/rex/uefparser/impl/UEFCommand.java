@@ -3,8 +3,10 @@ package edu.udel.cis.cisc475.rex.uefparser.impl;
 import java.util.Stack;
 
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
+import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
+import edu.udel.cis.cisc475.rex.exam.impl.Block;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
@@ -29,12 +31,10 @@ class UEFCommand {
 	 * Reference to the parser state
 	 */
 	private Stack<States> state;
-
 	/**
 	 * Exam factory is only created once at the constructor and used every time
 	 */
 	private ExamFactoryIF examFactory;
-
 	/**
 	 * Source factory is only created once at the constructor and used every
 	 * time
@@ -45,7 +45,8 @@ class UEFCommand {
 	 * The latex commands used by UEF as in the requirements.
 	 */
 	enum CommandTypes {
-		documentclass, label, verb, beginVerbatim, endVerbatim, beginProblem, endProblem, beginAnswers, endAnswers, answer, none
+
+		documentclass, label, verb, beginBlock, endBlock, beginVerbatim, endVerbatim, beginProblem, endProblem, beginAnswers, endAnswers, answer, none
 	}
 
 	/**
@@ -155,7 +156,8 @@ class UEFCommand {
 				&& !commandType.equals(CommandTypes.endAnswers)
 				&& !commandType.equals(CommandTypes.beginProblem)
 				&& !commandType.equals(CommandTypes.endProblem)
-				&& !commandType.equals(CommandTypes.answer)) {
+				&& !commandType.equals(CommandTypes.answer)
+				&& !commandType.equals(CommandTypes.endBlock)) {
 			// process until we find a command
 			commandType = process();
 		}
@@ -247,7 +249,9 @@ class UEFCommand {
 					if (state.peek() == States.verbatim) {
 						continue;
 					} else {
-						if (environment.equals("problem")) {
+						if (environment.equals("block")) {
+							return CommandTypes.endBlock;
+						} else if (environment.equals("problem")) {
 							return CommandTypes.endProblem;
 						} else if (environment.equals("answers")) {
 							return CommandTypes.endAnswers;
@@ -277,6 +281,8 @@ class UEFCommand {
 						if (environment.equals("verbatim")) {
 							processBeginVerbatim();
 							continue;
+						} else if (environment.equals("block")) {
+							return CommandTypes.beginBlock;
 						} else if (environment.equals("problem")) {
 							return CommandTypes.beginProblem;
 						} else if (environment.equals("answers")) {
@@ -357,8 +363,9 @@ class UEFCommand {
 		boolean isCorrect = false;
 
 		for (int i = 0; i < args.length; i++) {
-			if (args[i].equals("correct"))
+			if (args[i].equals("correct")) {
 				isCorrect = true;
+			}
 		}
 
 		answer = this.examFactory.newAnswer(isCorrect, s);
@@ -500,6 +507,53 @@ class UEFCommand {
 		} else {
 			System.out
 					.println("Error: \\end{problem} without a matching \\begin{problem}");
+			System.exit(-1);
+		}
+	}
+
+	/**
+	 * Handles the \begin{block} environment.
+	 * 
+	 */
+	BlockIF processBeginBlock() {
+		SourceIF source = sourceFactory.newSource(this.uefCharHandler
+				.getFileName());
+		source.setStartColumn(this.uefCharHandler.getColumnNo());
+		source.setStartLine(this.uefCharHandler.getLineNo());
+
+		// push the new state.
+		state.push(States.block);
+
+		// do some stuff we don't need to do
+		System.out.println("Found Block Environment with the following text:");
+
+		// get text for the block
+		String buffer = peekUntil();
+
+		System.out.println("-----------------------------------");
+		System.out.println(buffer);
+		System.out.println("-----------------------------------");
+		System.out.println();
+
+		source.setLastColumn(this.uefCharHandler.getColumnNo());
+		source.setLastLine(this.uefCharHandler.getLineNo());
+
+		BlockIF block = new Block("", "", source);
+
+		return block;
+	}
+
+	/**
+	 * Handles the \end{block} environment.
+	 * 
+	 */
+	void processEndBlock() {
+		if (state.peek() == States.block) {
+			// pop the old state.
+			state.pop();
+		} else {
+			System.out
+					.println("Error: \\end{block} without a matching \\begin{block}");
 			System.exit(-1);
 		}
 	}
