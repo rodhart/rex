@@ -373,7 +373,7 @@ public class ExamTest {
 		exam.addElementIF(figure);
 		exam.addElementIF(block);
 		
-		topics = exam.labels();
+		topics = exam.topics();
 		assertNotNull(topics);
 		// should only return 2 topics since figure doesnt have a topic
 		assertEquals(2, topics.size());
