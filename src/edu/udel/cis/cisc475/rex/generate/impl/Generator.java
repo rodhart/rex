@@ -87,9 +87,10 @@ public class Generator implements GeneratorIF {
 				
 				// find the corresponding problem
 				ExamElementIF theReqProblem = master.elementWithLabel(label);
+				
+				// add it to our container
+				allRequired.add(theReqProblem);
 			}
-				
-				
 				
 			
 			for (GroupConstraintIF gc : groupConstraints)
@@ -115,89 +116,88 @@ public class Generator implements GeneratorIF {
 					// check to make sure it satisfies the difficulty constraint
 					if (difficultyInterval.low() <= tempProblem.difficulty() 
 								&& tempProblem.difficulty() <= difficultyInterval.high())
+					{
+						// assuming it did, make sure it satisfies the points constraint
+						if (tempProblem.points() == points)
 						{
-							// assuming it did, make sure it satisfies the points constraint
-							if (tempProblem.points() == points)
-							{
-								// now add it to our container of desired problems
-								// NOTE: this container will also contain required problems
-								desiredProblems.add(tempProblem);
-							}
+							// now add it to our container of desired problems
+							// NOTE: this container will also contain required problems
+							desiredProblems.add(tempProblem);						
 						}
+					}
 											
-						else
-						{
-							throw new RexUnsatisfiableException();
-						}
+					else
+					{
+						throw new RexUnsatisfiableException();
+					}
 					
 				}
 				
 				// now add this collection from a specific topic to our master collection
 				allCollections.add(desiredProblems);
+			} // end for
+			
+			// now, iterate through the collection of required problems
+			Iterator<ExamElementIF> reqIterate = allRequired.iterator();
+			
+			while (reqIterate.hasNext())
+			{
+				ExamElementIF tempReqProblem = reqIterate.next();
+				Iterator<ArrayList> allIterate = allCollections.iterator();
+				
+				while (allIterate.hasNext())
+				{
+					ArrayList<ProblemIF> something = allIterate.next();
+					
+					ProblemIF otherTemp = (ProblemIF) something.get(0);
+					
+					// because we couldn't cast in the if statement
+					ProblemIF castTempReq = (ProblemIF) tempReqProblem;
+					
+					// check to see if the first problem in the allCollections collection
+					// has a topic that matches the topic of the singular required
+					// problem in the allRequired array list
+					if (otherTemp.topic().equals(castTempReq.topic()))
+					{
+						// now add it to the kth element of allCollections
+						something.add(castTempReq);
+					}		
+				}			
 			}
+			
+			// fill an array with the contents of the desiredElements collection
+			Object[] passableDesiredElements = allCollections.toArray();
+			
+			// now a linked hash map
+			LinkedHashMap<Integer, Object> lhm = new LinkedHashMap<Integer, Object>();
+			for (int n = 0; n < allCollections.size(); n++) 
+			{
+				lhm.put(n, passableDesiredElements[n]);
+			}
+			
+			// create an array of the keys
+			// Object[] keys = theRandomizer.choose(numProblems, lhm.keySet().toArray());
+			
+			// create a linked hash set of final desired problems
+			LinkedHashSet<ProblemIF> finalDesiredProblems = new LinkedHashSet<ProblemIF>();
+			
+			// now add the elements returned from the randomizer to the hash set
+			for (int j=0; j < passableDesiredElements.length; j++)
+			{
+				// finalDesiredProblems.add((ProblemIF) lhm.get((Integer) keys[j]));
+			}
+			
+			// now call the ExamFactory addProblem method and add it to generatedExams[i]
+			for (ExamElementIF e : finalDesiredProblems)
+			{
+				generatedExams[i].addElementIF(e);
+			}
+			
+			
+			
+			
 		}
-				
-//					// fill an array with the contents of the desiredElements collection
-//					Object[] passableDesiredElements = desiredProblems.toArray();
-//					
-//					// now a linked hash map
-//					LinkedHashMap<Integer, Object> lhm = new LinkedHashMap<Integer, Object>();
-//					for (int n = 0; n < desiredProblems.size(); n++) 
-//					{
-//						lhm.put(n, passableDesiredElements[n]);
-//					}
-//					
-//					// create an array of the keys
-//					Object[] keys = theRandomizer.choose(numProblems, lhm.keySet().toArray());
-//					
-//					// create a linked hash set of final desired problems
-//					LinkedHashSet<ProblemIF> finalDesiredProblems = new LinkedHashSet<ProblemIF>();
-//					
-//					// now add the elements returned from the randomizer to the hash set
-//					for (int j=0; j < passableDesiredElements.length; j++)
-//					{
-//						finalDesiredProblems.add((ProblemIF) lhm.get((Integer) keys[j]));
-//					}
-//					
-//					// now call the ExamFactory addProblem method and add it to generatedExams[i]
-//					for (ExamElementIF e : finalDesiredProblems)
-//					{
-//						generatedExams[i].addElementIF(e);
-//					}
-//				}
-				
-//				if (c.getClass().isInstance(RequiredProblemConstraintIF.class))	
-//				{
-//					// cast to a RequiredProblemConstraintIF
-//					RequiredProblemConstraintIF rpc = (RequiredProblemConstraintIF) c;
-//				
-//					// extract relevant data
-//					SourceIF source = rpc.source(); // necessary?
-//					String label = rpc.label();
-//					int points = rpc.points();
-//					
-//					// repeat everything listed above
-//					
-//					// Question: A RequiredProblemConstraint object contains a label for whatever the
-//					// required Figure / Block is, and a possible points value. But if we're iterating
-//					// through a myriad of GroupConstraints AND RequiredProblemConstraints, and the
-//					// RequiredProblemConstraints are the only things telling us when we need a figure,
-//					// I'm assuming that order matters in the config file, right? 
-//					// What I mean is: unless a RequiredProblemConstraint for a figure is listed in 
-//					// the config file directly before the GroupConstraints outlining the questions
-//					// it references, how else will we know to group the two together? The only thing
-//					// logically linking the two constraints is that they both extend the ConstraintIF
-//				}
-//				
-//				else
-//				{
-//					// throw new RexUnsatisfiableException();
-//				}
-				
-				
-//			}	
-		}
-//	}
+	} // end generate()
 
 	@Override
 	public AnswerKeyIF getAnswerKey(int i) {
