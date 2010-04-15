@@ -1,0 +1,95 @@
+/*
+Author: Tim Armstrong
+
+This doument is a grammar in ECNF for parsing the UEF file.
+It reflects my old thinking about parsing.  It shoud be easy to update,
+though, shoud we come to desire to use ANTLR rahter than our
+hand-built parser.
+*/
+
+
+S ::= <uef_document>
+
+<uef_document> ::=
+	\documentclass[master]{exam} 
+	<preamble>
+	\begin{document}
+	<front_matter>
+	(<problem> | <block> | <figure>)*
+	\end{document}
+
+<preamble> ::= <text_ptr>
+<front_matter> ::= <text_ptr>
+
+
+
+<problem> ::=
+	\begin{problem}([requires=<req_block>])?{<topic>}{<difficulty>}
+	(\label{<problem_id>})?
+	\begin{problembody}<problem_description>\end{problembody}
+	<answers>|<block>             // <block> for non-multiple-choice questions
+	\end{problem}
+
+<req_block> ::= <label>
+<topic> ::= <latex_cmd_text>     
+<difficulty> ::= -?\d+(\.\d+)?    //real number
+<problem_id> ::= <label>
+<problem_description> ::= <text_ptr>
+
+*****OR:
+<problem_description> ::= (?=\end{problembody})
+
+
+
+<answers> ::= begin{answers} <answer>* \end{answers}
+
+<answer> ::=
+	\begin{answer} ([correct] | [fixed] | [correct,fixed] | [fixed,correct])?
+	<answer_description>
+	\end{answer}
+
+<answer_description> ::= <text_ptr>
+*****OR:
+<answer_description> ::= (?=\end{answer})
+
+
+
+/***********8 Bad:
+
+<answers> ::= begin{answers} <answer>* \end{answers}
+
+<answer> ::=
+	\answer ([correct] | [fixed] | [correct,fixed] | [fixed,correct])?
+	<answer_description>
+
+<answer_description> ::= <text_ptr>
+
+*********/
+
+
+
+<figure> ::=
+	\begin{figure}
+	<fig_specification>
+	\caption{<fig_caption>}
+	\label{<label>}
+	\end{figure}
+
+<fig_specification> ::= <text_ptr>
+<fig_caption> ::=      //? What is legal?
+
+
+
+<block> ::= \begin{block}{<label>} <text_ptr> \end{block}
+
+
+
+<latex_cmd_text> ::=   //? What is legal?
+
+<text_ptr> ::= \d+   //to be used as an index into our collection of user text
+OR: <usertext> ::= \begin{usertext}(?=\end{usertext})\end{usertext}   // "?=" is positive lookahead
+
+
+
+<label> ::= [A-Za-z][A-Za-z0-9_]*   //? What is legal?
+		//...or \w
