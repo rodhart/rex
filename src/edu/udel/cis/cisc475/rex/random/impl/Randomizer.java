@@ -63,6 +63,14 @@ public class Randomizer implements RandomizerIF {
 		}//end of    	if (numObjects < numItems) 
 
 
+		if (numItems < 1) {
+			System.err.printf("	in method " +
+					"public Object[] choose (int numItems, Object[] items)   " +
+			"numItems less than 1");
+			return null;		
+		}//end of    	if (numObjects < numItems) 
+
+		
 		//pickedNums will store the indexes to the final random set
 		int pickedNums[] = new int[numItems];
 		int numofPickedNums = 0; //how many numbers have been already picked
