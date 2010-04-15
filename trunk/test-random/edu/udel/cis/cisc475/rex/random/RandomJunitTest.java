@@ -89,6 +89,17 @@ public class RandomJunitTest {
 		
 		
 		
+		@Test
+		public void testChooseE() {
+			int i = 0;
+		seed = 4236;
+		numToPick = -10;
+		R1 = RF.newRandomizer(seed);
+		b 		=  R1.choose (numToPick, a);		
+		if (b == null) 	result = true;	
+		
+			assertEquals (true, result);
+		}//end of method
 		
 		
 		
@@ -108,6 +119,7 @@ public class RandomJunitTest {
 	long seed;
 	Object[] b = new String[10];
 	Object[] b_check = new String[10];
+
 	RandomizerFactoryIF RF = new RandomizerFactory(); 
 	RandomizerFactoryIF RF_2 = new RandomizerFactory(); 
 	boolean result;
