@@ -10,7 +10,7 @@ import edu.udel.cis.cisc475.rex.key.impl.Key;
  * 
  */
 
-public class Output__main_example {
+public class OutputMainExample {
 
 	/**
 	 * @param args

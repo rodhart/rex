@@ -12,7 +12,7 @@ import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
  * @author cardona
  *
  */
-public class answer_key_junit_Test {
+public class AnswerKeyJunitTest {
 
 
 
