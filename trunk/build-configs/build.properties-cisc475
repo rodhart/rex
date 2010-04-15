@@ -1,2 +1,4 @@
 junit.name=/usa/siegel/junit-4.8.1.jar
 cobertura.lib.dir=/usa/siegel/cobertura-1.9.4.1
+antlr3-task.name=/usa/siegel/antlr3-task.jar
+antlr3.name=/usa/siegel/antlr-3.2.jar
