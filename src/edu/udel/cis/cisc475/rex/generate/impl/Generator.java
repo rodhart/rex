@@ -55,6 +55,9 @@ public class Generator implements GeneratorIF {
 		RandomizerIF theRandomizer = theRandomizerFactory.newRandomizer(config.seed());
 		IntervalFactoryIF theIntervalFactory = new IntervalFactory();
 		
+		ArrayList<ArrayList> allCollections = new ArrayList<ArrayList>();
+		ArrayList<ExamElementIF> allRequired = new ArrayList<ExamElementIF>();
+		
 		// this will be implemented later once we figure out how to iterate through
 		// or we make it so choose() doesn't return an array [Beta]
 		// Object[] constraintArray = theConstraints.toArray();
@@ -77,20 +80,25 @@ public class Generator implements GeneratorIF {
 		{
 			generatedExams[i] = theExamFactory.newGeneratedExam();
 			
+			for (RequiredProblemConstraintIF rpc : reqProbConstraints)
+			{
+				// extract label
+				String label = rpc.label();
+				
+				// find the corresponding problem
+				ExamElementIF theReqProblem = master.elementWithLabel(label);
+			}
+				
+				
+				
+			
 			for (GroupConstraintIF gc : groupConstraints)
 			{
 				// extract relevant data
-				// SourceIF source = gc.source(); // necessary?
 				int numProblems = gc.numProblems();
 				IntervalIF difficultyInterval = gc.difficultyInterval();
 				String topic = gc.topic();
 				int points = gc.points();					
-
-				IntervalIF theInterval = 
-					theIntervalFactory.interval(difficultyInterval.strictLow(), 
-												difficultyInterval.low(),
-												difficultyInterval.strictHigh(),
-												difficultyInterval.high());
 					
 					
 				// container for holding elements in master with specified topic
@@ -98,61 +106,65 @@ public class Generator implements GeneratorIF {
 				Iterator<ProblemIF> iterate = problemsWithTopic.iterator();
 					
 				// container for holding elements in master with specified topic/difficulty/points
-				Collection<ProblemIF> desiredProblems = null;
+				ArrayList<ProblemIF> desiredProblems = new ArrayList<ProblemIF>();
 				
 				while(iterate.hasNext())
-					{
-						ProblemIF tempProblem = iterate.next();
+				{
+					ProblemIF tempProblem = iterate.next();
 				
-						// check to make sure it satisfies the difficulty constraint
-						if (theInterval.low() <= tempProblem.difficulty() 
-									&& tempProblem.difficulty() <= theInterval.high())
+					// check to make sure it satisfies the difficulty constraint
+					if (difficultyInterval.low() <= tempProblem.difficulty() 
+								&& tempProblem.difficulty() <= difficultyInterval.high())
+						{
+							// assuming it did, make sure it satisfies the points constraint
+							if (tempProblem.points() == points)
 							{
-								// assuming it did, make sure it satisfies the points constraint
-								if (tempProblem.points() == points)
-								{
-									// this means it has the correct topic, difficulty, and points 
-									// add it to our collection container
-									desiredProblems.add(tempProblem);
-								}
+								// now add it to our container of desired problems
+								// NOTE: this container will also contain required problems
+								desiredProblems.add(tempProblem);
 							}
-						
-						
+						}
+											
 						else
 						{
 							throw new RexUnsatisfiableException();
 						}
-						
-					}
 					
-					// fill an array with the contents of the desiredElements collection
-					Object[] passableDesiredElements = desiredProblems.toArray();
-					
-					// now a linked hash map
-					LinkedHashMap<Integer, Object> lhm = new LinkedHashMap<Integer, Object>();
-					for (int n = 0; n < desiredProblems.size(); n++) 
-					{
-						lhm.put(n, passableDesiredElements[n]);
-					}
-					
-					// create an array of the keys
-					Object[] keys = theRandomizer.choose(numProblems, lhm.keySet().toArray());
-					
-					// create a linked hash set of final desired problems
-					LinkedHashSet<ProblemIF> finalDesiredProblems = new LinkedHashSet<ProblemIF>();
-					
-					// now add the elements returned from the randomizer to the hash set
-					for (int j=0; j < passableDesiredElements.length; j++)
-					{
-						finalDesiredProblems.add((ProblemIF) lhm.get((Integer) keys[j]));
-					}
-					
-					// now call the ExamFactory addProblem method and add it to generatedExams[i]
-					for (ExamElementIF e : finalDesiredProblems)
-					{
-						generatedExams[i].addElementIF(e);
-					}
 				}
+				
+				// now add this collection from a specific topic to our master collection
+				allCollections.add(desiredProblems);
+			}
+		}
+				
+//					// fill an array with the contents of the desiredElements collection
+//					Object[] passableDesiredElements = desiredProblems.toArray();
+//					
+//					// now a linked hash map
+//					LinkedHashMap<Integer, Object> lhm = new LinkedHashMap<Integer, Object>();
+//					for (int n = 0; n < desiredProblems.size(); n++) 
+//					{
+//						lhm.put(n, passableDesiredElements[n]);
+//					}
+//					
+//					// create an array of the keys
+//					Object[] keys = theRandomizer.choose(numProblems, lhm.keySet().toArray());
+//					
+//					// create a linked hash set of final desired problems
+//					LinkedHashSet<ProblemIF> finalDesiredProblems = new LinkedHashSet<ProblemIF>();
+//					
+//					// now add the elements returned from the randomizer to the hash set
+//					for (int j=0; j < passableDesiredElements.length; j++)
+//					{
+//						finalDesiredProblems.add((ProblemIF) lhm.get((Integer) keys[j]));
+//					}
+//					
+//					// now call the ExamFactory addProblem method and add it to generatedExams[i]
+//					for (ExamElementIF e : finalDesiredProblems)
+//					{
+//						generatedExams[i].addElementIF(e);
+//					}
+//				}
 				
 //				if (c.getClass().isInstance(RequiredProblemConstraintIF.class))	
 //				{
@@ -183,7 +195,7 @@ public class Generator implements GeneratorIF {
 //				}
 				
 				
-			}	
+//			}	
 		}
 //	}
 
