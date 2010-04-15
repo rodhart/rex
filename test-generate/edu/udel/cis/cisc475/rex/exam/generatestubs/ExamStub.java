@@ -7,6 +7,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
+import edu.udel.cis.cisc475.rex.exam.impl.Problem;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 public class ExamStub implements ExamIF {
@@ -97,6 +98,7 @@ public class ExamStub implements ExamIF {
 	@Override
 	public Collection<ProblemIF> problems() {
 		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
