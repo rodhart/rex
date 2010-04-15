@@ -20,9 +20,7 @@ import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
-import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyFactoryIF;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
-import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerFactoryIF;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
 import edu.udel.cis.cisc475.rex.random.impl.RandomizerFactory;
@@ -37,7 +35,7 @@ public class Generator implements GeneratorIF {
 	private int numExams = config.numVersions();
 
 	
-	Generator(ExamIF master, ConfigIF config) throws RexUnsatisfiableException{
+	Generator(ExamIF master, ConfigIF config) throws RexUnsatisfiableException {
 		this.master = master;
 		this.config = config;
 		generate();
@@ -45,13 +43,13 @@ public class Generator implements GeneratorIF {
 
 	private void generate() throws RexUnsatisfiableException 
 	{
+		// create containers for holding constraints
 		Collection<ConstraintIF> theConstraints = config.constraints();
-			
+		ArrayList<GroupConstraintIF> groupConstraints = new ArrayList<GroupConstraintIF>();
+		ArrayList<RequiredProblemConstraintIF> reqProbConstraints = new ArrayList<RequiredProblemConstraintIF>();
+		
 		generatedExams = new ExamIF[numExams];
 		ExamFactoryIF theExamFactory = new ExamFactory();
-		
-		keys = new AnswerKeyIF[numExams];
-		AnswerKeyFactoryIF theAnswerKeyFactory = new AnswerKeyFactory();
 		
 		RandomizerFactoryIF theRandomizerFactory = new RandomizerFactory();
 		RandomizerIF theRandomizer = theRandomizerFactory.newRandomizer(config.seed());
@@ -59,60 +57,50 @@ public class Generator implements GeneratorIF {
 		
 		// this will be implemented later once we figure out how to iterate through
 		// or we make it so choose() doesn't return an array [Beta]
-		Object[] constraintArray = theConstraints.toArray();
-		constraintArray = randomizeConstraints(theRandomizer, theConstraints.size(), theConstraints.toArray());
+		// Object[] constraintArray = theConstraints.toArray();
+		// constraintArray = randomizeConstraints(theRandomizer, theConstraints.size(), theConstraints.toArray());
 
+		// iterate through constraints and logically group them
+		for (ConstraintIF c : theConstraints)
+		{				
+			if (c.getClass().isInstance(GroupConstraintIF.class))	
+			{
+				groupConstraints.add((GroupConstraintIF) c);
+			}
+			else if (c.getClass().isInstance(RequiredProblemConstraintIF.class))
+			{
+				reqProbConstraints.add((RequiredProblemConstraintIF) c);
+			}
+		}
+		
 		for (int i = 0; i < numExams; i++)
 		{
 			generatedExams[i] = theExamFactory.newGeneratedExam();
 			
-			//Keys takes a version number (as a string), a name, and a date.
-			//Could not find a name or date field in Exam.
-			keys[i] = theAnswerKeyFactory.newAnswerKey(Integer.toString(i), "Test", "?/?/??");
-			
-			for (ConstraintIF c : theConstraints)
+			for (GroupConstraintIF gc : groupConstraints)
 			{
-				/* Overview:
-				 * Test Constraint type; extract information from Constraint.
-				 * Meet constraints using MasterExam (master).
-				 * Pass collection of met constraint problems to randomizer.
-				 * Add what randomizer returns to generatedExams[i].
-				 */				
+				// extract relevant data
+				// SourceIF source = gc.source(); // necessary?
+				int numProblems = gc.numProblems();
+				IntervalIF difficultyInterval = gc.difficultyInterval();
+				String topic = gc.topic();
+				int points = gc.points();					
+
+				IntervalIF theInterval = 
+					theIntervalFactory.interval(difficultyInterval.strictLow(), 
+												difficultyInterval.low(),
+												difficultyInterval.strictHigh(),
+												difficultyInterval.high());
+					
+					
+				// container for holding elements in master with specified topic
+				Collection<ProblemIF> problemsWithTopic = master.problemsWithTopic(topic);
+				Iterator<ProblemIF> iterate = problemsWithTopic.iterator();
+					
+				// container for holding elements in master with specified topic/difficulty/points
+				Collection<ProblemIF> desiredProblems = null;
 				
-				if (c.getClass().isInstance(GroupConstraintIF.class))	
-				{
-					// cast to a GroupConstraintIF
-					GroupConstraintIF gc = (GroupConstraintIF) c;
-
-					// extract relevant data
-					SourceIF source = gc.source(); // necessary?
-					int numProblems = gc.numProblems();
-					IntervalIF difficultyInterval = gc.difficultyInterval();
-					String topic = gc.topic();
-					int points = gc.points();					
-
-					//Greg: Pretty sure theInterval is unnecessary; won't it be exactly the
-					//the same as difficultyInterval?
-					IntervalIF theInterval = 
-						theIntervalFactory.interval(difficultyInterval.strictLow(), 
-													difficultyInterval.low(),
-													difficultyInterval.strictHigh(),
-													difficultyInterval.high());
-					
-					
-					// container for holding elements in master with specified topic
-					//Greg: We're only getting problems here, no figures or blocks.
-					//While ExamIF.java has some methods that *might* be useful, significant
-					//logic will be needed here to pair each figure and block with its respective
-					//problem (see method elementsUsingElement in ExamIF.java)
-					
-					Collection<ProblemIF> problemsWithTopic = master.problemsWithTopic(topic);
-					Iterator<ProblemIF> iterate = problemsWithTopic.iterator();
-					
-					// container for holding elements in master with specified topic/difficulty/points
-					Collection<ProblemIF> desiredProblems = new ArrayList<ProblemIF>();
-					
-					while(iterate.hasNext())
+				while(iterate.hasNext())
 					{
 						ProblemIF tempProblem = iterate.next();
 				
@@ -128,11 +116,13 @@ public class Generator implements GeneratorIF {
 									desiredProblems.add(tempProblem);
 								}
 							}
-					}
-					
-					if (desiredProblems.size() < numProblems)
-					{
-						throw new RexUnsatisfiableException();
+						
+						
+						else
+						{
+							throw new RexUnsatisfiableException();
+						}
+						
 					}
 					
 					// fill an array with the contents of the desiredElements collection
@@ -146,11 +136,7 @@ public class Generator implements GeneratorIF {
 					}
 					
 					// create an array of the keys
-					
-					//Greg: I'm surprised this isn't giving an error; keys is a private AnswerKeyIF[] in
-					//Generator. I've renamed Object[] keys to theKeys.
-					
-					Object[] theKeys = theRandomizer.choose(numProblems, lhm.keySet().toArray());
+					Object[] keys = theRandomizer.choose(numProblems, lhm.keySet().toArray());
 					
 					// create a linked hash set of final desired problems
 					LinkedHashSet<ProblemIF> finalDesiredProblems = new LinkedHashSet<ProblemIF>();
@@ -158,61 +144,48 @@ public class Generator implements GeneratorIF {
 					// now add the elements returned from the randomizer to the hash set
 					for (int j=0; j < passableDesiredElements.length; j++)
 					{
-						finalDesiredProblems.add((ProblemIF) lhm.get((Integer) theKeys[j]));
+						finalDesiredProblems.add((ProblemIF) lhm.get((Integer) keys[j]));
 					}
 					
 					// now call the ExamFactory addProblem method and add it to generatedExams[i]
 					for (ExamElementIF e : finalDesiredProblems)
 					{
 						generatedExams[i].addElementIF(e);
-						
-						if (e.getClass().isInstance(ProblemIF.class))
-						{
-							ProblemIF eAsProblem = (ProblemIF) e;
-							
-							//Method for getting the correct answer from a problem?
-							//addProblem in Key.java is expecting a Collection of Strings.
-							//answers in Problem.java is returning an AnswerIF[]
-							
-							//keys[i].addProblem(eAsProblem.answers());
-						}
-						
-						//keys[i].addProblem(e.answers());
 					}
 				}
 				
-				else if (c.getClass().isInstance(RequiredProblemConstraintIF.class))	
-				{
-					// cast to a RequiredProblemConstraintIF
-					RequiredProblemConstraintIF rpc = (RequiredProblemConstraintIF) c;
-				
-					// extract relevant data
-					SourceIF source = rpc.source(); // necessary?
-					String label = rpc.label();
-					int points = rpc.points();
-					
-					// repeat everything listed above
-					
-					// Question: A RequiredProblemConstraint object contains a label for whatever the
-					// required Figure / Block is, and a possible points value. But if we're iterating
-					// through a myriad of GroupConstraints AND RequiredProblemConstraints, and the
-					// RequiredProblemConstraints are the only things telling us when we need a figure,
-					// I'm assuming that order matters in the config file, right? 
-					// What I mean is: unless a RequiredProblemConstraint for a figure is listed in 
-					// the config file directly before the GroupConstraints outlining the questions
-					// it references, how else will we know to group the two together? The only thing
-					// logically linking the two constraints is that they both extend the ConstraintIF
-				}
-				
-				else
-				{
-					// throw new RexUnsatisfiableException();
-				}
+//				if (c.getClass().isInstance(RequiredProblemConstraintIF.class))	
+//				{
+//					// cast to a RequiredProblemConstraintIF
+//					RequiredProblemConstraintIF rpc = (RequiredProblemConstraintIF) c;
+//				
+//					// extract relevant data
+//					SourceIF source = rpc.source(); // necessary?
+//					String label = rpc.label();
+//					int points = rpc.points();
+//					
+//					// repeat everything listed above
+//					
+//					// Question: A RequiredProblemConstraint object contains a label for whatever the
+//					// required Figure / Block is, and a possible points value. But if we're iterating
+//					// through a myriad of GroupConstraints AND RequiredProblemConstraints, and the
+//					// RequiredProblemConstraints are the only things telling us when we need a figure,
+//					// I'm assuming that order matters in the config file, right? 
+//					// What I mean is: unless a RequiredProblemConstraint for a figure is listed in 
+//					// the config file directly before the GroupConstraints outlining the questions
+//					// it references, how else will we know to group the two together? The only thing
+//					// logically linking the two constraints is that they both extend the ConstraintIF
+//				}
+//				
+//				else
+//				{
+//					// throw new RexUnsatisfiableException();
+//				}
 				
 				
 			}	
 		}
-	}
+//	}
 
 	@Override
 	public AnswerKeyIF getAnswerKey(int i) {
