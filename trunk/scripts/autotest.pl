@@ -24,13 +24,13 @@ chdir("$home/$maindir") || die "Could not chdir $home/maindir";
 system("cp build-configs/build.properties-cisc475 build.properties");
 
 system("$ant test >>$out 2>>$err");
-system("rm -rf /home/www/cisc475/htdocs/junit/*; cp -r junit/reports /home/www/cisc475/htdocs/junit");
+system("rm -rf /home/www/cisc475/htdocs/junit; cp -r junit /home/www/cisc475/htdocs");
 
 system("$ant javadoc >>$out 2>>$err");
 system("rm -rf /home/www/cisc475/htdocs/api/*; cp -r doc/javadoc/* /home/www/cisc475/htdocs/api");
 
 system("$ant cobertura >>$out 2>>$err");
-system("rm -rf /home/www/cisc475/htdocs/cobertura/*; cp -r cobertura/reports/* /home/www/cisc475/htdocs/cobertura");
+system("rm -rf /home/www/cisc475/htdocs/cobertura; cp -r cobertura /home/www/cisc475/htdocs");
 
 system("cp $out /home/www/cisc475/htdocs/build.out");
 system("cp $err /home/www/cisc475/htdocs/build.err");
