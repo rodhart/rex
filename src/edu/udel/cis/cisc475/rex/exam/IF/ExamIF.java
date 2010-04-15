@@ -61,7 +61,8 @@ public interface ExamIF {
 	Collection<ExamElementIF> elements();
 
 	/**
-	 * Returns all elements that have a matching label to the argument
+	 * Returns the element with a matching label to the argument, there should be only one element
+	 * with the given label specified in the UEF but this is not guaranteed 
 	 */
 	ExamElementIF elementWithLabel(String label);
 
