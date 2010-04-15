@@ -48,12 +48,6 @@ public class Randomizer implements RandomizerIF {
 	public Object[] choose (int numItems, Object[] items) {
 
 		int numObjects = items.length; //total number of array elements
-		if (numObjects <= 0) {
-			System.err.printf("	in method " +
-					"public Object[] choose (int numItems, Object[] items)   " +
-			"number of Objects <= 0");
-			return null;		
-		}//end of    if (numObjects == 0) 
 
 		if (numObjects < numItems) {
 			System.err.printf("	in method " +
