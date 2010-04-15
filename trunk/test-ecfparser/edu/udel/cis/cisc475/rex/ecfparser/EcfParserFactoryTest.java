@@ -20,5 +20,8 @@ public class EcfParserFactoryTest {
 	/**	
 	* Tests go here
 	*/
+	public void test() {
+	  assertTrue(true);
+	}
 
 }	

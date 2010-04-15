@@ -1,0 +1,4 @@
+cobertura.lib.dir=lib/cobertura-1.9.4.1
+antlr3.name=lib/antlr-3.2.jar
+antlr3-task.name=lib/antlr3-task.jar
+junit.name=lib/junit-4.8.1.jar

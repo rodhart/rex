@@ -3,29 +3,49 @@
 package edu.udel.cis.cisc475.rex.config;
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 import junit.framework.TestCase;
+import java.util.Collection;
 
 import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
+import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
+import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
 import edu.udel.cis.cisc475.rex.config.impl.Config;
+import edu.udel.cis.cisc475.rex.config.impl.GroupConstraint;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
+import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
+import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
+import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 
 /*
  * @author Jesse Gledhill
+ * added a test for addGroupConstraint to test a nullpointer exception -cates
  */
 
 
 public class ConfigTest {
+  
+  ConfigFactoryIF configFactory;
+  IntervalFactoryIF intervalFactory;
+  SourceFactoryIF sourceFactory;
+  
+  @Before
+  public void setUp() {
+    configFactory = new ConfigFactory();
+    intervalFactory = new IntervalFactory();
+    sourceFactory = new SourceFactory();
+  }
+  
 	/*
 	 * Tests that pdfOption() returns the correct boolean when pdfOption is true
 	 */
 	@Test
 	public void testPdfOptionTrue() {
-		ConfigFactoryIF configFactory = new ConfigFactory();
 		ConfigIF C = configFactory.newConfig(true, 5);
 		
 		assertTrue(C.pdfOption());
@@ -36,7 +56,6 @@ public class ConfigTest {
 	 */
 	@Test
 	public void testPdfOptionFalse() {
-		ConfigFactoryIF configFactory = new ConfigFactory();
 		ConfigIF C = configFactory.newConfig(false, 10);
 		
 		assertFalse(C.pdfOption());
@@ -48,7 +67,6 @@ public class ConfigTest {
 	 */
 	@Test
 	public void testNumVersionsSingleD() {
-		ConfigFactoryIF configFactory = new ConfigFactory();
 		ConfigIF C = configFactory.newConfig(false, 1);
 		
 		assertEquals(C.numVersions(), 1);
@@ -60,7 +78,6 @@ public class ConfigTest {
 	 */
 	@Test
 	public void testNumVersionsNegative() {
-		ConfigFactoryIF configFactory = new ConfigFactory();
 		ConfigIF C = configFactory.newConfig(false, -123);
 		
 		assertEquals(C.numVersions(), -123);
@@ -72,12 +89,26 @@ public class ConfigTest {
 	 */
 	@Test
 	public void testNumVersionsFourDigit() {
-		ConfigFactoryIF configFactory = new ConfigFactory();
 		ConfigIF C = configFactory.newConfig(false, 9999);
 		
 		assertEquals(C.numVersions(), 9999);
 	}
 	
-	
+	/*
+	 * Tests the addition of group constraints 
+	 * 
+	 */
+	@Test
+	public void testAddGroupConstraint() {
+		ConfigIF C = configFactory.newConfig(false, 9999);
+		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
+		SourceIF S = sourceFactory.newSource("name");
+		
+		C.addGroupConstraint("topic", I, 5, 5, S);
+		
+		Collection<ConstraintIF> Cs = C.constraints();
+		
+		assertEquals(Cs.toArray(new GroupConstraintIF[0])[0].topic(), "topic");
+	}
 	
 }

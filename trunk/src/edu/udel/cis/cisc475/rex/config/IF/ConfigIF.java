@@ -29,7 +29,7 @@ public interface ConfigIF {
 
 	void setFinalBlock(String label);
 
-	GroupConstraintIF addGroupConstraintIF(String topic, IntervalIF difficulty,
+	GroupConstraintIF addGroupConstraint(String topic, IntervalIF difficulty,
 			int numProblems, int points, SourceIF source);
 
 	RequiredProblemConstraintIF addRequiredProblemConstraint(String label,

@@ -29,7 +29,7 @@ public class Config implements ConfigIF {
 	}
 	
 	@Override
-	public GroupConstraintIF addGroupConstraintIF(String topic,
+	public GroupConstraintIF addGroupConstraint(String topic,
 			IntervalIF difficulty, int numProblems, int points, SourceIF source) {
 		
 		GroupConstraintIF constraint = new GroupConstraint(difficulty, numProblems, points, topic, source);
