@@ -1,7 +1,6 @@
 // Author: Tim Armstrong
 
 
-// do I need this?
 one sig Generator
 {
 	master: one MasterExam,
@@ -9,22 +8,45 @@ one sig Generator
 	generated: set GeneratedExam
 }
 
+// These seem to be necessary.  They say that all MasterExams, Configs, and GeneratedExams belong to the Generator.
+fact {
+	all m: MasterExam | some g: Generator | m in g.master
+}
+fact { 
+	all c: Config | some g: Generator | c in g.config
+}
+fact {
+	all ge: GeneratedExam | some g: Generator | ge in g.generated
+}
 
 
 // all fields accounted for
 abstract sig Exam {
 	preamble: one Source,
 	frontMatter: one Source,
-	elements: set ExamElement // needs to be an *ordered list*. Implementing that looks difficult.
-														// See pg 157-9 in Jackson's book for lists in Alloy
+	elements: set ExamElement, // needs to be an *ordered list*. Implementing that looks difficult.
+														// See pg 157-9 in Jackson's book for lists in Alloy.
+	finalBlock: lone Block
 
 }
 
+// We do not have different classes for the master and generated exams, but we can always tell
+// the difference.  Therefore I make them subclasses of Exam.
 one sig MasterExam extends Exam {}
 
-sig GeneratedExam extends Exam {
-	finalBlock: lone Block  // master exam does not have a final Block
+sig GeneratedExam extends Exam {}
+
+
+
+fact { // the MasterExam contains all elements
+	all m: MasterExam, e: ExamElement | e in m.elements
 }
+
+fact { // if one Exam contains a final block, all do
+	all e, e': Exam | #e.finalBlock = #e'.finalBlock
+}
+
+
 
 
 
@@ -78,8 +100,8 @@ sig Interval {
 abstract sig ExamElement {
 	label: lone String
 }
-fact allElementsInMaster {
-	all e: ExamElement | some m: MasterExam | e in m.elements
+fact allElementsInMaster {  // there is some exam that is the master exam that contains all exam elements
+	all e: ExamElement | some ex: Exam | e in ex.elements
 }
 
 
@@ -148,8 +170,17 @@ fact usedBlockNotAppended {
 // If a block is not required by any problem occurring in the generated exam, 
 // and it is not appended, then that block will not occur in the exam.
 fact doNotPrintUnusedBlock {
+	// If a block is not the final block and 
+	all b: Block, g: GeneratedExam, p: Problem | (b not in g.finalBlock) and (b not in p.block)  
+																																
+		implies b not in g.elements
+}
+/* did not conform to our design:
+fact doNotPrintUnusedBlock {
 	all b: Block, g: GeneratedExam, p: Problem | (b not in g.finalBlock) and (b not in p.block) implies b not in g.elements
 }
+*/
+
 
 
 /* Only partially solved:
