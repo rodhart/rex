@@ -147,6 +147,7 @@ public class Exam implements ExamIF {
 		if (elements.containsValue(user) && elements.containsValue(usee)) {
 			uses.get(user).add(usee);
 		} else {
+			//TODO use actual ERR module
 			System.err.println("error calling exam.DeclareUse(user, usee), must add elements to the exam before declaring a relationship");
 		}
 		
@@ -166,11 +167,11 @@ public class Exam implements ExamIF {
 	}
 
 	/**
-	 * Returns all elements that have a matching label to the argument
+	 * Returns the element with a matching label to the argument, there should be only one element
+	 * with the given label specified in the UEF but this is not guaranteed 
 	 */
 	public ExamElementIF elementWithLabel(String label) {
-		Collection<ExamElementIF> elementValues = elements.values();
-		Iterator<ExamElementIF> i = elementValues.iterator();
+		Iterator<ExamElementIF> i = elements.values().iterator();
 		while (i.hasNext()) {
 			ExamElementIF element = i.next();
 			if (element.label().equals(label)) {
