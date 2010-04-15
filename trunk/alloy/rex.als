@@ -1,7 +1,7 @@
 // Author: Tim Armstrong
 
 // Presently I'm modeling constraints on the model with "fact"s.......which I hope is correct.
-// I need to read more on assertions and predicates.
+// I need to read a bit more for assertions and predicates.  The diagram looks to be correct, just slightly incomplete.
 
 
 one sig Generator
