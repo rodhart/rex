@@ -1,5 +1,8 @@
 // Author: Tim Armstrong
 
+// Presently I'm modeling constraints on the model with "fact"s.......which I hope is correct.
+// I need to read more on assertions and predicates.
+
 
 one sig Generator
 {
@@ -9,13 +12,13 @@ one sig Generator
 }
 
 // These seem to be necessary.  They say that all MasterExams, Configs, and GeneratedExams belong to the Generator.
-fact {
+fact masterInGenerator {
 	all m: MasterExam | some g: Generator | m in g.master
 }
-fact { 
+fact configInGenerator { 
 	all c: Config | some g: Generator | c in g.config
 }
-fact {
+fact generatedInGenerator {
 	all ge: GeneratedExam | some g: Generator | ge in g.generated
 }
 
@@ -38,11 +41,11 @@ sig GeneratedExam extends Exam {}
 
 
 
-fact { // the MasterExam contains all elements
+fact allElementsInMaster { // the MasterExam contains all elements
 	all m: MasterExam, e: ExamElement | e in m.elements
 }
 
-fact { // if one Exam contains a final block, all do
+fact finalBlockForAll { // if one Exam contains a final block, all do
 	all e, e': Exam | #e.finalBlock = #e'.finalBlock
 }
 
@@ -53,7 +56,6 @@ fact { // if one Exam contains a final block, all do
 
 // fields not complete
 one sig Config {
-	//count: Category ->one Int // ??? From Dr. Siegel
 	seed: one Int,
 	constraints: set Constraint   // no order necessary
 }
@@ -79,11 +81,11 @@ sig GroupConstraint extends Constraint {
 sig RequiredProblemConstraint extends Constraint {
 	problemNames: set String
 }
-/*  ??
-fact {
-	all r: RequiredProblemConstraint | #r.problemNames > 1
+
+fact { // it is syntactically incorrect for a required request not to ask for any problems
+	all r: RequiredProblemConstraint | #r.problemNames > 1 
 }
- */
+
 
 
 // Booleans are difficult to implement in Alloy (see Jackson pg 136).
@@ -100,10 +102,6 @@ sig Interval {
 abstract sig ExamElement {
 	label: lone String
 }
-fact allElementsInMaster {  // there is some exam that is the master exam that contains all exam elements
-	all e: ExamElement | some ex: Exam | e in ex.elements
-}
-
 
 // all fields accounted for
 sig Problem extends ExamElement {
@@ -112,31 +110,32 @@ sig Problem extends ExamElement {
 	figures: set Figure,
 	points: lone Int,   // lone because will be null in master exam.  (It is an integer, not a real number in the design.)
 	source: one Source,
-	difficulty: one Int   //actually REAL NUMBER, but it doesn't matter for the Alloy model
+	difficulty: one Int,   //actually REAL NUMBER, but it doesn't matter for the Alloy model
+	answers: set Answer   // May be 0 if not a multiple choice.
 }
 
+
+/* We do not make the distinction in our design.  I'll have to figure out how to model this.
 sig MultipleChoice extends Problem {
 	answers: set Answer
 }
-
 sig OtherProblem extends Problem {} // no answers field
+*/
 
 
 
+// fields not complete
 sig Answer {}
 
 
 
 abstract sig Block extends ExamElement {
-	source: one Source
+	source: one Source,
+	category: lone Category
 }
-
-sig FinalBlock extends Block {}
-
-sig NormalBlock extends Block {
-	category: one Category
+fact finalBlockWithoutCategory { // the final block does not have a category
+//TODO
 }
-
 
 
 
@@ -145,12 +144,18 @@ sig Figure extends ExamElement {}
 
 
 
-sig Category {} // this is not a real object, it is just a Java String.  We can't give it many properties.
+sig Category {} // This is not a real object, it is just a Java String.  Probably we can't give it many properties.
+							// It really might be better if an Exam consisted of categories and a category consisted of problems?
+
 
 sig Source{}
 
 
 
+
+//**************************
+//** Miscellaneous facts **
+//**************************
 
 
 // A Problem may refer to a Block only of the same category.
@@ -170,50 +175,41 @@ fact usedBlockNotAppended {
 // If a block is not required by any problem occurring in the generated exam, 
 // and it is not appended, then that block will not occur in the exam.
 fact doNotPrintUnusedBlock {
-	// If a block is not the final block and 
-	all b: Block, g: GeneratedExam, p: Problem | (b not in g.finalBlock) and (b not in p.block)  
-																																
-		implies b not in g.elements
+// not right:	all b: Block, g: GeneratedExam, p: Problem | (b not in g.finalBlock) and (b not in p.block)  
+//		  implies b not in g.elements
+// TODO
 }
-/* did not conform to our design:
-fact doNotPrintUnusedBlock {
-	all b: Block, g: GeneratedExam, p: Problem | (b not in g.finalBlock) and (b not in p.block) implies b not in g.elements
-}
-*/
 
 
 
-/* Only partially solved:
-If the answers environment is used, it must include at least one answer
-The maximum number of answers is 26.
+/* Only partially solved
+Requirement: If the answers environment is used, it must include at least one answer.  The maximum number of answers is 26.
+For the purposes of the Alloy model, all this says is that if the # of answers = 0, it is a non-multiple-choice problem.
+And then if it is a multiple-choice, it follows that there is at least one answer.
+But for the upper bound:
 
-ATTEMPT:
 fact validNumAnswers {
-	all m: MultipleChoice | #m.answers >= 1 and #m.answers <= 26
+	all p: Problem | #p.answers <= 26
 }
 
-ERROR message:
+...I get:
 "A type error has occured:
 Current bitwidth is set to 4, thus this integer constant 26
 is bigger than the maximum integer 7"
 
-Though in any case we CAN do:
+I'll figure this out later.
 */
-fact validNumAnswers {
-	all m: MultipleChoice | #m.answers >= 1
-}
 
 
 
-/* needs fixing
-//"REX guarantees that if given the same arguments and seed twice, it will produce the exact same outputs."
+
+
+
+// REX guarantees that if given the same arguments and seed twice, it will produce the exact same outputs.
 fact seedDeterminesOutput {
-	all g1, g2: GeneratedExam | g1.config.seed = g2.config.seed implies g1 = g2   // is this == or .equals???
+	// not right: all g1, g2: GeneratedExam | g1.config.seed = g2.config.seed implies g1 = g2   // is this == or .equals???
+	//TODO
 }
-*/
-
-
-
 
 
 
@@ -232,7 +228,7 @@ fact seedDeterminesOutput {
 
 
 
-// Answer-oriented:
+// Answer-oriented (I have not yet modeled Answers):
 
 //At least one answer must be labeled as correct.
 fact atLeastOneCorrect {
@@ -277,53 +273,12 @@ fact frontMatterFirst {
 //A problem refers to a figure if a \ref to the figure's label occurs anywhere in that problem's
 // environment. If at least one problem referring to a figure A is included in a generated exam,
 // the figure will also be included automatically.
-
+// Alloy probably cannot handle this constraint in that it probably does not have good string abilites.
 
 
 
 pred show{}
 
-run show for 3 but exactly 1 GeneratedExam//, exactly 1 MultipleChoice
-
-
-/*  Dr. Siegel's original:
-
-sig Category {
-}
-
-sig Problem {
-  category: one Category
-}
-
-one sig MasterExam {
-  probs: set Problem
-}
-
-sig Config {
-  count: Category ->one Int
-}
-
-fact {
-  all config: Config, cat: Category | config.count[cat] > 0       //Tim's note: config.count[cat] = cat.(config.count)
-}
-
-sig GenExam {
-  master: one MasterExam,
-  config: one Config,
-  genprobs: set Problem
-}
-
-pred generate[gen: GenExam] {
-    gen.genprobs in gen.master.probs
-    all c: Category | #{p: gen.genprobs | p.category = c} = gen.config.count[c]
-}
-
-pred showgenerate[gen: GenExam] {
-    #gen.genprobs > 3
-    #GenExam = 1
-    #Category > 1
-    generate[gen]
-}
-
-run showgenerate for 5
-*/
+// Just to get a generated exam and a problem in the diagram for inspection.
+// There are different valid states of course.
+run show for 3 but exactly 1 GeneratedExam, exactly 1 Problem
