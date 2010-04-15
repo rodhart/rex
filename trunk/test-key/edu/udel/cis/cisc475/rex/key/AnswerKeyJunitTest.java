@@ -14,26 +14,14 @@ import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
  */
 public class AnswerKeyJunitTest {
 
-
-
 	@Test
 	public void test_version() {
-		String a = "version string name";
-		String b = "exam string name ";
-		String c = "date string";
-		AnswerKeyFactoryIF AKF = new AnswerKeyFactory(); 
-		AnswerKeyIF K = AKF.newAnswerKey(a, b, c);		
 		boolean result = a.equals(K.version());
 		assertEquals (true, result);
 	}
 
 	@Test
 	public void test_examName() {
-		String a = "version string name";
-		String b = "exam string name ";
-		String c = "date string";
-		AnswerKeyFactoryIF AKF = new AnswerKeyFactory(); 
-		AnswerKeyIF K = AKF.newAnswerKey(a, b, c);		
 		boolean result = b.equals(K.examName());
 		assertEquals (true, result);
 	}
@@ -41,11 +29,6 @@ public class AnswerKeyJunitTest {
 
 	@Test
 	public void test_date() {
-		String a = "version string name";
-		String b = "exam string name ";
-		String c = "date string";
-		AnswerKeyFactoryIF AKF = new AnswerKeyFactory(); 
-		AnswerKeyIF K = AKF.newAnswerKey(a, b, c);		
 		boolean result = c.equals(K.date());
 		assertEquals (true, result);
 	}
@@ -54,11 +37,6 @@ public class AnswerKeyJunitTest {
 
 	@Test
 	public void test_collections() {
-		String a = "version string name";
-		String b = "exam string name ";
-		String c = "date string";
-		AnswerKeyFactoryIF AKF = new AnswerKeyFactory(); 
-		AnswerKeyIF K = AKF.newAnswerKey(a, b, c);		
 		//create temp containers
 		Collection <String> Answer_a = new ArrayList <String>(); 
 		Answer_a.add(new String("B"));
@@ -87,5 +65,9 @@ public class AnswerKeyJunitTest {
 		assertEquals (true, result);
 	}//end of test_collections() 	
 
-
+	String a = "version string name";
+	String b = "exam string name ";
+	String c = "date string";
+	AnswerKeyFactoryIF AKF = new AnswerKeyFactory(); 
+	AnswerKeyIF K = AKF.newAnswerKey(a, b, c);		
 }//end of class
