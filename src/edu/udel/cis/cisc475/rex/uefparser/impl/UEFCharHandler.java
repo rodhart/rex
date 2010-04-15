@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Class that handles the underlying UEF file character by character.
@@ -156,5 +158,26 @@ class UEFCharHandler {
 	 */
 	int getColumnNo() {
 		return this.charPos;
+	}
+
+	/**
+	 * Returns a java.​util.​regex.Matcher consisting of the information about any matching text
+	 * found. Returns null if the match isn't found.
+	 * @param pattern
+	 * @return
+	 */
+	Matcher regex(String pattern)
+	{
+		Pattern compiledPattern = Pattern.compile(pattern);
+		Matcher matcher = compiledPattern.matcher(this.fileContents);
+		boolean wasFound = matcher.find(this.getPosition());
+		if (wasFound)
+		{
+			return matcher;
+		}
+		else
+		{
+			return null;
+		}
 	}
 }
