@@ -126,11 +126,16 @@ public class Generator implements GeneratorIF {
 						}
 					}
 											
-					else
-					{
-						throw new RexUnsatisfiableException();
-					}
+					//else
+					//{
+					//	throw new RexUnsatisfiableException();
+					//}
 					
+				}
+				
+				if (desiredProblems.size() < gc.numProblems())
+				{
+					throw new RexUnsatisfiableException();
 				}
 				
 				// now add this collection from a specific topic to our master collection
