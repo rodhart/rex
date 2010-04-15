@@ -79,6 +79,12 @@ class UEFCommand {
 				uefCharHandler.setPosition(position);
 				return null;
 			}
+			// Handle comments: %
+			else if (uefCharHandler.read() == '%') {
+				while (uefCharHandler.read() != '\n') {
+					uefCharHandler.move();
+				}
+			}
 			uefCharHandler.move();
 		}
 
@@ -98,14 +104,7 @@ class UEFCommand {
 
 	/**
 	 * Starting at the currently retrieved character from the stream this method
-	 * returns arguments surrounded by squiggle brackets. Yes, misspelled
-	 * squiggle brackets.
-	 * 
-	 * FIXME: Needs error checking for when there are any character other than
-	 * spaces and new lines between arguments.
-	 * 
-	 * FIXME: Needs to check for comments and ignore arguments found within
-	 * those.
+	 * returns arguments surrounded by curly brackets.
 	 * 
 	 * @param numberOfArguments
 	 *            The number of arguments you want to retrieve
@@ -116,6 +115,12 @@ class UEFCommand {
 		for (int i = 0; i < numberOfArguments; i++) {
 			// Read until the first argument
 			while (uefCharHandler.read() != '{') {
+				// Handle comments: %
+				if (uefCharHandler.read() == '%') {
+					while (uefCharHandler.read() != '\n') {
+						uefCharHandler.move();
+					}
+				}
 				uefCharHandler.move();
 			}
 
