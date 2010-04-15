@@ -1,6 +1,8 @@
 package edu.udel.cis.cisc475.rex.interval;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -24,8 +26,7 @@ public class IntervalTest {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(true, 5.0, true, 10.0);
 		
-		boolean test = (I.low() == 5.0);
-		assertTrue(test);
+		assertTrue(I.low().equals(5.0));
 	}
 
 	/*
@@ -37,8 +38,8 @@ public class IntervalTest {
 		IntervalIF I = intervalFactory.interval(true, 5.0, true, 10.0);
 		IntervalIF I2 = intervalFactory.interval(false, 5.0, true, 10.0);
 		
-		boolean test = (I.strictLow() == true) && (I2.strictLow() == false);
-		assertTrue(test);
+		assertEquals(true, I.strictLow());
+		assertEquals(false, I2.strictLow());
 	}
 
 	/*
@@ -49,8 +50,7 @@ public class IntervalTest {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(true, 5.0, true, 10.0);
 		
-		boolean test = (I.high() == 10.0);
-		assertTrue(test);
+		assertTrue(I.high().equals(10.0));
 	}
 
 	/*
@@ -62,8 +62,8 @@ public class IntervalTest {
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		IntervalIF I2 = intervalFactory.interval(true, 5.0, false, 10.0);
 		
-		boolean test = (I.strictHigh() == true) && (I2.strictHigh() == false);
-		assertTrue(test);
+		assertEquals(true, I.strictHigh());
+		assertEquals(false, I2.strictHigh());
 	}
 
 	/*
@@ -74,10 +74,10 @@ public class IntervalTest {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
-		assertTrue(I.strictLow() == false);
-		assertTrue(I.strictHigh() == true);
-		assertTrue(I.low() == 5.0);
-		assertTrue(I.high() == 10.0);
+		assertEquals(false, I.strictLow());
+		assertEquals(true, I.strictHigh());
+		assertTrue(I.low().equals(5.0));
+		assertTrue(I.high().equals(10.0));
 	}
 
 	/*
