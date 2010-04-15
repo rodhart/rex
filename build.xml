@@ -28,6 +28,11 @@
 	<property name="cob.coverage.xml.dir" value="${cob.reports.dir}/cobertura-xml" />
 	<property name="cob.coverage.html.dir" value="${cob.reports.dir}/cobertura-html" />
 
+	<!-- antlr stuff. For this to work, you need to have antlr3 and antlr3-task.
+	 		I have my lib dir tgz'ed up on a server. There is no need really, unless
+			you want to modify the grammar. -->
+	<!--<import file="${basedir}/build-extra.xml" />-->
+
 	<path id="cobertura.classpath">
 		<fileset dir="${cobertura.lib.dir}">
 			<include name="cobertura.jar" />
@@ -39,6 +44,7 @@
 	<path id="classpath">
 		<pathelement location="${src}" />
 		<pathelement location="${junit.name}" />
+		<pathelement location="${antlr3.name}" />
 	</path>
 
 	<target name="compile" description="Compile all java source files.">
@@ -77,12 +83,14 @@
 		<pathelement location="${basedir}/test-uefparser" />
 		<pathelement location="${bin}" />
 		<pathelement location="${junit.name}" />
+		<pathelement location="${antlr3.name}" />
 	</path>
 
 	<path id="test.execute.classpath">
 		<pathelement location="${test.bin.dir}" />
 		<pathelement location="${bin}" />
 		<pathelement location="${junit.name}" />
+		<pathelement location="${antlr3.name}" />
 	</path>
 
 	<target name="test-init">
