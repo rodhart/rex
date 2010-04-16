@@ -216,6 +216,7 @@
 		<pathelement location="${cob.instrumented.dir}/${jar-name}" />
 		<pathelement location="${test.bin.dir}" />
 		<pathelement location="${junit.name}" />
+		<pathelement location="${antlr3.name}" />
 	</path>
 
 	<target name="cobertura-test" depends="cobertura-instrument">
@@ -254,6 +255,7 @@
 	<path id="javadoc.classpath">
 		<pathelement location="${src}" />
 		<pathelement location="${junit.name}" />
+		<pathelement location="${antlr3.name}" />
 	</path>
 
 
@@ -262,7 +264,7 @@
 		<mkdir dir="${javadoc.dir}" />
 		<javadoc destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="REX API" access="public" classpathref="javadoc.classpath" failonerror="false">
 			<fileset dir="${src}" defaultexcludes="yes">
-			<include name="**/*.java"/>
+				<include name="**/*.java" />
 			</fileset>
 		</javadoc>
 	</target>
