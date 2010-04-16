@@ -28,10 +28,61 @@
 	<property name="cob.coverage.xml.dir" value="${cob.reports.dir}/cobertura-xml" />
 	<property name="cob.coverage.html.dir" value="${cob.reports.dir}/cobertura-html" />
 
-	<!-- antlr stuff. For this to work, you need to have antlr3 and antlr3-task.
-	 		I have my lib dir tgz'ed up on a server. There is no need really, unless
-			you want to modify the grammar. -->
-	<!--<import file="${basedir}/build-extra.xml" />-->
+	<!-- ANTLR: Parser Generator *BEGIN* -->
+
+	<property name="antlr.grammars.dir" value="${basedir}/grammars" />
+	<property name="antlr.ecf.gen.dir" value="${rex_src}/ecfparser/impl/parser" />
+	<property name="antlr.ecf.grammar.path" value="${antlr.grammars.dir}/EcfAntlr.g" />
+	<property name="antlr.ecf.gen.lexer.path" value="${antlr.ecf.gen.dir}/EcfAntlrLexer.java" />
+	<property name="antlr.ecf.gen.parser.path" value="${antlr.ecf.gen.dir}/EcfAntlrParser.java" />
+	
+
+	<path id="antlr.classpath">
+		<pathelement location="${antlr3-task.name}" />
+	</path>
+	<taskdef classpathref="antlr.classpath" resource="org/apache/tools/ant/antlr/antlib.xml" />
+	
+
+	<macrodef name="myantlr">
+	    <attribute name="target"/>
+	    <attribute name="outputdirectory"/>
+	    <sequential>
+	           <echo message="antlr @{target}" />
+	           <antlr3 
+	               target="@{target}" 
+	               outputdirectory="@{outputdirectory}"
+	               libdirectory="@{outputdirectory}"
+	               multithreaded="true"
+	               report="false"
+	               profile="false">
+						<classpath>
+							<pathelement location="${antlr3.name}" />
+						</classpath>
+	           </antlr3>
+	     </sequential>
+	 </macrodef>
+
+	<target name="antlr.ecf.prepare">
+		<mkdir dir="${antlr.ecf.gen.dir}" />
+		<condition property="antlr.ecf.prepared">
+			<and>
+				<available file="${antlr.ecf.gen.lexer.path}" />
+				<available file="${antlr.ecf.gen.parser.path}" />
+				<uptodate  srcfile="${antlr.ecf.grammar.path}"
+					targetfile="${antlr.ecf.gen.lexer.path}" />
+				<uptodate  srcfile="${antlr.ecf.grammar.path}"
+					targetfile="${antlr.ecf.gen.parser.path}" />
+			</and>
+		</condition>
+	</target>
+
+	<target name="antlr.ecf.gen" unless="antlr.ecf.prepared" depends="antlr.ecf.prepare"
+		description="Generate the parser for ECF format.">
+		<myantlr target="${antlr.ecf.grammar.path}" outputdirectory="${antlr.ecf.gen.dir}" />
+	</target>
+	
+	<!-- ANTLR: Parser Generator *END* -->
+	
 
 	<path id="cobertura.classpath">
 		<fileset dir="${cobertura.lib.dir}">
@@ -47,7 +98,8 @@
 		<pathelement location="${antlr3.name}" />
 	</path>
 
-	<target name="compile" description="Compile all java source files.">
+	<target name="compile" description="Compile all java source files."
+		depends="antlr.ecf.gen">
 		<mkdir dir="${bin}" />
 		<javac debug="true" srcdir="${src}" destdir="${bin}" includes="edu/udel/cis/cisc475/rex/**" classpathref="classpath">
 		</javac>
@@ -64,6 +116,7 @@
 		<delete dir="${cobertura.dir}" />
 		<delete file="${cob.ser.file}" />
 		<delete file="${cob.log.file}" />
+		<delete dir="${antlr.ecf.gen.dir}" />
 	</target>
 
 
