@@ -161,7 +161,7 @@ class UEFCharHandler {
 	}
 
 	/**
-	 * Returns a java.​util.​regex.Matcher consisting of the information about any matching text
+	 * Returns a java...<corrupted>....Matcher consisting of the information about any matching text
 	 * found. Returns null if the match isn't found.
 	 * @param pattern
 	 * @return
