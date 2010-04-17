@@ -1,7 +1,5 @@
 // Author: Tim Armstrong
 
-// Presently I'm modeling constraints on the model with "fact"s.......which I hope is correct.
-// I need to read a bit more for assertions and predicates.  The diagram looks to be correct, just slightly incomplete.
 
 
 one sig Generator
@@ -10,6 +8,62 @@ one sig Generator
 	config: one Config,
 	generated: set GeneratedExam
 }
+
+
+
+//***Basic List material.  Lists in the exams are ordered, which requires special handling in Alloy.
+
+// A linked list:
+abstract sig List {}
+sig EmptyList extends List {}
+sig NonEmptyList extends List {
+	element: one ExamElement,
+	rest: one List
+
+}
+/* TODO: test
+fact listInExam { // no lists occur outside of an Exam
+TODO: test
+all ls: List | some e: Exam | ls in e.elements.*rest //listInList[ls, e.elements]
+}
+*/
+
+fact listNoCycles{ //there are no cycles in a list
+	all ls: List | not ls in ls.^rest
+}
+
+fact listsOwnNodes { // each Exam has its completely own list nodes
+		all  ex, ex': Exam, ls: List | ex != ex' and nodeInList[ls, ex.elements] implies not nodeInList[ls, ex'.elements]
+}
+
+// asks if List ls is in another list, helper for listsOwnNodes
+pred nodeInList [ls, ls': List] {
+	ls in ls'.^rest
+}
+
+
+
+//*** First assertion:
+
+assert NoDuplicatesInGen { // GeneratedExam does not include the same problem more than once.  It should *also* not include
+											 		// duplicate Blocks or Figures (easier to write!)
+	all g: GeneratedExam | (g.elements in EmptyList) or (not elementsDuplicated[g.elements]) //    ls.element = ls'.element implies ls = ls'
+}
+
+pred elementsDuplicated [ls: List] { // for all *problems* in a generated exam, 
+	all e: ls.*rest.element | some e': ls.^rest.element | e = e' //and e.element = e'.element
+}
+//check NoDuplicatesInGen for 5
+
+
+//assert NoDuplicatesInGen { // GeneratedExam does not include the same problem more than once
+//	all ls, ls': List |  ls.element = ls'.element implies ls = ls'
+//}
+//check NoDuplicatesInGen for 3
+
+
+
+
 
 // These seem to be necessary.  They say that all MasterExams, Configs, and GeneratedExams belong to the Generator.
 fact masterInGenerator {
@@ -27,11 +81,22 @@ fact generatedInGenerator {
 abstract sig Exam {
 	preamble: one Source,
 	frontMatter: one Source,
+	elements: one List, // needs to be an *ordered list*. Implementing that looks difficult.
+														// See pg 157-9 in Jackson's book for lists in Alloy.
+	finalBlock: lone Block
+}
+
+/* Without linked list:
+// all fields accounted for
+abstract sig Exam {
+	preamble: one Source,
+	frontMatter: one Source,
 	elements: set ExamElement, // needs to be an *ordered list*. Implementing that looks difficult.
 														// See pg 157-9 in Jackson's book for lists in Alloy.
 	finalBlock: lone Block
-
 }
+*/
+
 
 // We do not have different classes for the master and generated exams, but we can always tell
 // the difference.  Therefore I make them subclasses of Exam.
@@ -40,9 +105,13 @@ one sig MasterExam extends Exam {}
 sig GeneratedExam extends Exam {}
 
 
-
+/* before lists:
 fact allElementsInMaster { // the MasterExam contains all elements
 	all m: MasterExam, e: ExamElement | e in m.elements
+}
+*/
+fact allElementsInMaster { // the MasterExam contains all elements
+	all m: MasterExam, e: ExamElement | e in m.elements.*rest.element
 }
 
 fact finalBlockForAll { // if one Exam contains a final block, all do
@@ -57,27 +126,28 @@ fact finalBlockForAll { // if one Exam contains a final block, all do
 // fields not complete
 one sig Config {
 	seed: one Int,
-	constraints: set Constraint   // no order necessary
+	constraints: set Constraint   // There is Ticket #52, unresolved as of 4/16, that questions whether the constraints
+														// should be an *oredered* list.
 }
 
 
 
-// fields complete
+// fields complete.  Commented out for now for simpler diagram.  Re-insert!
 abstract sig Constraint {
-	source: one Source,
-	points: one Int  // maybe would want real number?
+	//source: one Source,
+	//points: one Int  // maybe would want real number?
 }
-fact {
-	all c: Constraint | some conf: Config | c in conf.constraints  //correct?
+fact { // all constraints are in the Config
+	all c: Constraint | some conf: Config | c in conf.constraints
 }
 
-// fields not complete
+// fields not complete. Commented out for now for simpler diagram.  Re-insert!
 sig GroupConstraint extends Constraint {
-	numProblems: one Int,
-	category: one Category,
-	interval: one Interval
+//	numProblems: one Int,
+//	category: one Category,
+//	interval: one Interval
 }
-
+//Commented out for now for simpler diagram.  Re-insert!
 sig RequiredProblemConstraint extends Constraint {
 	problemNames: set String
 }
@@ -88,14 +158,14 @@ fact { // it is syntactically incorrect for a required request not to ask for an
 
 
 
+//Commented out for now for simpler diagram.  Re-insert!
 // Booleans are difficult to implement in Alloy (see Jackson pg 136).
 // Therefore I omit here the Boolean values for the range being / not being inclusive.
 // They have no real bearing on the model.  I also omit the possibilities of infinity values.
 sig Interval {
-	low: one Int,
-	high: one Int
+//	low: one Int,
+//	high: one Int
 }
-
 
 
 
@@ -126,7 +196,9 @@ sig OtherProblem extends Problem {} // no answers field
 
 // fields not complete
 sig Answer {}
-
+fact answerInProblem {
+	all a: Answer | some p: Problem | a in p.answers
+}
 
 
 abstract sig Block extends ExamElement {
@@ -134,7 +206,7 @@ abstract sig Block extends ExamElement {
 	category: lone Category
 }
 fact finalBlockWithoutCategory { // the final block does not have a category
-//TODO
+	//TODO
 }
 
 
@@ -144,11 +216,14 @@ sig Figure extends ExamElement {}
 
 
 
-sig Category {} // This is not a real object, it is just a Java String.  Probably we can't give it many properties.
-							// It really might be better if an Exam consisted of categories and a category consisted of problems?
+/* This is not a real object, it is just a Java String.  I'll have to give it properties, but they might be more difficult
+to implement in the code than if an Exam consisted of categories and a category consisted of problems?
+*/
+sig Category {}
 
 
-sig Source{}
+sig Source {}
+
 
 
 
@@ -277,8 +352,30 @@ fact frontMatterFirst {
 
 
 
+
+/*
+pred addProblem (r: RequiredProblemConstraint, m: MasterExam, g, g': GeneratedExam) {
+	all pn: r.problemNames | pn in m.elements.label
+		
+}
+
+
+assert noDuplicatesInGenerated {
+	all g: GeneratedExam, p: Problem | 
+}
+*/
+
+/*
+pred addProblem (p: Problem, g, g': GeneratedExam) {
+	not p in g.elements and p in g'.elements
+}
+
+run addProblem for 3
+*/
+
 pred show{}
 
 // Just to get a generated exam and a problem in the diagram for inspection.
 // There are different valid states of course.
-run show for 3 but exactly 1 GeneratedExam, exactly 1 Problem
+run show for 4 but exactly 1 GeneratedExam, exactly 3 ExamElement, exactly 0 Answer
+
