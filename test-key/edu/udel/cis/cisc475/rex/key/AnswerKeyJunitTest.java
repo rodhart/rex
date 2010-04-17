@@ -9,18 +9,20 @@ import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
 
 /**
- * @author cardona
+ * @author jim cardona
  *
  */
 public class AnswerKeyJunitTest {
 
 	@Test
+	// test getter
 	public void test_version() {
 		boolean result = a.equals(K.version());
 		assertEquals (true, result);
 	}
 
 	@Test
+	// test getter
 	public void test_examName() {
 		boolean result = b.equals(K.examName());
 		assertEquals (true, result);
@@ -28,6 +30,7 @@ public class AnswerKeyJunitTest {
 
 
 	@Test
+	// test getter
 	public void test_date() {
 		boolean result = c.equals(K.date());
 		assertEquals (true, result);
@@ -36,7 +39,10 @@ public class AnswerKeyJunitTest {
 
 
 	@Test
+	//test adding problems to collection
+	//and test getting those problems back out
 	public void test_collections() {
+		boolean result; 
 		//create temp containers
 		Collection <String> Answer_a = new ArrayList <String>(); 
 		Answer_a.add(new String("B"));
@@ -52,7 +58,8 @@ public class AnswerKeyJunitTest {
 		K.addProblem(Answer_b);	 	
 		K.addProblem(Answer_c);	 	
 
-		boolean result = (3 == K.numProblems());
+		//test that problems are actually there	
+		result = (3 == K.numProblems());
 		assertEquals (true, result);
 
 		result = Answer_a.equals(K.answers(0));
@@ -63,11 +70,26 @@ public class AnswerKeyJunitTest {
 
 		result = Answer_c.equals(K.answers(2));
 		assertEquals (true, result);
+	
+		//make an out of bounds call
+		Collection <String> error_c = new ArrayList <String>();
+		error_c.add(new String("error_out_of_bounds"));
+		result = error_c.equals(K.answers(3));
+		assertEquals (true, result);
 	}//end of test_collections() 	
 
-	String a = "version string name";
-	String b = "exam string name ";
-	String c = "date string";
-	AnswerKeyFactoryIF AKF = new AnswerKeyFactory(); 
-	AnswerKeyIF K = AKF.newAnswerKey(a, b, c);		
+	
+	
+	
+	
+	
+	
+	
+
+	//class variables
+	private String a = "version string name";
+	private String b = "exam string name ";
+	private String c = "date string";
+	private AnswerKeyFactoryIF AKF = new AnswerKeyFactory(); 
+	private AnswerKeyIF K = AKF.newAnswerKey(a, b, c);		
 }//end of class

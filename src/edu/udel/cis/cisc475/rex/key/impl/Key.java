@@ -18,12 +18,12 @@ import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
  * which most of the time will contain only one element
  * 
  * 
- * @author cardona
+ * @author jim cardona
  */
 public class Key implements AnswerKeyIF {
 
 	/**
-	 * constructor initiallizes the answer key
+	 * constructor initializes the answer key
 	 * and sets all the initial variable
 	 * there are no answers loaded at this time
 	 * so the collection is initialized but is empty
@@ -46,28 +46,24 @@ public class Key implements AnswerKeyIF {
 
 	/**
 	 * simple getter that returns data about the answer key
-	 * 
 	 * @return the exam version that is set by user
 	 */
 	public	String 	version () 	{return _version;} 
 
 	/**
 	 * simple getter that returns data about the answer key
-	 * 
 	 * @return the exam name that is set by user
 	 */
 	public  String 	examName()	{return _examName;} 
 
 	/**
 	 * simple getter that returns data about the answer key
-	 * 
 	 * @return the exam date that is set by user, may not be true date
 	 */
 	public  String 	date()		{return _date;} 
 
 	/**
 	 * simple getter that returns data about the answer key
-	 * 
 	 * @return the number of problems that have been inputted 
 	 */
 	public  int 	numProblems() {return _numAnswers;} 
@@ -76,7 +72,6 @@ public class Key implements AnswerKeyIF {
 
 	/**
 	 * getter that returns answer(s) given a problem index
-	 * 
 	 * @param index the problem number that we want answers for
 	 * @return a collection of correct answers (maybe just one) 
 	 */
