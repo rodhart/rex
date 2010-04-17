@@ -8,63 +8,6 @@ one sig Generator
 	config: one Config,
 	generated: set GeneratedExam
 }
-
-
-
-//***Basic List material.  Lists in the exams are ordered, which requires special handling in Alloy.
-
-// A linked list:
-abstract sig List {}
-sig EmptyList extends List {}
-sig NonEmptyList extends List {
-	element: one ExamElement,
-	rest: one List
-
-}
-/* TODO: test
-fact listInExam { // no lists occur outside of an Exam
-TODO: test
-all ls: List | some e: Exam | ls in e.elements.*rest //listInList[ls, e.elements]
-}
-*/
-
-fact listNoCycles{ //there are no cycles in a list
-	all ls: List | not ls in ls.^rest
-}
-
-fact listsOwnNodes { // each Exam has its completely own list nodes
-		all  ex, ex': Exam, ls: List | ex != ex' and nodeInList[ls, ex.elements] implies not nodeInList[ls, ex'.elements]
-}
-
-// asks if List ls is in another list, helper for listsOwnNodes
-pred nodeInList [ls, ls': List] {
-	ls in ls'.^rest
-}
-
-
-
-//*** First assertion:
-
-assert NoDuplicatesInGen { // GeneratedExam does not include the same problem more than once.  It should *also* not include
-											 		// duplicate Blocks or Figures (easier to write!)
-	all g: GeneratedExam | (g.elements in EmptyList) or (not elementsDuplicated[g.elements]) //    ls.element = ls'.element implies ls = ls'
-}
-
-pred elementsDuplicated [ls: List] { // for all *problems* in a generated exam, 
-	all e: ls.*rest.element | some e': ls.^rest.element | e = e' //and e.element = e'.element
-}
-//check NoDuplicatesInGen for 5
-
-
-//assert NoDuplicatesInGen { // GeneratedExam does not include the same problem more than once
-//	all ls, ls': List |  ls.element = ls'.element implies ls = ls'
-//}
-//check NoDuplicatesInGen for 3
-
-
-
-
-
 // These seem to be necessary.  They say that all MasterExams, Configs, and GeneratedExams belong to the Generator.
 fact masterInGenerator {
 	all m: MasterExam | some g: Generator | m in g.master
@@ -77,27 +20,14 @@ fact generatedInGenerator {
 }
 
 
+
 // all fields accounted for
 abstract sig Exam {
 	preamble: one Source,
-	frontMatter: one Source,
-	elements: one List, // needs to be an *ordered list*. Implementing that looks difficult.
-														// See pg 157-9 in Jackson's book for lists in Alloy.
+	rontMatter: one Source,
+	elements: one List, // an *ordered* list, see below
 	finalBlock: lone Block
 }
-
-/* Without linked list:
-// all fields accounted for
-abstract sig Exam {
-	preamble: one Source,
-	frontMatter: one Source,
-	elements: set ExamElement, // needs to be an *ordered list*. Implementing that looks difficult.
-														// See pg 157-9 in Jackson's book for lists in Alloy.
-	finalBlock: lone Block
-}
-*/
-
-
 // We do not have different classes for the master and generated exams, but we can always tell
 // the difference.  Therefore I make them subclasses of Exam.
 one sig MasterExam extends Exam {}
@@ -105,13 +35,38 @@ one sig MasterExam extends Exam {}
 sig GeneratedExam extends Exam {}
 
 
-/* before lists:
-fact allElementsInMaster { // the MasterExam contains all elements
-	all m: MasterExam, e: ExamElement | e in m.elements
+
+
+
+//***Basic List material.  Lists in the exams are ordered, which requires special handling in Alloy.
+
+// A linked list of ExamElements:
+abstract sig List {}
+sig EmptyList extends List {}
+sig NonEmptyList extends List {
+	element: one ExamElement,
+	rest: one List
 }
-*/
+fact listInExam { // no lists occur outside of an Exam
+	all ls: List | some e: Exam | ls in e.elements.*rest
+}
+
+fact listNoCycles{ //there are no cycles in a list
+	all ls: List | not ls in ls.^rest
+}
+
+fact listsOwnNodes { // each Exam has its completely own list nodes
+		all  ex, ex': Exam, ls: List | ex != ex' and nodeInList[ls, ex.elements] implies not nodeInList[ls, ex'.elements]
+}
+// asks if List ls is in another list, helper for listsOwnNodes
+pred nodeInList [ls, ls': List] {
+	ls in ls'.^rest
+}
+
+
+
 fact allElementsInMaster { // the MasterExam contains all elements
-	all m: MasterExam, e: ExamElement | e in m.elements.*rest.element
+	all e: ExamElement | some m: MasterExam | e in m.elements.*rest.element
 }
 
 fact finalBlockForAll { // if one Exam contains a final block, all do
@@ -125,7 +80,7 @@ fact finalBlockForAll { // if one Exam contains a final block, all do
 
 // fields not complete
 one sig Config {
-	seed: one Int,
+	// seed: one Int, // Commented out for now for simpler diagram.  Re-insert!
 	constraints: set Constraint   // There is Ticket #52, unresolved as of 4/16, that questions whether the constraints
 														// should be an *oredered* list.
 }
@@ -149,7 +104,7 @@ sig GroupConstraint extends Constraint {
 }
 //Commented out for now for simpler diagram.  Re-insert!
 sig RequiredProblemConstraint extends Constraint {
-	problemNames: set String
+	//problemNames: set String
 }
 
 fact { // it is syntactically incorrect for a required request not to ask for any problems
@@ -161,7 +116,7 @@ fact { // it is syntactically incorrect for a required request not to ask for an
 //Commented out for now for simpler diagram.  Re-insert!
 // Booleans are difficult to implement in Alloy (see Jackson pg 136).
 // Therefore I omit here the Boolean values for the range being / not being inclusive.
-// They have no real bearing on the model.  I also omit the possibilities of infinity values.
+// For now they have no real bearing on the model.  I also omit the possibilities of infinity values.
 sig Interval {
 //	low: one Int,
 //	high: one Int
@@ -178,14 +133,14 @@ sig Problem extends ExamElement {
 	category: one Category,
 	block: lone Block,
 	figures: set Figure,
-	points: lone Int,   // lone because will be null in master exam.  (It is an integer, not a real number in the design.)
+	points: lone Int,   // lone because will be null in master exam.
 	source: one Source,
 	difficulty: one Int,   //actually REAL NUMBER, but it doesn't matter for the Alloy model
 	answers: set Answer   // May be 0 if not a multiple choice.
 }
 
 
-/* We do not make the distinction in our design.  I'll have to figure out how to model this.
+/* We do not make the distinction in our design:
 sig MultipleChoice extends Problem {
 	answers: set Answer
 }
@@ -215,11 +170,7 @@ sig Figure extends ExamElement {}
 
 
 
-
-/* This is not a real object, it is just a Java String.  I'll have to give it properties, but they might be more difficult
-to implement in the code than if an Exam consisted of categories and a category consisted of problems?
-*/
-sig Category {}
+sig Category {} // a Java string
 
 
 sig Source {}
@@ -271,8 +222,6 @@ fact validNumAnswers {
 "A type error has occured:
 Current bitwidth is set to 4, thus this integer constant 26
 is bigger than the maximum integer 7"
-
-I'll figure this out later.
 */
 
 
@@ -353,29 +302,34 @@ fact frontMatterFirst {
 
 
 
-/*
-pred addProblem (r: RequiredProblemConstraint, m: MasterExam, g, g': GeneratedExam) {
-	all pn: r.problemNames | pn in m.elements.label
-		
-}
 
 
+
+
+
+
+//******************
+//*** Assertions ***
+//******************
+
+
+// Tries to prove that, based on the model, there can be no duplicate questions in any single GeneratedExam.
+// This goal is accomplished by checking if the number of nodes = the number of elements, + 1 for empty.  First, the
+// number of elements cannot be more, since there is only "one" element per non-empty node.  Second, when I ask for
+// all the elements in a GeneratedExam, Alloy reduces the multiset to a set, i.e. potentially subtracts from the multiset's quantity.
 assert noDuplicatesInGenerated {
-	all g: GeneratedExam, p: Problem | 
-}
-*/
-
-/*
-pred addProblem (p: Problem, g, g': GeneratedExam) {
-	not p in g.elements and p in g'.elements
+	all g: GeneratedExam | #(g.elements.*rest) = #(g.elements.*rest.element) + 1
 }
 
-run addProblem for 3
-*/
+//check noDuplicatesInGenerated for 5
+
+//
+assert 
+
 
 pred show{}
 
 // Just to get a generated exam and a problem in the diagram for inspection.
 // There are different valid states of course.
-run show for 4 but exactly 1 GeneratedExam, exactly 3 ExamElement, exactly 0 Answer
+run show for 4 but exactly 1 GeneratedExam, exactly 1 Block, exactly 2 Problem, exactly 0 Answer
 
