@@ -25,7 +25,7 @@ fact generatedInGenerator {
 abstract sig Exam {
 	preamble: one Source,
 	rontMatter: one Source,
-	elements: one List, // an *ordered* list, see below
+	elements: one ElementList, // an *ordered* list, see below
 	finalBlock: lone Block
 }
 // We do not have different classes for the master and generated exams, but we can always tell
@@ -41,39 +41,42 @@ sig GeneratedExam extends Exam {}
 //***Basic List material.  Lists in the exams are ordered, which requires special handling in Alloy.
 
 // A linked list of ExamElements:
-abstract sig List {}
-sig EmptyList extends List {}
-sig NonEmptyList extends List {
+abstract sig ElementList {}
+sig EmptyList extends ElementList {}
+sig NonEmptyList extends ElementList {
 	element: one ExamElement,
-	rest: one List
+	rest: one ElementList
 }
 fact listInExam { // no lists occur outside of an Exam
-	all ls: List | some e: Exam | ls in e.elements.*rest
+	all ls: ElementList | some e: Exam | ls in e.elements.*rest
 }
 
 fact listNoCycles{ //there are no cycles in a list
-	all ls: List | not ls in ls.^rest
+	all ls:ElementList | not ls in ls.^rest
 }
 
+
 fact listsOwnNodes { // each Exam has its completely own list nodes
-		all  ex, ex': Exam, ls: List | ex != ex' and nodeInList[ls, ex.elements] implies not nodeInList[ls, ex'.elements]
+		all  ex, ex': Exam, ls: ElementList | (ex != ex' and ls in ex.elements.*rest) implies not ls in ex'.elements.*rest
+}
+
+/*  Old and incorrect:
+fact listsOwnNodes { // each Exam has its completely own list nodes
+		all  ex, ex': Exam, ls: ElementList | ex != ex' and nodeInList[ls, ex.elements] implies not nodeInList[ls, ex'.elements]
 }
 // asks if List ls is in another list, helper for listsOwnNodes
-pred nodeInList [ls, ls': List] {
+pred nodeInList [ls, ls': ElementList] {
 	ls in ls'.^rest
 }
+*/
+
+
 
 
 
 fact allElementsInMaster { // the MasterExam contains all elements
 	all e: ExamElement | some m: MasterExam | e in m.elements.*rest.element
 }
-
-fact finalBlockForAll { // if one Exam contains a final block, all do
-	all e, e': Exam | #e.finalBlock = #e'.finalBlock
-}
-
-
 
 
 
@@ -104,7 +107,7 @@ sig GroupConstraint extends Constraint {
 }
 //Commented out for now for simpler diagram.  Re-insert!
 sig RequiredProblemConstraint extends Constraint {
-	//problemNames: set String
+	problemNames: set String
 }
 
 fact { // it is syntactically incorrect for a required request not to ask for any problems
@@ -177,6 +180,16 @@ sig Source {}
 
 
 
+/*
+lone sig RexError {}
+
+
+fact {
+	one RexError iff 1 = 2
+}
+*/
+
+
 
 
 //**************************
@@ -190,6 +203,8 @@ sig Source {}
 fact problemBlockSameTopic{
 	all p: Problem, b: Block | p.block = b implies p.category = b.category
 }
+
+
 
 
 //A block cannot both be required by a problem and appended to the exam.
@@ -314,22 +329,40 @@ fact frontMatterFirst {
 
 
 // Tries to prove that, based on the model, there can be no duplicate questions in any single GeneratedExam.
-// This goal is accomplished by checking if the number of nodes = the number of elements, + 1 for empty.  First, the
-// number of elements cannot be more, since there is only "one" element per non-empty node.  Second, when I ask for
-// all the elements in a GeneratedExam, Alloy reduces the multiset to a set, i.e. potentially subtracts from the multiset's quantity.
+// The number of nodes in the list = total number of elements, + 1 for the empty list.  If any of the elements
+// are *duplicated*, the count will be less.
 assert noDuplicatesInGenerated {
 	all g: GeneratedExam | #(g.elements.*rest) = #(g.elements.*rest.element) + 1
 }
-
 //check noDuplicatesInGenerated for 5
 
-//
-assert 
+
+
+// If one Exam contains a final block, all do. 
+// Should follow from how generated axams are produced.
+assert finalBlockForAll {
+	all e, e': Exam | #e.finalBlock = #e'.finalBlock
+}
+
+
+
+// if the Constraint is fulfillable from the MasterExam, then there exist satisfying problems in the generated exams
+assert constraintFulfilled {
+// TODO
+}
+
+// if the constraint is possible to fill, there exists a ConstraintError
+assert impossibleConstraintRejected {
+// TODO
+}
+
+
+
 
 
 pred show{}
 
 // Just to get a generated exam and a problem in the diagram for inspection.
 // There are different valid states of course.
-run show for 4 but exactly 1 GeneratedExam, exactly 1 Block, exactly 2 Problem, exactly 0 Answer
+run show for 5 but exactly 1 GeneratedExam, exactly 2 NonEmptyList, exactly 0 Answer
 
