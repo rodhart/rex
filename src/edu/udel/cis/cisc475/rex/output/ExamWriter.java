@@ -11,11 +11,9 @@ import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 /**
  * @author team 5
-<<<<<<< .mine
- * hello
-=======
- * Outputs a randomized, completed exam file
->>>>>>> .r212
+ * The ExamWriter class utilizes a print writer and an precreated Exam
+ * class to output parts of the exam class to the print writer.
+ *  
  */
 public class ExamWriter implements ExamWriterIF {
 
@@ -25,7 +23,11 @@ public class ExamWriter implements ExamWriterIF {
 	// out what to print
 	// Does not include front matter.
 
-	//constructor	
+	/*
+	 * Default constructor for ExamWriter
+	 * 	
+	 * @param E created with the Exam module
+	 */
 	public ExamWriter(Exam E) {
 
 		this.E = E;
@@ -34,8 +36,13 @@ public class ExamWriter implements ExamWriterIF {
 	}//end of constructor
 
 
+	/*
+	 * Writes the Exam class to a specified PrintWriter object
+	 * 	
+	 * @param out any writer used to output data
+	 */
 	public void write(PrintWriter out){
-		// output begining of exam file
+		// output beginning of exam file
 		out.printf("%s\n", E.preamble());
 		out.printf("%s\n", E.frontMatter());
 		
