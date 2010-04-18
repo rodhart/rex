@@ -49,89 +49,89 @@ public class newGenerator implements GeneratorIF
 		}
 	}
 	
-	class FigureProblemContainer
-	{
-		private FigureIF theFigure = null;
-		private ArrayList<ProblemIF> theProblems;
-		
-		public FigureProblemContainer(FigureIF theFigure)
-		{
-			this.theFigure = theFigure;
-		}
-		
-		public void addProblem(ProblemIF newProblem)
-		{
-			//assert ((theFigure == null) || (newProblem.referencedFigures().contains(theFigure)));
-			
-			theProblems.add(newProblem);
-		}
-		
-		public FigureIF getFigure()
-		{
-			return this.theFigure;
-		}
-		
-		public ArrayList<ProblemIF> getProblems()
-		{
-			return this.theProblems;
-		}
-	}
-	
-	class SatisfiedContainer
-	{
-		private String name;
-		private ArrayList<ProblemIF> requiredProblems = new ArrayList<ProblemIF>();
-		private ArrayList<ProblemIF> remainingProblems = new ArrayList<ProblemIF>();
-		private ArrayList<FigureProblemContainer> FPCs = new ArrayList<FigureProblemContainer>();
-		
-		public SatisfiedContainer(String name) 
-		{
-			this.name = name;
-		}
-		
-		private void addRequired(ProblemIF requiredProblem)
-		{
-			requiredProblems.add(requiredProblem);
-		}
-		
-		private void addRemaining(ProblemIF remainingProblem)
-		{
-			ProblemIF[] blacklist = (ProblemIF[]) requiredProblems.toArray();
-			boolean add = true;
-			
-			for (int i = 0; i < blacklist.length && add; i++)
-				if (blacklist[i].label().equals(remainingProblem.label()))
-					add = false;
-					
-			if (add)
-				remainingProblems.add(remainingProblem);
-		}
-		
-		private void addFPC(FigureProblemContainer newFPC)
-		{
-			FPCs.add(newFPC);
-		}
-		
-		public String getName()
-		{
-			return this.name;
-		}
-		
-		public ArrayList<ProblemIF> getRequiredProblems()
-		{
-			return this.requiredProblems;
-		}
-		
-		public ArrayList<ProblemIF> getRemainingProblems()
-		{
-			return this.remainingProblems;
-		}
-		
-		public ArrayList<FigureProblemContainer> getFPCs()
-		{
-			return this.FPCs;
-		}
-	}
+//	class FigureProblemContainer
+//	{
+//		private FigureIF theFigure = null;
+//		private ArrayList<ProblemIF> theProblems;
+//		
+//		public FigureProblemContainer(FigureIF theFigure)
+//		{
+//			this.theFigure = theFigure;
+//		}
+//		
+//		public void addProblem(ProblemIF newProblem)
+//		{
+//			//assert ((theFigure == null) || (newProblem.referencedFigures().contains(theFigure)));
+//			
+//			theProblems.add(newProblem);
+//		}
+//		
+//		public FigureIF getFigure()
+//		{
+//			return this.theFigure;
+//		}
+//		
+//		public ArrayList<ProblemIF> getProblems()
+//		{
+//			return this.theProblems;
+//		}
+//	}
+//	
+//	class SatisfiedContainer
+//	{
+//		private String name;
+//		private ArrayList<ProblemIF> requiredProblems = new ArrayList<ProblemIF>();
+//		private ArrayList<ProblemIF> remainingProblems = new ArrayList<ProblemIF>();
+//		private ArrayList<FigureProblemContainer> FPCs = new ArrayList<FigureProblemContainer>();
+//		
+//		public SatisfiedContainer(String name) 
+//		{
+//			this.name = name;
+//		}
+//		
+//		private void addRequired(ProblemIF requiredProblem)
+//		{
+//			requiredProblems.add(requiredProblem);
+//		}
+//		
+//		private void addRemaining(ProblemIF remainingProblem)
+//		{
+//			ProblemIF[] blacklist = (ProblemIF[]) requiredProblems.toArray();
+//			boolean add = true;
+//			
+//			for (int i = 0; i < blacklist.length && add; i++)
+//				if (blacklist[i].label().equals(remainingProblem.label()))
+//					add = false;
+//					
+//			if (add)
+//				remainingProblems.add(remainingProblem);
+//		}
+//		
+//		private void addFPC(FigureProblemContainer newFPC)
+//		{
+//			FPCs.add(newFPC);
+//		}
+//		
+//		public String getName()
+//		{
+//			return this.name;
+//		}
+//		
+//		public ArrayList<ProblemIF> getRequiredProblems()
+//		{
+//			return this.requiredProblems;
+//		}
+//		
+//		public ArrayList<ProblemIF> getRemainingProblems()
+//		{
+//			return this.remainingProblems;
+//		}
+//		
+//		public ArrayList<FigureProblemContainer> getFPCs()
+//		{
+//			return this.FPCs;
+//		}
+//	}
 	
 	private SatisfiedContainer findContainer(ArrayList<SatisfiedContainer> satisfiedContainers, String topic)
 	{
