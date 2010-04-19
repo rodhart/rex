@@ -149,6 +149,9 @@ public class Exam implements ExamIF {
 			if(user instanceof ProblemIF && usee instanceof FigureIF) {
 				((Problem) user).addReferencedFigure((FigureIF) usee);
 			}
+			if(user instanceof ProblemIF && usee instanceof BlockIF){
+				((Problem) user).setRequiredBlock((BlockIF) usee);
+			}
 		} else {
 			//TODO use actual ERR module
 			System.err.println("error calling exam.DeclareUse(user, usee), must add elements to the exam before declaring a relationship");
