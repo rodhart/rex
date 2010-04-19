@@ -146,6 +146,9 @@ public class Exam implements ExamIF {
 	public void declareUse(ExamElementIF user, ExamElementIF usee) {
 		if (elements.containsValue(user) && elements.containsValue(usee)) {
 			uses.get(user).add(usee);
+			if(user instanceof ProblemIF && usee instanceof FigureIF) {
+				((Problem) user).addReferencedFigure((FigureIF) usee);
+			}
 		} else {
 			//TODO use actual ERR module
 			System.err.println("error calling exam.DeclareUse(user, usee), must add elements to the exam before declaring a relationship");
