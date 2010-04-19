@@ -1,5 +1,6 @@
 package edu.udel.cis.cisc475.rex.random.impl;
 
+import java.util.ArrayList;
 import java.util.Random;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
 
@@ -48,74 +49,41 @@ public class Randomizer implements RandomizerIF {
 	 */
 	public Object[] choose (int numItems, Object[] items) {
 
-		int numObjects = items.length; //total number of array elements
+		int index;
+		//holds the original list
+		ArrayList itemsArray = new ArrayList();
+		//holds the shuffled list
+		ArrayList shuffledItems  = new ArrayList();
 
-		if (numObjects < numItems) {
-			System.err.printf("	in method " +
-					"public Object[] choose (int numItems, Object[] items)   " +
-			"numItems larger than number of Objects");
-			return null;		
-		}//end of    	if (numObjects < numItems) 
+		//adds all the items to the arraylist
+		for(int i=0; i< items.length; i++){
+			itemsArray.add(items[i]);	
+		}
 
-
-		if (numItems < 1) {
-			System.err.printf("	in method " +
-					"public Object[] choose (int numItems, Object[] items)   " +
-			"numItems less than 1");
-			return null;		
-		}//end of    	if (numObjects < numItems) 
-
+		//if picked items is less then zero return null
+		if(numItems <= 0){
+			return null;
+		}
+		//if they request more objects then in the list
+		if(numItems > items.length + 1){
+			return null;
+		}
 		
-		//pickedNums will store the indexes to the final random set
-		int pickedNums[] = new int[numItems];
-		int numofPickedNums = 0; //how many numbers have been already picked
-		//these are vars used in loop
-		int nextNum = 0;
-		boolean done = false; 
-		boolean alreadyPicked = false;
+		
+		while(shuffledItems.size()!=numItems ){
+			//gets a random number in the array's range
+			index = randnum.nextInt(itemsArray.size());
+			//adds that item to the shuffled list
+			shuffledItems.add(itemsArray.get(index));
+			//removes that item from the items array
+			itemsArray.remove(index);
+		}
 
-		//do the first one outside of the loop
-		//this assumes that user wants at least
-		//one object back (we checked for tht above already)
-		pickedNums[0] = randnum.nextInt(numObjects); 
-
-		//now loop through and pick the rest of them
-		while (!done) {
-			nextNum = randnum.nextInt(numObjects); //pick next random int 
-			alreadyPicked = false;					//reset the loop checker
-
-			//loop through and verify num has not already been picked
-			//since we do not want duplicate questions or duplicate
-			//answers on a multiple choice test
-			for(int i = 0; i<=numofPickedNums; i++) { 
-				if (pickedNums[i] == nextNum )
-					alreadyPicked = true;
-			}//end of for loop
-
-			//if our num hasn't been picked yet 
-			//then assign it into the array	
-			if (!alreadyPicked){	
-				numofPickedNums++; 
-				pickedNums[numofPickedNums] = nextNum;
-			}//end of if (!alreadyPicked)
-
-			//if the required amount of numbers has been picked then we are done
-			//with number picking
-			if (numofPickedNums == (numItems-1)	)
-				done = true;
-		}//end of while (!done) 	
-
-		//now create an array of objects consisting
-		//and ordered by the indexes of our picked numbers
-		Object[] newItems = new Object[numItems]; 
-		for(int i = 0; i<numItems; i++) { 
-			newItems[i] = items[pickedNums[i]];
-		}//end of for loop
-
-		//send our sorted object array on its way to its new home
-		//bye bye baby! have a nice life!
-		return newItems;
-	}//end of choose method
+		index = 0;
+		
+		//returns the shuffled list as an array
+		return shuffledItems.toArray();
+	}
 
 
 	//private vars
