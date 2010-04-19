@@ -17,12 +17,6 @@ import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
  */
 public class ExamWriter implements ExamWriterIF {
 
-
-	// Notes for creation:
-	// loop with exam.numElements through a hash(?) to find 
-	// out what to print
-	// Does not include front matter.
-
 	/*
 	 * Default constructor for ExamWriter
 	 * 	
@@ -31,7 +25,6 @@ public class ExamWriter implements ExamWriterIF {
 	public ExamWriter(Exam E) {
 
 		this.E = E;
-		numElements = E.numElements();
 
 	}//end of constructor
 
@@ -50,7 +43,8 @@ public class ExamWriter implements ExamWriterIF {
 		for(int i=0; i< E.elements().toArray().length; i++){
 			ExamElementIF temp = (ExamElementIF) E.elements().toArray()[i];
 
-
+			// the following checks what type the current element is
+			// and prints accordingly
 			if(temp instanceof BlockIF){
 				BlockIF tempBlockIF  = (BlockIF)temp;
 				out.printf("%s\n", tempBlockIF.source().text());
@@ -83,6 +77,4 @@ public class ExamWriter implements ExamWriterIF {
 	
 	//private vars
 	private Exam E;
-	private Collection <ExamElementIF> C;	
-	private int numElements;
 }//end of class 
