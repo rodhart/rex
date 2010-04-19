@@ -5,11 +5,15 @@ package edu.udel.cis.cisc475.rex.source;
 
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -28,6 +32,8 @@ import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
  *
  */
 public class SourceTest {
+
+	public static String newline = System.getProperty("line.separator");
 
 	/**
 	 * @throws java.lang.Exception
@@ -99,7 +105,7 @@ public class SourceTest {
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		assertEquals(S.lastLine(), 7);
+		assertEquals(S.lastLine(), 0);
 	}
 	
 	@Test
@@ -162,42 +168,19 @@ public class SourceTest {
 	@Test
 	public void testGetText() {
 
-		String filename = "./trunk/test-source/edu/udel/cis/cisc475/rex/source/SampleText.txt";
+		String filename = "some name";
 		
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-//		String testString1 = "This is a sample text file for testing the source.\nLine 2\n";
-//		String testString2 = "Line 3\n123456789012345678901234567890\nLine 4\n";
-//		String testString3 = "Testing some more\nLine 5\n1234567890";
-//		String testString = testString1 + testString2 + testString3;
-
-		String testString = "1234567890"; // text() only returns last line that was read
+		S.addText("mvemjsnup");
+		S.addText("JUnit is kinda painful");
+		
+		
+		String testString = "mvemjsnup" + newline + "JUnit is kinda painful" + newline;
 		
 		assertEquals(testString, S.text());
-	}
-	
-	@Test
-	public void testStartlineLessThanZero() {
-		String filename = "./trunk/test-source/edu/udel/cis/cisc475/rex/source/SampleText.txt";
-		
-		SourceFactoryIF sourceFactory = new SourceFactory();
-		SourceIF S = sourceFactory.newSource(filename);
-		
-		S.setStartLine(-5);
-		
-	//	assertFalse(S.write(new PrintWriter(System.out,true)));
-	}
-	
-	@Test(expected= FileNotFoundException.class)
-	public void testFileDoesNotExist() {
-		String filename = "sillyfile.txt";
-		
-		SourceFactoryIF sourceFactory = new SourceFactory();
-		SourceIF S = sourceFactory.newSource(filename);
-		
-		
-	}
+	}	
 	
 	@Test
 	public void testTextReadFromFile(){
@@ -249,6 +232,59 @@ public class SourceTest {
 		
 		
 	}
+	// Doesn't work quite yet.  Doesn't write to a file. contents is empty
 	
+	@Test
+	public void testWrite() {
+		String filename = "test.txt";
+		
+		SourceFactoryIF myFactory = new SourceFactory();
+		SourceIF S = myFactory.newSource(filename);
+		
+		S.addText("This is my first line of text");
+		S.addText("Second line of text this is");
+		
+	
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new FileWriter(filename));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		S.write(pw);
+		pw.flush();
+		
+		StringBuffer contents = new StringBuffer();
+		
+		File aFile = new File(filename);
+		try {
+			BufferedReader input = new BufferedReader(new FileReader(aFile));
+			String line = null;
+			
+			try {
+				while((line = input.readLine()) != null){
+					contents.append(line);
+					contents.append(newline);
+					
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String testString = "This is my first line of text" + newline + "Second line of text this is" + newline;
+		System.out.println(contents.toString());
+		System.out.println(testString);
+		
+		assertTrue(testString.equals(contents));
+		
+		
+		
+	}
 	
 }
