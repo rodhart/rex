@@ -7,6 +7,7 @@ package edu.udel.cis.cisc475.rex.source;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 import org.junit.After;
@@ -170,7 +171,7 @@ public class SourceTest {
 
 		String testString = "1234567890"; // text() only returns last line that was read
 		
-		assertEquals(S.text(), testString);
+		assertEquals(testString, S.text());
 	}
 	
 	@Test
@@ -183,5 +184,15 @@ public class SourceTest {
 		S.setStartLine(-5);
 		
 	//	assertFalse(S.write(new PrintWriter(System.out,true)));
+	}
+	
+	@Test(expected= FileNotFoundException.class)
+	public void testFileDoesNotExist() {
+		String filename = "sillyfile.txt";
+		
+		SourceFactoryIF sourceFactory = new SourceFactory();
+		SourceIF S = sourceFactory.newSource(filename);
+		
+		
 	}
 }
