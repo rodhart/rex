@@ -23,8 +23,8 @@ fact generatedInGenerator {
 
 // all fields accounted for
 abstract sig Exam {
-	preamble: one Source,
-	rontMatter: one Source,
+	//preamble: one Source,
+	//frontMatter: one Source,
 	elements: one ElementList, // an *ordered* list, see below
 	finalBlock: lone Block
 }
@@ -56,7 +56,7 @@ fact listNoCycles{ //there are no cycles in a list
 }
 
 
-fact listsOwnNodes { // each Exam has its completely own list nodes
+fact listsHaveOwnNodes { // each Exam has its completely own list nodes
 		all  ex, ex': Exam, ls: ElementList | (ex != ex' and ls in ex.elements.*rest) implies not ls in ex'.elements.*rest
 }
 
@@ -105,18 +105,20 @@ sig GroupConstraint extends Constraint {
 //	category: one Category,
 //	interval: one Interval
 }
-//Commented out for now for simpler diagram.  Re-insert!
+// A line in the ECF might require several problems, but they break down into individual requests.
+// That's all I model
 sig RequiredProblemConstraint extends Constraint {
-	problemNames: set String
+//	problemName: one String  //Commented out for now for simpler diagram.  Re-insert!
 }
-
+/* from when I permitted > 1 problem request per RequiredProblemConstraint
 fact { // it is syntactically incorrect for a required request not to ask for any problems
-	all r: RequiredProblemConstraint | #r.problemNames > 1 
+	all r: RequiredProblemConstraint | #r.problemNames >= 1 
 }
-
+*/
 
 
 //Commented out for now for simpler diagram.  Re-insert!
+/*
 // Booleans are difficult to implement in Alloy (see Jackson pg 136).
 // Therefore I omit here the Boolean values for the range being / not being inclusive.
 // For now they have no real bearing on the model.  I also omit the possibilities of infinity values.
@@ -124,6 +126,10 @@ sig Interval {
 //	low: one Int,
 //	high: one Int
 }
+fact {
+	all i: Interval | some u: univ | i in u
+}
+*/
 
 
 
@@ -174,20 +180,14 @@ sig Figure extends ExamElement {}
 
 
 sig Category {} // a Java string
-
+fact {
+	all c: Category | some u: univ | c in u
+}
 
 sig Source {}
-
-
-
-/*
-lone sig RexError {}
-
-
 fact {
-	one RexError iff 1 = 2
+	all s: Source | some u: univ | s in u
 }
-*/
 
 
 
@@ -315,10 +315,13 @@ fact frontMatterFirst {
 // Alloy probably cannot handle this constraint in that it probably does not have good string abilites.
 
 
+/*
+lone sig Error {}
 
-
-
-
+fact errorIfReqConstInvalid {
+	some r: RequiredProblemConstraint  implies one Error
+}
+*/
 
 
 
@@ -346,6 +349,17 @@ assert finalBlockForAll {
 
 
 
+
+
+/*  look at, maybe good
+assert validReqConstraintInAll { // if there is a valid RequiredProblemConstraint. this problem is in all GeneratedExams
+	all r: RequiredProblemConstraint, m: MasterExam | r.problemName in m.elements.*rest.element.label
+		implies all g: GeneratedExam | r.problemName in g.elements.*rest.element.label
+}
+*/
+
+
+
 // if the Constraint is fulfillable from the MasterExam, then there exist satisfying problems in the generated exams
 assert constraintFulfilled {
 // TODO
@@ -364,5 +378,7 @@ pred show{}
 
 // Just to get a generated exam and a problem in the diagram for inspection.
 // There are different valid states of course.
-run show for 5 but exactly 1 GeneratedExam, exactly 2 NonEmptyList, exactly 0 Answer
 
+//run show for 5 but exactly 1 GeneratedExam, exactly 2 NonEmptyList, exactly 0 Problem, exactly 0 Answer
+
+run show for 5 but exactly 0 GeneratedExam, exactly 2 NonEmptyList, exactly 1 Problem, exactly 2 Answer
