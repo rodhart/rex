@@ -108,7 +108,7 @@ sig GroupConstraint extends Constraint {
 // A line in the ECF might require several problems, but they break down into individual requests.
 // That's all I model
 sig RequiredProblemConstraint extends Constraint {
-//	problemName: one String  //Commented out for now for simpler diagram.  Re-insert!
+	problemName: one String  //Commented out for now for simpler diagram.  Re-insert!
 }
 /* from when I permitted > 1 problem request per RequiredProblemConstraint
 fact { // it is syntactically incorrect for a required request not to ask for any problems
@@ -180,13 +180,14 @@ sig Figure extends ExamElement {}
 
 
 sig Category {} // a Java string
-fact {
-	all c: Category | some u: univ | c in u
+fact { // c belongs to *something* (it's difficult to be specific)
+	all c: Category | some u: univ | u != c and c in u
 }
 
+
 sig Source {}
-fact {
-	all s: Source | some u: univ | s in u
+fact { // s belongs to *something*
+	all s: Source | some u: univ | u != s  and s in u
 }
 
 
@@ -211,6 +212,14 @@ fact problemBlockSameTopic{
 fact usedBlockNotAppended {
 	all e: Exam, p: Problem | e.finalBlock not in p.block
 }
+
+
+fact finalBlockSameForAll{
+//TODO
+//	all m: MasterExam | some m.finalBlock implies (all g: GeneratedExam | g.finalBlock = m.finalBlock)
+//	all m: MasterExam | no m.finalBlock implies (all g: GeneratedExam | no g.finalBlock)
+}
+
 
 
 // If a block is not required by any problem occurring in the generated exam, 
@@ -316,13 +325,13 @@ fact frontMatterFirst {
 
 
 /*
-lone sig Error {}
+lone sig RequiredProblemError {}
 
 fact errorIfReqConstInvalid {
-	some r: RequiredProblemConstraint  implies one Error
+	one RequiredProblemError iff some r: RequiredProblemConstraint | all m: MasterExam | r.problemName not in m.elements.*rest.element.label
+//	some r: RequiredProblemConstraint  implies one Error
 }
 */
-
 
 
 
@@ -376,9 +385,8 @@ assert impossibleConstraintRejected {
 
 pred show{}
 
-// Just to get a generated exam and a problem in the diagram for inspection.
-// There are different valid states of course.
+// PROBLEM: need to get it so that can specify exactly 3 of each subclass of ExamElement!
 
-//run show for 5 but exactly 1 GeneratedExam, exactly 2 NonEmptyList, exactly 0 Problem, exactly 0 Answer
+run show for 5 but exactly 1 GeneratedExam, exactly 3 NonEmptyList, exactly 3 ExamElement, exactly 0 Answer // GOOD!
 
-run show for 5 but exactly 0 GeneratedExam, exactly 2 NonEmptyList, exactly 1 Problem, exactly 2 Answer
+//check noDuplicatesInGenerated for 5 // GOOD!
