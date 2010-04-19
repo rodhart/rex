@@ -25,6 +25,7 @@ import org.junit.Test;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FixedAnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
@@ -116,7 +117,8 @@ public class ProblemTest {
 
 	@Test
 	public void testGetRequiredBlock() {
-		
+		ExamIF exam = examFactory.newGeneratedExam();
+		exam.addElementIF(problem);
 		assertNull(problem.requiredBlock());
 		
 		// TODO: How do we mark a problem as being in a required block?
@@ -126,9 +128,11 @@ public class ProblemTest {
 		blockSource.addText("Test Block Source");
 		
 		BlockIF block = examFactory.newBlock("Test Block Topic", "Test Block Label", blockSource);
+		exam.addElementIF(block);
 		
 		// make problem part of required block
-		((Problem)problem).setRequiredBlock(block);
+		//((Problem)problem).setRequiredBlock(block);
+		exam.declareUse(problem, block);
 		
 		// test returned block is same as created
 		BlockIF returned = problem.requiredBlock();
@@ -139,7 +143,8 @@ public class ProblemTest {
 
 	@Test
 	public void testGetReferencedFigures() {
-		
+		ExamIF exam = examFactory.newGeneratedExam();
+		exam.addElementIF(problem);
 		// I would rather have referenced figures be empty
 		// so as to avoid null pointer exceptions...
 		assertNotNull(problem.referencedFigures());
@@ -152,9 +157,10 @@ public class ProblemTest {
 		figureSource.addText("TestFigureSource");
 		
 		FigureIF figure1 = examFactory.newFigure("testFigure1", figureSource);
-		
+		exam.addElementIF(figure1);
 		// make problem reference figure
-		((Problem)problem).addReferencedFigure(figure1);
+		//((Problem)problem).addReferencedFigure(figure1);
+		exam.declareUse(problem, figure1);
 		
 		// test set returned contains referenced figure
 		Collection<FigureIF> figures = problem.referencedFigures();
@@ -167,10 +173,11 @@ public class ProblemTest {
 		figureSource = sourceFactory.newSource(testUEFfilename);
 		figureSource.addText("TestFigureSource");
 		FigureIF figure2 = examFactory.newFigure("testFigure2", figureSource);
+		exam.addElementIF(figure2);
 		
 		// add to problem the reference to figure
-		((Problem)problem).addReferencedFigure(figure2);
-		
+		//((Problem)problem).addReferencedFigure(figure2);
+		exam.declareUse(problem, figure2);
 		// test set returned contains reference figure
 		figures = problem.referencedFigures();
 		
