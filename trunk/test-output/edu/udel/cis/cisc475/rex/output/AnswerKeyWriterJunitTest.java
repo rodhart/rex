@@ -12,7 +12,7 @@ import edu.udel.cis.cisc475.rex.key.impl.Key;
  * @author cardona
  * 
  */
-public class answer_key_writer_junit_Test {
+public class AnswerKeyWriterJunitTest {
 
 	@Test
 	public void test_answer_key_writer() {
