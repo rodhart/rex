@@ -14,16 +14,15 @@ import edu.udel.cis.cisc475.rex.output.IF.OutputFactoryIF;
  */
 public class OutputFactory implements OutputFactoryIF {
 
-	@Override
+	// unsure of how to implement this method
+	// tried return new AnswerKeyWriter(answerKey)
+	// says it can't find a constructor for it
 	public AnswerKeyWriterIF newAnswerKeyWriter(AnswerKeyIF answerKey) {
-		// TODO Auto-generated method stub
-		return null;
+		return null;	
 	}
 
-	@Override
 	public ExamWriterIF newExamWriter(ExamIF exam) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ExamWriter(exam);
 	}
 
 }

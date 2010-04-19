@@ -1,14 +1,13 @@
 package edu.udel.cis.cisc475.rex.output;
 
 import java.io.PrintWriter;
-import java.util.Collection;
 
-import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
-import edu.udel.cis.cisc475.rex.exam.impl.Exam;
-import edu.udel.cis.cisc475.rex.exam.impl.Problem;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
+import edu.udel.cis.cisc475.rex.exam.impl.Problem;
+import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
 /**
  * @author team 5
  * The ExamWriter class utilizes a print writer and an precreated Exam
@@ -22,9 +21,9 @@ public class ExamWriter implements ExamWriterIF {
 	 * 	
 	 * @param E created with the Exam module
 	 */
-	public ExamWriter(Exam E) {
+	public ExamWriter(ExamIF exam) {
 
-		this.E = E;
+		this.E = exam;
 
 	}//end of constructor
 
@@ -76,5 +75,5 @@ public class ExamWriter implements ExamWriterIF {
 
 	
 	//private vars
-	private Exam E;
+	private ExamIF E;
 }//end of class 
