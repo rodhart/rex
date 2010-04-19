@@ -53,11 +53,11 @@ public class KeyMainExample {
 		K.addProblem(Answer_c);	 	
 
 		System.out.printf("number of Answers in Answers Key is: %d \n", K.numProblems());			
-		System.out.printf("Answer to question number 0 is %s \n", K.answers(0));			
-		System.out.printf("Answer to question number 1 is %s \n", K.answers(1));			
-		System.out.printf("Answer to question number 2 is %s \n", K.answers(2));			
+		System.out.printf("Answer to question number 1 is %s \n", K.answers(0));			
+		System.out.printf("Answer to question number 2 is %s \n", K.answers(1));			
+		System.out.printf("Answer to question number 3 is %s \n", K.answers(2));			
 
-		System.out.printf("Answer to question number 3 is %s \n", K.answers(3));			
+		System.out.printf("Answer to question number 4 is %s \n", K.answers(3));			
 
 
 	}//end of main

@@ -45,7 +45,7 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 		out.printf("\n\t  Answer Key  \n"); 
 
 		for (int i = 0; i < K.numProblems(); i ++) {
-			out.printf("problem %d :   %s\n", i, K.answers(i) ); 
+			out.printf("problem %d :   %s\n", i+1, K.answers(i) ); 
 		}
 	}//end of write(PrintWriter out)
 
