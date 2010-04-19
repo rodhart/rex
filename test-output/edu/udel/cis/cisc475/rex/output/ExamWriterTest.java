@@ -3,6 +3,7 @@ package edu.udel.cis.cisc475.rex.output;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
 import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.impl.Answer;
@@ -10,12 +11,18 @@ import edu.udel.cis.cisc475.rex.exam.impl.Block;
 import edu.udel.cis.cisc475.rex.exam.impl.Exam;
 import edu.udel.cis.cisc475.rex.exam.impl.Figure;
 import edu.udel.cis.cisc475.rex.exam.impl.Problem;
+import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
 import edu.udel.cis.cisc475.rex.output.ExamWriter;
+import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.impl.Source;
 import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 
 public class ExamWriterTest {
+	
+	ExamFactoryIF examFactory;
+	OutputFactoryIF examWriterFactory;
+	SourceFactoryIF sourceFactory;
 	
 	@Before
 	public void setUp() {
