@@ -1,25 +1,21 @@
+/**
+ * @author cates
+ */
+// TODO: accept only one includeall/append/versions
 grammar EcfAntlr;
 
+// Suppress a warning about ANTLR defaulting to this anyways
 options {
 output=AST;
 }
 
-tokens {
-	INCLUDE_STMNT;
-	INCLUDEALL_STMNT;
-	APPEND_STMNT;
-	VERSIONS_STMNT;
-	OPEN;
-	CLOSED;
-	INTERVAL;
-	INFINITY;
-	LABELS;
-}
 
+// lexer needs its own header, otherwise it gets confused
 @lexer::header {
 package edu.udel.cis.cisc475.rex.ecfparser.impl.parser;
 }
 
+// tons of stuff to include
 @header {
 package edu.udel.cis.cisc475.rex.ecfparser.impl.parser; 
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
@@ -35,6 +31,7 @@ import java.lang.Integer;
 }
 
 
+// these will be used throughout the parser
 @members {
 	private ConfigIF config;
 	private IntervalFactoryIF intervalFactory = new IntervalFactory();
@@ -45,6 +42,7 @@ import java.lang.Integer;
 
 //------------------
 // parser
+//------------------
 ecf[ConfigIF configuration]
     :   statement* EOF!
     {
@@ -52,10 +50,12 @@ ecf[ConfigIF configuration]
     }
     ;
 
+// catch all for a statement
 statement
 	:	include | includeall | append | versions
 	;
 
+// include statement
 include
 	:	INCLUDE n=numInt PROBLEMS
 		ON topic=STRING
@@ -66,16 +66,17 @@ include
 		    System.out.println(funsauce.filename());
 		    config.addGroupConstraint($topic.text, $interval.i, $n.value, $p.value, funsauce);
 		}
-		//-> ^(INCLUDE_STMNT $topic $n interval $p)
 	;
 
+// interval statement
 interval returns [IntervalIF i]
-	:	l=leftBound COMMA r=rightBound //-> ^(INTERVAL leftBound rightBound)
+	:	l=leftBound COMMA r=rightBound
 	    {
 	        System.out.println(" " + $l.strict + " " + $l.value + " " + $r.strict + " " + $r.value);
 	        $i = intervalFactory.interval($l.strict, $l.value, $r.strict, $r.value);
 	    }
 	;
+
 
 leftBound returns [boolean strict, Double value]
 	:	LEFT_CLOSED {$strict = true;}
@@ -95,6 +96,7 @@ rightBound returns [boolean strict, Double value]
 	    RIGHT_OPEN {$strict = false;}
 	;
 
+// includeall statement
 includeall
 	:	{
 	        LinkedList<String> labels = new LinkedList<String>();
@@ -107,14 +109,13 @@ includeall
 	    }
 	;
 
-/*labels
-	:	(COMMA? LABEL)+ -> ^(LABELS LABEL*)
-	;*/
 
+// append statement
 append
 	:	APPEND STRING SEMI {config.setFinalBlock($STRING.text);}
 	;
 
+// versions statement
 versions
 	:	{
 	        LinkedList<String> versions = new LinkedList<String>();
@@ -181,9 +182,6 @@ COMMENT
     :   '#' NONCONTROL_CHAR* '\r'? '\n' {$channel=HIDDEN;}
     ;
 
-/*STRING
-    :  '"' ('a'..'z' | 'A'..'Z' | '\\' | '-' |  )* '"'
-    ;*/
 WS	: (' ' | '\t' | '\n' | '\r')+ { $channel = HIDDEN; };
 
 STRING: '"' NONCONTROL_CHAR* '"' {setText(getText().substring(1, getText().length()-1));} ;
@@ -196,8 +194,7 @@ fragment DIGIT: '0'..'9';
 fragment SPACE: ' ' | '\t';
 fragment SYMBOL: '!' | '#'..'/' | ':'..'@' | '['..'`' | '{'..'~';
 
-fragment
-EXPONENT : ('e'|'E') ('+'|'-')? ('0'..'9')+ ;
+fragment EXPONENT : ('e'|'E') ('+'|'-')? ('0'..'9')+ ;
 
 fragment
 HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F') ;
@@ -221,8 +218,6 @@ UNICODE_ESC
     :   '\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
     ;
     
-
-// maybe this will work
 
 
 // $>
