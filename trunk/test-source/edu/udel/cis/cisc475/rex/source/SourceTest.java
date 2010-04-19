@@ -7,7 +7,10 @@ package edu.udel.cis.cisc475.rex.source;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.io.DataInputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.junit.After;
@@ -195,4 +198,57 @@ public class SourceTest {
 		
 		
 	}
+	
+	@Test
+	public void testTextReadFromFile(){
+		String textFromFile = "";
+		String textFromSource = "";
+	
+		String filename = "./trunk/test-source/edu/udel/cis/cisc475/rex/source/SampleText.txt";
+		
+		//creates a file input stream for the file
+		FileInputStream inputStream = null;
+		try {
+			inputStream  = new FileInputStream(filename);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//creates a data input stream
+		DataInputStream dataStream = null;
+		dataStream = new DataInputStream(inputStream);
+		
+		//creates the source factory
+		SourceFactoryIF sourceFactory = new SourceFactory();
+		SourceIF S = sourceFactory.newSource(filename);
+		
+		//gets the top line from the file
+		try {
+			textFromFile = dataStream.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		S.setStartLine(0);
+		S.setLastLine(0);
+		
+		//creates a print writer
+		PrintWriter out = null;
+		
+		//out = new PrintWriter();
+		
+		
+		//
+		S.write(out);
+		
+		textFromSource = out.toString();
+		
+		assertEquals(textFromSource.compareTo(textFromFile), 0);
+		
+		
+	}
+	
+	
 }
