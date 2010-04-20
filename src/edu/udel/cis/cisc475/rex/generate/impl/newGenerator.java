@@ -241,21 +241,6 @@ public class newGenerator implements GeneratorIF
 		RequiredProblemConstraintIF[] requiredConstraints;
 		
 		/* Container variables used for organization:
-		 * 1.) satisfied is an ArrayList of SatisfiedContainers, used for housing all ProblemsIFs,
-		 *     and establishing an order.
-		 * 2.) theSatisfiedContainer is used as a reference to a specific SatisfiedContainer
-		 *     in satisfied throughout control flow.
-		 * 3.) subset is an ArrayList of SubsetContainers, used for housing all ExamElementIFs
-		 *     and establishing an order.
-		 * 4.) theSubsetContainer is used as a reference to a specific SubsetContainer
-		 *     in subset throughout control flow.
-		 * 5.) theBPC is a reference to a specific BlockProblemContainer throughout
-		 *     control flow.
-		 * 6.) theFPC is a reference to a specific FigureProblemContainer throughout
-		 *     control flow.
-		 */
-		
-		/* Container variables used for organization:
 		 * 
 		 * 1.) satisfied is the master ArrayList of SatisfiedContainers.
 		 * 2.) theSatisfiedContainer is used as a reference to a specific
