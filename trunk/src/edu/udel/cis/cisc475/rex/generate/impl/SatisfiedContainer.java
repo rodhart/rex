@@ -1,14 +1,29 @@
 package edu.udel.cis.cisc475.rex.generate.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
+
+/**
+ * SatisfiedContainers have a unique topic, an ArrayList
+ * of ProblemIFs that are required on an exam, and an
+ * ArrayList of ConstraintContainers.
+ * 
+ * Before the ProblemIFs that match a given ConstraintIF
+ * are added to a ConstraintContainer in SatisfiedContainer,
+ * all ProblemIFs in requiredProblems, and all existing
+ * ConstraintContainers in SatisfiedContainer are checked; if
+ * the ProblemIF in question is found, it is not added.
+ * 
+ * @author Greg Simons
+ */
 
 public class SatisfiedContainer 
 {
 	private String topic;
 	private ArrayList<ProblemIF> requiredProblems = new ArrayList<ProblemIF>();
-	private ArrayList<ProblemIF> remainingProblems = new ArrayList<ProblemIF>();
+	private ArrayList<ConstraintContainer> theConstraintContainers = new ArrayList<ConstraintContainer>();
 	
 	public SatisfiedContainer(String topic)
 	{
@@ -25,9 +40,9 @@ public class SatisfiedContainer
 		return this.requiredProblems;
 	}
 	
-	public ArrayList<ProblemIF> getRemainingProblems()
+	public ArrayList<ConstraintContainer> getSatisfiedConstraints()
 	{
-		return this.remainingProblems;
+		return this.theConstraintContainers;
 	}
 	
 	public void addRequired(ProblemIF requiredProblem)
@@ -42,21 +57,40 @@ public class SatisfiedContainer
 		this.requiredProblems.add(requiredProblem);
 	}
 	
-	public void addRemaining(ProblemIF remainingProblem)
+	public ConstraintContainer getLastConstraintContainer()
 	{
+		ConstraintContainer[] theConstraintContainers = (ConstraintContainer[]) this.theConstraintContainers.toArray();
+		
+		return theConstraintContainers[theConstraintContainers.length - 1];
+	}
+	
+	public void addRemaining(ProblemIF remainingProblem, int constraintValue, boolean makeNewConstraintContainer)
+	{
+		ConstraintContainer[] theConstraintContainersArray = (ConstraintContainer[]) this.theConstraintContainers.toArray();
+		ConstraintContainer theConstraintContainer;
+		
 		ProblemIF[] requiredBlacklist = (ProblemIF[]) this.requiredProblems.toArray();
-		ProblemIF[] remainingBlacklist = (ProblemIF[]) this.remainingProblems.toArray();
 		boolean add = true;
+		
+		if (makeNewConstraintContainer)
+		{
+			theConstraintContainer = new ConstraintContainer(constraintValue);
+			this.theConstraintContainers.add(theConstraintContainer);
+		}
+		
+		else
+			theConstraintContainer = getLastConstraintContainer();
 		
 		for (int i = 0; i < requiredBlacklist.length && add; i++)
 			if (requiredBlacklist[i].label().equals(remainingProblem.label()))
 				add = false;
 		
-		for (int i = 0; i < remainingBlacklist.length && add; i++)
-			if (remainingBlacklist[i].label().equals(remainingProblem.label()))
-				add = false;
+		for (int i = 0; i < theConstraintContainersArray.length && add; i++)
+			for (ProblemIF currentProblem : theConstraintContainersArray[i].getSatisfiedProblems())
+				if (currentProblem.label().equals(remainingProblem.label()))
+					add = false;
 		
 		if (add)
-			this.remainingProblems.add(remainingProblem);
+			theConstraintContainer.addSatisfiedProblem(remainingProblem);
 	}
 }

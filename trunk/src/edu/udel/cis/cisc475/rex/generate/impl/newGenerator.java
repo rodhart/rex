@@ -124,8 +124,9 @@ public class newGenerator implements GeneratorIF
 	}
 	
 	/**
-	 * Given a ProblemIF and a RandomizerIF, will return a new ProblemIF
-	 * with shuffled non-FixedAnswerIFs, while maintaining order on
+	 * Given a ProblemIF and a RandomizerIF, will return a ProblemPair
+	 * consisting of the input ProblemIF, plus a new ProblemIF with
+	 * shuffled non-FixedAnswerIFs, while maintaining order on
 	 * FixedAnswerIFs
 	 * 
 	 * @param inputProblem
@@ -160,33 +161,52 @@ public class newGenerator implements GeneratorIF
 	}
 	
 	/**
-	 * Given a SatisfiedContainer, RandomizerIF, and integer, will return an ArrayList
-	 * of ProblemIFs consisting of all of the SatisfiedContainer's required ProblemIFs,
-	 * plus randomly selected integer-value number of ProblemIFs from the SatisfiedContainer's 
-	 * remaining ProblemIFs.
+	 * Given an ArrayList of SatisfiedContainers, an arrayList of SubsetContainers, and a
+	 * RandomizerIF, this method will distribute to each SubsetContainer a subset of ProblemIFs
+	 * from each ConstraintContainer in the SatisfiedContainer of matching name, as well as all
+	 * ProblemIFs that are required.
 	 * 
-	 * @param theSatisfiedContainer
+	 * @param satisfied
+	 * @param subset
 	 * @param theRandomizer
-	 * @param constraintValue
-	 * @return
 	 */
 	
-	private ArrayList<ProblemPair> selectProblems(SatisfiedContainer theSatisfiedContainer, RandomizerIF theRandomizer, int constraintValue)
-	{
-		ArrayList<ProblemPair> returnSet = new ArrayList<ProblemPair>();
+	private void subsetSelector(ArrayList<SatisfiedContainer> satisfied, ArrayList<SubsetContainer> subset,
+			                    RandomizerIF theRandomizer)
+	{	
+		ArrayList<ProblemIF> problemSubset = new ArrayList<ProblemIF>();
+		ProblemIF[] problemSubsetArray;
+		SubsetContainer theSubsetContainer;
 		
-		ProblemIF[] requiredProblems = (ProblemIF[]) theSatisfiedContainer.getRequiredProblems().toArray();
+		ProblemIF[] requiredProblems;
+		ProblemIF[] nProblems;
 		
-		ProblemIF[] beforeSelection = (ProblemIF[]) theSatisfiedContainer.getRemainingProblems().toArray();
-		ProblemIF[] afterSelection = (ProblemIF[]) theRandomizer.choose(constraintValue, beforeSelection);
 		
-		for (int i = 0; i < requiredProblems.length; i++)
-			returnSet.add(randomizeAnswers(requiredProblems[i], theRandomizer));
+		for (SatisfiedContainer currentSatisfiedContainer : satisfied)
+		{
+			problemSubset.clear();
+			
+			requiredProblems = (ProblemIF[]) currentSatisfiedContainer.getRequiredProblems().toArray();
+			
+			for (int i = 0; i < requiredProblems.length; i++)
+				problemSubset.add(requiredProblems[i]);
 		
-		for (int i = 0; i < afterSelection.length; i++)
-			returnSet.add(randomizeAnswers(afterSelection[i], theRandomizer));
-		
-		return returnSet;
+			for (ConstraintContainer currentConstraintContainer : currentSatisfiedContainer.getSatisfiedConstraints())
+			{
+				nProblems = (ProblemIF[]) theRandomizer.choose(currentConstraintContainer.getNumProblems(), 
+						                                       currentConstraintContainer.getSatisfiedProblems().toArray());
+				
+				for (int i = 0; i < nProblems.length; i++)
+					problemSubset.add(nProblems[i]);
+			}
+			
+			theSubsetContainer = findSubsetContainer(subset, currentSatisfiedContainer.getTopic());
+			problemSubsetArray = (ProblemIF[]) problemSubset.toArray();
+			
+			for (int i = 0; i < problemSubsetArray.length; i++)
+				theSubsetContainer.addToSubset(randomizeAnswers(problemSubsetArray[i], 
+						                                        theRandomizer));
+		}
 	}
 	
 	private void generate() throws Exception
@@ -235,8 +255,28 @@ public class newGenerator implements GeneratorIF
 		 *     control flow.
 		 */
 		
+		/* Container variables used for organization:
+		 * 
+		 * 1.) satisfied is the master ArrayList of SatisfiedContainers.
+		 * 2.) theSatisfiedContainer is used as a reference to a specific
+		 *     SatisfiedContainer in satisfied throughout control flow.
+		 * 3.) makeNewConstraintContainer aids in the creation of
+		 *     ConstraintContainers in the SatisfiedContainers of satisfied.
+		 * 4.) subset is the master ArrayList of SubsetContainers.
+		 * 5.) theSubsetContainer is used as a reference to a specific
+		 *     SubsetContainer in subset throughout control flow.
+		 * 6.) theBPC is used as a reference to a specific
+		 *     BlockProblemContainer in the SubsetContainers of subset
+		 *     throughout control flow.
+		 * 7.) theFPC is used as a reference to a specific
+		 *     FigureProblemContainer in the BPCs in the
+		 *     SubsetContainers of subset throughout control flow.
+		 */
+		
+		
 		ArrayList<SatisfiedContainer> satisfied = new ArrayList<SatisfiedContainer>();
 		SatisfiedContainer theSatisfiedContainer = null;
+		boolean makeNewConstraintContainer;
 		ArrayList<SubsetContainer> subset = new ArrayList<SubsetContainer>();
 		SubsetContainer theSubsetContainer = null;
 		BlockProblemContainer theBPC = null;
@@ -313,25 +353,24 @@ public class newGenerator implements GeneratorIF
 		}
 		
 		/* For each GroupConstraintIF, find the SatisfiedContainer in satisfied that
-		 * matches its topic (again, a new one is created if none exist), as well as
-		 * the SubsetContainer in subset that matches its topic (also newly created
-		 * if one did not previously exist). Then, if the ProblemIF is within the correct 
-		 * interval, and is worth the correct number of points, add the ProblemIF specified 
-		 * by the GroupConstraintIF to the SatisfiedContainer (as a remaining problem).
+		 * matches its topic (again, a new one is created if none exist).
+		 * Then, if the ProblemIF is within the correct interval, and is worth the correct 
+		 * number of points, add the ProblemIF specified by the GroupConstraintIF to the matching
+		 * ConstraintContainer in the SatisfiedContainer.
 		 * 
 		 * If, however unlikely, a ProblemIF satisfies two GroupConstraintIFs, it will
 		 * only be added once.
 		 * 
-		 * Finally, pick n of these ProblemIFs, where n is specified by the
-		 * GroupConstraintIF. These n ProblemIFs will have their non-FixedAnswerIFs
-		 * shuffled. This set of n ProblemIFs is then inserted into the SubsetContainer.
+		 * If the number of ProblemIFs in the ConstraintContainer is less than
+		 * the number specified by the GroupConstraintIF, a
+		 * RexUnsatisfiableException is thrown.
 		 * 
-		 * If the number of ProblemIFs in the SubsetContainer is less than n,
-		 * a RexUnsatisfiableException is thrown.
 		 */
 		
 		for (int i = 0; i < groupConstraints.length; i++)
 		{
+			makeNewConstraintContainer = true;
+			
 			theRemainingTopic = groupConstraints[i].topic();
 			difficulty = groupConstraints[i].difficultyInterval();
 			numProblems = groupConstraints[i].numProblems();
@@ -350,20 +389,49 @@ public class newGenerator implements GeneratorIF
 			
 			byTopic = (ArrayList<ProblemIF>) master.problemsWithTopic(theRemainingTopic);
 			theSatisfiedContainer = findSatisfiedContainer(satisfied, theRemainingTopic);
-			theSubsetContainer = findSubsetContainer(subset, theRemainingTopic);
 			
 			for (ProblemIF currentProblem : byTopic)		
 				if ((currentProblem.points() == points) &&
 				   (low <= currentProblem.difficulty()) &&
 				   (currentProblem.difficulty() <= high))
-					theSatisfiedContainer.addRemaining(currentProblem);
+				{
+					theSatisfiedContainer.addRemaining(currentProblem, numProblems, makeNewConstraintContainer);
+					makeNewConstraintContainer = false;
+				}
 			
-			if (theSatisfiedContainer.getRemainingProblems().size() < numProblems)
+			if (theSatisfiedContainer.getLastConstraintContainer().getSatisfiedProblems().size() < numProblems)
 				throw new RexUnsatisfiableException();
-			
-			theSubsetContainer.setSubset(selectProblems(theSatisfiedContainer, theRandomizer, numProblems));
 		}
+		
+		/* Now we can begin to iterate on the number of ExamIFs desired;
+		 * the above parsing into SatisfiedContainers should be the same
+		 * for every version of the exam.
+		 */
+		
+		/* subsetSelector grabs a randomized subset of ProblemIFs
+		 * from satisfied, and distributes them to subset.
+		 */
+		
+		subsetSelector(satisfied, subset, theRandomizer);
 
+		/* For each SubsetContainer in subset, for each ProblemPair
+		 * in that SubsetContainer, find the corresponding BlockProblemContainer
+		 * that houses that Pair's old ProblemIF's BlockIF, and add the
+		 * Pair's new ProblemIF to that BlockProblemContainer. A new
+		 * BlockProblemContainer is created if none already exist for that
+		 * BlockIF.
+		 * 
+		 * Then, for each BlockProblemContainer, for each ProblemIF,
+		 * find the corresponding FigureProblemContainer that houses that
+		 * ProblemIF's FigureIF. A new FigureProblemContainer is created
+		 * if none already exist.
+		 * 
+		 * Note that there are BlockProblemContainers and
+		 * FigureProblemContainers that have null BlockIFs
+		 * and FigureIFs; these correspond to ProblemIFs
+		 * that do not have BlockIFs and FigureIFs respectively.
+		 */
+		
 		for (SubsetContainer currentSubset : subset)
 		{
 			for (ProblemPair currentProblemPair : currentSubset.getSubset())
