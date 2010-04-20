@@ -14,17 +14,25 @@ import edu.udel.cis.cisc475.rex.config.Configs;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.config.generatestubs.ConfigFactoryStub;
+import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.generatestubs.ExamFactoryStub;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorFactoryIF;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
 import edu.udel.cis.cisc475.rex.generate.impl.GeneratorFactory;
+import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
+import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
+import edu.udel.cis.cisc475.rex.interval.generatestubs.IntervalFactoryStub;
 import edu.udel.cis.cisc475.rex.key.Keys;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyFactoryIF;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 import edu.udel.cis.cisc475.rex.key.generatestubs.AnswerKeyFactoryStub;
+import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
+import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
+import edu.udel.cis.cisc475.rex.source.generatestubs.SourceFactoryStub;
 
 public class GeneratorTest {
 
@@ -41,6 +49,10 @@ public class GeneratorTest {
 	private static AnswerKeyFactoryIF answerKeyFactory;
 	
 	private static ExamFactoryIF masterFactory;
+	
+	private static IntervalFactoryIF intervalFactory;
+	
+	private static SourceFactoryIF sourceFactory;
 
 	private static GeneratorIF generator1;
 
@@ -50,22 +62,48 @@ public class GeneratorTest {
 	
 	private static AnswerKeyIF key1;
 	
+	private static IntervalIF interval1;
+
+	private static SourceIF source1;
+	
+	private static ProblemIF problem1;
+	
+	private static AnswerIF answer1;
+	
+	private static AnswerIF[] num1Answers = {answer1};
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		if (useStubs) {
 			configFactory = new ConfigFactoryStub();
 			masterFactory = new ExamFactoryStub();
 			answerKeyFactory = new AnswerKeyFactoryStub();
-			masterFactory = new ExamFactoryStub();
-			generatorFactory = new GeneratorFactoryStub();
+			generatorFactory = new GeneratorFactory();
+			intervalFactory = new IntervalFactoryStub();
+			sourceFactory = new SourceFactoryStub();
 		} else {
 			configFactory = Configs.newConfigFactory();
 			answerKeyFactory = Keys.newAnswerKeyFactory();
 		}
 		
-		config1 = configFactory.newConfig(true, 1);
+		interval1 = intervalFactory.interval(false, 10.0, true, 25.0);
+		source1 = sourceFactory.newSource("filename.java");
+		
+		//Creating example config
+		config1 = configFactory.newConfig(false, 1);
+		String[] versions = {"Version1"};
+		config1.setSeed(29475092);
+		config1.setVersionStrings(versions);
+		config1.setFinalBlock("Final block label");
+		config1.addGroupConstraint("Prime", interval1, 2, 10, source1);
+		config1.addRequiredProblemConstraint("Required Problem", 5, source1);
+		
+		//creating example Master Exam
 		master1 = masterFactory.newMasterExam();
+		problem1 = masterFactory.newProblem("Prime", "Prime1", source1, num1Answers);
+	
 		generator1 = generatorFactory.newGenerator(master1, config1);
+
 	}
 
 	@AfterClass
