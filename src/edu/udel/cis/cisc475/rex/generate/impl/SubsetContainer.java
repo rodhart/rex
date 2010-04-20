@@ -1,13 +1,14 @@
 package edu.udel.cis.cisc475.rex.generate.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
-import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
+import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 
 public class SubsetContainer 
 {
 	private String topic;
-	private ArrayList<ProblemIF> subset = new ArrayList<ProblemIF>();
+	private ArrayList<ProblemPair> subset = new ArrayList<ProblemPair>();
 	private ArrayList<BlockProblemContainer> theBPCs = new ArrayList<BlockProblemContainer>();
 	
 	public SubsetContainer(String topic)
@@ -20,7 +21,7 @@ public class SubsetContainer
 		return this.topic;
 	}
 	
-	public ArrayList<ProblemIF> getSubset()
+	public ArrayList<ProblemPair> getSubset()
 	{
 		return this.subset;
 	}
@@ -30,13 +31,33 @@ public class SubsetContainer
 		return this.theBPCs;
 	}
 	
-	public void setSubset(ArrayList<ProblemIF> theSubset)
+	public void setSubset(ArrayList<ProblemPair> theSubset)
 	{
 		this.subset.addAll(theSubset);
 	}
 	
-	public void addBPC(BlockProblemContainer theBPC)
+	public BlockProblemContainer getBPC(BlockIF theBlock)
 	{
-		this.theBPCs.add(theBPC);
+		Iterator<BlockProblemContainer> BPCIterator = theBPCs.iterator();
+		BlockProblemContainer theBPC = null;
+		boolean found = false;
+		
+		while (!found && BPCIterator.hasNext())
+		{
+			theBPC = BPCIterator.next();
+			
+			if (theBPC.getBlock().label().equals(theBlock.label()))
+				found = true;
+		}
+		
+		if (found)
+			return theBPC;
+		
+		else
+		{
+			theBPC = new BlockProblemContainer(theBlock);
+			this.theBPCs.add(theBPC);
+			return theBPC;
+		}
 	}
 }

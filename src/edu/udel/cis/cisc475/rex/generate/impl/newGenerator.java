@@ -133,7 +133,7 @@ public class newGenerator implements GeneratorIF
 	 * @return
 	 */
 	
-	private ProblemIF randomizeAnswers(ProblemIF inputProblem, RandomizerIF theRandomizer)
+	private ProblemPair randomizeAnswers(ProblemIF inputProblem, RandomizerIF theRandomizer)
 	{
 		ExamFactoryIF theExamFactory = new ExamFactory();
 		AnswerIF[] theAnswers = inputProblem.answers();
@@ -154,8 +154,9 @@ public class newGenerator implements GeneratorIF
 				j++;
 			}
 		
-		return theExamFactory.newProblem(inputProblem.topic(), inputProblem.label(),
-				                         inputProblem.question(), theAnswers);	
+		return new ProblemPair(inputProblem, 
+				               theExamFactory.newProblem(inputProblem.topic(), inputProblem.label(),
+				        		                         inputProblem.question(), theAnswers));	
 	}
 	
 	/**
@@ -170,9 +171,9 @@ public class newGenerator implements GeneratorIF
 	 * @return
 	 */
 	
-	private ArrayList<ProblemIF> selectProblems(SatisfiedContainer theSatisfiedContainer, RandomizerIF theRandomizer, int constraintValue)
+	private ArrayList<ProblemPair> selectProblems(SatisfiedContainer theSatisfiedContainer, RandomizerIF theRandomizer, int constraintValue)
 	{
-		ArrayList<ProblemIF> returnSet = new ArrayList<ProblemIF>();
+		ArrayList<ProblemPair> returnSet = new ArrayList<ProblemPair>();
 		
 		ProblemIF[] requiredProblems = (ProblemIF[]) theSatisfiedContainer.getRequiredProblems().toArray();
 		
@@ -228,12 +229,18 @@ public class newGenerator implements GeneratorIF
 		 *     and establishing an order.
 		 * 4.) theSubsetContainer is used as a reference to a specific SubsetContainer
 		 *     in subset throughout control flow.
+		 * 5.) theBPC is a reference to a specific BlockProblemContainer throughout
+		 *     control flow.
+		 * 6.) theFPC is a reference to a specific FigureProblemContainer throughout
+		 *     control flow.
 		 */
 		
 		ArrayList<SatisfiedContainer> satisfied = new ArrayList<SatisfiedContainer>();
 		SatisfiedContainer theSatisfiedContainer = null;
 		ArrayList<SubsetContainer> subset = new ArrayList<SubsetContainer>();
 		SubsetContainer theSubsetContainer = null;
+		BlockProblemContainer theBPC = null;
+		FigureProblemContainer theFPC = null;
 		
 		/* Variables used in distributing required ProblemIFs:
 		 * 1.) labelGivesProblem is the label of a RequiredProblemConstraintIF.
@@ -286,6 +293,15 @@ public class newGenerator implements GeneratorIF
 		groupConstraints = (GroupConstraintIF[]) groupConstraintCollection.toArray();
 		requiredConstraints = (RequiredProblemConstraintIF[]) requiredConstraintCollection.toArray();
 		
+		/* For each RequiredProblemConstraintIF, find the SatisfiedContainer in satisfied
+		 * that matches its topic (a new one is created if none exist), then add the
+		 * ProblemIF specified by the RequiredProblemConstraintIF to the
+		 * SatisfiedContainer (as a required problem).
+		 * 
+		 * If, by accident, the same ProblemIF is listed as required more than
+		 * once, it will only be added once.
+		 */
+		
 		for (int i = 0; i < requiredConstraints.length; i++)
 		{	
 			labelGivesProblem = requiredConstraints[i].label();
@@ -295,6 +311,24 @@ public class newGenerator implements GeneratorIF
 			theSatisfiedContainer = findSatisfiedContainer(satisfied, theRequiredTopic);
 			theSatisfiedContainer.addRequired(problemGivesTopic);
 		}
+		
+		/* For each GroupConstraintIF, find the SatisfiedContainer in satisfied that
+		 * matches its topic (again, a new one is created if none exist), as well as
+		 * the SubsetContainer in subset that matches its topic (also newly created
+		 * if one did not previously exist). Then, if the ProblemIF is within the correct 
+		 * interval, and is worth the correct number of points, add the ProblemIF specified 
+		 * by the GroupConstraintIF to the SatisfiedContainer (as a remaining problem).
+		 * 
+		 * If, however unlikely, a ProblemIF satisfies two GroupConstraintIFs, it will
+		 * only be added once.
+		 * 
+		 * Finally, pick n of these ProblemIFs, where n is specified by the
+		 * GroupConstraintIF. These n ProblemIFs will have their non-FixedAnswerIFs
+		 * shuffled. This set of n ProblemIFs is then inserted into the SubsetContainer.
+		 * 
+		 * If the number of ProblemIFs in the SubsetContainer is less than n,
+		 * a RexUnsatisfiableException is thrown.
+		 */
 		
 		for (int i = 0; i < groupConstraints.length; i++)
 		{
@@ -330,6 +364,21 @@ public class newGenerator implements GeneratorIF
 			theSubsetContainer.setSubset(selectProblems(theSatisfiedContainer, theRandomizer, numProblems));
 		}
 
+		for (SubsetContainer currentSubset : subset)
+		{
+			for (ProblemPair currentProblemPair : currentSubset.getSubset())
+			{
+				theBPC = currentSubset.getBPC(currentProblemPair.getBeforeRandomization().requiredBlock());
+				theBPC.addProblem(currentProblemPair.getAfterRandomization());
+				
+				for (FigureIF currentFigure : currentProblemPair.getBeforeRandomization().referencedFigures())
+				{
+					theFPC = theBPC.getFPC(currentFigure);
+					theFPC.addProblem(currentProblemPair.getAfterRandomization());
+				}
+			}
+		}
+		
 		
 		
 		
