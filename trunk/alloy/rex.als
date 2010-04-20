@@ -21,6 +21,7 @@ fact generatedInGenerator {
 
 
 
+
 // all fields accounted for
 abstract sig Exam {
 	//preamble: one Source,
@@ -108,7 +109,7 @@ sig GroupConstraint extends Constraint {
 // A line in the ECF might require several problems, but they break down into individual requests.
 // That's all I model
 sig RequiredProblemConstraint extends Constraint {
-	problemName: one String  //Commented out for now for simpler diagram.  Re-insert!
+	problemName: one Label  //Commented out for now for simpler diagram.  Re-insert!
 }
 /* from when I permitted > 1 problem request per RequiredProblemConstraint
 fact { // it is syntactically incorrect for a required request not to ask for any problems
@@ -134,7 +135,7 @@ fact {
 
 
 abstract sig ExamElement {
-	label: lone String
+	label: one Label // Just say "one"
 }
 
 // all fields accounted for
@@ -183,6 +184,8 @@ fact finalBlockWithoutCategory { // the final block does not have a category
 
 sig Figure extends ExamElement {}
 
+
+sig Label {}
 
 
 sig Category {} // a Java string
@@ -406,11 +409,13 @@ assert impossibleConstraintRejected {
 //*************************
 
 // 2010 04 20
-/*
-fact allRequiredProblemsInMaster {
-	all 
+
+fact allRequiredProblemsAreInMaster {
+//	all r: RequiredProblemConstraint, m: MasterExam | r.problemName in m.elements.*rest.element
 }
 
+
+/*
 pred generateExams (g, g': GeneratedExam, m: MasterExam, ) {
 }
 
@@ -425,7 +430,7 @@ pred show{}
 
 // PROBLEM: need to get it so that can specify exactly 3 of each subclass of ExamElement!
 
-run show for 5 but exactly 1 GeneratedExam, exactly 1 Problem, exactly 2 Answer
+run show for 5 but exactly 1 RequiredProblemConstraint
 
 //run show for 5 but exactly 1 GeneratedExam, exactly 3 NonEmptyList, exactly 3 ExamElement, exactly 0 Answer // not good: modified!
 
