@@ -180,6 +180,40 @@ public class ExamTest {
 	}
 	
 	@Test
+	public void testDeclareUse() {
+		ExamIF exam = examFactory.newGeneratedExam();
+		Collection<ExamElementIF> elements;
+		
+		ProblemIF problem = createTestProblem();
+		FigureIF figure = createTestFigure();
+		BlockIF block = createTestBlock();
+		
+		exam.declareUse(problem, figure);
+		elements = exam.elementsUsingElement(figure);
+		assertEquals(0, elements.size());
+		
+		exam.addElementIF(problem);
+		exam.declareUse(problem, figure);
+		elements = exam.elementsUsingElement(figure);
+		assertEquals(0, elements.size());
+		
+		exam.addElementIF(figure);
+		exam.declareUse(problem, figure);
+		elements = exam.elementsUsingElement(figure);
+		assertEquals(1, elements.size());
+		
+		exam.addElementIF(block);
+		exam.declareUse(problem,block);
+		elements = exam.elementsUsingElement(block);
+		assertEquals(1, elements.size());
+		
+		exam.declareUse(block, figure);
+		elements = exam.elementsUsingElement(figure);
+		assertEquals(2,elements.size());
+		
+	}
+	
+	@Test
 	public void testGetElement() {
 		ExamIF exam = examFactory.newGeneratedExam();
 		
@@ -260,6 +294,8 @@ public class ExamTest {
 		
 		ProblemIF problem1 = createTestProblem();
 		ProblemIF problem2 = createTestProblem();
+		BlockIF block = createTestBlock();
+		FigureIF figure = createTestFigure();
 		
 		Collection<ExamElementIF> elements = exam.elementsWithTopic("Test Problem Topic");
 		assertNotNull(elements);
@@ -267,15 +303,27 @@ public class ExamTest {
 		
 		exam.addElementIF(problem1);
 		exam.addElementIF(problem2);
-		//exam.addElementIF(figure); //Figures currently do not have topics
-		//exam.addElementIF(block);    //Blocks currently do not have topics
+		exam.addElementIF(block);
+		exam.addElementIF(figure);
 		
 		elements = exam.elementsWithTopic("Test Problem Topic");
 		assertNotNull(elements);
 		assertEquals(2, elements.size());
 		
-		//TODO need to test case where there are problems in the exam WITHOUT the topic we are looking for
-		//to make sure that they are not included by method
+		elements = exam.elementsWithTopic("Test Block Topic");
+		assertNotNull(elements);
+		assertEquals(1,elements.size());
+		assertTrue(elements.contains(block));
+		
+		elements = exam.elementsWithTopic("Nonexistant Topic");
+		assertNotNull(elements);
+		assertEquals(0, elements.size());
+		
+		ExamElement ee = new ExamElement("ExamElement Topic");
+		exam.addElementIF(ee);
+		elements = exam.elementsWithTopic("ExamElement Topic");
+		assertNotNull(elements);
+		assertEquals(0,elements.size());
 	}
 	
 	@Test
