@@ -44,7 +44,7 @@ public class BlockProblemContainer
 		FigureProblemContainer theFPC = null;
 		boolean found = false;
 		
-		while (FPCIterator.hasNext())
+		while (!found && FPCIterator.hasNext())
 		{
 			theFPC = FPCIterator.next();
 			
