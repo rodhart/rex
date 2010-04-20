@@ -54,6 +54,41 @@ public class newGenerator implements GeneratorIF
 	}
 	
 	/**
+	 * Given an ArrayList of SubsetContainers and a String topic, will return the SubsetContainer	
+	 * with that topic.
+	 * 
+	 * @param satisfiedContainers
+	 * @param topic
+	 * @return
+	 */
+	
+	private SubsetContainer findSubsetContainer(ArrayList<SubsetContainer> subsetContainers, String topic)
+	{
+		Iterator<SubsetContainer> subsetIterator = subsetContainers.iterator();
+		SubsetContainer theSubsetContainer = null;
+		boolean found = false;
+		
+		while (!found && subsetIterator.hasNext())
+		{
+			theSubsetContainer = subsetIterator.next();
+			
+			if (theSubsetContainer.getTopic().equals(topic))
+				found = true;
+		}
+		
+		if (found)
+			return theSubsetContainer;
+		
+		else
+		{
+			theSubsetContainer = new SubsetContainer(topic);
+			subsetContainers.add(theSubsetContainer);
+			
+			return theSubsetContainer;
+		}
+	}
+	
+	/**
 	 * Given an ArrayList of SatisfiedContainers and a String topic, will return the SatisfiedContainer	
 	 * with that topic.
 	 * 
@@ -72,7 +107,7 @@ public class newGenerator implements GeneratorIF
 		{
 			theSatisfiedContainer = satisfiedIterator.next();
 			
-			if (theSatisfiedContainer.getName().equals(topic))
+			if (theSatisfiedContainer.getTopic().equals(topic))
 				found = true;
 		}
 		
@@ -185,14 +220,20 @@ public class newGenerator implements GeneratorIF
 		RequiredProblemConstraintIF[] requiredConstraints;
 		
 		/* Container variables used for organization:
-		 * 1.) satisfied is an ArrayList of SatisfiedContainers, used for housing all ExamElementIFs,
+		 * 1.) satisfied is an ArrayList of SatisfiedContainers, used for housing all ProblemsIFs,
 		 *     and establishing an order.
 		 * 2.) theSatisfiedContainer is used as a reference to a specific SatisfiedContainer
 		 *     in satisfied throughout control flow.
+		 * 3.) subset is an ArrayList of SubsetContainers, used for housing all ExamElementIFs
+		 *     and establishing an order.
+		 * 4.) theSubsetContainer is used as a reference to a specific SubsetContainer
+		 *     in subset throughout control flow.
 		 */
 		
 		ArrayList<SatisfiedContainer> satisfied = new ArrayList<SatisfiedContainer>();
 		SatisfiedContainer theSatisfiedContainer = null;
+		ArrayList<SubsetContainer> subset = new ArrayList<SubsetContainer>();
+		SubsetContainer theSubsetContainer = null;
 		
 		/* Variables used in distributing required ProblemIFs:
 		 * 1.) labelGivesProblem is the label of a RequiredProblemConstraintIF.
@@ -222,16 +263,6 @@ public class newGenerator implements GeneratorIF
 		int numProblems, points;
 		double low, high;
 		
-		/* Variables used to distribute ProblemIFs among FigureProblemContainers:
-		 * 1.) makeNewFPC determines if a ProblemIF should be added to an existing
-		 *     FPC, or if a new FPC should be created for it.
-		 * 2.) newFPC is used as a reference to a specific FPC throughout
-		 *     control flow.
-		 */
-		
-		boolean makeNewFPC = true;
-		FigureProblemContainer newFPC;
-		
 		/* Sort ConstraintIFs into two categories:
 		 * GroupConstraintIFs, and RequiredProblemConstraintIFs.
 		 * 
@@ -255,12 +286,6 @@ public class newGenerator implements GeneratorIF
 		groupConstraints = (GroupConstraintIF[]) groupConstraintCollection.toArray();
 		requiredConstraints = (RequiredProblemConstraintIF[]) requiredConstraintCollection.toArray();
 		
-		/* For each RequiredProblemConstraintIF, find the SatisfiedContainer in
-		 * satisfied that matches its topic (a new one is created if none exist),
-		 * then add the ProblemIF specified by the RequiredProblemConstraintIF
-		 * to the SatisfiedContainer (as a required problem).
-		 */
-		
 		for (int i = 0; i < requiredConstraints.length; i++)
 		{	
 			labelGivesProblem = requiredConstraints[i].label();
@@ -270,20 +295,6 @@ public class newGenerator implements GeneratorIF
 			theSatisfiedContainer = findSatisfiedContainer(satisfied, theRequiredTopic);
 			theSatisfiedContainer.addRequired(problemGivesTopic);
 		}
-		
-		/* For each GroupConstraintIF, find the SatisfiedContainer in
-		 * satisfied that matches its topic (again, a new one is created if none
-		 * exist), then, if the ProblemIF is within the correct interval, and
-		 * is worth the correct number of points, add the ProblemIF specified by 
-		 * the GroupConstraintIF to the SatisfiedContainer (as a remaining problem).
-		 * 
-		 * Finally, pick n of these ProblemIFs, where n is specified by the
-		 * GroupConstraintIF. These n ProblemIFs will have their non-FixedAnswerIFs
-		 * shuffled.
-		 * 
-		 * If the number of ProblemIFs chosen is less than n, a
-		 * RexUnsatisfiableException is thrown.
-		 */
 		
 		for (int i = 0; i < groupConstraints.length; i++)
 		{
@@ -305,6 +316,7 @@ public class newGenerator implements GeneratorIF
 			
 			byTopic = (ArrayList<ProblemIF>) master.problemsWithTopic(theRemainingTopic);
 			theSatisfiedContainer = findSatisfiedContainer(satisfied, theRemainingTopic);
+			theSubsetContainer = findSubsetContainer(subset, theRemainingTopic);
 			
 			for (ProblemIF currentProblem : byTopic)		
 				if ((currentProblem.points() == points) &&
@@ -315,49 +327,11 @@ public class newGenerator implements GeneratorIF
 			if (theSatisfiedContainer.getRemainingProblems().size() < numProblems)
 				throw new RexUnsatisfiableException();
 			
-			theSatisfiedContainer.setSubset(selectProblems(theSatisfiedContainer, theRandomizer, numProblems));
+			theSubsetContainer.setSubset(selectProblems(theSatisfiedContainer, theRandomizer, numProblems));
 		}
+
 		
-		/* For each SatisfiedContainer in satisfied, for each of its ProblemIFs,
-		 * for each of *their* referenced FigureIFs, iterate through all FPCs in the
-		 * current SatisfiedContainer, and determine if any of them are already housing
-		 * the FigureIF in question.
-		 * 
-		 * If an FPC is found, add the current ProblemIF to that FPC.
-		 * 
-		 * IF no such FPC is found, create one, have it house the FigureIF in question
-		 * as well as the ProblemIF in question, and then add this FPC to the current
-		 * SatisfiedContainer.
-		 */
 		
-		for (SatisfiedContainer currentSatisfiedContainer : satisfied)
-		{
-			for (ProblemIF currentProblem : currentSatisfiedContainer.getSelectedSubset())
-			{
-				for (FigureIF currentFigure : currentProblem.referencedFigures())
-				{
-					for (FigureProblemContainer currentFPC : currentSatisfiedContainer.getFPCs())
-					{
-						if (currentFPC.getFigure().label().equals(currentFigure.label()))
-						{
-							currentFPC.addProblem(currentProblem);
-							makeNewFPC = false;
-						}
-					}
-					
-					if (makeNewFPC)
-					{
-						newFPC = new FigureProblemContainer(currentFigure);
-						newFPC.addProblem(currentProblem);
-						//((SatisfiedContainer) currentSatisfiedContainer).addFPC(newFPC); //Why isn't this working?
-					}
-					
-					makeNewFPC = true;
-				}
-			}
-		}
-		
-		//start here
 		
 		
 		
