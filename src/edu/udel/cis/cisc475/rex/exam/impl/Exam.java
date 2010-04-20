@@ -101,16 +101,8 @@ public class Exam implements ExamIF {
 	public int addElementIF(ExamElementIF element) {
 		// Even though we are using a map, we really want a set so should not
 		// add duplicate entries in a single exam
-		if (!elements.containsValue(element)) {
+		if (!elements.containsValue(element) && element != null) {
 			int key = elements.size();
-			// put into linked hash set
-			elements.put(key,element);
-			// also need to make some kind of record of whether it is
-			// a problem, a block, or a figure.
-			labels.add(element.label());
-			// Allocate a new HashSet for the uses map
-			HashSet<ExamElementIF> useesOfElement = new HashSet<ExamElementIF>();
-			uses.put(element, useesOfElement);
 			if (element instanceof FigureIF) {
 				figures.add(key);
 			} else if (element instanceof BlockIF) {
@@ -120,9 +112,17 @@ public class Exam implements ExamIF {
 				problems.add(key);
 				topics.add(((ProblemIF) element).topic());
 			} else {
-				// Do we need to do anything in this case? It definitely is not
-				// good if it isn't one of the 3
+				return -1;
 			}
+		
+			// put into linked hash set
+			elements.put(key,element);
+			// also need to make some kind of record of whether it is
+			// a problem, a block, or a figure.
+			labels.add(element.label());
+			// Allocate a new HashSet for the uses map
+			HashSet<ExamElementIF> useesOfElement = new HashSet<ExamElementIF>();
+			uses.put(element, useesOfElement);
 			return key;
 		} else {
 			return -1;

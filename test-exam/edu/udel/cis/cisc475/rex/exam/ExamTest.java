@@ -18,7 +18,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
@@ -29,6 +28,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FixedAnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
+import edu.udel.cis.cisc475.rex.exam.impl.ExamElement;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
@@ -423,6 +423,9 @@ public class ExamTest {
 		assertEquals(2, problems.size());
 		assertTrue(problems.contains(problem1));
 		assertTrue(problems.contains(problem2));
+		
+		problems = exam.problemsWithTopic("Non Existant");
+		assertEquals(0, problems.size());
 	}
 	
 	@Test
@@ -449,10 +452,13 @@ public class ExamTest {
 		assertTrue(elements.contains(problem));
 		assertTrue(elements.contains(figure));
 		assertTrue(elements.contains(block));
+		
+		// Trying to add an element that is already there!
+		int res = exam.addElementIF(problem);
+		assertEquals(-1, res);
 	}
 	
 	@Test
-	@Ignore
 	public void testAddBadElement() {
 		ExamIF exam = examFactory.newMasterExam();
 		
@@ -462,6 +468,12 @@ public class ExamTest {
 		
 		Collection<ExamElementIF> elements = exam.elements();
 		assertNotNull(elements);
+		assertEquals(0, elements.size());
+		
+		// Lets try adding something that ISNT a Problem, Block, or Figure
+		ExamElement ee = new ExamElement("Unnecessary ExamElement");
+		exam.addElementIF(ee);
+		elements = exam.elements();
 		assertEquals(0, elements.size());
 	}
 	
