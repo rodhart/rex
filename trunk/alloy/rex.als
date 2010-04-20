@@ -142,10 +142,10 @@ abstract sig ExamElement {
 sig Problem extends ExamElement {
 	category: one Category,
 	block: lone Block,
-	figures: set Figure,
+	//figures: set Figure,
 	points: lone Int,   // lone because will be null in master exam.
 	// source: one Source,   // not important for model!
-	difficulty: one Int,   //actually REAL NUMBER, but it doesn't matter for the Alloy model
+	//difficulty: one Int,   //actually REAL NUMBER, but it doesn't matter for the Alloy model
 	answers: set Answer   // May be 0 if not a multiple choice.
 }
 
@@ -404,25 +404,66 @@ assert impossibleConstraintRejected {
 }
 
 
+// 2010 04 20: interesting to say # problems in MasterExam = total # problems?  Follows trivialy from allElementsInMaster
+assert {
+//TODO
+}
+
+
 //*************************
 //** Predicates to run? **
 //*************************
 
 // 2010 04 20
 
+// I assume that we checked for this possibility!
+fact elementsDoNotHaveIdenticalLabels
+{
+	all e, e': ExamElement | e != e' implies e.label != e'.label
+}
+
+
+// assume ONE OF THESE to be true for test purposes here:
 fact allRequiredProblemsAreInMaster {
-//	all r: RequiredProblemConstraint, m: MasterExam | r.problemName in m.elements.*rest.element
+	all r: RequiredProblemConstraint | some p: Problem | r.problemName = p.label
+}
+// OR: NOT WORKING!:
+//fact someRequiredProblemNotInMaster {
+//		some r: RequiredProblemConstraint | some p:Problem| l: Label | r.problemName = p.label
+//		not all r: RequiredProblemConstraint | some p: Problem | r.problemName = p.label
+//		all r: RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
+//}
+
+
+// Just assume we have this check implemented
+fact doNotRequestSameProblemTwice
+{
+	all r, r': RequiredProblemConstraint | r != r' implies r.problemName != r'.problemName
 }
 
 
-/*
-pred generateExams (g, g': GeneratedExam, m: MasterExam, ) {
+
+
+
+pred generateExams (g, g': GeneratedExam, r: RequiredProblemConstraint)//, m: MasterExam, 
+	#g.elements.*rest.element = 0
+
+// something like this:	g'.elements.*rest.element =     r.problemName   m.elements.*rest.element.label
+
+
+
+
+//	#g'.elements.*rest.element = 2
+//	(#g'.elements.*rest.element = g'.elements.*rest.element + (r.)
 }
 
-run generateExams for 3 but exactly 2 GeneratedExam, exactly 1 MasterExam
+run generateExams for 7
+//run generateExams for 3 but exactly 2 GeneratedExam, exactly 1 MasterExam
 
 
-end 2010 04 20*/
+//end 2010 04 20
+
+
 
 
 
@@ -430,7 +471,8 @@ pred show{}
 
 // PROBLEM: need to get it so that can specify exactly 3 of each subclass of ExamElement!
 
-run show for 5 but exactly 1 RequiredProblemConstraint
+//run show for 5 but exactly 1 GeneratedExam, exactly 2 Problem, exactly 2 RequiredProblemConstraint,
+//	exactly 0 GroupConstraint, exactly 0 Answer
 
 //run show for 5 but exactly 1 GeneratedExam, exactly 3 NonEmptyList, exactly 3 ExamElement, exactly 0 Answer // not good: modified!
 
