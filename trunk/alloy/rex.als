@@ -102,7 +102,7 @@ fact { // all constraints are in the Config
 // fields not complete. Commented out for now for simpler diagram.  Re-insert!
 sig GroupConstraint extends Constraint {
 //	numProblems: one Int,
-//	category: one Category,
+	category: one Category,
 //	interval: one Interval
 }
 // A line in the ECF might require several problems, but they break down into individual requests.
@@ -143,7 +143,7 @@ sig Problem extends ExamElement {
 	block: lone Block,
 	figures: set Figure,
 	points: lone Int,   // lone because will be null in master exam.
-	source: one Source,
+	// source: one Source,   // not important for model!
 	difficulty: one Int,   //actually REAL NUMBER, but it doesn't matter for the Alloy model
 	answers: set Answer   // May be 0 if not a multiple choice.
 }
@@ -160,13 +160,19 @@ sig OtherProblem extends Problem {} // no answers field
 
 // fields not complete
 sig Answer {}
+
+
+
 fact answerInProblem {
 	all a: Answer | some p: Problem | a in p.answers
 }
 
 
-abstract sig Block extends ExamElement {
-	source: one Source,
+
+
+
+sig Block extends ExamElement {
+	//source: one Source,
 	category: lone Category
 }
 fact finalBlockWithoutCategory { // the final block does not have a category
@@ -180,16 +186,32 @@ sig Figure extends ExamElement {}
 
 
 sig Category {} // a Java string
-fact { // c belongs to *something* (it's difficult to be specific)
-	all c: Category | some u: univ | u != c and c in u
+fact categoryNotFreeFloating{
+	all c: Category |
+	(some b: Block | c in b.category) or
+	(some p: Problem | c in p.category) or
+	(some g: GroupConstraint | c in g.category)
 }
+// Doesn't work for some reason:
+//fact { // c belongs to *something* (it's difficult to be specific)
+//	all c: Category | some u: univ | u != c and c in u
+//}
 
 
+
+/* ACTUALLY, don't need Source for model
 sig Source {}
-fact { // s belongs to *something*
-	all s: Source | some u: univ | u != s  and s in u
+fact sourceNotFreeFloating {
+	all s: Source |
+	(some e: ExamElement | s in e.source) or
+	(some c: Constraint | s in c.source)
+	// or Exam preamble, frontMatter, but I'm leaving these out of the model
 }
-
+// Does not work:
+//fact { // s belongs to *something*
+//	all s: Source | some u: univ | u != s  and s in u
+//}
+*/
 
 
 
@@ -206,12 +228,11 @@ fact problemBlockSameTopic{
 }
 
 
-
-
 //A block cannot both be required by a problem and appended to the exam.
 fact usedBlockNotAppended {
 	all e: Exam, p: Problem | e.finalBlock not in p.block
 }
+
 
 
 fact finalBlockSameForAll{
@@ -380,6 +401,23 @@ assert impossibleConstraintRejected {
 }
 
 
+//*************************
+//** Predicates to run? **
+//*************************
+
+// 2010 04 20
+/*
+fact allRequiredProblemsInMaster {
+	all 
+}
+
+pred generateExams (g, g': GeneratedExam, m: MasterExam, ) {
+}
+
+run generateExams for 3 but exactly 2 GeneratedExam, exactly 1 MasterExam
+
+
+end 2010 04 20*/
 
 
 
@@ -387,6 +425,8 @@ pred show{}
 
 // PROBLEM: need to get it so that can specify exactly 3 of each subclass of ExamElement!
 
-run show for 5 but exactly 1 GeneratedExam, exactly 3 NonEmptyList, exactly 3 ExamElement, exactly 0 Answer // GOOD!
+run show for 5 but exactly 1 GeneratedExam, exactly 1 Problem, exactly 2 Answer
+
+//run show for 5 but exactly 1 GeneratedExam, exactly 3 NonEmptyList, exactly 3 ExamElement, exactly 0 Answer // not good: modified!
 
 //check noDuplicatesInGenerated for 5 // GOOD!
