@@ -1,7 +1,6 @@
 /**
  * rex
  * edu.udel.cis.cisc475.rex.exam
- * Test Suite for testing Exam methods.
  * Apr 9, 2010
  * hboyd
  */
@@ -38,7 +37,6 @@ import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 
 /**
  * @author hboyd
- * @author fxfitz
  *
  */
 public class ExamTest {
@@ -190,15 +188,46 @@ public class ExamTest {
 		FigureIF figure = createTestFigure();
 		BlockIF block = createTestBlock();
 		
-		exam.addElementIF(figure);
-		elements = exam.elementsUsingElement(figure);
-		assertTrue(elements.isEmpty());
-		
+		exam.declareUse(problem, figure);
 		exam.addElementIF(problem);
+		exam.addElementIF(figure);
+		
 		exam.declareUse(problem, figure);
 		elements = exam.elementsUsingElement(figure);
 		assertEquals(1, elements.size());
 		
+		exam.addElementIF(block);
+		exam.declareUse(problem,block);
+		elements = exam.elementsUsingElement(block);
+		assertEquals(1, elements.size());
+		
+		exam.declareUse(block, figure);
+		elements = exam.elementsUsingElement(figure);
+		assertEquals(2,elements.size());
+		
+	}
+	
+	@Test
+	public void testDeclareUseBad() {
+		// TODO Waiting for declareUse to throw Exceptions instead of
+		// System.err messages.
+		ExamIF exam = examFactory.newGeneratedExam();
+		Collection<ExamElementIF> elements;
+		
+		ProblemIF problem = createTestProblem();
+		FigureIF figure = createTestFigure();
+		BlockIF block = createTestBlock();
+		
+		exam.declareUse(problem, figure);
+		elements = exam.elementsUsingElement(figure);
+		assertEquals(0, elements.size());
+		
+		exam.addElementIF(problem);
+		exam.declareUse(problem, figure);
+		elements = exam.elementsUsingElement(figure);
+		assertEquals(0, elements.size());
+		
+		exam.addElementIF(figure);
 		exam.declareUse(problem, figure);
 		elements = exam.elementsUsingElement(figure);
 		assertEquals(1, elements.size());
@@ -517,12 +546,6 @@ public class ExamTest {
 		
 		Collection<ExamElementIF> elements = exam.elements();
 		assertNotNull(elements);
-		assertEquals(0, elements.size());
-		
-		// Lets try adding something that ISNT a Problem, Block, or Figure
-		ExamElement ee = new ExamElement("Unnecessary ExamElement");
-		exam.addElementIF(ee);
-		elements = exam.elements();
 		assertEquals(0, elements.size());
 	}
 	
