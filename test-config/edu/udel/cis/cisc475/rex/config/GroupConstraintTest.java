@@ -1,8 +1,8 @@
 package edu.udel.cis.cisc475.rex.config;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import junit.framework.TestCase;
 
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.impl.GroupConstraint;
@@ -161,8 +161,6 @@ public class GroupConstraintTest {
 		
 		GroupConstraintIF GroupConstraint = new GroupConstraint(I, 10, 20, "testing", S);
 		
-		SourceIF F = GroupConstraint.source();
-		
 		assertEquals(GroupConstraint.points(), 20);
 	
 	}
@@ -181,8 +179,6 @@ public class GroupConstraintTest {
 		SourceIF S = sourceFactory.newSource(filename);
 		
 		GroupConstraintIF GroupConstraint = new GroupConstraint(I, 10, 20222, "testing", S);
-		
-		SourceIF F = GroupConstraint.source();
 		
 		assertEquals(GroupConstraint.points(), 20222);
 	
@@ -203,8 +199,6 @@ public class GroupConstraintTest {
 		
 		GroupConstraintIF GroupConstraint = new GroupConstraint(I, 10, 20, "testing", S);
 		
-		SourceIF F = GroupConstraint.source();
-		
 		assertEquals(GroupConstraint.topic(), "testing");
 	
 	}
@@ -223,8 +217,6 @@ public class GroupConstraintTest {
 		SourceIF S = sourceFactory.newSource(filename);
 		
 		GroupConstraintIF GroupConstraint = new GroupConstraint(I, 10, 20, "-8test33ing2", S);
-		
-		SourceIF F = GroupConstraint.source();
 		
 		assertEquals(GroupConstraint.topic(), "-8test33ing2");
 	
