@@ -1,9 +1,9 @@
 /**
  * rex
  * edu.udel.cis.cisc475.rex.exam
- * Test Suite for testing Answer methods.
+ * Test Suite for testing Exam Element.
  * Apr 9, 2010
- * hboyd
+ * 
  */
 package edu.udel.cis.cisc475.rex.exam;
 
