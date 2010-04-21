@@ -74,7 +74,10 @@ public class Exam implements ExamIF {
 	private HashSet<String> labels;
 
 	/**
-	 * 
+	 *  Set representing the uses relationship between elements.
+	 *  uses[user] = { the set of usees}
+	 *  If Element A uses soley Element B, then
+	 *  uses[A] = {B}
 	 */
 	private LinkedHashMap<ExamElementIF, HashSet<ExamElementIF>> uses;
 
