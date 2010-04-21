@@ -15,8 +15,8 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
  * also how many versions to generate. It can also store the group
  * constraints and the problem constraints.
  * 
- * @author Anthony Platt
- * @author Jeremy Verchick
+ * @author Anthony Platt (aplatt)
+ * @author Jeremy Verchick (verchick)
  * 
  */
 

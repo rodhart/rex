@@ -7,7 +7,8 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
  * Constraint stores the different types of requirements for the exam documents.
  * It is used by the Config class.
  * 
- * @author aplatt + verchick
+ * @author Anthony Platt (aplatt)
+ * @author Jeremy Verchick (verchick)
  *
  */
 public class Constraint implements ConstraintIF {

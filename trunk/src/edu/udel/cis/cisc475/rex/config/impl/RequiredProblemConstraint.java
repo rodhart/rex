@@ -7,8 +7,8 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
  * RequiredProblemConstraint stores and accesses the different properties of a problem constraint
  * and is used by the config class.
  * 
- * @author Anthony Platt
- * @author Jeremy Verchick
+ * @author Anthony Platt (aplatt)
+ * @author Jeremy Verchick (verchick)
  *
  */
 public class RequiredProblemConstraint implements RequiredProblemConstraintIF {
