@@ -1,7 +1,7 @@
 package edu.udel.cis.cisc475.rex.config.impl;
 
 import java.util.Collection;
-
+import java.util.HashSet;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
@@ -26,11 +26,12 @@ public class Config implements ConfigIF {
 	private String finalBlock;
 	private boolean pdfOption;
 	private int numVersions;
-	private Collection<ConstraintIF> constraints;
+	private HashSet<ConstraintIF> constraints;
 	
 	public Config(boolean pdf, int numVersions){
 		this.numVersions = numVersions;
 		this.pdfOption = pdf;
+		this.constraints = new HashSet<ConstraintIF>();
 	}
 	
 	/**
@@ -39,9 +40,9 @@ public class Config implements ConfigIF {
 	 */
 	public GroupConstraintIF addGroupConstraint(String topic,
 			IntervalIF difficulty, int numProblems, int points, SourceIF source) {
-		
+
 		GroupConstraintIF constraint = new GroupConstraint(difficulty, numProblems, points, topic, source);
-		constraints.add(constraint);
+		this.constraints.add(constraint);
 		
 		return constraint;
 	}
@@ -52,6 +53,7 @@ public class Config implements ConfigIF {
 	 */
 	public RequiredProblemConstraintIF addRequiredProblemConstraint(
 			String label, int points, SourceIF source) {
+		
 		RequiredProblemConstraintIF constraint = new RequiredProblemConstraint(label, points, source);
 		constraints.add(constraint);
 		
@@ -78,7 +80,7 @@ public class Config implements ConfigIF {
 	 * constraints collection.
 	 */
 	public Collection<ConstraintIF> constraints() {
-		return constraints;
+		return (Collection<ConstraintIF>)constraints;
 	}
 
 	/**
