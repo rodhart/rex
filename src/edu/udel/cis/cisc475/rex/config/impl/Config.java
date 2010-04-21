@@ -47,8 +47,8 @@ public class Config implements ConfigIF {
 	}
 
 	/**
-	 * Creates a new RequiredProblemConstraint object with the passed parameters and adds it to
-	 * the constraints collection.  
+	 * Creates a new RequiredProblemConstraint object with the passed parameters and adds 
+	 * it to the constraints collection.  
 	 */
 	public RequiredProblemConstraintIF addRequiredProblemConstraint(
 			String label, int points, SourceIF source) {
