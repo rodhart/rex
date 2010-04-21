@@ -35,7 +35,7 @@ public class Config implements ConfigIF {
 	}
 	
 	/**
-	 * Creates a new GroupConstraint object with the passed parameters and adds it to
+	 * Constructor creates a new GroupConstraint object with the passed parameters and adds it to
 	 * the constraints collection.  
 	 */
 	public GroupConstraintIF addGroupConstraint(String topic,
