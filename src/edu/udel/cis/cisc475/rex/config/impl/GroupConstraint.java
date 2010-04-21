@@ -8,8 +8,8 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
  * GroupConstraint stores and accesses the different properties of a group constraint
  * and is used by the config class.
  * 
- * @author Anthony Platt
- * @author Jeremy Verchick
+ * @author Anthony Platt (aplatt)
+ * @author Jeremy Verchick (verchick)
  *
  */
 public class GroupConstraint implements GroupConstraintIF {
