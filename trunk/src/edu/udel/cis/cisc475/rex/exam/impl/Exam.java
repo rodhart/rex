@@ -226,8 +226,7 @@ public class Exam implements ExamIF {
 	 */	
 	public Collection<ExamElementIF> elementsWithTopic(String topic) {
 		HashSet<ExamElementIF> returnSet = new HashSet<ExamElementIF>();
-		Collection<ExamElementIF> elementValues = elements.values();
-		Iterator<ExamElementIF> i = elementValues.iterator();
+		Iterator<ExamElementIF> i = elements.values().iterator();
 		while (i.hasNext()) {
 			ExamElementIF element = i.next();
 			if (element instanceof ProblemIF) {
