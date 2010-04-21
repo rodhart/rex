@@ -111,11 +111,7 @@ public class Exam implements ExamIF {
 			} else if (element instanceof ProblemIF) {
 				problems.add(key);
 				topics.add(((ProblemIF) element).topic());
-			} else {
-				// There has to be this 'else' for full branch coverage.
-				// TODO Perhaps make this throw an exception?
-				return -1;
-			}
+			} 
 		
 			// put into linked hash set
 			elements.put(key,element);
