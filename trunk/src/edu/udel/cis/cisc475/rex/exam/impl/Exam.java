@@ -111,9 +111,7 @@ public class Exam implements ExamIF {
 			} else if (element instanceof ProblemIF) {
 				problems.add(key);
 				topics.add(((ProblemIF) element).topic());
-			} else {
-				return -1;
-			}
+			} 
 		
 			// put into linked hash set
 			elements.put(key,element);
@@ -210,8 +208,7 @@ public class Exam implements ExamIF {
 	 */
 	public Collection<ExamElementIF> elementsUsingElement(ExamElementIF element) {
 		HashSet<ExamElementIF> returnSet = new HashSet<ExamElementIF>();
-		Collection<ExamElementIF> elementValues = elements.values();
-		Iterator<ExamElementIF> i = elementValues.iterator();
+		Iterator<ExamElementIF> i = elements.values().iterator();
 		while (i.hasNext()) {
 			ExamElementIF newElement = i.next();
 			if (uses.get(newElement).contains(element)) {
