@@ -93,8 +93,8 @@ public class ExamFactory implements ExamFactoryIF {
 	public ProblemIF newProblem(String topic, String label, SourceIF question, AnswerIF[] answers) {
 		if((topic == null) || (label == null)  || (question == null)   || (answers == null))
 			throw new NullPointerException();
-		if(answers.length == 0)
-			throw new IllegalArgumentException("Argument answers cannot be empty");
+		//if(answers.length == 0)
+		//	throw new IllegalArgumentException("Argument answers cannot be empty");
 		for(int i = 0; i < answers.length; i++)
 			if(answers[i] == null)
 			throw new NullPointerException("Argument answers cannot contain null values");
