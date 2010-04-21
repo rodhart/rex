@@ -1,20 +1,20 @@
 
 
 package edu.udel.cis.cisc475.rex.config;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Collection;
 
 import org.junit.Before;
 import org.junit.Test;
-import junit.framework.TestCase;
-import java.util.Collection;
 
 import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
-import edu.udel.cis.cisc475.rex.config.impl.Config;
-import edu.udel.cis.cisc475.rex.config.impl.GroupConstraint;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
@@ -102,13 +102,12 @@ public class ConfigTest {
 	public void testAddGroupConstraint() {
 		ConfigIF C = configFactory.newConfig(false, 9999);
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
-		SourceIF S = sourceFactory.newSource("name");
+		SourceIF S = sourceFactory.newSource("test");
 		
-		C.addGroupConstraint("topic", I, 5, 5, S);
+		GroupConstraintIF constraint = C.addGroupConstraint("topic", I, 5, 5, S);
 		
 		Collection<ConstraintIF> Cs = C.constraints();
-		
-		assertEquals(Cs.toArray(new GroupConstraintIF[0])[0].topic(), "topic");
+		assertEquals(Cs.toArray()[0], constraint);
 	}
 	
 }
