@@ -5,8 +5,11 @@ import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /** 
+ * GroupConstraint stores and accesses the different properties of a group constraint
+ * and is used by the config class.
  * 
- * @author aplatt + verchick
+ * @author Anthony Platt
+ * @author Jeremy Verchick
  *
  */
 public class GroupConstraint implements GroupConstraintIF {
@@ -16,6 +19,14 @@ public class GroupConstraint implements GroupConstraintIF {
 	private String topic;
 	private SourceIF source;
 	
+	/**
+	 * Constructor creates a new instance of GroupConstraint with the passed parameters.
+	 * @param difficulty
+	 * @param numProblems
+	 * @param points
+	 * @param topic
+	 * @param source
+	 */
 	public GroupConstraint(IntervalIF difficulty, int numProblems, int points, String topic, SourceIF source){
 		this.difficultyInterval = difficulty;
 		this.numProblems = numProblems;
@@ -24,27 +35,37 @@ public class GroupConstraint implements GroupConstraintIF {
 		this.source = source;
 	}
 	
-	@Override
+	/**
+	 * returns the difficulty interval
+	 */
 	public IntervalIF difficultyInterval() {
 		return this.difficultyInterval;
 	}
 
-	@Override
+	/**
+	 * returns the number of problems
+	 */
 	public int numProblems() {
 		return this.numProblems;
 	}
 
-	@Override
+	/**
+	 * returns the required points
+	 */
 	public int points() {
 		return this.points;
 	}
 
-	@Override
+	/**
+	 * returns the group topic
+	 */
 	public String topic() {
 		return this.topic;
 	}
 
-	@Override
+	/**
+	 * returns the requirement source
+	 */
 	public SourceIF source() {
 		return this.source;
 	}
