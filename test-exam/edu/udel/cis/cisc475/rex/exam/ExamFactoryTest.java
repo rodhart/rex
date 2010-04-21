@@ -1,6 +1,7 @@
 /**
  * rex
  * edu.udel.cis.cisc475.rex.exam
+ * Test Suite for testing ExamFactory.
  * Apr 9, 2010
  * hboyd
  */
@@ -16,7 +17,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
@@ -96,9 +96,28 @@ public class ExamFactoryTest {
 	}
 	
 	@Test
-	@Ignore
 	public void testNewBlockBadInput() {
-		fail("Not yet implemented");
+		SourceIF blockSource = sourceFactory.newSource(testUEFfilename);
+		blockSource.addText("test Block Source");
+		try{
+			ExamElementIF block = examFactory.newBlock(null, "test Label", blockSource);
+			fail("Expected Exceptions not Thrown.");
+		} catch (Exception e) {
+			
+		}
+		try{
+			ExamElementIF block = examFactory.newBlock("test topic", null, blockSource);
+			fail("Expected Exceptions not Thrown.");
+		} catch (Exception e) {
+			
+		}
+		try{
+			ExamElementIF block = examFactory.newBlock("test topic", "test label", null);
+			fail("Expected Exceptions not Thrown.");
+		} catch (Exception e) {
+			
+		}
+		
 	}
 	
 	@Test
@@ -111,9 +130,21 @@ public class ExamFactoryTest {
 	}
 	
 	@Test
-	@Ignore
 	public void testNewFigureBadInput() {
-		fail("Not yet implemented");
+		SourceIF figureSource = sourceFactory.newSource(testUEFfilename);
+		figureSource.addText("test Figure Source");
+		try{
+			ExamElementIF figure = examFactory.newFigure(null, figureSource);
+			fail("Expected Exceptions not Thrown.");
+		} catch(Exception e) {
+			
+		}
+		try{
+			ExamElementIF figure = examFactory.newFigure("test figure label", null);
+			fail("Expected Exceptions not Thrown.");
+		} catch(Exception e) {
+			
+		}
 	}
 	
 	@Test
@@ -127,10 +158,9 @@ public class ExamFactoryTest {
 		assertNotSame(answer1, answer2);
 	}
 	
-	@Test
-	@Ignore
+	@Test(expected = Exception.class)
 	public void testNewAnswerBadInput() {
-		fail("Not yet implemented");
+		AnswerIF answer1 = examFactory.newAnswer(true, null);
 	}
 	
 	@Test
@@ -146,10 +176,9 @@ public class ExamFactoryTest {
 		assertNotSame(answer1, answer2);
 	}
 	
-	@Test
-	@Ignore
+	@Test(expected = Exception.class)
 	public void testNewFixedAnswerBadInput() {
-		fail("Not yet implemented");
+		AnswerIF answer2 = examFactory.newFixedAnswer(false, 0, null);
 	}
 	
 	@Test
@@ -171,9 +200,48 @@ public class ExamFactoryTest {
 	}
 	
 	@Test
-	@Ignore
 	public void testNewProblemBadInput() {
-		fail("Not yet implemented");
+		SourceIF answerSource = sourceFactory.newSource(testUEFfilename);
+		answerSource.addText("test Answer Source");
+		AnswerIF answer1 = examFactory.newAnswer(true, answerSource);
+		AnswerIF answer2 = examFactory.newFixedAnswer(false, 0, answerSource);
+		AnswerIF[] answers = new AnswerIF[2];
+		SourceIF problemSource = sourceFactory.newSource(testUEFfilename);
+		problemSource.addText("test Problem Source?");
+		
+		try{
+			// answers array is empty
+			ExamElementIF problem = examFactory.newProblem("test Problem Topic", "test Label", problemSource, answers);
+			fail("Expected Exceptions not Thrown.");
+		} catch (Exception e) {
+			
+		}
+		answers[0] = answer1;
+		answers[1] = answer2;
+		try{
+			ExamElementIF problem = examFactory.newProblem(null, "test Label", problemSource, answers);
+			fail("Expected Exceptions not Thrown.");
+		} catch (Exception e) {
+			
+		}
+		try{
+			ExamElementIF problem = examFactory.newProblem("test Problem Topic", null, problemSource, answers);
+			fail("Expected Exceptions not Thrown.");
+		} catch (Exception e) {
+			
+		}
+		try{
+			ExamElementIF problem = examFactory.newProblem("test Problem Topic", "test Label", null, answers);
+			fail("Expected Exceptions not Thrown.");
+		} catch (Exception e) {
+			
+		}
+		try{
+			ExamElementIF problem = examFactory.newProblem("test Problem Topic", "test Label", problemSource, null);
+			fail("Expected Exceptions not Thrown.");
+		} catch (Exception e) {
+			
+		}
 	}
 	
 }

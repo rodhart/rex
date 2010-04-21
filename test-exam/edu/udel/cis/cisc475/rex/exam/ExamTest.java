@@ -1,6 +1,7 @@
 /**
  * rex
  * edu.udel.cis.cisc475.rex.exam
+ * Test Suite for testing Exam methods.
  * Apr 9, 2010
  * hboyd
  */
@@ -37,6 +38,7 @@ import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 
 /**
  * @author hboyd
+ * @author fxfitz
  *
  */
 public class ExamTest {
@@ -188,16 +190,15 @@ public class ExamTest {
 		FigureIF figure = createTestFigure();
 		BlockIF block = createTestBlock();
 		
-		exam.declareUse(problem, figure);
+		exam.addElementIF(figure);
 		elements = exam.elementsUsingElement(figure);
-		assertEquals(0, elements.size());
+		assertTrue(elements.isEmpty());
 		
 		exam.addElementIF(problem);
 		exam.declareUse(problem, figure);
 		elements = exam.elementsUsingElement(figure);
-		assertEquals(0, elements.size());
+		assertEquals(1, elements.size());
 		
-		exam.addElementIF(figure);
 		exam.declareUse(problem, figure);
 		elements = exam.elementsUsingElement(figure);
 		assertEquals(1, elements.size());

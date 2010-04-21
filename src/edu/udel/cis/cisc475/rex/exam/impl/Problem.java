@@ -79,7 +79,13 @@ public class Problem implements ProblemIF {
 	}
 
 	public void setPoints(int points) {
-		this.points = points;
+		// TODO: not sure if we should throw exception here
+		if(points < 0) {
+			this.points = 0;
+		}
+		else {
+			this.points = points;
+		}
 	}
 	
 	public void setDifficulty(double difficulty){

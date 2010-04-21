@@ -1,6 +1,7 @@
 /**
  * rex
  * edu.udel.cis.cisc475.rex.exam
+ * Test Suite for Problem methods.
  * Apr 9, 2010
  * hboyd
  */
@@ -19,7 +20,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
@@ -117,7 +117,7 @@ public class ProblemTest {
 	@Test
 	public void testGetRequiredBlock() {
 		ExamIF exam = examFactory.newGeneratedExam();
-		exam.addElementIF(problem);
+		
 		assertNull(problem.requiredBlock());
 		
 		// TODO: How do we mark a problem as being in a required block?
@@ -128,6 +128,7 @@ public class ProblemTest {
 		
 		BlockIF block = examFactory.newBlock("Test Block Topic", "Test Block Label", blockSource);
 		exam.addElementIF(block);
+		exam.addElementIF(problem);
 		
 		// make problem part of required block
 		//((Problem)problem).setRequiredBlock(block);
@@ -139,17 +140,15 @@ public class ProblemTest {
 		assertNotNull(returned);
 		assertEquals(block, returned);
 	}
-
+	
 	@Test
 	public void testGetReferencedFigures() {
 		ExamIF exam = examFactory.newGeneratedExam();
-		exam.addElementIF(problem);
+		
 		// I would rather have referenced figures be empty
 		// so as to avoid null pointer exceptions...
 		assertNotNull(problem.referencedFigures());
 		assertTrue(problem.referencedFigures().isEmpty());
-		
-		// TODO: How do we mark that a problem references a figure? 
 		
 		// create figure for problem to reference
 		SourceIF figureSource = sourceFactory.newSource(testUEFfilename);
@@ -157,6 +156,8 @@ public class ProblemTest {
 		
 		FigureIF figure1 = examFactory.newFigure("testFigure1", figureSource);
 		exam.addElementIF(figure1);
+		exam.addElementIF(problem);
+		
 		// make problem reference figure
 		//((Problem)problem).addReferencedFigure(figure1);
 		exam.declareUse(problem, figure1);
@@ -182,6 +183,7 @@ public class ProblemTest {
 		
 		assertNotNull(figures);
 		assertEquals(2, figures.size());
+		assertTrue(figures.contains(figure1));
 		assertTrue(figures.contains(figure2));
 	}
 	
@@ -209,14 +211,10 @@ public class ProblemTest {
 	}
 	
 	@Test
-	@Ignore
 	public void testGetPointsBadInput(){
 		problem.setPoints(-20);
 		// TODO: Does set points throw an error or return null on bad input?
-		assertNull(problem.points());
-		
-		problem.setPoints(0);
-		assertNull(problem.points());
+		assertTrue(problem.points() == 0);
 	}
 	
 	@Test
@@ -254,5 +252,11 @@ public class ProblemTest {
 		difficulty = problem.difficulty();
 		
 		assertEquals(23.75, difficulty, 0);
+		
+		problem.setDifficulty(-20.1);
+		
+		difficulty = problem.difficulty();
+		
+		assertEquals(-20.1, difficulty, 0);
 	}
 }

@@ -1,6 +1,7 @@
 /**
  * rex
  * edu.udel.cis.cisc475.rex.exam
+ * Test Suite for testing FigureTest methods.
  * Apr 9, 2010
  * hboyd
  */
