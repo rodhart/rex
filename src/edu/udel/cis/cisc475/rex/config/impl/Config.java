@@ -10,8 +10,13 @@ import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /**
+ * The Config class handles the storage of the configuration options.
+ * It stores the command line arguments such as whether it needs pdfs and 
+ * also how many versions to generate. It can also store the group
+ * constraints and the problem constraints.
  * 
- * @author aplatt + verchick
+ * @author Anthony Platt
+ * @author Jeremy Verchick
  * 
  */
 
@@ -28,7 +33,10 @@ public class Config implements ConfigIF {
 		this.pdfOption = pdf;
 	}
 	
-	@Override
+	/**
+	 * Creates a new GroupConstraint object with the passed parameters and adds it to
+	 * the constraints collection.  
+	 */
 	public GroupConstraintIF addGroupConstraint(String topic,
 			IntervalIF difficulty, int numProblems, int points, SourceIF source) {
 		
@@ -38,7 +46,10 @@ public class Config implements ConfigIF {
 		return constraint;
 	}
 
-	@Override
+	/**
+	 * Creates a new RequiredProblemConstraint object with the passed parameters and adds it to
+	 * the constraints collection.  
+	 */
 	public RequiredProblemConstraintIF addRequiredProblemConstraint(
 			String label, int points, SourceIF source) {
 		RequiredProblemConstraintIF constraint = new RequiredProblemConstraint(label, points, source);
@@ -47,48 +58,67 @@ public class Config implements ConfigIF {
 		return constraint;
 	}
 
-	@Override
-	public Collection<ConstraintIF> constraints() {
-		return constraints;
-	}
-
-	@Override
-	public String finalBlock() {
-		return this.finalBlock;
-	}
-
-	@Override
-	public int numVersions() {
-		return this.numVersions;
-	}
-
-	@Override
-	public boolean pdfOption() {
-		return this.pdfOption;
-	}
-
-	@Override
-	public long seed() {
-		return this.seed;
-	}
-
-	@Override
-	public void setFinalBlock(String label) {
-		this.finalBlock = label;
-	}
-
-	@Override
+	/**
+	 * Sets the exam seed number
+	 */
 	public void setSeed(long value) {
 		this.seed = value;
 
 	}
 
-	@Override
+	/**
+	 * sets the version strings for exam version differentiation
+	 */
 	public void setVersionStrings(String[] names) {
 		this.versionStrings = names;
 	}
 
-	@Override
+	/**
+	 * Returns the Group and Problem Constraints that have been stored in the 
+	 * constraints collection.
+	 */
+	public Collection<ConstraintIF> constraints() {
+		return constraints;
+	}
+
+	/**
+	 * Returns the final block
+	 */
+	public String finalBlock() {
+		return this.finalBlock;
+	}
+
+	/**
+	 * Returns the number of versions to be generated
+	 */
+	public int numVersions() {
+		return this.numVersions;
+	}
+
+	/**
+	 * Returns true or false whether or not a pdf should be generated
+	 */
+	public boolean pdfOption() {
+		return this.pdfOption;
+	}
+
+	/**
+	 * Returns exam seed
+	 */
+	public long seed() {
+		return this.seed;
+	}
+
+	/**
+	 * Returns the final block
+	 */
+	public void setFinalBlock(String label) {
+		this.finalBlock = label;
+	}
+
+	/**
+	 * Returns the version strings for exam version differentiation
+	 */
 	public String[] versionStrings() {
 		return this.versionStrings;
 	}
