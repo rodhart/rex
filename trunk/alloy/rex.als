@@ -100,9 +100,9 @@ fact { // all constraints are in the Config
 	all c: Constraint | some conf: Config | c in conf.constraints
 }
 
-// fields not complete. Commented out for now for simpler diagram.  Re-insert!
+
 sig GroupConstraint extends Constraint {
-//	numProblems: one Int,
+	numProblems: one Int,
 	category: one Category,
 //	interval: one Interval
 }
@@ -143,7 +143,7 @@ sig Problem extends ExamElement {
 	category: one Category,
 	block: lone Block,
 	//figures: set Figure,
-	points: lone Int,   // lone because will be null in master exam.
+	//points: lone Int,   // lone because will be null in master exam.
 	// source: one Source,   // not important for model!
 	//difficulty: one Int,   //actually REAL NUMBER, but it doesn't matter for the Alloy model
 	answers: set Answer   // May be 0 if not a multiple choice.
@@ -423,10 +423,11 @@ fact elementsDoNotHaveIdenticalLabels
 }
 
 
+// Use only if needed:
 // assume ONE OF THESE to be true for test purposes here:
-fact allRequiredProblemsAreInMaster {
-	all r: RequiredProblemConstraint | some p: Problem | r.problemName = p.label
-}
+//fact allRequiredProblemsAreInMaster {
+//	all r: RequiredProblemConstraint | some p: Problem | r.problemName = p.label
+//}
 // OR: NOT WORKING!:
 //fact someRequiredProblemNotInMaster {
 //		some r: RequiredProblemConstraint | some p:Problem| l: Label | r.problemName = p.label
@@ -444,20 +445,105 @@ fact doNotRequestSameProblemTwice
 
 
 
+//2010 04 21:
 
-pred generateExams (g, g': GeneratedExam, r: RequiredProblemConstraint)//, m: MasterExam, 
+/*
+sig SatisfiedContainer {
+	category: one Category,
+	requiredProblems: set Problem,
+	groupConstraints: set ConstraintContainer
+}
+
+sig ConstraintContainer {
+	numProblems: one Int,
+	satisfiedProblems: set Problem
+}
+*/
+
+sig SatisfiedContainer {
+	category: one Category,
+	requiredProblems: one ElementList,
+	groupConstraints: set ConstraintContainer
+}
+
+sig ConstraintContainer {
+	numProblems: one Int,
+	satisfiedProblems: one ElementList
+}
+
+
+
+
+
+lone sig RequiredProblemUnsatisfiableError {}
+fact isReqProblemUnsatError{
+	some RequiredProblemUnsatisfiableError iff some r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
+	// all p are in the MasterExam as specified elsewhere
+}
+//fact forceErrorToExist {
+//	all r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
+//}
+//fact forceErrorNotToExist {
+//	all r: RequiredProblemConstraint | some p: Problem | r.problemName = p.label
+//}
+
+
+/* DO LATER:
+lone sig GroupProblemUnsatisfiableError {}
+fact isGroupProblemUnsatError{
+	some GroupProblemUnsatisfiableError iff
+		
+		some g:GroupConstraint | not all    //not some p: Problem | r.problemName = p.label
+	// all p are in the MasterExam as specified elsewhere
+}
+*/
+
+
+
+pred isProblemAlreadyIncluded [p: Problem, s: SatisfiedContainer] {
+	p in s.requiredProblems.*rest.element or p in s.groupConstraints.satisfiedProblems.*rest.element
+}
+/*
+pred addToGenerated {
+	all 
+
+	isProblemAlreadyIncluded
+}
+*/
+
+//run isProblemAlreadyIncluded for 5 but exactly 2 Problem
+
+
+//fun getAllSatisfyingSingleGroupConstraint (g) {
+//}
+
+
+//pred fulfillGroupConstraints(g: GroupConstraint, s, s': SatisfiedContainer, c, c': ConstraintContainer) {
+//	#s = 0
+//	#c = 0
+//	s'.groupConstraints.satisfiedProblems = 
+//}
+
+
+// end 2010 04 21
+
+//run fulfillGroupConstraints for 3
+
+
+pred generateExams (g, g': GeneratedExam, r: RequiredProblemConstraint, m, m': MasterExam) {
 	#g.elements.*rest.element = 0
 
+//	(set all p | some r | p.label = r.problemName) in m.elements.*rest.element
+
+//	m'.elements.*rest.element = m.elements.*rest.element - r.
+
 // something like this:	g'.elements.*rest.element =     r.problemName   m.elements.*rest.element.label
-
-
-
 
 //	#g'.elements.*rest.element = 2
 //	(#g'.elements.*rest.element = g'.elements.*rest.element + (r.)
 }
 
-run generateExams for 7
+//run generateExams for 7
 //run generateExams for 3 but exactly 2 GeneratedExam, exactly 1 MasterExam
 
 
@@ -474,6 +560,7 @@ pred show{}
 //run show for 5 but exactly 1 GeneratedExam, exactly 2 Problem, exactly 2 RequiredProblemConstraint,
 //	exactly 0 GroupConstraint, exactly 0 Answer
 
-//run show for 5 but exactly 1 GeneratedExam, exactly 3 NonEmptyList, exactly 3 ExamElement, exactly 0 Answer // not good: modified!
+//run show for 7 but exactly 1 GeneratedExam, exactly 3 NonEmptyList, exactly 3 ExamElement, exactly 0 Answer, exactly 1 RequiredProblemConstraint // not good: modified!
+run show for 4 but exactly 1 RequiredProblemConstraint, exactly 2 Problem
 
 //check noDuplicatesInGenerated for 5 // GOOD!
