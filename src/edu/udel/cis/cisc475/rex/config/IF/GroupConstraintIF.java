@@ -1,6 +1,7 @@
 package edu.udel.cis.cisc475.rex.config.IF;
 
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
+import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /*
  * @author team 2
@@ -10,11 +11,8 @@ import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 
 public interface GroupConstraintIF extends ConstraintIF{
 	int numProblems();
-
 	IntervalIF difficultyInterval();
-
 	String topic();
-
 	int points();
-
+	SourceIF source();
 }// end of interface
