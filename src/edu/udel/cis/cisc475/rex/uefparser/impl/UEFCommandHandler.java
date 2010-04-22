@@ -88,9 +88,9 @@ class UEFCommandHandler
 				break;
 			}
 		}
-		SourceIF s = sourceFactory.newSource(uefCharHandler.getFileName());
-		s.setStartColumn(this.uefCharHandler.getColumnNumber());
-		s.setStartLine(this.uefCharHandler.getLineNumber());
+		//SourceIF s = sourceFactory.newSource(uefCharHandler.getFileName());
+		//s.setStartColumn(this.uefCharHandler.getColumnNumber());
+		//s.setStartLine(this.uefCharHandler.getLineNumber());
 	}
 
 	/**

@@ -6,11 +6,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Class that handles the underlying UEF file character by character.
+ * Internally uses unix line breaks for internal representation.
+ * This is important to note because the position may differ
+ * from the actual byte position in the underlying file. For instance-
+ * in the case of windows line breaks. This would be true.
  * 
  * @author Aaron Myles Landwehr
  * @author Ahmed El-Hassany
@@ -24,9 +30,9 @@ class UEFCharHandler
 	 */
 	private int position = -1;
 	/**
-	 * Current line number in the file
+	 * Mapping of file position to actual file lines.
 	 */
-	private int lineNumber;
+	NavigableMap<Integer, Integer> positionToLineNumberMap;
 	/**
 	 * The column position on the current line
 	 */
@@ -39,6 +45,11 @@ class UEFCharHandler
 	 * the name of the file being handled
 	 */
 	private String fileName;
+
+	public UEFCharHandler()
+	{
+		positionToLineNumberMap = new TreeMap<Integer, Integer>();
+	}
 
 	/**
 	 * Opens a file and completely reads it into a StringBuffer for easy
@@ -56,10 +67,16 @@ class UEFCharHandler
 				new InputStreamReader(stream));
 
 		StringBuffer buffer = new StringBuffer();
-		for (String line = reader.readLine(); line != null; line = reader.readLine())
+		int lineNumber = 1;
+		String line = reader.readLine();
+		while (line != null)
 		{
+			int lal = buffer.length();
+			positionToLineNumberMap.put(buffer.length(), lineNumber);
 			buffer.append(line);
 			buffer.append('\n');
+			lineNumber++;
+			line = reader.readLine();
 		}
 		reader.close();
 
@@ -97,9 +114,9 @@ class UEFCharHandler
 
 	boolean isLineBreak() throws EOFException
 	{
-		char ch = fileContents.charAt(position);
 		if (position < fileContents.length())
 		{
+			char ch = fileContents.charAt(position);
 			if (ch == '\r'
 				|| ch == '\n' || ch == '\f')
 			{
@@ -122,20 +139,6 @@ class UEFCharHandler
 	void move() throws EOFException
 	{
 		position++;
-
-		// keep track of the current line number and chat number on that line
-		if (position < fileContents.length())
-		{
-			if (isLineBreak())
-			{
-				lineNumber++;
-				columnNumber = 1;
-			}
-			else
-			{
-				columnNumber++;
-			}
-		}
 	}
 
 	/**
@@ -217,9 +220,16 @@ class UEFCharHandler
 	/**
 	 * Get the line number
 	 */
-	int getLineNumber()
+	int getLineNumber() throws EOFException
 	{
-		return this.lineNumber;
+		if (position < fileContents.length())
+		{
+			return positionToLineNumberMap.floorEntry(position).getValue();
+		}
+		else
+		{
+			throw new EOFException();
+		}
 	}
 
 	/**
@@ -227,7 +237,7 @@ class UEFCharHandler
 	 */
 	int getColumnNumber()
 	{
-		return this.columnNumber;
+		return columnNumber;
 	}
 
 	/**
