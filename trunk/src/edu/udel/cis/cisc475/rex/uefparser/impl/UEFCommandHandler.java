@@ -1,13 +1,21 @@
 package edu.udel.cis.cisc475.rex.uefparser.impl;
 
+import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
+import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
+import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
+import java.io.EOFException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
 import edu.udel.cis.cisc475.rex.uefparser.impl.UEFCommand.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class handles the processing of commands after they are parsed from a file.
@@ -21,22 +29,27 @@ class UEFCommandHandler
 	/**
 	 * Queue of all commands from the file.
 	 */
-	Queue<UEFCommand> uefCommandQueue;
+	private Queue<UEFCommand> uefCommandQueue;
 	/**
 	 * Stack of current states in the file.
 	 */
-	Stack<States> uefStateStack;
+	private Stack<States> uefStateStack;
 	/**
 	 * Underlying file that was read from.
 	 * Simply used to retrieve text from lines
 	 * in the case that errors occur.
 	 */
-	UEFCharHandler uefCharHandler;
+	private UEFCharHandler uefCharHandler;
 	/**
 	 * Source factory is only created once at the constructor and used every
-	 * time
+	 * time a source object needs to be created.
 	 */
 	private SourceFactoryIF sourceFactory;
+	/**
+	 * Exam Factor is only created once at the constructor and used every time
+	 * parts of exam needs to be created.
+	 */
+	private ExamFactoryIF examFactory;
 
 	/**
 	 * The list of states we have.
@@ -46,6 +59,14 @@ class UEFCommandHandler
 
 		answers, block, document, figure, problem
 	}
+	/**
+	 * The current amount of answers within a particular problem.
+	 */
+	private int answerAmount;
+	/**
+	 * List of answers for the current problem.
+	 */
+	private List<AnswerIF> answersList;
 
 	/**
 	 * Constructor for the class. Takes a reference to the underlying UEFCharHandler that
@@ -57,6 +78,8 @@ class UEFCommandHandler
 		this.uefCharHandler = uefCharHandler;
 		this.uefCommandQueue = new LinkedList<UEFCommand>();
 		this.uefStateStack = new Stack<States>();
+		this.sourceFactory = new SourceFactory();
+		this.examFactory = new ExamFactory();
 	}
 
 	/**
@@ -68,29 +91,106 @@ class UEFCommandHandler
 		uefCommandQueue.add(uefCommand);
 	}
 
-	/**
-	 * Process an \answer command.
-	 */
-	void processAnswer()
+	private boolean isFixed(String argument)
 	{
-		UEFCommand command = uefCommandQueue.poll();
-		String optionalArgument = command.getOptionalArgument();
-		String content;
-		for (Iterator<UEFCommand> iter = uefCommandQueue.iterator(); iter.hasNext();)
+
+		if (argument != null)
 		{
-			UEFCommand peekedCommand = iter.next();
-			if (peekedCommand.getType() == Types.answer
-				|| peekedCommand.getType() == Types.endAnswers)
-			{
-				content = uefCharHandler.getContent(command.endPosition,
-													peekedCommand.getStartPosition() - 1);
-				System.out.println("answer: '" + content + "'");
-				break;
-			}
+			return argument.contains("fixed");
 		}
-		//SourceIF s = sourceFactory.newSource(uefCharHandler.getFileName());
-		//s.setStartColumn(this.uefCharHandler.getColumnNumber());
-		//s.setStartLine(this.uefCharHandler.getLineNumber());
+		else
+		{
+			return false;
+		}
+	}
+
+	private boolean isCorrect(String argument)
+	{
+		if (argument != null)
+		{
+			return argument.contains("correct");
+		}
+		return false;
+	}
+
+	/**
+	 * Process an \answer command. Increments the answer index.
+	 * Adds the new answer to the answers list.
+	 */
+	void processAnswer() throws EOFException
+	{
+		if (uefStateStack.peek() == States.answers)
+		{
+			//set our answer index for the current problem
+			int answerIndex = answerAmount;
+
+			//increment the amount of answers for this problem
+			this.answerAmount++;
+
+			UEFCommand command = uefCommandQueue.poll();
+
+			String optionalArgument = command.getOptionalArgument();
+			boolean fixed = isFixed(optionalArgument);
+			boolean correct = isCorrect(optionalArgument);
+
+			//String to be filled with the source content
+			String content;
+
+			//Variables to hold the beginning and end of the source
+			int startSource = command.startPosition;
+			int endSource;
+
+			for (Iterator<UEFCommand> iter = uefCommandQueue.iterator(); iter.hasNext();)
+			{
+				UEFCommand peekedCommand = iter.next();
+				Types type = peekedCommand.getType();
+				if (type == Types.answer || type == Types.endAnswers)
+				{
+					//set the end of the source to the position before
+					//the beginning of the next command.
+					endSource = peekedCommand.getStartPosition() - 1;
+
+					//get the file content from beginning of '/answer'
+					//to beginning of next command .
+					content = uefCharHandler.getContent(startSource, endSource);
+
+					//Create the source object
+					SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
+					source.setStartLine(uefCharHandler.getLineNumber(startSource));
+					source.setLastLine(uefCharHandler.getLineNumber(endSource));
+					source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
+					source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
+					source.addText(content);
+					if (!fixed)
+					{
+						answersList.add(examFactory.newAnswer(correct, source));
+					}
+					else
+					{
+						answersList.add(examFactory.newFixedAnswer(correct, answerIndex - 1,
+																   source));
+					}
+					//System.out.println("index: " + answerIndex);
+					//System.out.println("fixed = " + fixed);
+					//System.out.println("correct = " + correct);
+					//System.out.println();
+					//System.out.println(content);
+					break;
+				}
+			}
+
+
+
+			//	source.
+			//answer = this.examFactory.newAnswer(isCorrect, s);
+			//SourceIF s = sourceFactory.newSource(uefCharHandler.getFileName());
+			//s.setStartColumn(this.uefCharHandler.getColumnNumber());
+			//s.setStartLine(this.uefCharHandler.getLineNumber());
+		}
+		else
+		{
+			System.exit(-1);
+		}
 	}
 
 	/**
@@ -138,13 +238,20 @@ class UEFCommandHandler
 	}
 
 	/**
-	 * Process a \begin{problem} command.
+	 * Process a \begin{problem} command. Creates a new answer
+	 * list for all answers in the problem. Resets the index
+	 * for the answers in the problem. Pushes the problem state.
 	 */
 	void processBeginProblem()
 	{
 		if (uefStateStack.peek() == States.document)
 		{
+			this.answersList = new ArrayList<AnswerIF>();
+			//reset the answer amount for this problem
+			this.answerAmount = 0;
+			//push the new state
 			uefStateStack.push(States.problem);
+			//pull this command off the stack
 			uefCommandQueue.poll();
 		}
 		else
@@ -215,16 +322,20 @@ class UEFCommandHandler
 	}
 
 	/**
-	 * Process a \end{problem} command.
+	 * Process a \end{problem} command. Creates a ProblemIF to add to the ExamIF.
 	 */
 	void processEndProblem()
 	{
-		if (uefStateStack.pop() != States.problem)
+		if (uefStateStack.pop() == States.problem)
+		{
+			uefCommandQueue.poll();
+			//ProblemIF problem = examFactory.newProblem(null, null, null, answers)
+		}
+		else
 		{
 			System.out.println("Error: \\end{problem} without a matching \\begin{problem}");
 			System.exit(-1);
 		}
-		uefCommandQueue.poll();
 	}
 
 	/**
@@ -247,7 +358,7 @@ class UEFCommandHandler
 	 * Starts the processing of all commands in the command queue.
 	 * Should be called by another class.
 	 */
-	void process()
+	void process() throws EOFException
 	{
 		while (!uefCommandQueue.isEmpty())
 		{
