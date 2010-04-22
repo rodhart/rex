@@ -28,15 +28,11 @@ class UEFCharHandler
 	 * The current position in the file. This will count the new lines as just
 	 * another charcte
 	 */
-	private int position = -1;
+	private int position;
 	/**
 	 * Mapping of file position to actual file lines.
 	 */
 	NavigableMap<Integer, Integer> positionToLineNumberMap;
-	/**
-	 * The column position on the current line
-	 */
-	private int columnNumber;
 	/**
 	 * The complete contents of the file
 	 */
@@ -45,11 +41,6 @@ class UEFCharHandler
 	 * the name of the file being handled
 	 */
 	private String fileName;
-
-	public UEFCharHandler()
-	{
-		positionToLineNumberMap = new TreeMap<Integer, Integer>();
-	}
 
 	/**
 	 * Opens a file and completely reads it into a StringBuffer for easy
@@ -62,16 +53,19 @@ class UEFCharHandler
 	 */
 	void openFile(File file) throws IOException
 	{
+		//initialize
+		this.position = 0;
+		positionToLineNumberMap = new TreeMap<Integer, Integer>();
+
+		//work
 		FileInputStream stream = new FileInputStream(file);
 		BufferedReader reader = new BufferedReader(
 				new InputStreamReader(stream));
-
 		StringBuffer buffer = new StringBuffer();
 		int lineNumber = 1;
 		String line = reader.readLine();
 		while (line != null)
 		{
-			int lal = buffer.length();
 			positionToLineNumberMap.put(buffer.length(), lineNumber);
 			buffer.append(line);
 			buffer.append('\n');
@@ -81,11 +75,6 @@ class UEFCharHandler
 		reader.close();
 
 		fileContents = buffer.toString();
-
-		// Reset local state
-		position = 0;
-		lineNumber = 1;
-		columnNumber = 1;
 		this.fileName = file.getName();
 	}
 
@@ -237,6 +226,13 @@ class UEFCharHandler
 	 */
 	int getColumnNumber()
 	{
+		int currentPosition = this.position - 1;
+		int columnNumber = 1;
+		while (currentPosition > -1 && fileContents.charAt(currentPosition) != '\n')
+		{
+			columnNumber++;
+			currentPosition--;
+		}
 		return columnNumber;
 	}
 

@@ -162,7 +162,7 @@ public class UEFParserTest
 		assertEquals(0, documentclass.getStartPosition());
 		assertEquals(20, documentclass.getEndPosition());
 		assertEquals(1, documentclass.getLineNumber());
-		//assertEquals(1, documentclass.getColumnNumber());
+		assertEquals(1, documentclass.getColumnNumber());
 		assertEquals(20, documentclass.getSize());
 		assertEquals("exam", documentclass.getArgument(0));
 		assertEquals(null, documentclass.getOptionalArgument());
@@ -173,7 +173,7 @@ public class UEFParserTest
 		assertEquals(20, label.getStartPosition());
 		assertEquals(31, label.getEndPosition());
 		assertEquals(1, label.getLineNumber());
-		//assertEquals(21, label.getColumnNumber());
+		assertEquals(21, label.getColumnNumber());
 		assertEquals(11, label.getSize());
 		assertEquals("lbl", label.getArgument(0));
 		assertEquals(null, label.getOptionalArgument());
@@ -184,7 +184,7 @@ public class UEFParserTest
 		assertEquals(160, answer.getStartPosition());
 		assertEquals(177, answer.getEndPosition());
 		assertEquals(5, answer.getLineNumber());
-		//assertEquals(42, answer.getColumnNumber());
+		assertEquals(42, answer.getColumnNumber());
 		assertEquals(17, answer.getSize());
 		assertEquals("optional", answer.getOptionalArgument());
 
@@ -194,6 +194,7 @@ public class UEFParserTest
 		assertEquals(178, answer.getStartPosition());
 		assertEquals(199, answer.getEndPosition());
 		assertEquals(5, answer.getLineNumber());
+		assertEquals(60, answer.getColumnNumber());
 		assertEquals(21, answer.getSize());
 		assertEquals("optional2", answer.getOptionalArgument());
 
@@ -203,6 +204,7 @@ public class UEFParserTest
 		assertEquals(237, beginDocument.getStartPosition());
 		assertEquals(253, beginDocument.getEndPosition());
 		assertEquals(8, beginDocument.getLineNumber());
+		assertEquals(1, beginDocument.getColumnNumber());
 		assertEquals(16, beginDocument.getSize());
 		assertEquals(null, beginDocument.getOptionalArgument());
 
@@ -212,6 +214,7 @@ public class UEFParserTest
 		assertEquals(253, endDocument.getStartPosition());
 		assertEquals(267, endDocument.getEndPosition());
 		assertEquals(8, endDocument.getLineNumber());
+		assertEquals(17, endDocument.getColumnNumber());
 		assertEquals(14, endDocument.getSize());
 		assertEquals(null, endDocument.getOptionalArgument());
 
@@ -221,6 +224,7 @@ public class UEFParserTest
 		assertEquals(268, beginProblem.getStartPosition());
 		assertEquals(302, beginProblem.getEndPosition());
 		assertEquals(9, beginProblem.getLineNumber());
+		assertEquals(1, beginProblem.getColumnNumber());
 		assertEquals(34, beginProblem.getSize());
 		assertEquals("Topic", beginProblem.getArgument(0));
 		assertEquals("difficulty", beginProblem.getArgument(1));
@@ -232,6 +236,7 @@ public class UEFParserTest
 		assertEquals(302, beginProblem.getStartPosition());
 		assertEquals(403, beginProblem.getEndPosition());
 		assertEquals(9, beginProblem.getLineNumber());
+		assertEquals(35, beginProblem.getColumnNumber());
 		assertEquals(101, beginProblem.getSize());
 		assertEquals("Topic2", beginProblem.getArgument(0));
 		assertEquals("difficulty2", beginProblem.getArgument(1));
@@ -243,6 +248,7 @@ public class UEFParserTest
 		assertEquals(404, endProblem.getStartPosition());
 		assertEquals(417, endProblem.getEndPosition());
 		assertEquals(16, endProblem.getLineNumber());
+		assertEquals(1, endProblem.getColumnNumber());
 		assertEquals(13, endProblem.getSize());
 		assertEquals(null, endProblem.getOptionalArgument());
 
@@ -252,6 +258,7 @@ public class UEFParserTest
 		assertEquals(418, beginAnswers.getStartPosition());
 		assertEquals(433, beginAnswers.getEndPosition());
 		assertEquals(17, beginAnswers.getLineNumber());
+		assertEquals(1, beginAnswers.getColumnNumber());
 		assertEquals(15, beginAnswers.getSize());
 		assertEquals(null, beginAnswers.getOptionalArgument());
 
@@ -261,6 +268,7 @@ public class UEFParserTest
 		assertEquals(451, endAnswers.getStartPosition());
 		assertEquals(464, endAnswers.getEndPosition());
 		assertEquals(19, endAnswers.getLineNumber());
+		assertEquals(1, endAnswers.getColumnNumber());
 		assertEquals(13, endAnswers.getSize());
 		assertEquals(null, endAnswers.getOptionalArgument());
 
@@ -270,6 +278,7 @@ public class UEFParserTest
 		assertEquals(464, beginBlock.getStartPosition());
 		assertEquals(491, beginBlock.getEndPosition());
 		assertEquals(19, beginBlock.getLineNumber());
+		assertEquals(14, beginBlock.getColumnNumber());
 		assertEquals(27, beginBlock.getSize());
 		assertEquals("some Name", beginBlock.getArgument(0));
 		assertEquals(null, beginBlock.getOptionalArgument());
@@ -280,6 +289,7 @@ public class UEFParserTest
 		assertEquals(619, endBlock.getStartPosition());
 		assertEquals(630, endBlock.getEndPosition());
 		assertEquals(22, endBlock.getLineNumber());
+		assertEquals(1, endBlock.getColumnNumber());
 		assertEquals(11, endBlock.getSize());
 		assertEquals(null, endBlock.getOptionalArgument());
 
@@ -289,6 +299,7 @@ public class UEFParserTest
 		assertEquals(631, ref.getStartPosition());
 		assertEquals(651, ref.getEndPosition());
 		assertEquals(23, ref.getLineNumber());
+		assertEquals(1, ref.getColumnNumber());
 		assertEquals(20, ref.getSize());
 		assertEquals("some reference", ref.getArgument(0));
 		assertEquals(null, ref.getOptionalArgument());
@@ -299,6 +310,7 @@ public class UEFParserTest
 		assertEquals(652, beginFigure.getStartPosition());
 		assertEquals(666, beginFigure.getEndPosition());
 		assertEquals(24, beginFigure.getLineNumber());
+		assertEquals(1, beginFigure.getColumnNumber());
 		assertEquals(14, beginFigure.getSize());
 		assertEquals(null, beginFigure.getOptionalArgument());
 
@@ -308,6 +320,7 @@ public class UEFParserTest
 		assertEquals(692, endFigure.getStartPosition());
 		assertEquals(704, endFigure.getEndPosition());
 		assertEquals(24, endFigure.getLineNumber());
+		assertEquals(41, endFigure.getColumnNumber());
 		assertEquals(12, endFigure.getSize());
 		assertEquals(null, endFigure.getOptionalArgument());
 
@@ -317,6 +330,7 @@ public class UEFParserTest
 		assertEquals(789, beginAnswers.getStartPosition());
 		assertEquals(804, beginAnswers.getEndPosition());
 		assertEquals(26, beginAnswers.getLineNumber());
+		assertEquals(1, beginAnswers.getColumnNumber());
 		assertEquals(15, beginAnswers.getSize());
 		assertEquals(null, beginAnswers.getOptionalArgument());
 	}
