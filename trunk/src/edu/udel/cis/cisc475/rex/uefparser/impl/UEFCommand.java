@@ -28,14 +28,6 @@ public class UEFCommand
 	 */
 	int endPosition;
 	/**
-	 * The line number of the command.
-	 */
-	private int lineNumber;
-	/**
-	 * The column number of the command.
-	 */
-	private int columnNumber;
-	/**
 	 * The optional argument of the command.
 	 */
 	String optionalArgument;
@@ -90,24 +82,6 @@ public class UEFCommand
 	}
 
 	/**
-	 * Sets the line number.
-	 * @param lineNumber the line number to set.
-	 */
-	void setLineNumber(int lineNumber)
-	{
-		this.lineNumber = lineNumber;
-	}
-
-	/**
-	 * Sets the column number.
-	 * @param columnNumber the column number to set.
-	 */
-	void setColumnNumber(int columnNumber)
-	{
-		this.columnNumber = columnNumber;
-	}
-
-	/**
 	 * Sets the optional argument.
 	 * @param optionalArgument the optional argument to set.
 	 */
@@ -150,24 +124,6 @@ public class UEFCommand
 	int getEndPosition()
 	{
 		return this.endPosition;
-	}
-
-	/**
-	 * Gets the line number of the command.
-	 * @return the line number.
-	 */
-	int getLineNumber()
-	{
-		return this.lineNumber;
-	}
-
-	/**
-	 * Gets the column number of the command.
-	 * @return the column number.
-	 */
-	int getColumnNumber()
-	{
-		return this.columnNumber;
 	}
 
 	/**
