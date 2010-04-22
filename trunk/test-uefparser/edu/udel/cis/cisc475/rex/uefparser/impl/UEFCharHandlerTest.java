@@ -3,6 +3,7 @@
  */
 package edu.udel.cis.cisc475.rex.uefparser.impl;
 
+import java.io.EOFException;
 import org.junit.Test;
 import java.io.File;
 import java.net.URL;
@@ -18,7 +19,8 @@ import static org.junit.Assert.assertEquals;
  * @author Aaron Myles Landwehr
  * 
  */
-public class UEFCharHandlerTest {
+public class UEFCharHandlerTest
+{
 
 	/**
 	 * Instance of UEFCharHandler to be tested.
@@ -31,7 +33,8 @@ public class UEFCharHandlerTest {
 	 * @throws java.lang.Exception
 	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws Exception
+	{
 		// create the object.
 		this.uefCharHandler = new UEFCharHandler();
 
@@ -46,7 +49,8 @@ public class UEFCharHandlerTest {
 	 * Test for the read() method.
 	 */
 	@Test
-	public void readTest() {
+	public void readTest() throws EOFException
+	{
 		char ch = this.uefCharHandler.read();
 		assertEquals('L', ch);
 	}
@@ -55,7 +59,8 @@ public class UEFCharHandlerTest {
 	 * Test for the move() method.
 	 */
 	@Test
-	public void moveTest() {
+	public void moveTest() throws EOFException
+	{
 		char ch = this.uefCharHandler.read();
 
 		// move once
@@ -78,31 +83,33 @@ public class UEFCharHandlerTest {
 	 * Test for the getPosition() method.
 	 */
 	@Test
-	public void getPositionTest() {
-		int pos = this.uefCharHandler.getPosition();
-		assertEquals(0, pos);
+	public void getPositionTest() throws EOFException
+	{
+		int position = this.uefCharHandler.getPosition();
+		assertEquals(0, position);
 
 		// move once
 		this.uefCharHandler.move();
-		pos = this.uefCharHandler.getPosition();
-		assertEquals(1, pos);
+		position = this.uefCharHandler.getPosition();
+		assertEquals(1, position);
 
 		// move twice
 		this.uefCharHandler.move();
-		pos = this.uefCharHandler.getPosition();
-		assertEquals(2, pos);
+		position = this.uefCharHandler.getPosition();
+		assertEquals(2, position);
 
 		// move thrice
 		this.uefCharHandler.move();
-		pos = this.uefCharHandler.getPosition();
-		assertEquals(3, pos);
+		position = this.uefCharHandler.getPosition();
+		assertEquals(3, position);
 	}
 
 	/**
 	 * Test for the setPosition() method.
 	 */
 	@Test
-	public void setPositionTest() {
+	public void setPositionTest()
+	{
 		int pos;
 		this.uefCharHandler.setPosition(0);
 		pos = this.uefCharHandler.getPosition();
@@ -125,7 +132,8 @@ public class UEFCharHandlerTest {
 	 * Test for the getContent() method.
 	 */
 	@Test
-	public void getContentTest() {
+	public void getContentTest()
+	{
 		String buffer = this.uefCharHandler.getContent(0, 7);
 		assertEquals("Line 0.", buffer);
 
@@ -142,7 +150,8 @@ public class UEFCharHandlerTest {
 	 * @throws java.lang.Exception
 	 */
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() throws Exception
+	{
 		this.uefCharHandler = null;
 	}
 }
