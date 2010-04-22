@@ -1,6 +1,7 @@
 package edu.udel.cis.cisc475.rex.uefparser.impl;
 
 import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,29 +15,26 @@ import java.util.regex.Pattern;
  * @author Aaron Myles Landwehr
  * @author Ahmed El-Hassany
  */
-class UEFCharHandler {
+class UEFCharHandler
+{
 
 	/**
 	 * The current position in the file. This will count the new lines as just
 	 * another charcte
 	 */
 	private int position = -1;
-
 	/**
-	 * Current Line no
+	 * Current line number in the file
 	 */
-	private int lineNo;
-
+	private int lineNumber;
 	/**
-	 * The position of the char from the last line beggining
+	 * The column position on the current line
 	 */
-	private int charPos;
-
+	private int columnNumber;
 	/**
 	 * The complete contents of the file
 	 */
-	private StringBuffer fileContents = new StringBuffer();
-
+	private String fileContents;
 	/**
 	 * the name of the file being handled
 	 */
@@ -51,38 +49,91 @@ class UEFCharHandler {
 	 * @throws IOException
 	 * 
 	 */
-	void openFile(File file) throws IOException {
+	void openFile(File file) throws IOException
+	{
 		FileInputStream stream = new FileInputStream(file);
 		BufferedReader reader = new BufferedReader(
 				new InputStreamReader(stream));
 
-		for (String line = reader.readLine(); line != null; line = reader
-				.readLine()) {
-			fileContents.append(line);
-			fileContents.append('\n');
+		StringBuffer buffer = new StringBuffer();
+		for (String line = reader.readLine(); line != null; line = reader.readLine())
+		{
+			buffer.append(line);
+			buffer.append('\n');
 		}
 		reader.close();
 
+		fileContents = buffer.toString();
+
 		// Reset local state
 		position = 0;
-		lineNo = 0;
-		charPos = 0;
+		lineNumber = 1;
+		columnNumber = 1;
 		this.fileName = file.getName();
+	}
+
+	boolean isWhiteSpace() throws EOFException
+	{
+
+
+		if (position < fileContents.length())
+		{
+			char ch = fileContents.charAt(position);
+			if (ch == ' ' || ch == '\t' || ch == '\r'
+				|| ch == '\n' || ch == '\f' || ch == '\b')
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			throw new EOFException();
+		}
+	}
+
+	boolean isLineBreak() throws EOFException
+	{
+		char ch = fileContents.charAt(position);
+		if (position < fileContents.length())
+		{
+			if (ch == '\r'
+				|| ch == '\n' || ch == '\f')
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			throw new EOFException();
+		}
 	}
 
 	/**
 	 * Moves the current position ahead one byte in the file.
 	 */
-	void move() {
+	void move() throws EOFException
+	{
 		position++;
 
 		// keep track of the current line number and chat number on that line
-		if (fileContents.length() < position) {
-			if (fileContents.charAt(position) == '\n') {
-				lineNo++;
-				charPos = 0;
-			} else {
-				charPos++;
+		if (position < fileContents.length())
+		{
+			if (isLineBreak())
+			{
+				lineNumber++;
+				columnNumber = 1;
+			}
+			else
+			{
+				columnNumber++;
 			}
 		}
 	}
@@ -90,18 +141,31 @@ class UEFCharHandler {
 	/**
 	 * Reads one character from the underlying file and returns it.
 	 * 
-	 * @return The character read.
+	 * @return The character read or null if at the end of the file.
 	 * 
 	 */
-	char read() {
-		try {
+	Character read() throws EOFException
+	{
+		if (position < fileContents.length())
+		{
 			return fileContents.charAt(position);
-		} catch (IndexOutOfBoundsException e) {
-			System.out
-					.println("FIXME: I'm not handled when the end of file is reached...");
-			System.exit(-1);
 		}
-		return 0;
+		else
+		{
+			throw new EOFException();
+		}
+	}
+
+	boolean eof()
+	{
+		if (position < fileContents.length())
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
 	}
 
 	/**
@@ -113,7 +177,8 @@ class UEFCharHandler {
 	 *            The ending index exclusive.
 	 * @return A string containing the characters read.
 	 */
-	String getContent(int start, int end) {
+	String getContent(int start, int end)
+	{
 		return fileContents.substring(start, end);
 	}
 
@@ -123,7 +188,8 @@ class UEFCharHandler {
 	 * 
 	 * @return The current position in the file.
 	 */
-	int getPosition() {
+	int getPosition()
+	{
 		return position;
 	}
 
@@ -133,7 +199,8 @@ class UEFCharHandler {
 	 * @param position
 	 *            The position to set the file to.
 	 */
-	void setPosition(int position) {
+	void setPosition(int position)
+	{
 		this.position = position;
 	}
 
@@ -142,26 +209,29 @@ class UEFCharHandler {
 	 * 
 	 * @return
 	 */
-	String getFileName() {
+	String getFileName()
+	{
 		return this.fileName;
 	}
 
 	/**
 	 * Get the line number
 	 */
-	int getLineNo() {
-		return this.lineNo;
+	int getLineNumber()
+	{
+		return this.lineNumber;
 	}
 
 	/**
 	 * Get the column number
 	 */
-	int getColumnNo() {
-		return this.charPos;
+	int getColumnNumber()
+	{
+		return this.columnNumber;
 	}
 
 	/**
-	 * Returns a java...<corrupted>....Matcher consisting of the information about any matching text
+	 * Returns a java.util.regex.Matcher consisting of the information about any matching text
 	 * found. Returns null if the match isn't found.
 	 * @param pattern
 	 * @return
