@@ -37,12 +37,12 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 	 * @param out a pointer to where the user wants the output to go
 	 */
 	public void write(PrintWriter out){
-		out.printf("Exam version : \t %s\n", K.version() ); 
-		out.printf("Exam Name : \t %s\n", K.examName() );
-		out.printf("Date :      \t %s\n", K.date() ); 
-		out.printf("\nThis Exam contains %d problems. \n", K.numProblems() ); 
-
-		out.printf("\n\t  Answer Key  \n"); 
+		out.printf("Exam version :   %s\n", K.version() ); 
+		out.printf("Exam Name :      %s\n", K.examName() );
+		out.printf("Date :           %s\n", K.date() ); 
+		out.printf("\nThis Exam contains %d problems.\n", K.numProblems() ); 
+		out.printf("\n"); 
+		out.printf("        Answer Key\n"); 
 
 		for (int i = 0; i < K.numProblems(); i ++) {
 			out.printf("problem %d :   %s\n", i+1, K.answers(i) ); 

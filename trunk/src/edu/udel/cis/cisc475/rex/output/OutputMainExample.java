@@ -18,7 +18,7 @@ public class OutputMainExample {
 	public static void main(String[] args) {
 		//declare a pointer to an interface and
 		//create an object of the interface type
-		Key K = new Key ("version string name", "exam string name ", "date string");		
+		Key K = new Key ("version string name", "exam string name", "date string");		
 
 		//create temp containers
 		Collection <String> Answer_a = new ArrayList <String>(); 
