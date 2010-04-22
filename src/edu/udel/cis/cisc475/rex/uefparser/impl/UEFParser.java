@@ -250,8 +250,6 @@ public class UEFParser implements UEFParserIF
 				//parseForOptionalArgument() method anyway.nN
 
 				int commandStart = uefCharHandler.getPosition();
-				int lineNumber = uefCharHandler.getLineNumber();
-				int columnNumber = uefCharHandler.getColumnNumber();
 				// move forward in the file.
 				uefCharHandler.move();
 
@@ -296,8 +294,6 @@ public class UEFParser implements UEFParserIF
 					uefCommand.setType(UEFCommand.Types.answer);
 					uefCommand.setStartPosition(commandStart);
 					uefCommand.setEndPosition(uefCharHandler.getPosition());
-					uefCommand.setLineNumber(lineNumber);
-					uefCommand.setColumnNumber(columnNumber);
 					uefCommand.setOptionalArgument(optionalArgument);
 					return uefCommand;
 				}
@@ -330,8 +326,6 @@ public class UEFParser implements UEFParserIF
 						uefCommand.setType(UEFCommand.Types.beginAnswers);
 						uefCommand.setStartPosition(commandStart);
 						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.setLineNumber(lineNumber);
-						uefCommand.setColumnNumber(columnNumber);
 						uefCommand.setOptionalArgument(optionalArgument);
 						return uefCommand;
 					}
@@ -342,8 +336,6 @@ public class UEFParser implements UEFParserIF
 						uefCommand.setType(UEFCommand.Types.beginBlock);
 						uefCommand.setStartPosition(commandStart);
 						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.setLineNumber(lineNumber);
-						uefCommand.setColumnNumber(columnNumber);
 						uefCommand.addArgument(name);
 						return uefCommand;
 					}
@@ -353,8 +345,6 @@ public class UEFParser implements UEFParserIF
 						uefCommand.setType(UEFCommand.Types.beginDocument);
 						uefCommand.setStartPosition(commandStart);
 						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.setLineNumber(lineNumber);
-						uefCommand.setColumnNumber(columnNumber);
 						return uefCommand;
 					}
 					//Handle \begin{figure}
@@ -363,8 +353,6 @@ public class UEFParser implements UEFParserIF
 						uefCommand.setType(UEFCommand.Types.beginFigure);
 						uefCommand.setStartPosition(commandStart);
 						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.setLineNumber(lineNumber);
-						uefCommand.setColumnNumber(columnNumber);
 						return uefCommand;
 					}
 					//Handle \begin{problem}
@@ -376,8 +364,6 @@ public class UEFParser implements UEFParserIF
 						uefCommand.setType(UEFCommand.Types.beginProblem);
 						uefCommand.setStartPosition(commandStart);
 						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.setLineNumber(lineNumber);
-						uefCommand.setColumnNumber(columnNumber);
 						uefCommand.setOptionalArgument(optionalArgument);
 						uefCommand.addArgument(topic);
 						uefCommand.addArgument(difficulty);
@@ -391,8 +377,6 @@ public class UEFParser implements UEFParserIF
 					uefCommand.setType(UEFCommand.Types.documentclass);
 					uefCommand.setStartPosition(commandStart);
 					uefCommand.setEndPosition(uefCharHandler.getPosition());
-					uefCommand.setLineNumber(lineNumber);
-					uefCommand.setColumnNumber(columnNumber);
 					uefCommand.addArgument(cls);
 					return uefCommand;
 				}
@@ -406,8 +390,7 @@ public class UEFParser implements UEFParserIF
 						uefCommand.setType(UEFCommand.Types.endAnswers);
 						uefCommand.setStartPosition(commandStart);
 						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.setLineNumber(lineNumber);
-						uefCommand.setColumnNumber(columnNumber);
+
 						return uefCommand;
 					}
 					//Handle \end{block}
@@ -416,8 +399,6 @@ public class UEFParser implements UEFParserIF
 						uefCommand.setType(UEFCommand.Types.endBlock);
 						uefCommand.setStartPosition(commandStart);
 						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.setLineNumber(lineNumber);
-						uefCommand.setColumnNumber(columnNumber);
 						return uefCommand;
 					}
 					//Handle \end{document}
@@ -426,8 +407,6 @@ public class UEFParser implements UEFParserIF
 						uefCommand.setType(UEFCommand.Types.endDocument);
 						uefCommand.setStartPosition(commandStart);
 						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.setLineNumber(lineNumber);
-						uefCommand.setColumnNumber(columnNumber);
 						return uefCommand;
 					}
 					//Handle \end{figure}
@@ -436,8 +415,6 @@ public class UEFParser implements UEFParserIF
 						uefCommand.setType(UEFCommand.Types.endFigure);
 						uefCommand.setStartPosition(commandStart);
 						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.setLineNumber(lineNumber);
-						uefCommand.setColumnNumber(columnNumber);
 						return uefCommand;
 					}
 					//Handle \end{problem}
@@ -446,8 +423,6 @@ public class UEFParser implements UEFParserIF
 						uefCommand.setType(UEFCommand.Types.endProblem);
 						uefCommand.setStartPosition(commandStart);
 						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.setLineNumber(lineNumber);
-						uefCommand.setColumnNumber(columnNumber);
 						return uefCommand;
 					}
 				}
@@ -458,8 +433,6 @@ public class UEFParser implements UEFParserIF
 					uefCommand.setType(UEFCommand.Types.label);
 					uefCommand.setStartPosition(commandStart);
 					uefCommand.setEndPosition(uefCharHandler.getPosition());
-					uefCommand.setLineNumber(lineNumber);
-					uefCommand.setColumnNumber(columnNumber);
 					uefCommand.addArgument(label);
 					return uefCommand;
 				}
@@ -470,8 +443,6 @@ public class UEFParser implements UEFParserIF
 					uefCommand.setType(UEFCommand.Types.ref);
 					uefCommand.setStartPosition(commandStart);
 					uefCommand.setEndPosition(uefCharHandler.getPosition());
-					uefCommand.setLineNumber(lineNumber);
-					uefCommand.setColumnNumber(columnNumber);
 					uefCommand.addArgument(label);
 					return uefCommand;
 				}

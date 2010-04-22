@@ -207,9 +207,19 @@ class UEFCharHandler
 	}
 
 	/**
-	 * Get the line number
+	 * Get the line number at the current position in the file.
 	 */
 	int getLineNumber() throws EOFException
+	{
+		return getLineNumber(this.position);
+	}
+
+	/**
+	 * Get the line number at the specified position in the file.
+	 *
+	 * @param position the position at which to get the line number.
+	 */
+	int getLineNumber(int position) throws EOFException
 	{
 		if (position < fileContents.length())
 		{
@@ -222,16 +232,26 @@ class UEFCharHandler
 	}
 
 	/**
-	 * Get the column number
+	 * Get the column number at the current position in the file.
 	 */
 	int getColumnNumber()
 	{
-		int currentPosition = this.position - 1;
+		return getColumnNumber(this.position);
+	}
+
+	/**
+	 * Get the column number at the specified position in the file.
+	 *
+	 * @param position the position to get the column number at.
+	 */
+	int getColumnNumber(int position)
+	{
+		position = position - 1;
 		int columnNumber = 1;
-		while (currentPosition > -1 && fileContents.charAt(currentPosition) != '\n')
+		while (position > -1 && fileContents.charAt(position) != '\n')
 		{
 			columnNumber++;
-			currentPosition--;
+			position--;
 		}
 		return columnNumber;
 	}
