@@ -276,10 +276,63 @@ class UEFCommandHandler
 	/**
 	 * Process a \begin{figure} command.
 	 */
-	void processBeginFigure()
+	void processBeginFigure() throws EOFException, Exception
 	{
 		uefStateStack.push(States.figure);
-		uefCommandQueue.poll();
+		UEFCommand command = uefCommandQueue.poll();
+
+		//String to be filled with the source content
+		String content;
+
+		//Variables to hold the beginning and end of the source
+		int startSource = command.startPosition;
+		int endSource;
+
+		//find the label first
+		UEFCommand peekedCommand = findMatchingCommand(new Types[]
+				{
+					Types.label, Types.endFigure
+				});
+
+		String label;
+		if (peekedCommand != null && peekedCommand.getType() == Types.label)
+		{
+			label = peekedCommand.getArgument(0);
+		}
+		else
+		{
+			throw new Exception();
+		}
+
+		//find the end of the figure now
+		peekedCommand = findMatchingCommand(new Types[]
+				{
+					Types.endFigure
+				});
+
+		if (peekedCommand == null)
+		{
+			throw new Exception();
+		}
+
+		endSource = peekedCommand.getEndPosition();
+
+		//get the file content from beginning of '/begin{block}'
+		//to the end of '/end{block}'.
+		content = uefCharHandler.getContent(startSource, endSource);
+
+		//Create the source object
+		SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
+		source.setStartLine(uefCharHandler.getLineNumber(startSource));
+		source.setLastLine(uefCharHandler.getLineNumber(endSource));
+		source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
+		source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
+		source.addText(content);
+
+		//create the object
+		examFactory.newFigure(label, source);
+
+		//System.out.println(content);
 	}
 
 	/**
