@@ -91,6 +91,22 @@ class UEFCommandHandler
 		uefCommandQueue.add(uefCommand);
 	}
 
+	private UEFCommand findMatchingCommand(Types types[])
+	{
+		for (Iterator<UEFCommand> iter = uefCommandQueue.iterator(); iter.hasNext();)
+		{
+			UEFCommand peekedCommand = iter.next();
+			for (int i = 0; i < types.length; i++)
+			{
+				if (peekedCommand.getType() == types[i])
+				{
+					return peekedCommand;
+				}
+			}
+		}
+		return null;
+	}
+
 	private boolean isFixed(String argument)
 	{
 
@@ -140,45 +156,44 @@ class UEFCommandHandler
 			int startSource = command.startPosition;
 			int endSource;
 
-			for (Iterator<UEFCommand> iter = uefCommandQueue.iterator(); iter.hasNext();)
+			UEFCommand peekedCommand = findMatchingCommand(new Types[]
+					{
+						Types.answer, Types.endAnswers
+					});
+
+			if (peekedCommand == null)
 			{
-				UEFCommand peekedCommand = iter.next();
-				Types type = peekedCommand.getType();
-				if (type == Types.answer || type == Types.endAnswers)
-				{
-					//set the end of the source to the position before
-					//the beginning of the next command.
-					endSource = peekedCommand.getStartPosition() - 1;
-
-					//get the file content from beginning of '/answer'
-					//to beginning of next command .
-					content = uefCharHandler.getContent(startSource, endSource);
-
-					//Create the source object
-					SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
-					source.setStartLine(uefCharHandler.getLineNumber(startSource));
-					source.setLastLine(uefCharHandler.getLineNumber(endSource));
-					source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
-					source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
-					source.addText(content);
-					if (!fixed)
-					{
-						answersList.add(examFactory.newAnswer(correct, source));
-					}
-					else
-					{
-						answersList.add(examFactory.newFixedAnswer(correct, answerIndex - 1,
-																   source));
-					}
-					//System.out.println("index: " + answerIndex);
-					//System.out.println("fixed = " + fixed);
-					//System.out.println("correct = " + correct);
-					//System.out.println();
-					//System.out.println(content);
-					return;
-				}
+				throw new Exception();
 			}
-			throw new Exception();
+
+			//set the end of the source to the position before
+			//the beginning of the next command.
+			endSource = peekedCommand.getStartPosition() - 1;
+
+			//get the file content from beginning of '/answer'
+			//to beginning of next command .
+			content = uefCharHandler.getContent(startSource, endSource);
+
+			//Create the source object
+			SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
+			source.setStartLine(uefCharHandler.getLineNumber(startSource));
+			source.setLastLine(uefCharHandler.getLineNumber(endSource));
+			source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
+			source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
+			source.addText(content);
+			if (!fixed)
+			{
+				answersList.add(examFactory.newAnswer(correct, source));
+			}
+			else
+			{
+				answersList.add(examFactory.newFixedAnswer(correct, answerIndex - 1, source));
+			}
+			//System.out.println("index: " + answerIndex);
+			//System.out.println("fixed = " + fixed);
+			//System.out.println("correct = " + correct);
+			//System.out.println();
+			//System.out.println(content);
 		}
 		else
 		{
@@ -221,33 +236,32 @@ class UEFCommandHandler
 		int startSource = command.startPosition;
 		int endSource;
 
-		for (Iterator<UEFCommand> iter = uefCommandQueue.iterator(); iter.hasNext();)
+		UEFCommand peekedCommand = findMatchingCommand(new Types[]
+				{
+					Types.endBlock
+				});
+
+		if (peekedCommand == null)
 		{
-			UEFCommand peekedCommand = iter.next();
-			Types type = peekedCommand.getType();
-			if (type == Types.endBlock)
-			{
-				endSource = peekedCommand.getEndPosition();
-
-				//get the file content from beginning of '/begin{block}'
-				//to the end of '/end{block}'.
-				content = uefCharHandler.getContent(startSource, endSource);
-
-				//Create the source object
-				SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
-				source.setStartLine(uefCharHandler.getLineNumber(startSource));
-				source.setLastLine(uefCharHandler.getLineNumber(endSource));
-				source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
-				source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
-				source.addText(content);
-
-				//BlockIF newBlock(String topic, String label, SourceIF text);
-				System.out.println(content);
-
-				return;
-			}
+			throw new Exception();
 		}
-		throw new Exception();
+
+		endSource = peekedCommand.getEndPosition();
+
+		//get the file content from beginning of '/begin{block}'
+		//to the end of '/end{block}'.
+		content = uefCharHandler.getContent(startSource, endSource);
+
+		//Create the source object
+		SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
+		source.setStartLine(uefCharHandler.getLineNumber(startSource));
+		source.setLastLine(uefCharHandler.getLineNumber(endSource));
+		source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
+		source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
+		source.addText(content);
+
+		//BlockIF newBlock(String topic, String label, SourceIF text);
+		//System.out.println(content);
 	}
 
 	/**
@@ -273,7 +287,7 @@ class UEFCommandHandler
 	 * list for all answers in the problem. Resets the index
 	 * for the answers in the problem. Pushes the problem state.
 	 */
-	void processBeginProblem()
+	void processBeginProblem() throws EOFException, Exception
 	{
 		if (uefStateStack.peek() == States.document)
 		{
@@ -283,12 +297,46 @@ class UEFCommandHandler
 			//push the new state
 			uefStateStack.push(States.problem);
 			//pull this command off the stack
-			uefCommandQueue.poll();
+			UEFCommand command = uefCommandQueue.poll();
+
+			//String to be filled with the source content
+			String content;
+
+			//Variables to hold the beginning and end of the source
+			int startSource = command.startPosition;
+			int endSource;
+
+			UEFCommand peekedCommand = findMatchingCommand(new Types[]
+					{
+						Types.endProblem
+					});
+
+			if (peekedCommand == null)
+			{
+				throw new Exception();
+			}
+
+
+			endSource = peekedCommand.getEndPosition();
+
+			//get the file content from beginning of '/begin{block}'
+			//to the end of '/end{block}'.
+			content = uefCharHandler.getContent(startSource, endSource);
+
+			//Create the source object
+			SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
+			source.setStartLine(uefCharHandler.getLineNumber(startSource));
+			source.setLastLine(uefCharHandler.getLineNumber(endSource));
+			source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
+			source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
+			source.addText(content);
+
+			//System.out.println(content);
 		}
 		else
 		{
 			//error
-			System.exit(-1);
+			throw new Exception();
 		}
 	}
 
