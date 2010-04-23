@@ -117,7 +117,7 @@ class UEFCommandHandler
 	 * Process an \answer command. Increments the answer index.
 	 * Adds the new answer to the answers list.
 	 */
-	void processAnswer() throws EOFException
+	void processAnswer() throws EOFException, Exception
 	{
 		if (uefStateStack.peek() == States.answers)
 		{
@@ -175,21 +175,14 @@ class UEFCommandHandler
 					//System.out.println("correct = " + correct);
 					//System.out.println();
 					//System.out.println(content);
-					break;
+					return;
 				}
 			}
-
-
-
-			//	source.
-			//answer = this.examFactory.newAnswer(isCorrect, s);
-			//SourceIF s = sourceFactory.newSource(uefCharHandler.getFileName());
-			//s.setStartColumn(this.uefCharHandler.getColumnNumber());
-			//s.setStartLine(this.uefCharHandler.getLineNumber());
+			throw new Exception();
 		}
 		else
 		{
-			System.exit(-1);
+			throw new Exception();
 		}
 	}
 
@@ -213,10 +206,48 @@ class UEFCommandHandler
 	/**
 	 * Process a \begin{block} command.
 	 */
-	void processBeginBlock()
+	void processBeginBlock() throws Exception
 	{
 		uefStateStack.push(States.block);
-		uefCommandQueue.poll();
+
+		UEFCommand command = uefCommandQueue.poll();
+
+		String name = command.getArgument(0);
+
+		//String to be filled with the source content
+		String content;
+
+		//Variables to hold the beginning and end of the source
+		int startSource = command.startPosition;
+		int endSource;
+
+		for (Iterator<UEFCommand> iter = uefCommandQueue.iterator(); iter.hasNext();)
+		{
+			UEFCommand peekedCommand = iter.next();
+			Types type = peekedCommand.getType();
+			if (type == Types.endBlock)
+			{
+				endSource = peekedCommand.getEndPosition();
+
+				//get the file content from beginning of '/begin{block}'
+				//to the end of '/end{block}'.
+				content = uefCharHandler.getContent(startSource, endSource);
+
+				//Create the source object
+				SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
+				source.setStartLine(uefCharHandler.getLineNumber(startSource));
+				source.setLastLine(uefCharHandler.getLineNumber(endSource));
+				source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
+				source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
+				source.addText(content);
+
+				//BlockIF newBlock(String topic, String label, SourceIF text);
+				System.out.println(content);
+
+				return;
+			}
+		}
+		throw new Exception();
 	}
 
 	/**
@@ -358,7 +389,7 @@ class UEFCommandHandler
 	 * Starts the processing of all commands in the command queue.
 	 * Should be called by another class.
 	 */
-	void process() throws EOFException
+	void process() throws EOFException, Exception
 	{
 		while (!uefCommandQueue.isEmpty())
 		{

@@ -5,7 +5,8 @@ import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserIF;
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
-import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
 /**
@@ -471,7 +472,14 @@ public class UEFParser implements UEFParserIF
 				uefCommandHandler.add(uefCommand);
 				uefCommand = parseForCommand();
 			}
-			uefCommandHandler.process();
+			try
+			{
+				uefCommandHandler.process();
+			}
+			catch (Exception ex)
+			{
+				Logger.getLogger(UEFParser.class.getName()).log(Level.SEVERE, null, ex);
+			}
 			return null;
 		}
 		catch (EOLException ex)
@@ -489,3 +497,5 @@ public class UEFParser implements UEFParserIF
 		return null;
 	}
 }
+
+
