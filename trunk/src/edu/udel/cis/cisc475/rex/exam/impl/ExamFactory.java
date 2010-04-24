@@ -38,7 +38,7 @@ public class ExamFactory implements ExamFactoryIF {
 	 * @return BlockIF
 	 */
 	public BlockIF newBlock(String topic, String label, SourceIF text) {
-		if((topic == null) || (label == null)  || (text == null) )
+		if((topic == null) || (text == null) )
 			throw new NullPointerException();
 		return new Block(topic, label, text);
 	}
@@ -49,7 +49,7 @@ public class ExamFactory implements ExamFactoryIF {
 	 * @return FigureIF
 	 */
 	public FigureIF newFigure(String label, SourceIF text) {
-		if((label == null)  || (text == null) )
+		if(text == null)
 			throw new NullPointerException();
 		return new Figure(label, text);
 	}
@@ -91,7 +91,7 @@ public class ExamFactory implements ExamFactoryIF {
 	 * @throws RexException 
 	 */
 	public ProblemIF newProblem(String topic, String label, SourceIF question, AnswerIF[] answers) {
-		if((topic == null) || (label == null)  || (question == null)   || (answers == null))
+		if((topic == null) || (question == null)   || (answers == null))
 			throw new NullPointerException();
 		//if(answers.length == 0)
 		//	throw new IllegalArgumentException("Argument answers cannot be empty");
