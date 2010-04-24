@@ -282,9 +282,6 @@ public class SourceTest {
 		System.out.println(testString);
 		
 		assertTrue(testString.equals(contents));
-		
-		
-		
 	}
 	
 }

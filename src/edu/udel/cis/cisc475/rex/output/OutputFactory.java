@@ -9,16 +9,12 @@ import edu.udel.cis.cisc475.rex.output.IF.OutputFactoryIF;
 /**
  * 
  * @author mcloughl
- * needed this class to compile main module
- *
+ * @author cardona
  */
 public class OutputFactory implements OutputFactoryIF {
 
-	// unsure of how to implement this method
-	// tried return new AnswerKeyWriter(answerKey)
-	// says it can't find a constructor for it
 	public AnswerKeyWriterIF newAnswerKeyWriter(AnswerKeyIF answerKey) {
-		return null;	
+		return new AnswerKeyWriter(answerKey) ;
 	}
 
 	public ExamWriterIF newExamWriter(ExamIF exam) {
