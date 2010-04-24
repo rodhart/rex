@@ -28,7 +28,16 @@ public interface ExamFactoryIF {
      * @param text
      * @return
      */
+    @Deprecated
     BlockIF newBlock(String topic, String label, SourceIF text);
+    
+    /**
+     * 
+     * @param label
+     * @param text
+     * @return
+     */
+	 BlockIF newBlock(String label, SourceIF text);
     
     /**
      * 
