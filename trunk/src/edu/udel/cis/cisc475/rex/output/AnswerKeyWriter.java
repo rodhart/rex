@@ -2,6 +2,8 @@ package edu.udel.cis.cisc475.rex.output;
 
 import java.io.File;
 import java.io.PrintWriter;
+
+import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 import edu.udel.cis.cisc475.rex.key.impl.Key;
 import edu.udel.cis.cisc475.rex.output.IF.AnswerKeyWriterIF;
 
@@ -23,7 +25,7 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 	 * 
 	 * @param K a pointer to answer key representation stored in our program
 	 */
-	public AnswerKeyWriter (Key K){
+	public AnswerKeyWriter (AnswerKeyIF K){
 		this.K = K;
 	}//end of constructor
 
@@ -40,7 +42,8 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 		out.printf("Exam version :   %s\n", K.version() ); 
 		out.printf("Exam Name :      %s\n", K.examName() );
 		out.printf("Date :           %s\n", K.date() ); 
-		out.printf("\nThis Exam contains %d problems.\n", K.numProblems() ); 
+		out.printf("\n"); 
+		out.printf("This Exam contains %d problems.\n", K.numProblems() ); 
 		out.printf("\n"); 
 		out.printf("        Answer Key\n"); 
 
@@ -60,5 +63,5 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 	}//end of writeScantron(File file)
 
 	//private vars
-	private Key K;
+	private AnswerKeyIF K;
 }//end of class

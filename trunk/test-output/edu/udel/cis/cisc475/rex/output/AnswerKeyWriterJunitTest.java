@@ -12,7 +12,12 @@ import java.util.Collection;
 
 import org.junit.Test;
 
+import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyFactoryIF;
+import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
+import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
 import edu.udel.cis.cisc475.rex.key.impl.Key;
+import edu.udel.cis.cisc475.rex.output.IF.AnswerKeyWriterIF;
+import edu.udel.cis.cisc475.rex.output.IF.OutputFactoryIF;
 
 /**
  * @author cardona
@@ -21,14 +26,22 @@ import edu.udel.cis.cisc475.rex.key.impl.Key;
 public class AnswerKeyWriterJunitTest {
 
 	public static String newline = System.getProperty("line.separator");
+
+	
 	
 	//test to see what is actually writer to output
 	@Test
 	public void test_answer_key_writer() {
-		// declare a pointer to an interface and
-		// create an object of the interface type
-		Key K = new Key("version string name", "exam string name",
-				"date string");
+		//declare a pointer to an interface and
+		//create an object of the interface type
+		AnswerKeyFactoryIF AKF = new AnswerKeyFactory(); 
+		AnswerKeyIF K = AKF.newAnswerKey("version string name", 
+										"C++ and you", 
+										"date 01/01/2010 string");		
+
+		//create the writer only once the key is built
+		OutputFactoryIF OF = new OutputFactory(); 
+		AnswerKeyWriterIF AKW = OF.newAnswerKeyWriter (K);		
 
 		// create temp containers
 		Collection<String> Answer_a = new ArrayList<String>();
@@ -51,10 +64,11 @@ public class AnswerKeyWriterJunitTest {
 		//now we can take that stuff and actually write it out
 		//write method writes to a printWriter
 		//so we must always pipe through that
-		PrintWriter ScreenW = new PrintWriter(System.out,true); 
-		AnswerKeyWriter AKW = new AnswerKeyWriter(K);
 		PrintWriter pw = null;
 		StringBuffer contents = new StringBuffer();
+		//this one is just for sending to console	
+		PrintWriter ScreenW = new PrintWriter(System.out,true); 
+		
 		try {
 			//pipe from printWriter to file then from file to stringbuffer
 			pw = new PrintWriter(new FileWriter("AnswerKeyWriterTester.txt"));
@@ -80,23 +94,25 @@ public class AnswerKeyWriterJunitTest {
 		// here is the text that we were expecting
 		String testString = 
 		"Exam version :   version string name" + newline +  
-		"Exam Name :      exam string name" + newline + 
-		"Date :           date string" + newline + 
-		 newline + 
+		"Exam Name :      C++ and you" + newline + 
+		"Date :           date 01/01/2010 string" + newline + 
+		newline +  
 		"This Exam contains 3 problems." + newline +
-		 newline +  
+		newline +  
 		"        Answer Key"+ newline + 
 		"problem 1 :   [B]" + newline + 
 		"problem 2 :   [A, C]" + newline + 
 		"problem 3 :   [B]" + newline;		
 
 
-		//now compare the two	
+		//these few lines are for dumping output
+		//to the screen to see output visually
 //		System.out.println(contents.toString());
 //		System.out.println(testString);
 //		AKW.write(ScreenW);
-//		System.out.println( testString.compareTo( contents.toString() ) );
+		System.out.println( testString.compareTo( contents.toString() ) );
 
+		//now compare the two	
 		assertEquals(0,(testString.compareTo( contents.toString() ) ));
 	}// end test
 

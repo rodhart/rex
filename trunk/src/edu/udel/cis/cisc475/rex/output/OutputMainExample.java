@@ -3,7 +3,12 @@ package edu.udel.cis.cisc475.rex.output;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import edu.udel.cis.cisc475.rex.key.impl.Key;
+
+import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyFactoryIF;
+import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
+import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
+import edu.udel.cis.cisc475.rex.output.IF.AnswerKeyWriterIF;
+import edu.udel.cis.cisc475.rex.output.IF.OutputFactoryIF;
 
 /**
  * @author cardona
@@ -18,8 +23,14 @@ public class OutputMainExample {
 	public static void main(String[] args) {
 		//declare a pointer to an interface and
 		//create an object of the interface type
-		Key K = new Key ("version string name", "exam string name", "date string");		
+		AnswerKeyFactoryIF AKF = new AnswerKeyFactory(); 
+		AnswerKeyIF K = AKF.newAnswerKey("version string name", "exam string name ", "date string");		
 
+		//create the writer only once the key is built
+		OutputFactoryIF OF = new OutputFactory(); 
+		AnswerKeyWriterIF AKW = OF.newAnswerKeyWriter (K);		
+
+		
 		//create temp containers
 		Collection <String> Answer_a = new ArrayList <String>(); 
 		Answer_a.add(new String("B"));
@@ -35,8 +46,6 @@ public class OutputMainExample {
 		K.addProblem(Answer_b);	 	
 		K.addProblem(Answer_c);	 	
 
-		//create the writer only once the key is built??
-		AnswerKeyWriter AKW = new AnswerKeyWriter (K);		
 
 		//create output stream
 		PrintWriter pw = new PrintWriter(System.out,true); 

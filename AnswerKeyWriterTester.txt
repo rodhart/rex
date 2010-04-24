@@ -1,0 +1,10 @@
+Exam version :   version string name
+Exam Name :      C++ and you
+Date :           date 01/01/2010 string
+
+This Exam contains 3 problems.
+
+        Answer Key
+problem 1 :   [B]
+problem 2 :   [A, C]
+problem 3 :   [B]
