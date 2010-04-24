@@ -1,4 +1,4 @@
-package edu.udel.cis.cisc475.rex.output;
+package edu.udel.cis.cisc475.rex.output.impl;
 
 import java.io.File;
 import java.io.PrintWriter;

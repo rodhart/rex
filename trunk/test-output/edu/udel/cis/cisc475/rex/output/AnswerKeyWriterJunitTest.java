@@ -18,6 +18,7 @@ import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
 import edu.udel.cis.cisc475.rex.key.impl.Key;
 import edu.udel.cis.cisc475.rex.output.IF.AnswerKeyWriterIF;
 import edu.udel.cis.cisc475.rex.output.IF.OutputFactoryIF;
+import edu.udel.cis.cisc475.rex.output.impl.OutputFactory;
 
 /**
  * @author cardona

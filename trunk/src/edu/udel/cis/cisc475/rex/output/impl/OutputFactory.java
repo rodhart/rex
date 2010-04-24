@@ -1,4 +1,4 @@
-package edu.udel.cis.cisc475.rex.output;
+package edu.udel.cis.cisc475.rex.output.impl;
 
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
