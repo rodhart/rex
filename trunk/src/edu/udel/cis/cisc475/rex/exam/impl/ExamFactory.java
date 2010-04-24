@@ -37,12 +37,22 @@ public class ExamFactory implements ExamFactoryIF {
 	 * 
 	 * @return BlockIF
 	 */
+	@Deprecated
 	public BlockIF newBlock(String topic, String label, SourceIF text) {
 		if((topic == null) || (text == null) )
 			throw new NullPointerException();
 		return new Block(topic, label, text);
 	}
 
+	public BlockIF newBlock(String label, SourceIF text)
+	{
+		if(text == null)
+			throw new NullPointerException();
+		// Will remove the null topic argument when the Block
+		//   constructor is updated.
+		return new Block(null, label, text);
+	}
+	
 	/**
 	 * Creates a new instance of FigureIF.
 	 * 
