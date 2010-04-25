@@ -1,6 +1,7 @@
 package edu.udel.cis.cisc475.rex.uefparser.impl;
 
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
+import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
@@ -200,7 +201,7 @@ class UEFCommandHandler
 	/**
 	 * Process a \begin{block} command.
 	 */
-	void processBeginBlock() throws Exception
+	BlockIF processBlock() throws Exception
 	{
 		UEFCommand command = uefCommandQueue.poll();
 
@@ -211,35 +212,48 @@ class UEFCommandHandler
 
 		//Variables to hold the beginning and end of the source
 		int startSource = command.startPosition;
-		int endSource;
+		int endSource = 0;
 
-		Types type[] = new Types[1];
-		type[0] = Types.endBlock;
+		boolean done = false;
 
-		UEFCommand peekedCommand = uefCommandQueue.poll();
-
-		if (peekedCommand != null && peekedCommand.getType() == Types.endBlock)
+		while (!uefCommandQueue.isEmpty() && !done)
 		{
-			//get the file content from beginning of '/begin{block}'
-			//to the end of '/end{block}'.
-			endSource = peekedCommand.getEndPosition();
-			content = uefCharHandler.getContent(startSource, endSource);
+			switch (uefCommandQueue.peek().getType())
+			{
+				case endBlock:
+				{
+					done = true;
 
-			//Create the source object
-			SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
-			source.setStartLine(uefCharHandler.getLineNumber(startSource));
-			source.setLastLine(uefCharHandler.getLineNumber(endSource));
-			source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
-			source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
-			source.addText(content);
+					//poll the /end{problem command off the queue
+					UEFCommand nextCommand = uefCommandQueue.poll();
+					endSource = nextCommand.getEndPosition();
+					break;
+				}
+				default:
+				{
+					System.err.println("Error: " + uefCommandQueue.peek().getType()
+									   + " found within problem environment!");
+					System.exit(-1);
+					break;
+				}
+			}
+		}
 
-			//BlockIF newBlock(String topic, String label, SourceIF text);
-			//System.out.println(content);
-		}
-		else
-		{
-			throw new Exception();
-		}
+		//get the file content from beginning of '/begin{block}'
+		//to the end of '/end{block}'.
+		content = uefCharHandler.getContent(startSource, endSource);
+
+		//Create the source object
+		SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
+		source.setStartLine(uefCharHandler.getLineNumber(startSource));
+		source.setLastLine(uefCharHandler.getLineNumber(endSource));
+		source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
+		source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
+		source.addText(content);
+
+		//System.out.println(content);
+
+		return examFactory.newBlock(name, source);
 	}
 
 	/**
@@ -452,7 +466,7 @@ class UEFCommandHandler
 					processBeginAnswers();
 					break;
 				case beginBlock:
-					processBeginBlock();
+					processBlock();
 					break;
 				case beginDocument:
 					processBeginDocument();
