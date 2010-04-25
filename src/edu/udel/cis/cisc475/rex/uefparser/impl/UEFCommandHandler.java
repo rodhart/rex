@@ -368,7 +368,7 @@ class UEFCommandHandler
 		//System.out.println(content);
 
 		//create the object
-		return examFactory.newFigure(label, source);	
+		return examFactory.newFigure(label, source);
 	}
 
 	/**
@@ -496,6 +496,8 @@ class UEFCommandHandler
 	ExamIF process() throws EOFException, Exception
 	{
 		boolean isExamDocumentclass = false;
+		int startOfPreamble = 0;
+		int endOfPreamble = 0;
 		while (!uefCommandQueue.isEmpty())
 		{
 			switch (uefCommandQueue.peek().getType())
@@ -508,10 +510,27 @@ class UEFCommandHandler
 										   + " found when the documentclass is net set to exam!");
 						System.exit(-1);
 					}
-					return processDocument();
+
+					//retrieve the preamble
+					endOfPreamble = uefCommandQueue.peek().getStartPosition();
+					String content = uefCharHandler.getContent(startOfPreamble, endOfPreamble);
+
+					//process to make an ExamIF
+					ExamIF exam = processDocument();
+
+					//Create the source object for preamble
+					SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
+					source.setStartLine(uefCharHandler.getLineNumber(startOfPreamble));
+					source.setLastLine(uefCharHandler.getLineNumber(endOfPreamble));
+					source.setStartColumn(uefCharHandler.getColumnNumber(startOfPreamble));
+					source.setLastColumn(uefCharHandler.getColumnNumber(endOfPreamble));
+					source.addText(content);
+					exam.setPreamble(source);
+					return exam;
 				}
 				case documentclass:
 				{
+					startOfPreamble = uefCommandQueue.peek().getEndPosition();
 					isExamDocumentclass = processDocumentclass();
 					break;
 				}
