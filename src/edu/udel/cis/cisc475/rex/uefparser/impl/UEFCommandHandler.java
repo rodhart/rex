@@ -264,10 +264,35 @@ class UEFCommandHandler
 	ExamIF processDocument() throws Exception
 	{
 		//pull /begin{document} off the queue
-		uefCommandQueue.poll();
+		UEFCommand command = uefCommandQueue.poll();
 
 		//create the ExamIF
 		ExamIF exam = examFactory.newMasterExam();
+
+		//get the frontal matter
+		if (!uefCommandQueue.isEmpty())
+		{
+			//get the start and end positions of the frontal matter
+			int startOfFrontalMatter = command.getEndPosition();
+			int endOfFrontalMatter = uefCommandQueue.peek().getStartPosition();
+
+			String content = uefCharHandler.getContent(startOfFrontalMatter, endOfFrontalMatter);
+
+			//Create the source object for frontal matter
+			SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
+			source.setStartLine(uefCharHandler.getLineNumber(startOfFrontalMatter));
+			source.setLastLine(uefCharHandler.getLineNumber(endOfFrontalMatter));
+			source.setStartColumn(uefCharHandler.getColumnNumber(startOfFrontalMatter));
+			source.setLastColumn(uefCharHandler.getColumnNumber(endOfFrontalMatter));
+			source.addText(content);
+
+			//System.out.println(content);
+
+			//set the frontal matter
+			exam.setFrontMatter(source);
+		}
+
+		//process commands within the document environment
 		while (!uefCommandQueue.isEmpty())
 		{
 			switch (uefCommandQueue.peek().getType())
@@ -525,7 +550,11 @@ class UEFCommandHandler
 					source.setStartColumn(uefCharHandler.getColumnNumber(startOfPreamble));
 					source.setLastColumn(uefCharHandler.getColumnNumber(endOfPreamble));
 					source.addText(content);
+
+					//set the preamble
 					exam.setPreamble(source);
+
+					//return the ExamIF
 					return exam;
 				}
 				case documentclass:
