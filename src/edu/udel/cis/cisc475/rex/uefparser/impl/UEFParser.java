@@ -479,7 +479,7 @@ public class UEFParser implements UEFParserIF
 			}
 			try
 			{
-				uefCommandHandler.process();
+				return uefCommandHandler.process();
 			}
 			catch (Exception ex)
 			{
@@ -502,5 +502,3 @@ public class UEFParser implements UEFParserIF
 		return null;
 	}
 }
-
-
