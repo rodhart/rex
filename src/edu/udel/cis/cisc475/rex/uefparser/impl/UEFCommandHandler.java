@@ -134,7 +134,7 @@ class UEFCommandHandler
 		String content;
 
 		//Variables to hold the beginning and end of the source
-		int startSource = command.startPosition;
+		int startSource = command.getStartPosition();
 		int endSource;
 
 		Types type[] = new Types[2];
@@ -213,7 +213,7 @@ class UEFCommandHandler
 		String content;
 
 		//Variables to hold the beginning and end of the source
-		int startSource = command.startPosition;
+		int startSource = command.getStartPosition();
 		int endSource = 0;
 
 		boolean done = false;
@@ -343,7 +343,7 @@ class UEFCommandHandler
 		String content;
 
 		//Variables to hold the beginning and end of the source
-		int startSource = command.startPosition;
+		int startSource = command.getStartPosition();
 		int endSource = 0;
 
 		String label = null;
