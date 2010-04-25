@@ -3,6 +3,7 @@ package edu.udel.cis.cisc475.rex.uefparser.impl;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
@@ -259,34 +260,38 @@ class UEFCommandHandler
 	/**
 	 * Process a \begin{document} command.
 	 */
-	void processDocument() throws Exception
+	ExamIF processDocument() throws Exception
 	{
 		//pull /begin{document} off the queue
 		uefCommandQueue.poll();
+
+		//create the ExamIF
+		ExamIF exam = examFactory.newMasterExam();
 		while (!uefCommandQueue.isEmpty())
 		{
 			switch (uefCommandQueue.peek().getType())
 			{
 				case beginBlock:
 				{
-					processBlock();
+					exam.addElementIF(processBlock());
 					break;
 				}
 				case beginFigure:
 				{
+					//exam.addElementIF(processFigure());
 					processFigure();
 					break;
 				}
 				case beginProblem:
 				{
-					processProblem();
+					exam.addElementIF(processProblem());
 					break;
 				}
 				case endDocument:
 				{
 					//pull /end{document} off the queue.
 					uefCommandQueue.poll();
-					break;
+					return exam;
 				}
 				default:
 				{
@@ -297,6 +302,9 @@ class UEFCommandHandler
 				}
 			}
 		}
+		System.err.println("Error: end of file reached before \\end{document} found!");
+		System.exit(-1);
+		return null;
 	}
 
 	/**
@@ -485,11 +493,11 @@ class UEFCommandHandler
 	 * Starts the processing of all commands in the command queue.
 	 * Should be called by another class.
 	 */
-	void process() throws EOFException, Exception
+	ExamIF process() throws EOFException, Exception
 	{
 		boolean isExamDocumentclass = false;
 		while (!uefCommandQueue.isEmpty())
-		{			
+		{
 			switch (uefCommandQueue.peek().getType())
 			{
 				case beginDocument:
@@ -500,8 +508,7 @@ class UEFCommandHandler
 										   + " found when the documentclass is net set to exam!");
 						System.exit(-1);
 					}
-					processDocument();
-					break;
+					return processDocument();
 				}
 				case documentclass:
 				{
@@ -517,5 +524,8 @@ class UEFCommandHandler
 				}
 			}
 		}
+		System.err.println("Error: end of document before \begin{document} found!");
+		System.exit(-1);
+		return null;
 	}
 }
