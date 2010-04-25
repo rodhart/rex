@@ -183,60 +183,8 @@ public class SourceTest {
 	}	
 	
 	@Test
-	public void testTextReadFromFile(){
-		String textFromFile = "";
-		String textFromSource = "";
-	
-		String filename = "./trunk/test-source/edu/udel/cis/cisc475/rex/source/SampleText.txt";
-		
-		//creates a file input stream for the file
-		FileInputStream inputStream = null;
-		try {
-			inputStream  = new FileInputStream(filename);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		//creates a data input stream
-		DataInputStream dataStream = null;
-		dataStream = new DataInputStream(inputStream);
-		
-		//creates the source factory
-		SourceFactoryIF sourceFactory = new SourceFactory();
-		SourceIF S = sourceFactory.newSource(filename);
-		
-		//gets the top line from the file
-		try {
-			textFromFile = dataStream.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		S.setStartLine(0);
-		S.setLastLine(0);
-		
-		//creates a print writer
-		PrintWriter out = null;
-		
-		//out = new PrintWriter();
-		
-		
-		//
-		S.write(out);
-		
-		textFromSource = out.toString();
-		
-		assertEquals(textFromSource.compareTo(textFromFile), 0);
-		
-		
-	}
-	// Doesn't work quite yet.  Doesn't write to a file. contents is empty
-	
-	@Test
 	public void testWrite() {
-		String filename = "test.txt";
+		String filename = "./trunk/test-source/edu/udel/cis/cisc475/rex/source/test.txt";
 		
 		SourceFactoryIF myFactory = new SourceFactory();
 		SourceIF S = myFactory.newSource(filename);
@@ -277,11 +225,13 @@ public class SourceTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String testString = "This is my first line of text" + newline + "Second line of text this is" + newline;
-		System.out.println(contents.toString());
-		System.out.println(testString);
+
+		// There is an extra newline appended by reading in until null 
+		// Line 1 and 2 are read and a newline is appended after each
+		// Line 3 is just a newline itself and the above loop appends a newline
+		// This is why an extra newline is added at the end of testString
 		
-		assertTrue(testString.equals(contents));
+		String testString = "This is my first line of text" + newline + "Second line of text this is" + newline + newline;
+		assertTrue(testString.equals(contents.toString()));
 	}
-	
 }
