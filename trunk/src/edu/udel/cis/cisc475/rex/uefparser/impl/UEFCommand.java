@@ -18,23 +18,23 @@ public class UEFCommand
 	/**
 	 * The type of the command
 	 */
-	Types type;
+	private Types type;
 	/**
 	 * From the backslash, the starting position of the command.
 	 */
-	int startPosition;
+	private int startPosition;
 	/**
 	 * Following the last argument, the ending position of the command.
 	 */
-	int endPosition;
+	private int endPosition;
 	/**
 	 * The optional argument of the command.
 	 */
-	String optionalArgument;
+	private String optionalArgument;
 	/**
 	 * The arguments of the command
 	 */
-	List<String> Arguments;
+	private List<String> Arguments;
 
 	/**
 	 * All of the supported commands.

@@ -32,7 +32,7 @@ class UEFCharHandler
 	/**
 	 * Mapping of file position to actual file lines.
 	 */
-	NavigableMap<Integer, Integer> positionToLineNumberMap;
+	private NavigableMap<Integer, Integer> positionToLineNumberMap;
 	/**
 	 * The complete contents of the file
 	 */
