@@ -73,8 +73,9 @@ public class UEFParser implements UEFParserIF
 	 * And null is returned.
 	 *
 	 * @return the argument if an argument exists. Characters found within
-	 * comments are ignored. If a character other than a linebreak or space is
-	 * found outside of a comment then null is returned.
+	 * comments are ignored. Optional arguments are ignored. If a character
+	 * other than a linebreak or space is found outside of a comment or optional
+	 * argument then null is returned.
 	 *
 	 * @throws EOFException if an EOF occurs after an argument begins.
 	 */
@@ -94,6 +95,10 @@ public class UEFParser implements UEFParserIF
 						uefCharHandler.move();
 					}
 					uefCharHandler.move();
+				}
+				else if (uefCharHandler.read() == '[')
+				{
+					parseForOptionalArgument();
 				}
 				//Handle finding linebreaks or whitespaces.
 				else if (uefCharHandler.isWhiteSpace())

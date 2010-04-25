@@ -58,9 +58,13 @@ public class UEFParserTest
 		String argument7 = parser.parseForArgument();
 		assertEquals("arg7", argument7);
 
-		//Check for argument following a command.
+		//Check for argument after optional argument- should ignore.
 		String argument8 = parser.parseForArgument();
-		assertEquals(null, argument8);
+		assertEquals("arg8", argument8);
+
+		//Check for argument following a command.
+		String argument9 = parser.parseForArgument();
+		assertEquals(null, argument9);
 	}
 
 	/**
