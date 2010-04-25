@@ -232,7 +232,7 @@ class UEFCommandHandler
 				default:
 				{
 					System.err.println("Error: " + uefCommandQueue.peek().getType()
-									   + " found within problem environment!");
+									   + " found within block environment!");
 					System.exit(-1);
 					break;
 				}
@@ -259,15 +259,50 @@ class UEFCommandHandler
 	/**
 	 * Process a \begin{document} command.
 	 */
-	void processBeginDocument()
+	void processDocument() throws Exception
 	{
+		//pull /begin{document} off the queue
 		uefCommandQueue.poll();
+		while (!uefCommandQueue.isEmpty())
+		{
+			switch (uefCommandQueue.peek().getType())
+			{
+				case beginBlock:
+				{
+					processBlock();
+					break;
+				}
+				case beginFigure:
+				{
+					processFigure();
+					break;
+				}
+				case beginProblem:
+				{
+					processProblem();
+					break;
+				}
+				case endDocument:
+				{
+					//pull /end{document} off the queue.
+					uefCommandQueue.poll();
+					break;
+				}
+				default:
+				{
+					System.err.println("Error: " + uefCommandQueue.peek().getType()
+									   + " found within document environment!");
+					System.exit(-1);
+					break;
+				}
+			}
+		}
 	}
 
 	/**
 	 * Process a \begin{figure} command.
 	 */
-	void processBeginFigure() throws EOFException, Exception
+	void processFigure() throws EOFException, Exception
 	{
 		UEFCommand command = uefCommandQueue.poll();
 
@@ -295,7 +330,8 @@ class UEFCommandHandler
 				{
 					//use the end of the other command as the end source
 					endSource = uefCommandQueue.peek().getEndPosition();
-					processEndFigure();
+					//pull /end{figure} off the queue.
+					uefCommandQueue.poll();
 					done = true;
 					break;
 				}
@@ -419,22 +455,6 @@ class UEFCommandHandler
 	}
 
 	/**
-	 * Process a \end{document} command.
-	 */
-	void processEndDocument()
-	{
-		uefCommandQueue.poll();
-	}
-
-	/**
-	 * Process a \end{figure} command.
-	 */
-	void processEndFigure()
-	{
-		uefCommandQueue.poll();
-	}
-
-	/**
 	 * Process a \label command.
 	 */
 	String processLabel()
@@ -462,29 +482,23 @@ class UEFCommandHandler
 		{
 			switch (uefCommandQueue.peek().getType())
 			{
-				case beginBlock:
-					processBlock();
-					break;
 				case beginDocument:
-					processBeginDocument();
+				{
+					processDocument();
 					break;
-				case beginFigure:
-					processBeginFigure();
-					break;
-				case beginProblem:
-					processProblem();
-					break;
+				}
 				case documentclass:
+				{
 					processDocumentclass();
 					break;
-				case endDocument:
-					processEndDocument();
-					break;
+				}
 				default:
+				{
 					System.err.println("Error: " + uefCommandQueue.peek().getType()
-									   + " found within figure environment!");
+									   + " found outside of document environment!");
 					System.exit(-1);
 					break;
+				}
 			}
 		}
 	}
