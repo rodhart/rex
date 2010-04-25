@@ -175,7 +175,7 @@ class UEFCommandHandler
 	/**
 	 * Process a \begin{answers} command.
 	 */
-	AnswerIF[] processBeginAnswers() throws Exception
+	AnswerIF[] processAnswers() throws Exception
 	{
 		//pop off the /begin{answers} command
 		uefCommandQueue.poll();
@@ -332,7 +332,7 @@ class UEFCommandHandler
 	 * list for all answers in the problem. Resets the index
 	 * for the answers in the problem. Pushes the problem state.
 	 */
-	ProblemIF processBeginProblem() throws EOFException, Exception
+	ProblemIF processProblem() throws EOFException, Exception
 	{
 		//pull this command off the stack
 		UEFCommand command = uefCommandQueue.poll();
@@ -363,7 +363,7 @@ class UEFCommandHandler
 					endSource = uefCommandQueue.peek().getStartPosition();
 
 					//get answers for the problem
-					answers = processBeginAnswers();
+					answers = processAnswers();
 					break;
 				}
 				case label:
@@ -462,9 +462,6 @@ class UEFCommandHandler
 		{
 			switch (uefCommandQueue.peek().getType())
 			{
-				case beginAnswers:
-					processBeginAnswers();
-					break;
 				case beginBlock:
 					processBlock();
 					break;
@@ -475,7 +472,7 @@ class UEFCommandHandler
 					processBeginFigure();
 					break;
 				case beginProblem:
-					processBeginProblem();
+					processProblem();
 					break;
 				case documentclass:
 					processDocumentclass();
