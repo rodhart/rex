@@ -11,7 +11,6 @@ import java.io.EOFException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Stack;
 
 import edu.udel.cis.cisc475.rex.uefparser.impl.UEFCommand.Types;
 import java.util.ArrayList;
@@ -193,6 +192,7 @@ class UEFCommandHandler
 				throw new Exception();
 			}
 		}
+		//poll the /end{answers} command off the queue
 		uefCommandQueue.poll();
 		return answersList.toArray(new AnswerIF[0]);
 	}
@@ -360,7 +360,8 @@ class UEFCommandHandler
 				case endProblem:
 				{
 					done = true;
-					processEndProblem();
+					//poll the /end{problem command off the queue
+					uefCommandQueue.poll();
 					break;
 				}
 				default:
@@ -386,8 +387,6 @@ class UEFCommandHandler
 			source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
 			source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
 			source.addText(content);
-			label = "";
-			//FIXME: Label is wrong, because null label throws exceptions
 			return examFactory.newProblem(topic, label, source, answers);
 		}
 		else
@@ -406,22 +405,6 @@ class UEFCommandHandler
 	}
 
 	/**
-	 * Process a \end{answers} command.
-	 */
-	void processEndAnswers()
-	{
-		uefCommandQueue.poll();
-	}
-
-	/**
-	 * Process a \end{block} command.
-	 */
-	void processEndBlock()
-	{
-		uefCommandQueue.poll();
-	}
-
-	/**
 	 * Process a \end{document} command.
 	 */
 	void processEndDocument()
@@ -433,14 +416,6 @@ class UEFCommandHandler
 	 * Process a \end{figure} command.
 	 */
 	void processEndFigure()
-	{
-		uefCommandQueue.poll();
-	}
-
-	/**
-	 * Process a \end{problem} command. Creates a ProblemIF to add to the ExamIF.
-	 */
-	void processEndProblem()
 	{
 		uefCommandQueue.poll();
 	}
