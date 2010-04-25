@@ -479,6 +479,27 @@ public class UEFParser implements UEFParserIF
 	}
 
 	/**
+	 * Parses for all commands in file and adds them to internal command queue.
+	 * They are ready to be processed after the call finishes.
+	 *
+	 * @param file the file handler for the uef file.
+	 *
+	 * @throws EOLException if an unexpected EOL occurs.
+	 * @throws EOFException if an unexpected EOF occurs.
+	 * @throws IOException If an I/O problem occurs.
+	 */
+	void parseForAllCommands(File file) throws EOLException, EOFException, IOException
+	{
+		this.openFile(file);
+		UEFCommand uefCommand = parseForCommand();
+		while (uefCommand != null)
+		{
+			uefCommandHandler.add(uefCommand);
+			uefCommand = parseForCommand();
+		}
+	}
+
+	/**
 	 * Parse UEF file and generate ExamIF from it.
 	 *
 	 * @param file
@@ -490,15 +511,11 @@ public class UEFParser implements UEFParserIF
 		//catch any IO problem while opening the file
 		try
 		{
-			this.openFile(file);
-			UEFCommand uefCommand = parseForCommand();
-			while (uefCommand != null)
-			{
-				uefCommandHandler.add(uefCommand);
-				uefCommand = parseForCommand();
-			}
+			//completely parse the file
+			parseForAllCommands(file);
 			try
 			{
+				//process the queue
 				return uefCommandHandler.process();
 			}
 			catch (Exception ex)
