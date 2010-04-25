@@ -449,9 +449,18 @@ class UEFCommandHandler
 	/**
 	 * Process a \documentclass{} command.
 	 */
-	void processDocumentclass()
+	boolean processDocumentclass()
 	{
-		uefCommandQueue.poll();
+		UEFCommand command = uefCommandQueue.poll();
+		String classType = command.getArgument(0);
+		if (classType.equals("exam"))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/**
@@ -478,18 +487,25 @@ class UEFCommandHandler
 	 */
 	void process() throws EOFException, Exception
 	{
+		boolean isExamDocumentclass = false;
 		while (!uefCommandQueue.isEmpty())
-		{
+		{			
 			switch (uefCommandQueue.peek().getType())
 			{
 				case beginDocument:
 				{
+					if (!isExamDocumentclass)
+					{
+						System.err.println("Error: " + uefCommandQueue.peek().getType()
+										   + " found when the documentclass is net set to exam!");
+						System.exit(-1);
+					}
 					processDocument();
 					break;
 				}
 				case documentclass:
 				{
-					processDocumentclass();
+					isExamDocumentclass = processDocumentclass();
 					break;
 				}
 				default:
