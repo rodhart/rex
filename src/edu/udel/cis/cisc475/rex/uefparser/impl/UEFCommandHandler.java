@@ -4,6 +4,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
+import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
@@ -278,8 +279,7 @@ class UEFCommandHandler
 				}
 				case beginFigure:
 				{
-					//exam.addElementIF(processFigure());
-					processFigure();
+					exam.addElementIF(processFigure());
 					break;
 				}
 				case beginProblem:
@@ -310,7 +310,7 @@ class UEFCommandHandler
 	/**
 	 * Process a \begin{figure} command.
 	 */
-	void processFigure() throws EOFException, Exception
+	FigureIF processFigure() throws EOFException, Exception
 	{
 		UEFCommand command = uefCommandQueue.poll();
 
@@ -365,10 +365,10 @@ class UEFCommandHandler
 		source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
 		source.addText(content);
 
-		//create the object
-		examFactory.newFigure(label, source);
+		//System.out.println(content);
 
-		//System.out.println(content)
+		//create the object
+		return examFactory.newFigure(label, source);	
 	}
 
 	/**
