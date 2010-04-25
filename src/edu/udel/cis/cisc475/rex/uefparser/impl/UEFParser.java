@@ -54,6 +54,26 @@ public class UEFParser implements UEFParserIF
 	}
 
 	/**
+	 * Returns a reference the underlying UEFCharHandler created in the constructor.
+	 * Used for junit testing.
+	 * @return the internal UEFCharHandler.
+	 */
+	UEFCharHandler getUEFCharHandler()
+	{
+		return uefCharHandler;
+	}
+
+	/**
+	 * Returns a reference the underlying UEFCommandHandler created in the constructor.
+	 * Used for junit testing.
+	 * @return the internal UEFCharHandler.
+	 */
+	UEFCommandHandler getUEFCommandHandler()
+	{
+		return uefCommandHandler;
+	}
+
+	/**
 	 * Opens a file using the underlying UEFCharHandler.
 	 *
 	 * @param file
