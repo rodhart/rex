@@ -3,7 +3,7 @@ package edu.udel.cis.cisc475.rex.interval.impl;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 
 /**
- * @author team 2
+ * @author bouchard
  *
  */
 
@@ -32,23 +32,26 @@ public class Interval implements IntervalIF
 	public boolean contains(double value)
 	{
 		/* tests for outright out of range */
-		if((value > high) || (value < low)){
+		if((value > high) || (value < low))
+		{
 			return false;
 		}
-			
-		// if strictLow is on, x > low, so if x is low, false
-		else if(this.strictLow && (value == this.low)){
+		else if(this.strictLow && (value == this.low))
+		{
+			// if strictLow is on, x > low, so if x is low, false
 			return false;
 		}
-		
-		// if strictHigh is on, x < high, so if x is high, false
-		else if(this.strictHigh && (value == this.high)){
+		else if(this.strictHigh && (value == this.high))
+		{
+			// if strictHigh is on, x < high, so if x is high, false
 			return false;
 		}
-		//otherwise, the value is inside the range and can be 
-		//equal to high and low so return true
 		else 
+		{
+			//otherwise, the value is inside the range and can be 
+			//equal to high and low so return true
 			return true;
+		}
 	}
 
 }
