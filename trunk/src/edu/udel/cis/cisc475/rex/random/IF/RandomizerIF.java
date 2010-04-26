@@ -1,5 +1,7 @@
 package edu.udel.cis.cisc475.rex.random.IF;
 
+import edu.udel.cis.cisc475.rex.err.RexException;
+
 /**
  * class creates an instance of a random object chooser
  * when called it first creates the seed randomizer
@@ -27,7 +29,8 @@ public interface RandomizerIF {
 	 * @param numItems number of items to return
 	 * @param items the arrays of objects o choose from
 	 * @return an array of chosen objects
+	 * @throws Exception 
 	 */
-	Object[] choose(int numItems, Object[] items);
+	Object[] choose(int numItems, Object[] items) throws Exception;
 
 }// end of interface

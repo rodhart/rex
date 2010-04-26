@@ -17,7 +17,7 @@ public class RandomTest {
 	@Test
 	//test that random numbers picked are
 	//same with same seed
-	public void testChooseA1() {
+	public void testChooseA1() throws Exception {
 		int i = 0;
 		seed = 3;
 		numToPick = 9;
@@ -34,7 +34,7 @@ public class RandomTest {
 	@Test
 	//test that random numbers picked are
 	//same with same seed
-	public void testChooseA2() {
+	public void testChooseA2() throws Exception {
 		int i = 0;
 		seed = 4236;
 		numToPick = 19;
@@ -51,7 +51,7 @@ public class RandomTest {
 	//test that random numbers picked are
 	//same with same seed
 	@Test
-	public void testChooseA3() {
+	public void testChooseA3() throws Exception {
 		int i = 0;
 		seed = 36;
 		numToPick = 29;
@@ -68,7 +68,7 @@ public class RandomTest {
 	@Test
 	//test that random numbers picked are
 	//same with same seed
-	public void testChooseA4() {
+	public void testChooseA4() throws Exception {
 		int i = 0;
 		seed = 4236;
 		numToPick = 39;
@@ -86,7 +86,7 @@ public class RandomTest {
 	//test that random numbers picked are
 	//same with same seed
 	//test that all 40 diff elements are used
-	public void testChooseA5() {
+	public void testChooseA5() throws Exception {
 		int i = 0;
 		seed = 4236;
 		numToPick = 40;
@@ -100,46 +100,40 @@ public class RandomTest {
 		}
 	}//end of method
 
-	@Test
+	@Test(expected=Exception.class)
 	//test if number of objects to pick is <1
-	public void testChooseB1() {
+	public void testChooseB1() throws Exception {
 		seed = 4236;
 		numToPick = 0;
 		R1 = RF.newRandomizer(seed);
-		b 		=  R1.choose (numToPick, a);		
-		if (b == null) 	result = true;	
-		assertEquals (true, result);
+		b = R1.choose (numToPick, a);
 	}//end of method
 
-	@Test
+	@Test(expected=Exception.class)
 	//test if number of objects to pick is <1
-	public void testChooseB2() {
+	public void testChooseB2() throws Exception {
 		seed = 4236;
 		numToPick = -10;
 		R1 = RF.newRandomizer(seed);
-		b 		=  R1.choose (numToPick, a);		
-		if (b == null) 	result = true;	
-		assertEquals (true, result);
+		b = R1.choose(numToPick, a);
 	}//end of method
 
-	@Test
+	@Test(expected=Exception.class)
 	//test if number of objects is > avail objects
-	public void testChooseB3() {
+	public void testChooseB3() throws Exception {
 		seed = 4236;
 		numToPick = 42;//we have only 40 objects cannot pick 42
 		R1 = RF.newRandomizer(seed);
-		b 		=  R1.choose (numToPick, a);		
-		if (b == null) 	result = true;	
-		assertEquals (true, result);
+		b = R1.choose (numToPick, a);
 	}//end of method
 
 
 
 	@Test
 	//test if result is random to 5%
-	public void testChooseMillion1() {
+	public void testChooseMillion1() throws Exception {
 		seed = 426;
-		numToPick = 1;//we have only 40 objects cannot pick 42
+		numToPick = 1;
 		R1 = RF.newRandomizer(seed);
 		int[] counter = new int[11];
 
@@ -170,7 +164,7 @@ public class RandomTest {
 
 	@Test
 	//test if result is random to 1%
-	public void testChooseMillion2() {
+	public void testChooseMillion2() throws Exception {
 		seed = 426;
 		numToPick = 1;//we have only 40 objects cannot pick 42
 		R1 = RF.newRandomizer(seed);
@@ -204,7 +198,7 @@ public class RandomTest {
 
 	@Test
 	//test if result is random to .5%
-	public void testChooseMillion3() {
+	public void testChooseMillion3() throws Exception {
 		seed = 426;
 		numToPick = 1;//we have only 40 objects cannot pick 42
 		R1 = RF.newRandomizer(seed);
@@ -233,8 +227,7 @@ public class RandomTest {
 		}	
 	}//end of method
 
-
-
+	
 
 
 
