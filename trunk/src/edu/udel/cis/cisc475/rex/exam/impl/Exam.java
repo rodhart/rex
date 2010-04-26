@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
@@ -29,24 +32,24 @@ public class Exam implements ExamIF {
 
 	/**
 	 * Stores all elements (problems, figures, blocks) in one collection
-	 * accessible both as a map (by key) and as a linked list using an iterator
+	 * accessible both as a map (by key)
 	 */
-	private LinkedHashMap<Integer, ExamElementIF> elements;
+	private Map<Integer, ExamElementIF> elements;
 
 	/**
 	 * A list storing the keys of all the figures in the Map elements
 	 */
-	private LinkedList<Integer> figures;
+	private List<Integer> figures;
 
 	/**
 	 * A list storing the keys of all the blocks in the Map elements
 	 */
-	private LinkedList<Integer> blocks;
+	private List<Integer> blocks;
 
 	/**
 	 * A list storing the keys of all the problems in the Map elements
 	 */
-	private LinkedList<Integer> problems;
+	private List<Integer> problems;
 
 	/**
 	 * TODO: What is the difference between the preamble and front matter?
@@ -66,12 +69,12 @@ public class Exam implements ExamIF {
 	/**
 	 * Set of topics throughout all ExamElements
 	 */
-	private HashSet<String> topics;
+	private Set<String> topics;
 
 	/**
 	 * Set of labels throughout all ExamElements
 	 */
-	private HashSet<String> labels;
+	private Set<String> labels;
 
 	/**
 	 *  Set representing the uses relationship between elements.
@@ -79,7 +82,7 @@ public class Exam implements ExamIF {
 	 *  If Element A uses soley Element B, then
 	 *  uses[A] = {B}
 	 */
-	private LinkedHashMap<ExamElementIF, HashSet<ExamElementIF>> uses;
+	private Map<ExamElementIF, HashSet<ExamElementIF>> uses;
 
 	/**
 	 * Default constructor
@@ -193,9 +196,8 @@ public class Exam implements ExamIF {
 	 * collection will return elements in the order element(0), element(1),
 	 */
 	public Collection<ExamElementIF> elements() {
-		HashSet<ExamElementIF> returnSet = new HashSet<ExamElementIF>();
-		Collection<ExamElementIF> elementValues = elements.values();
-		Iterator<ExamElementIF> i = elementValues.iterator();
+		Set<ExamElementIF> returnSet = new HashSet<ExamElementIF>();
+		Iterator<ExamElementIF> i = elements.values().iterator();
 		while (i.hasNext()) {
 			ExamElementIF element = i.next();
 			returnSet.add(element);
@@ -210,7 +212,7 @@ public class Exam implements ExamIF {
 	 * are found, an empty collection will be returned
 	 */
 	public Collection<ExamElementIF> elementsUsingElement(ExamElementIF element) {
-		HashSet<ExamElementIF> returnSet = new HashSet<ExamElementIF>();
+		Set<ExamElementIF> returnSet = new HashSet<ExamElementIF>();
 		Iterator<ExamElementIF> i = elements.values().iterator();
 		while (i.hasNext()) {
 			ExamElementIF newElement = i.next();
@@ -225,7 +227,7 @@ public class Exam implements ExamIF {
 	 * Returns all elements that have a matching topic to the argument
 	 */	
 	public Collection<ExamElementIF> elementsWithTopic(String topic) {
-		HashSet<ExamElementIF> returnSet = new HashSet<ExamElementIF>();
+		Set<ExamElementIF> returnSet = new HashSet<ExamElementIF>();
 		Iterator<ExamElementIF> i = elements.values().iterator();
 		while (i.hasNext()) {
 			ExamElementIF element = i.next();
@@ -245,7 +247,7 @@ public class Exam implements ExamIF {
 	 * @return All figures stored in exam
 	 */
 	public Collection<FigureIF> figures() {
-		HashSet<FigureIF> returnSet = new HashSet<FigureIF>();
+		Set<FigureIF> returnSet = new HashSet<FigureIF>();
 
 		Iterator<Integer> i = figures.iterator();
 		while (i.hasNext()) {
@@ -305,7 +307,7 @@ public class Exam implements ExamIF {
 	 * A collection of all problems stored in the exam
 	 */
 	public Collection<ProblemIF> problems() {
-		HashSet<ProblemIF> returnSet = new HashSet<ProblemIF>();
+		Set<ProblemIF> returnSet = new HashSet<ProblemIF>();
 
 		Iterator<Integer> i = problems.iterator();
 		while (i.hasNext()) {
@@ -319,9 +321,9 @@ public class Exam implements ExamIF {
 	 * A collection of all problems in the exam with the specified topic
 	 */
 	public Collection<ProblemIF> problemsWithTopic(String topic) {
-		HashSet<ProblemIF> returnSet = new HashSet<ProblemIF>();
+		Set<ProblemIF> returnSet = new HashSet<ProblemIF>();
+		
 		ProblemIF problem;
-
 		Iterator<Integer> i = problems.iterator();
 		while (i.hasNext()) {
 			problem = (ProblemIF) elements.get(i.next());
