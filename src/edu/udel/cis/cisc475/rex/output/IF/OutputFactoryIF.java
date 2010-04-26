@@ -4,8 +4,10 @@ import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 
 /**
+ * The OutputFactoryIF specifies classes for writing
+ * exam objects and corresponding answerKey objects
  * 
- * @author team 5
+ * @author Team 5
  * 
  */
 public interface OutputFactoryIF {
