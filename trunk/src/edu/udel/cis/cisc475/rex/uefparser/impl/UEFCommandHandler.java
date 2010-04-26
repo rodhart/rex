@@ -149,7 +149,7 @@ class UEFCommandHandler
 
 		//set the end of the source to the position before
 		//the beginning of the next command.
-		endSource = peekedCommand.getStartPosition() - 1;
+		endSource = peekedCommand.getStartPosition();
 
 		//get the file content from beginning of '/answer'
 		//to beginning of next command .
