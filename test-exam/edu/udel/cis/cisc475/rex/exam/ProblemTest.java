@@ -126,7 +126,7 @@ public class ProblemTest {
 		SourceIF blockSource = sourceFactory.newSource(testUEFfilename);
 		blockSource.addText("Test Block Source");
 		
-		BlockIF block = examFactory.newBlock("Test Block Topic", "Test Block Label", blockSource);
+		BlockIF block = examFactory.newBlock("Test Block Label", blockSource);
 		exam.addElementIF(block);
 		exam.addElementIF(problem);
 		
