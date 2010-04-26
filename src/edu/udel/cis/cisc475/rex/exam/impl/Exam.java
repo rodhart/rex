@@ -83,6 +83,8 @@ public class Exam implements ExamIF {
 	 *  uses[A] = {B}
 	 */
 	private Map<ExamElementIF, HashSet<ExamElementIF>> uses;
+	
+	private Map<ExamElementIF, HashSet<ExamElementIF>> usedBy;
 
 	/**
 	 * Default constructor
