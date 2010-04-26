@@ -43,6 +43,61 @@ output exams, as specified in the ECF file.
 
 \section{The ECF File}
 
+\section{Troubleshooting}
+Because of the requirements that REX places upon the input it parses,
+REX may present the user with a variety of errors. Additionally, it's
+possible that REX might process the request without any errors or warnings,
+but will provide an undesired output.
+
+\subsection{Errors}
+\subsubsection{RexParseException}
+This error means that REX encountered a syntactic error in either the
+UEF or ECF file. Please consult the provided error message for more
+information.
+
+\subsubsection{RexUnsatisfiableException}
+This error means that the input files were parsed correctly, but that
+REX determined that the requirements from the ECF cannot be resolved
+using the provided UEF file. Generally, this means that there aren't
+enough problems in the UEF. Either reduce the number of requested
+problems in the ECF, or create new problems in the UEF to resolve
+this error.
+
+Note: REX resolves the requirements in the ECF simultaneously. This means
+that if the ECF has two identical requirements of 5 questions each, REX
+will require at least 10 satisfactory questions.
+
 \section{Credits}
+REX was coded by Prof. Siegel's CISC475 class for the 2010 Spring
+semester. The TA for this class was Charlie Greenbacker.
+
+\begin{multicols}{2}
+\begin{enumerate}
+\item Aaron Landwehr
+\item Ahmed El-Hassany
+\item Anthony Platt
+\item Burke Cates
+\item Fran "Da Man" Fitzpatrick
+\item Greg Simons
+\item Haley Boyd
+\item Ian Burns
+\item Jack Song
+\item James Cardona
+\item Jeremy Verchick
+\item Jesse Gledhill
+\item Josh Rothhaupt
+\item Justin Johnson
+\item Keith McLoughlin
+\item Kevin Schultz
+\item Kyle Bouchard
+\item Lucero Carmona
+\item Reed Martz
+\item Tim Armstrong
+\item Tim McClory
+\item Trevor Kiernan
+\item William Gordon
+\item Zach Hine
+\end{enumerate}
+\end{multicols}
 
 \end{document}
