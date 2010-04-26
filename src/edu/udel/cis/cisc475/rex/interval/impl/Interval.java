@@ -28,25 +28,17 @@ public class Interval implements IntervalIF
 				this.low = low;
 				this.high = high;
 			}
-	
-	/**
-	 *  when "high" is 5: 
-	 * strictHigh: x < 5
-	 * !strictHigh: x <= 5 
-	 * 
-	 */
-	
+		
 	public boolean contains(double value)
 	{
-		// tests for outright out of range
+		/* tests for outright out of range */
 		if((value > high) || (value < low)){return false;}
-				
+			
 		// if strictLow is on, x > low, so if x is low, false
 		else if(this.strictLow && (value == this.low)){return false;}
 		
 		// if strictHigh is on, x < high, so if x is high, false
 		else if(this.strictHigh && (value == this.high)){return false;}
-		
 		//otherwise, the value is inside the range and can be 
 		//equal to high and low so return true
 		else return true;
