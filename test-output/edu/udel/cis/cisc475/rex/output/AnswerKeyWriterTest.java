@@ -24,7 +24,7 @@ import edu.udel.cis.cisc475.rex.output.impl.OutputFactory;
  * @author cardona
  * 
  */
-public class AnswerKeyWriterJunitTest {
+public class AnswerKeyWriterTest {
 
 	public static String newline = System.getProperty("line.separator");
 
