@@ -22,10 +22,20 @@ public class TopicContainer
 	 * 				-Topic representative of the TopicContainer being instantiated.
 	 */
 	
-	public TopicContainer(String topic) { this.topic = topic; }
+	public TopicContainer(String topic)
+	{
+		this.topic = topic;
+	}
 	
-	public String getTopic() { return this.topic; }
-	public HashMap getBCs() { return this.theBCs; }
+	public String getTopic()
+	{
+		return this.topic;
+	}
+	
+	public HashMap getBCs()
+	{
+		return this.theBCs;
+	}
 	
 	/**
 	 * @param theBlock

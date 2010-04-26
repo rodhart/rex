@@ -25,10 +25,20 @@ public class TopicOrganizer
 	 * 				-Topic representative of the TopicOrganizer being instantiated.
 	 */
 	
-	public TopicOrganizer(String topic) { this.topic = topic; }
+	public TopicOrganizer(String topic)
+	{
+		this.topic = topic;
+	}
 	
-	public String getTopic() { return this.topic; }
-	public Collection<GroupConstraintContainer> getGCCs() { return this.theGCCs; }
+	public String getTopic()
+	{
+		return this.topic;
+	}
+	
+	public Collection<GroupConstraintContainer> getGCCs()
+	{
+		return this.theGCCs;
+	}
 	
 	/**
 	 * @param theGC
