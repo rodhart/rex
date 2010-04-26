@@ -27,10 +27,15 @@ public class Problem implements ProblemIF {
 	protected Problem(String topic, String label, SourceIF question,
 			AnswerIF[] answers) {
 		this.topic = topic;
-		this.label = label;
+		if(label == null) {
+			this.label = new String("");
+		} else {
+			this.label = label;
+		}
 		this.question = question;
 		this.answers = answers;
 		this.referencedFigures = new HashSet<FigureIF>();
+		
 	}
 
 	public AnswerIF[] answers() {
