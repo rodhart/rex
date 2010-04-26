@@ -16,18 +16,28 @@ import edu.udel.cis.cisc475.rex.output.IF.OutputFactoryIF;
  */
 public class OutputFactory implements OutputFactoryIF {
 
-	/* (non-Javadoc)
-	 * @see edu.udel.cis.cisc475.rex.output.IF.OutputFactoryIF#newAnswerKeyWriter(edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF)
+	/**
+	 * This method utilizes a print writer and an precreated Exam
+     * class to output parts of the exam class to the print writer.
+     * 
+	 * @param exam an exam object with preamble, front matter, and problems
+	 * @return exam an exam object with preamble, front matter, and problems
+	 */
+	
+	public ExamWriterIF newExamWriter(ExamIF exam) {
+		return new ExamWriter(exam);
+	}
+	
+	/**
+	 * This method writes an answerKey object to any PrintWriter object
+	 *  
+	 * @param answerKey an answerKey object that corresponds to a completed exam object
+	 * @return answerKey an answerKey object that corresponds to a completed exam object
 	 */
 	public AnswerKeyWriterIF newAnswerKeyWriter(AnswerKeyIF answerKey) {
 		return new AnswerKeyWriter(answerKey) ;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.udel.cis.cisc475.rex.output.IF.OutputFactoryIF#newExamWriter(edu.udel.cis.cisc475.rex.exam.IF.ExamIF)
-	 */
-	public ExamWriterIF newExamWriter(ExamIF exam) {
-		return new ExamWriter(exam);
-	}
+
 
 }

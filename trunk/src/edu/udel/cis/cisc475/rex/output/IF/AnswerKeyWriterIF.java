@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.PrintWriter;
 
 /**
- * The AnswerKeyWriterIF is used to output a exam Key object
+ * The AnswerKeyWriterIF is used to output an answerKey object
  * with a print writer object using the public write() function.
  * There is also consideration for writing a scantron formatted file.
  * 

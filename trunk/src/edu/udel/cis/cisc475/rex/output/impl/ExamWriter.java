@@ -21,6 +21,7 @@ public class ExamWriter implements ExamWriterIF {
 
 	/**
 	 * Default constructor
+	 * 
 	 * @param exam an exam object with a preamble, front matter, and problems
 	 */
 	public ExamWriter(ExamIF exam) {
