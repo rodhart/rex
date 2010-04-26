@@ -22,4 +22,19 @@ public class SourceFactory implements SourceFactoryIF {
 		return new Source(filename);
 	}
 
-}//end of class
+	/**
+	 * Creates a new instance of Source
+	 * 
+	 * @param filename Name of file
+	 * @param startLine Starting line
+	 * @param startColumn Starting column
+	 * @param lastLine Ending line
+	 * @param lastColumn Ending column
+	 * @return Returns a new Source object initialized with given parameters
+	 */
+	public SourceIF newSource(String filename, int startLine, 
+			int startColumn, int lastLine, int lastColumn) {
+		return new Source(filename, startLine, startColumn, lastLine, lastColumn);
+	}
+	
+}
