@@ -12,17 +12,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Class that handles the underlying UEF file character by character.
- * Internally uses unix line breaks for internal representation.
- * This is important to note because the position may differ
- * from the actual byte position in the underlying file. For instance-
- * in the case of windows line breaks. This would be true.
+ * Class that handles the underlying UEF file character by character. Internally
+ * uses unix line breaks for internal representation. This is important to note
+ * because the position may differ from the actual byte position in the
+ * underlying file. For instance- in the case of windows line breaks. This would
+ * be true.
  * 
  * @author Aaron Myles Landwehr
  * @author Ahmed El-Hassany
  */
-class UEFCharHandler
-{
+class UEFCharHandler {
 
 	/**
 	 * The current position in the file. This will count the new lines as just
@@ -51,21 +50,19 @@ class UEFCharHandler
 	 * @throws IOException
 	 * 
 	 */
-	void openFile(File file) throws IOException
-	{
-		//initialize
+	void openFile(File file) throws IOException {
+		// initialize
 		this.position = 0;
 		positionToLineNumberMap = new TreeMap<Integer, Integer>();
 
-		//work
+		// work
 		FileInputStream stream = new FileInputStream(file);
 		BufferedReader reader = new BufferedReader(
 				new InputStreamReader(stream));
 		StringBuffer buffer = new StringBuffer();
 		int lineNumber = 1;
 		String line = reader.readLine();
-		while (line != null)
-		{
+		while (line != null) {
 			positionToLineNumberMap.put(buffer.length(), lineNumber);
 			buffer.append(line);
 			buffer.append('\n');
@@ -78,46 +75,30 @@ class UEFCharHandler
 		this.fileName = file.getName();
 	}
 
-	boolean isWhiteSpace() throws EOFException
-	{
+	boolean isWhiteSpace() throws EOFException {
 
-
-		if (position < fileContents.length())
-		{
+		if (position < fileContents.length()) {
 			char ch = fileContents.charAt(position);
-			if (ch == ' ' || ch == '\t' || ch == '\r'
-				|| ch == '\n' || ch == '\f' || ch == '\b')
-			{
+			if (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n'
+					|| ch == '\f' || ch == '\b') {
 				return true;
-			}
-			else
-			{
+			} else {
 				return false;
 			}
-		}
-		else
-		{
+		} else {
 			throw new EOFException();
 		}
 	}
 
-	boolean isLineBreak() throws EOFException
-	{
-		if (position < fileContents.length())
-		{
+	boolean isLineBreak() throws EOFException {
+		if (position < fileContents.length()) {
 			char ch = fileContents.charAt(position);
-			if (ch == '\r'
-				|| ch == '\n' || ch == '\f')
-			{
+			if (ch == '\r' || ch == '\n' || ch == '\f') {
 				return true;
-			}
-			else
-			{
+			} else {
 				return false;
 			}
-		}
-		else
-		{
+		} else {
 			throw new EOFException();
 		}
 	}
@@ -125,8 +106,7 @@ class UEFCharHandler
 	/**
 	 * Moves the current position ahead one byte in the file.
 	 */
-	void move() throws EOFException
-	{
+	void move() throws EOFException {
 		position++;
 	}
 
@@ -136,26 +116,18 @@ class UEFCharHandler
 	 * @return The character read or null if at the end of the file.
 	 * 
 	 */
-	Character read() throws EOFException
-	{
-		if (position < fileContents.length())
-		{
+	Character read() throws EOFException {
+		if (position < fileContents.length()) {
 			return fileContents.charAt(position);
-		}
-		else
-		{
+		} else {
 			throw new EOFException();
 		}
 	}
 
-	boolean eof()
-	{
-		if (position < fileContents.length())
-		{
+	boolean eof() {
+		if (position < fileContents.length()) {
 			return false;
-		}
-		else
-		{
+		} else {
 			return true;
 		}
 	}
@@ -169,8 +141,7 @@ class UEFCharHandler
 	 *            The ending index exclusive.
 	 * @return A string containing the characters read.
 	 */
-	String getContent(int start, int end)
-	{
+	String getContent(int start, int end) {
 		return fileContents.substring(start, end);
 	}
 
@@ -180,8 +151,7 @@ class UEFCharHandler
 	 * 
 	 * @return The current position in the file.
 	 */
-	int getPosition()
-	{
+	int getPosition() {
 		return position;
 	}
 
@@ -191,8 +161,7 @@ class UEFCharHandler
 	 * @param position
 	 *            The position to set the file to.
 	 */
-	void setPosition(int position)
-	{
+	void setPosition(int position) {
 		this.position = position;
 	}
 
@@ -201,32 +170,27 @@ class UEFCharHandler
 	 * 
 	 * @return
 	 */
-	String getFileName()
-	{
+	String getFileName() {
 		return this.fileName;
 	}
 
 	/**
 	 * Get the line number at the current position in the file.
 	 */
-	int getLineNumber() throws EOFException
-	{
+	int getLineNumber() throws EOFException {
 		return getLineNumber(this.position);
 	}
 
 	/**
 	 * Get the line number at the specified position in the file.
-	 *
-	 * @param position the position at which to get the line number.
+	 * 
+	 * @param position
+	 *            the position at which to get the line number.
 	 */
-	int getLineNumber(int position) throws EOFException
-	{
-		if (position < fileContents.length())
-		{
+	int getLineNumber(int position) throws EOFException {
+		if (position < fileContents.length()) {
 			return positionToLineNumberMap.floorEntry(position).getValue();
-		}
-		else
-		{
+		} else {
 			throw new EOFException();
 		}
 	}
@@ -234,22 +198,20 @@ class UEFCharHandler
 	/**
 	 * Get the column number at the current position in the file.
 	 */
-	int getColumnNumber()
-	{
+	int getColumnNumber() {
 		return getColumnNumber(this.position);
 	}
 
 	/**
 	 * Get the column number at the specified position in the file.
-	 *
-	 * @param position the position to get the column number at.
+	 * 
+	 * @param position
+	 *            the position to get the column number at.
 	 */
-	int getColumnNumber(int position)
-	{
+	int getColumnNumber(int position) {
 		position = position - 1;
 		int columnNumber = 1;
-		while (position > -1 && fileContents.charAt(position) != '\n')
-		{
+		while (position > -1 && fileContents.charAt(position) != '\n') {
 			columnNumber++;
 			position--;
 		}
@@ -257,22 +219,19 @@ class UEFCharHandler
 	}
 
 	/**
-	 * Returns a java.util.regex.Matcher consisting of the information about any matching text
-	 * found. Returns null if the match isn't found.
+	 * Returns a java.util.regex.Matcher consisting of the information about any
+	 * matching text found. Returns null if the match isn't found.
+	 * 
 	 * @param pattern
 	 * @return
 	 */
-	Matcher regex(String pattern)
-	{
+	Matcher regex(String pattern) {
 		Pattern compiledPattern = Pattern.compile(pattern);
 		Matcher matcher = compiledPattern.matcher(this.fileContents);
 		boolean wasFound = matcher.find(this.getPosition());
-		if (wasFound)
-		{
+		if (wasFound) {
 			return matcher;
-		}
-		else
-		{
+		} else {
 			return null;
 		}
 	}
