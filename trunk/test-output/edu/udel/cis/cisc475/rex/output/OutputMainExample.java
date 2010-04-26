@@ -55,9 +55,8 @@ public class OutputMainExample {
 		PrintWriter pw = new PrintWriter(System.out,true); 
 
 		//make call to write out the answer key
-		AKW.write(pw);
+//		AKW.write(pw);
 
-		
 		/* now we are done fooling around with answer keys
 		 * 
 		 * 

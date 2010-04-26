@@ -30,14 +30,15 @@ public class ExamStub implements ExamIF {
 		preamble.addText("\\begin{document}\n");
 		preamble.addText("\\maketitle\n");
 		preamble.addText("\\newpage\n");
-
 		return preamble;
 	}
 	
 	@Override
 	public SourceIF frontMatter() {
 		SourceIF frontMatter = sourceFactory.newSource("frontmatter.txt");
-		frontMatter.addText("\\newpage");
+		frontMatter.addText("\\begin{document}\n");
+		frontMatter.addText("\\maketitle\n");
+		frontMatter.addText("\\newpage\n");
 		return frontMatter;
 	}
 	
@@ -45,7 +46,7 @@ public class ExamStub implements ExamIF {
 	@Override
 	public BlockIF finalBlock() {
 		SourceIF finalSource = sourceFactory.newSource("finalBlock.txt");
-		finalSource.addText("\\newpage");
+		finalSource.addText("\\end{document}");
 		BlockIF finalBlock = examFactory.newBlock("Final topic", finalSource);
 		return finalBlock;
 	}
