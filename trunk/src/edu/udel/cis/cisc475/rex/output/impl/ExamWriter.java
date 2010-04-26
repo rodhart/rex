@@ -21,14 +21,11 @@ public class ExamWriter implements ExamWriterIF {
 
 	/**
 	 * Default constructor
-	 * 
 	 * @param exam an exam object with a preamble, front matter, and problems
 	 */
 	public ExamWriter(ExamIF exam) {
-
 		this.E = exam;
-
-	}//end of constructor
+		}//end of constructor
 
 
 	/**
@@ -51,27 +48,28 @@ public class ExamWriter implements ExamWriterIF {
 			if(temp instanceof BlockIF){
 				BlockIF tempBlockIF  = (BlockIF)temp;
 				out.printf("%s\n", tempBlockIF.source().text());
-			}
+				}
 			else if(temp instanceof FigureIF){
 				out.println("/newpage\n");
 				FigureIF tempFigureIF = (FigureIF)temp;
 				out.printf("%s\n",tempFigureIF.source().text());
-			}
+				}
 			else if(temp instanceof Problem){
 				Problem tempProblem = (Problem)temp;
 
 				//prints the required block if it does not equal null
 				if(tempProblem.requiredBlock()!= null)
 					out.printf("%s\n",tempProblem.requiredBlock());
+				
 				//prints the question
 				out.printf("%s\n",tempProblem.question().text());
 
 				//prints all the answers
 				for(int index=0; index<tempProblem.answers().length; index++){
 					out.printf("%s\n",tempProblem.answers()[index].source().text());
-				}
-			}
-		}
+					}//end of for loop
+			}//endo of if(temp instanceof Problem) 
+		}//endo of for loop (int i=0; i< E.elements().toArray().length; i++)
 
 		// output the end block for exam
 		out.printf("%s\n", E.finalBlock());
