@@ -159,11 +159,12 @@ public class Exam implements ExamIF {
 			if(user instanceof ProblemIF && usee instanceof BlockIF){
 				((Problem) user).setRequiredBlock((BlockIF) usee);
 				
-				if ( ((ProblemIF) user).topic() != ((BlockIF) usee).topic()){
-					//TODO use actual ERR module
-					System.err.println("error changing a current block's topic");
-				} else{
-					((Block) usee).setTopic(((ProblemIF) usee).topic());
+				if ( ((BlockIF) usee).topic() == null || 
+						((BlockIF) usee).topic() == ((ProblemIF) user).topic()){
+					((Block) usee).setTopic( ((ProblemIF) user).topic());
+				} else {
+					// TODO use err module
+					System.err.println("rar");
 				}
 			}
 		} else {
