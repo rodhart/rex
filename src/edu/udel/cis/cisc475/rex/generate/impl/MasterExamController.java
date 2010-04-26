@@ -91,8 +91,11 @@ public class MasterExamController
 		Integer identifier = (Integer) this.identifiers.get(requiredProblem);
 		
 		if (!this.requiredProblems.containsKey(identifier))
+		{
+			requiredProblem.setPoints(theRPC.points());
 			this.requiredProblems.put(identifier, requiredProblem);
-		
+		}
+			
 		else
 			System.err.println("The problem \"" + requiredProblem.question() +
 							   "\" is referenced by two required problem constraints.");
