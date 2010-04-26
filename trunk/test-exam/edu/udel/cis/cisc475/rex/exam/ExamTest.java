@@ -140,7 +140,7 @@ public class ExamTest {
 		
 		SourceIF blockSource = sourceFactory.newSource(testUEFfilename);
 		blockSource.addText("Test Block Source");
-		BlockIF block = examFactory.newBlock("Test Block Topic", "Test Block Label", blockSource);
+		BlockIF block = examFactory.newBlock("Test Block Label", blockSource);
 		
 		exam.setFinalBlock(block);
 		
@@ -604,12 +604,11 @@ public class ExamTest {
 		SourceIF blockSource;
 		
 		String testUEFfilename = "testFileName.txt";
-		String testTopic = "Test Block Topic";
 		String testLabel = "Test Block Label";
 		
 		blockSource = sourceFactory.newSource(testUEFfilename);
 		blockSource.addText("Test Block Source");
-		return examFactory.newBlock(testTopic, testLabel, blockSource);
+		return examFactory.newBlock(testLabel, blockSource);
 	}
 	
 }
