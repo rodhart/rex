@@ -63,7 +63,7 @@ public class ExamWriterTest {
     	//BlockIF blockTest = examFactory.newBlock("test topic", "test label", testSource );
     	//BlockIF changed, needed to fix so code compiles.
     	BlockIF blockTest = examFactory.newBlock("test topic", testSource );
-    	e.addElementIF(blockTest);
+    	e.addElement(blockTest);
     	ExamWriterIF ew = examWriterFactory.newExamWriter(e);
     }
     
@@ -72,7 +72,7 @@ public class ExamWriterTest {
     	ExamIF e = examFactory.newGeneratedExam();	
     	SourceIF testSource = sourceFactory.newSource("./trunk/test-source/edu/udel/cis/cisc475/rex/source/SampleText.txt");
     	FigureIF figureTest = examFactory.newFigure("test label", testSource );
-    	e.addElementIF(figureTest);
+    	e.addElement(figureTest);
     	ExamWriterIF ew = examWriterFactory.newExamWriter(e);
     }
     
