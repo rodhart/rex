@@ -35,21 +35,6 @@ public class ExamFactory implements ExamFactoryIF {
 	/**
 	 * Creates a new instance of BlockIF.
 	 * 
-	 * @return BlockIF
-	 * @deprecated Replaced by {@link #newBlock(String, SourceIF)}
-	 */
-	@Deprecated
-	public BlockIF newBlock(String topic, String label, SourceIF text) {
-		if(topic == null)
-			throw new NullPointerException("The argument topic cannot be null");
-			if (text == null)
-			throw new NullPointerException("The argument text cannot be null");
-		return new Block(topic, label, text);
-	}
-
-	/**
-	 * Creates a new instance of BlockIF.
-	 * 
 	 * @param label String: The label given to this BlockIF
 	 * @param text SourceIF: The source from the UEF that defines this BlockIF 
 	 * @return new instance of BlockIF

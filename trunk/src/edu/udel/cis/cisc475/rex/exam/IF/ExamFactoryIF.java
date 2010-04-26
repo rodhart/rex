@@ -22,16 +22,7 @@ public interface ExamFactoryIF {
 	 * @return new instance of ExamIF
 	 */
     ExamIF newGeneratedExam();
-    
-	/**
-	 * Creates a new instance of BlockIF.
-	 * 
-	 * @return BlockIF
-	 * @deprecated Replaced by {@link #newBlock(String, SourceIF)}
-	 */
-	@Deprecated
-   BlockIF newBlock(String topic, String label, SourceIF text);
-    
+        
 	/**
 	 * Creates a new instance of BlockIF.
 	 * 
