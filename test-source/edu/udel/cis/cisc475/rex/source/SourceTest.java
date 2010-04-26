@@ -16,7 +16,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.w3c.dom.Text;
 
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;

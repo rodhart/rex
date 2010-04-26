@@ -2,6 +2,7 @@ package edu.udel.cis.cisc475.rex.random.impl;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
 
 /**
@@ -14,7 +15,6 @@ import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
  * 
  * @author justin
  * @author cardona
- * @author jsong
  *
  */
 public class Randomizer implements RandomizerIF {
@@ -26,6 +26,8 @@ public class Randomizer implements RandomizerIF {
 	//we could make the default constructor private which would
 	//force the use of the factory
 
+	//private vars
+	private Random randnum;
 
 	/**
 	 * class creates an instance of a random object chooser
@@ -48,7 +50,7 @@ public class Randomizer implements RandomizerIF {
 	 * @param items  the arrays of objects to choose from
 	 * @return an array of chosen objects
 	 */
-	public Object[] choose (int numItems, Object[] items) {
+	public Object[] choose(int numItems, Object[] items) throws Exception {
 
 		int index;
 		//holds the original list
@@ -63,13 +65,14 @@ public class Randomizer implements RandomizerIF {
 
 		//if picked items is less then zero return null
 		if(numItems <= 0){
-			return null;
+			// Should be changed to RexException when it's implemented
+			throw new Exception("Number of items: " + numItems + "\n numItems <= 0");
 		}
 		//if they request more objects then in the list
-		if(numItems > items.length + 1){
-			return null;
+		if(numItems > items.length + 1){	
+			throw new Exception("Number of items: " + numItems + "\n"
+					+ "Length of array: " + (items.length+1));
 		}
-		
 		
 		while(shuffledItems.size()!=numItems ){
 			//gets a random number in the array's range
@@ -86,8 +89,5 @@ public class Randomizer implements RandomizerIF {
 		return shuffledItems.toArray();
 	}
 
-
-	//private vars
-	private Random randnum;
 }//end of class 
 
