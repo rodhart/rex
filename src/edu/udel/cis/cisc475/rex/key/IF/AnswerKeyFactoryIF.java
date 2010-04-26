@@ -4,7 +4,7 @@ package edu.udel.cis.cisc475.rex.key.IF;
  * this class is a factory which creates a new instance of 
  * an answer key
  * 
- *   @author CARDONA
+ *   @author cardona
  * 
  */
 public interface AnswerKeyFactoryIF {

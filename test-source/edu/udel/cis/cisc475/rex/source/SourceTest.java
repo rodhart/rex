@@ -28,7 +28,7 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 
 /**
- * @author Jack
+ * @author jsong
  *
  */
 public class SourceTest {

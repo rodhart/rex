@@ -7,8 +7,8 @@ import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
 import edu.udel.cis.cisc475.rex.random.impl.RandomizerFactory;
 
 /**
- * @author jim cardona
- * @author justin johnson
+ * Junit tests for Random module
+ * @author cardona
  *
  */
 public class RandomTest {

@@ -9,7 +9,9 @@ import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
 
 /**
- * @author jim cardona
+ * Junit Test for AnswerKey
+ * 
+ * @author cardona
  *
  */
 public class AnswerKeyTest {

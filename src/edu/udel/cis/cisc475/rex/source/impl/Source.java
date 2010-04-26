@@ -9,9 +9,9 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
  * with a PrintWriter.  A section can be selected with starting
  * line, ending line, starting column, and ending column.
  * 
- * @author Jim Cardona
- * @author Justin Johnson
- * @author Jack Song
+ * @author cardona
+ * @author justinjo
+ * @author jsong
  * @version 1.0, 19 Apr 2010
  *
  */

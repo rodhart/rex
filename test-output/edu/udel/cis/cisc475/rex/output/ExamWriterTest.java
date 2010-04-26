@@ -29,6 +29,13 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 import edu.udel.cis.cisc475.rex.source.impl.Source;
 import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 
+/**
+ * Junit Testing for ExamWriter
+ * 
+ * @author jsong
+ * @author kiernan
+ *
+ */
 public class ExamWriterTest {
 	
 	ExamFactoryIF examFactory;

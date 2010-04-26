@@ -12,8 +12,9 @@ import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
  * the choosing of these objects will be repeatable if given the
  * same seed value
  * 
- * @author jim cardona
- * @author justin johnson
+ * @author justin
+ * @author cardona
+ * @author jsong
  *
  */
 public class Randomizer implements RandomizerIF {

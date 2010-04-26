@@ -9,7 +9,8 @@ import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
  * 
  * this is an alternate way to do factories with interfaces
  * instead of creating an instance of the factory (saves memory)
- *   @author siegel / javadoc by cardona
+ *   @author siegel
+ *   @author cardona
  * 
  */
 public class Keys {

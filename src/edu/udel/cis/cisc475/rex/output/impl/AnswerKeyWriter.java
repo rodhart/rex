@@ -15,7 +15,8 @@ import edu.udel.cis.cisc475.rex.output.IF.AnswerKeyWriterIF;
  * 
  * The file is written to a PrintWriter specified by the caller
  * 
- * @author Team 5
+ * @author cardona
+ * @author iburns
  *
  */
 public class AnswerKeyWriter implements AnswerKeyWriterIF {

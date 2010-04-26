@@ -7,7 +7,8 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 
 /**
- * @author team 5
+ * @author cardona
+ * @author jsong
  *
  */
 

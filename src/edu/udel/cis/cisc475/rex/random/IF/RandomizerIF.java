@@ -8,7 +8,8 @@ package edu.udel.cis.cisc475.rex.random.IF;
  * the choosing of these objects will be repeatable if given the
  * same seed value
  * 
- * @author  CARDONA
+ * @author cardona
+ * @author jsong
  *
  */
 public interface RandomizerIF {

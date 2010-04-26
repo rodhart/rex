@@ -8,7 +8,8 @@ import java.io.PrintWriter;
  * with a print writer object using the public write() function.
  * There is also consideration for writing a scantron formatted file.
  * 
- * @author Team 5
+ * @author cardona
+ * @author jsong
  *
  */
 public interface AnswerKeyWriterIF {
