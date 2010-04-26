@@ -10,4 +10,11 @@ public class SourceFactory implements SourceFactoryIF {
 		return new Source(filename);
 	}
 
+	@Override
+	public SourceIF newSource(String filename, int startLine, int startColumn,
+			int lastLine, int lastColumn) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

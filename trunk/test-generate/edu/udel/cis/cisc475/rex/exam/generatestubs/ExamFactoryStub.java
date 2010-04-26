@@ -17,11 +17,6 @@ public class ExamFactoryStub implements ExamFactoryIF {
 		return new AnswerStub(correct, text);
 	}
 
-	@Override
-	public BlockIF newBlock(String topic, String label, SourceIF text) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public FigureIF newFigure(String label, SourceIF text) {
@@ -53,6 +48,13 @@ public class ExamFactoryStub implements ExamFactoryIF {
 			AnswerIF[] answers) {
 		// TODO Auto-generated method stub
 		return new ProblemStub(topic, label, question, answers);
+	}
+
+
+	@Override
+	public BlockIF newBlock(String label, SourceIF text) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
