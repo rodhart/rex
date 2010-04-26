@@ -146,9 +146,7 @@ public class ExamTest {
 		
 		BlockIF result = exam.finalBlock();
 		assertNotNull(result);
-		assertNotNull(result.topic());
 		assertNotNull(result.label());
-		assertEquals("Test Block Topic", result.topic());
 		assertEquals("Test Block Label", result.label());
 		assertEquals(block, result);
 	}
@@ -457,7 +455,6 @@ public class ExamTest {
 		// should only return 2 topics since figure doesnt have a topic
 		assertEquals(2, topics.size());
 		assertTrue(topics.contains("Test Problem Topic"));
-		assertTrue(topics.contains("Test Block Topic"));
 	}
 	
 	@Test
