@@ -13,8 +13,7 @@ import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
  * class to output parts of the exam class to the print writer.
  *  
  *  @author kiernan
- *  @author iburns
- *  @author jsong
+ *  @author justinjo
  */
 
 public class ExamWriter implements ExamWriterIF {
@@ -27,7 +26,6 @@ public class ExamWriter implements ExamWriterIF {
 	public ExamWriter(ExamIF exam) {
 		this.E = exam;
 		}//end of constructor
-
 
 	/**
 	 * Loops through each exam element and 
