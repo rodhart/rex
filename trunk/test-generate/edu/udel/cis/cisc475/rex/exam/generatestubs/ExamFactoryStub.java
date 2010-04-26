@@ -14,7 +14,7 @@ public class ExamFactoryStub implements ExamFactoryIF {
 	@Override
 	public AnswerIF newAnswer(boolean correct, SourceIF text) {
 		// TODO Auto-generated method stub
-		return null;
+		return new AnswerStub(correct, text);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class ExamFactoryStub implements ExamFactoryIF {
 	public ProblemIF newProblem(String topic, String label, SourceIF question,
 			AnswerIF[] answers) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ProblemStub(topic, label, question, answers);
 	}
 
 }

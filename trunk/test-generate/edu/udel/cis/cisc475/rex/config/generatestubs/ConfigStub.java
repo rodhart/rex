@@ -1,24 +1,54 @@
 package edu.udel.cis.cisc475.rex.config.generatestubs;
 
 import java.util.Collection;
+import java.util.HashSet;
 
+import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
+import edu.udel.cis.cisc475.rex.config.impl.GroupConstraint;
+import edu.udel.cis.cisc475.rex.config.impl.RequiredProblemConstraint;
+import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
+import edu.udel.cis.cisc475.rex.interval.generatestubs.IntervalFactoryStub;
+import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
+import edu.udel.cis.cisc475.rex.source.generatestubs.SourceFactoryStub;
 
 /**
  * This is a STUB for the Config class. To be used for testing purposes only.
  */
 public class ConfigStub implements ConfigIF {
-	Boolean c_pdf;
-	int c_numVersions;
+	long seed;
+	String[] versionStrings;
+	String finalBlock;
+	boolean pdfOption;
+	int numVersions;
+	HashSet<ConstraintIF> constraints = new HashSet<ConstraintIF>();
 
+	SourceFactoryIF sourceFactory = new SourceFactoryStub();
+	ConfigFactoryIF configFactory = new ConfigFactoryStub();
+	IntervalFactoryIF intervalFactory = new IntervalFactoryStub();
+	
 	public ConfigStub(boolean pdf, int numVersions) {
-		this.c_pdf = pdf;
-		this.c_numVersions = numVersions;
+		this.pdfOption = pdf;
+		this.numVersions = numVersions;
+		
+		SourceIF source1 = sourceFactory.newSource("testFile.txt");
+		source1.addText("question1");
+		
+		SourceIF source2 = sourceFactory.newSource("testFile.txt");
+		source1.addText("question2");
+		
+		IntervalIF interval = intervalFactory.interval(true, 1.0, true, 5.0);
+		
+		RequiredProblemConstraint constraint1 = new RequiredProblemConstraint("label1", 4, source1);
+		GroupConstraint constraint2 = new GroupConstraint(interval, 1, 3, "topic2", source2);
+		
+		this.constraints.add(constraint1);
+		this.constraints.add(constraint2);
 	}
 
 
@@ -32,7 +62,7 @@ public class ConfigStub implements ConfigIF {
 	@Override
 	public Collection<ConstraintIF> constraints() {
 		// TODO Auto-generated method stub
-		return null;
+		return constraints;
 	}
 
 	@Override
@@ -44,13 +74,13 @@ public class ConfigStub implements ConfigIF {
 	@Override
 	public int numVersions() {
 		// TODO Auto-generated method stub
-		return c_numVersions;
+		return numVersions;
 	}
 
 	@Override
 	public boolean pdfOption() {
 		// TODO Auto-generated method stub
-		return c_pdf;
+		return pdfOption;
 	}
 
 	@Override
