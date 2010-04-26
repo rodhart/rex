@@ -1,6 +1,5 @@
 package edu.udel.cis.cisc475.rex.exam.impl;
 
-import edu.udel.cis.cisc475.rex.err.RexException;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
@@ -11,7 +10,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /**
- * 
+ * Provides a series of methods for creating objects within the Exam package.
  * 
  * 
  * @author Reed Martz (martz)
@@ -22,11 +21,14 @@ public class ExamFactory implements ExamFactoryIF {
 	/**
 	 * Creates a new instance of AnswerIF.
 	 * 
-	 * @return AnswerIF
+	 * @param correct boolean: Determines if the answer is a correct answer
+	 * @param text SourceIF: The source from the UEF that defines this answer
+	 * @return new instance of AnswerIF
+	 * @exception NullPointerException If text is null
 	 */
 	public AnswerIF newAnswer(boolean correct, SourceIF text) {
 		if(text == null)
-			throw new NullPointerException();
+			throw new NullPointerException("The argument text cannot be null");
 		return new Answer(correct, text);
 	}
 
@@ -34,50 +36,66 @@ public class ExamFactory implements ExamFactoryIF {
 	 * Creates a new instance of BlockIF.
 	 * 
 	 * @return BlockIF
+	 * @deprecated Replaced by {@link #newBlock(String, SourceIF)}
 	 */
 	@Deprecated
 	public BlockIF newBlock(String topic, String label, SourceIF text) {
-		if((topic == null) || (text == null) )
-			throw new NullPointerException();
+		if(topic == null)
+			throw new NullPointerException("The argument topic cannot be null");
+			if (text == null)
+			throw new NullPointerException("The argument text cannot be null");
 		return new Block(topic, label, text);
 	}
 
+	/**
+	 * Creates a new instance of BlockIF.
+	 * 
+	 * @param label String: The label given to this BlockIF
+	 * @param text SourceIF: The source from the UEF that defines this BlockIF 
+	 * @return new instance of BlockIF
+	 * @exception NullPointerException If text is null
+	 */
 	public BlockIF newBlock(String label, SourceIF text)
 	{
 		if(text == null)
-			throw new NullPointerException();
-		// Will remove the null topic argument when the Block
-		//   constructor is updated.
+			throw new NullPointerException("The argument text cannot be null");
 		return new Block(label, text);
 	}
 	
 	/**
 	 * Creates a new instance of FigureIF.
 	 * 
-	 * @return FigureIF
+	 * @param label String: The label given to this FigureIF
+	 * @param text SourceIF: The source from the UEF that defines this FigureIF 
+	 * @return new instance of FigureIF
+	 * @exception NullPointerException If text is null
 	 */
 	public FigureIF newFigure(String label, SourceIF text) {
 		if(text == null)
-			throw new NullPointerException();
+			throw new NullPointerException("The argument text cannot be null");
 		return new Figure(label, text);
 	}
 
 	/**
 	 * Creates a new instance of FixedAnswerIF.
-	 * 
-	 * @return FixedAnswerIF
+	 * 	
+	 * @param correct boolean: Determines if the answer is a correct answer
+	 * @param index int: The position that this FixedAnswerIF must be placed in.
+	 * @param text SourceIF: The source from the UEF that defines this FigureIF 
+	 * @return new instance of FixedAnswerIF
+	 * @exception NullPointerException If text is null
 	 */
 	public FixedAnswerIF newFixedAnswer(boolean correct, int index,
 			SourceIF text) {
 		if(text == null)
-			throw new NullPointerException();
+			throw new NullPointerException("The argument text cannot be null");
 		return new FixedAnswer(index, correct, text);
 	}
 
 	/**
 	 * Creates a new instance of ExamIF for use as a output Exam.
 	 * 
-	 * @return ExamIF
+	 * @return new instance of ExamIF
 	 */
 	public ExamIF newGeneratedExam() {
 		return new Exam(false);
@@ -86,7 +104,7 @@ public class ExamFactory implements ExamFactoryIF {
 	/**
 	 * Creates a new instance ExamIF for use as the master repository.
 	 * 
-	 * @return ExamIF
+	 * @return new master instance of ExamIF
 	 */
 	public ExamIF newMasterExam() {
 		return new Exam(true);
@@ -95,17 +113,26 @@ public class ExamFactory implements ExamFactoryIF {
 	/**
 	 * Creates a new instance of ProblemIF.
 	 * 
-	 * @return ProblemIF
-	 * @throws RexException 
+	 * 
+	 * @param topic String: The topic of this ProblemIF
+	 * @param label String: The label given to this ProblemIF
+	 * @param question SourceIF: The source from the UEF that defines this ProblemIF
+	 * @param answers AnswerIF[]: An array of answers for this ProblemIF 
+	 * @return new instance of ProblemIF
+	 * @exception NullPointerException If topic, question, answers, or any element in answers is null.
 	 */
 	public ProblemIF newProblem(String topic, String label, SourceIF question, AnswerIF[] answers) {
-		if((topic == null) || (question == null)   || (answers == null))
-			throw new NullPointerException();
+		if(topic == null) 
+				throw new NullPointerException("The argument topic cannot be null");
+		if(question == null)   
+		throw new NullPointerException("The argument question cannot be null");
+		if(answers == null)
+			throw new NullPointerException("The argument answers cannot be null");
 		//if(answers.length == 0)
 		//	throw new IllegalArgumentException("Argument answers cannot be empty");
 		for(int i = 0; i < answers.length; i++)
 			if(answers[i] == null)
-			throw new NullPointerException("Argument answers cannot contain null values");
+			throw new NullPointerException("The argument answers cannot contain null values");
 		return new Problem(topic, label, question, answers);
 	}
 }
