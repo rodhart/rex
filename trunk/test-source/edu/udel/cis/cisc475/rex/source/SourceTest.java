@@ -16,6 +16,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.w3c.dom.Text;
 
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
@@ -227,5 +228,77 @@ public class SourceTest {
 		
 		String testString = "This is my first line of text" + newline + "Second line of text this is" + newline + newline;
 		assertTrue(testString.equals(contents.toString()));
+	}
+	
+	@Test
+	public void testAddNullText() {
+		String filename = "blah";
+		
+		SourceFactoryIF sourceFactory = new SourceFactory();
+		SourceIF S = sourceFactory.newSource(filename);
+		
+		S.addText(null);
+		
+		boolean result = S.text().equals("null");
+		
+		assertTrue(result);
+	}
+	
+	@Test
+	public void testAddNullTextToExistingText() {
+		String filename = "whatever name";
+		
+		SourceFactoryIF sourceFactory = new SourceFactory();
+		SourceIF S = sourceFactory.newSource(filename);
+		
+		S.addText("Line of text\n");
+		S.addText("Nother line of text\n\n");
+		
+		S.addText(null);
+		
+		String testString = "Line of text\n" + "Nother line of text\n\n" + "null";
+		
+		System.out.print(S.text());
+		boolean result = S.text().equals(testString);
+		assertTrue(result);
+	}
+	
+	@Test
+	public void testAddLotsOfNewlines() {
+		String filename = "some name";
+		
+		SourceFactoryIF sourceFactory = new SourceFactory();
+		SourceIF S = sourceFactory.newSource(filename);
+		
+		for(int i = 0; i < 5000; i++)
+			S.addText(newline);
+		
+		String testString = "";
+		
+		for(int i = 0; i < 5000; i++)
+			testString += newline;
+		
+		boolean result = S.text().equals(testString);
+		
+		assertTrue(result);
+	}
+	
+	@Test
+	public void testAddThreeMillionChars() {
+		String filename = "moo";
+		
+		SourceFactoryIF sourceFactory = new SourceFactory();
+		SourceIF S = sourceFactory.newSource(filename);
+		
+		StringBuffer testString = new StringBuffer();
+		
+		for(int i = 0; i < 3000000; i++) {
+			S.addText("t");
+			testString.append("t");
+		}
+		
+		boolean result = S.text().equals(testString.toString());
+		
+		assertTrue(result);
 	}
 }
