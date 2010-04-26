@@ -9,7 +9,6 @@ import edu.udel.cis.cisc475.rex.output.IF.AnswerKeyWriterIF;
 
 
 /**
- * 
  * The AnswerKeyWriter class outputs the answer key
  * data which corresponds to an exam object
  * 
@@ -34,7 +33,6 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 
 
 	/**
-	 * 
 	 * writes the answer key
 	 * data is written to whichever output is specified by the caller
 	 * 
@@ -56,7 +54,6 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 
 
 	/**
-	 * 
 	 * writes the answer key data to a scantron
 	 * 
 	 * @param file pointer to a file
