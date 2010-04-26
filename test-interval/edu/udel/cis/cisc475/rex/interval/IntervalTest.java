@@ -18,7 +18,7 @@ import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
 
 public class IntervalTest {
 
-	/*
+	/**
 	 * Tests that low() returns the correct low value
 	 */
 	@Test
@@ -29,7 +29,7 @@ public class IntervalTest {
 		assertTrue(I.low().equals(5.0));
 	}
 
-	/*
+	/**
 	 * Tests that strictLow() returns the correct strictLow value
 	 */
 	@Test
@@ -42,7 +42,7 @@ public class IntervalTest {
 		assertEquals(false, I2.strictLow());
 	}
 
-	/*
+	/**
 	 * Tests that high() returns the correct high value
 	 */
 	@Test
@@ -53,7 +53,7 @@ public class IntervalTest {
 		assertTrue(I.high().equals(10.0));
 	}
 
-	/*
+	/**
 	 * Tests that strictHigh() returns the correct strictHigh value
 	 */
 	@Test
@@ -66,7 +66,7 @@ public class IntervalTest {
 		assertEquals(false, I2.strictHigh());
 	}
 
-	/*
+	/**
 	 * Tests that the interval constructor sets the correct values
 	 */
 	@Test
@@ -80,7 +80,7 @@ public class IntervalTest {
 		assertTrue(I.high().equals(10.0));
 	}
 
-	/*
+	/**
 	 * Tests that contains() returns whether the value is inside the interval
 	 * depending on the constraints set by the constructor.
 	 */
