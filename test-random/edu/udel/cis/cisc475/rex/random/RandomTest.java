@@ -11,7 +11,7 @@ import edu.udel.cis.cisc475.rex.random.impl.RandomizerFactory;
  * @author justin johnson
  *
  */
-public class RandomJunitTest {
+public class RandomTest {
 
 
 	@Test
