@@ -10,20 +10,21 @@ import edu.udel.cis.cisc475.rex.output.IF.AnswerKeyWriterIF;
 
 /**
  * 
- * class which writes the answer key
- * data is written to whichever output is specified by the caller
+ * The AnswerKeyWriter class outputs the answer key
+ * data which corresponds to an exam object
  * 
- * @author cardona
+ * The file is written to a PrintWriter specified by the caller
+ * 
+ * @author Team 5
  *
  */
 public class AnswerKeyWriter implements AnswerKeyWriterIF {
 
 	/**
 	 * 
-	 * constructor, establishes a pointer to the answer key representation stored in 
-	 * our program
+	 * constructor, establishes a pointer to the answer key object
 	 * 
-	 * @param K a pointer to answer key representation stored in our program
+	 * @param K pointer to answer key object
 	 */
 	public AnswerKeyWriter (AnswerKeyIF K){
 		this.K = K;
