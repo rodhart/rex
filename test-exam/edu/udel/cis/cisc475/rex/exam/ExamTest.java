@@ -447,8 +447,15 @@ public class ExamTest {
 		
 		topics = exam.topics();
 		assertNotNull(topics);
-		// should only return 2 topics since figure doesnt have a topic
-		assertEquals(2, topics.size());
+		// should only return 1 topics since figure doesnt have a topic
+		assertEquals(1, topics.size());
+		assertTrue(topics.contains("Test Problem Topic"));
+		
+		exam.declareUse(problem, block);
+		topics = exam.topics();
+		assertNotNull(topics);
+		// Should still be one because now block and topic have the same topic
+		assertEquals(1, topics.size());
 		assertTrue(topics.contains("Test Problem Topic"));
 	}
 	
