@@ -128,7 +128,9 @@ public class Exam implements ExamIF {
 			labels.add(element.label());
 			// Allocate a new HashSet for the uses map
 			HashSet<ExamElementIF> useesOfElement = new HashSet<ExamElementIF>();
+			HashSet<ExamElementIF> usersOfElement = new HashSet<ExamElementIF>();
 			uses.put(element, useesOfElement);
+			usedBy.put(element, usersOfElement);
 			return key;
 		} else {
 			return -1;
