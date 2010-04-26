@@ -170,9 +170,9 @@ public class ExamTest {
 		
 		assertEquals(0, exam.numElements());
 		
-		exam.addElementIF(problem);
-		exam.addElementIF(figure);
-		exam.addElementIF(block);
+		exam.addElement(problem);
+		exam.addElement(figure);
+		exam.addElement(block);
 		
 		assertEquals(3, exam.numElements());
 	}
@@ -187,14 +187,14 @@ public class ExamTest {
 		BlockIF block = createTestBlock();
 		
 		exam.declareUse(problem, figure);
-		exam.addElementIF(problem);
-		exam.addElementIF(figure);
+		exam.addElement(problem);
+		exam.addElement(figure);
 		
 		exam.declareUse(problem, figure);
 		elements = exam.elementsUsingElement(figure);
 		assertEquals(1, elements.size());
 		
-		exam.addElementIF(block);
+		exam.addElement(block);
 		exam.declareUse(problem,block);
 		elements = exam.elementsUsingElement(block);
 		assertEquals(1, elements.size());
@@ -220,17 +220,17 @@ public class ExamTest {
 		elements = exam.elementsUsingElement(figure);
 		assertEquals(0, elements.size());
 		
-		exam.addElementIF(problem);
+		exam.addElement(problem);
 		exam.declareUse(problem, figure);
 		elements = exam.elementsUsingElement(figure);
 		assertEquals(0, elements.size());
 		
-		exam.addElementIF(figure);
+		exam.addElement(figure);
 		exam.declareUse(problem, figure);
 		elements = exam.elementsUsingElement(figure);
 		assertEquals(1, elements.size());
 		
-		exam.addElementIF(block);
+		exam.addElement(block);
 		exam.declareUse(problem,block);
 		elements = exam.elementsUsingElement(block);
 		assertEquals(1, elements.size());
@@ -253,9 +253,9 @@ public class ExamTest {
 		
 		assertNull(element);
 		
-		exam.addElementIF(problem);
-		exam.addElementIF(figure);
-		exam.addElementIF(block);
+		exam.addElement(problem);
+		exam.addElement(figure);
+		exam.addElement(block);
 		
 		assertEquals(3, exam.elements().size());
 		
@@ -277,9 +277,9 @@ public class ExamTest {
 		assertNotNull(elements);
 		assertEquals(0, elements.size());
 		
-		exam.addElementIF(problem);
-		exam.addElementIF(figure);
-		exam.addElementIF(block);
+		exam.addElement(problem);
+		exam.addElement(figure);
+		exam.addElement(block);
 		
 		elements = exam.elements();
 		
@@ -299,9 +299,9 @@ public class ExamTest {
 		ExamElementIF element = exam.elementWithLabel("Test Problem Label");
 		assertNull(element);
 		
-		exam.addElementIF(problem);
-		exam.addElementIF(figure);
-		exam.addElementIF(block);
+		exam.addElement(problem);
+		exam.addElement(figure);
+		exam.addElement(block);
 		
 		element = exam.elementWithLabel("Test Problem Label");
 		assertNotNull(element);
@@ -329,26 +329,21 @@ public class ExamTest {
 		assertNotNull(elements);
 		assertEquals(0, elements.size());
 		
-		exam.addElementIF(problem1);
-		exam.addElementIF(problem2);
-		exam.addElementIF(block);
-		exam.addElementIF(figure);
+		exam.addElement(problem1);
+		exam.addElement(problem2);
+		exam.addElement(block);
+		exam.addElement(figure);
 		
 		elements = exam.elementsWithTopic("Test Problem Topic");
 		assertNotNull(elements);
 		assertEquals(2, elements.size());
-		
-		elements = exam.elementsWithTopic("Test Block Topic");
-		assertNotNull(elements);
-		assertEquals(1,elements.size());
-		assertTrue(elements.contains(block));
 		
 		elements = exam.elementsWithTopic("Nonexistant Topic");
 		assertNotNull(elements);
 		assertEquals(0, elements.size());
 		
 		ExamElement ee = new ExamElement("ExamElement Topic");
-		exam.addElementIF(ee);
+		exam.addElement(ee);
 		elements = exam.elementsWithTopic("ExamElement Topic");
 		assertNotNull(elements);
 		assertEquals(0,elements.size());
@@ -363,9 +358,9 @@ public class ExamTest {
 		ProblemIF problem2 = createTestProblem();
 		
 		// Elements must be added to exam before declareUse can be called
-		exam.addElementIF(problem1);
-		exam.addElementIF(problem2);
-		exam.addElementIF(figure);
+		exam.addElement(problem1);
+		exam.addElement(problem2);
+		exam.addElement(figure);
 		
 		Collection<ExamElementIF> elements = exam.elementsUsingElement(figure);
 		
@@ -400,8 +395,8 @@ public class ExamTest {
 		assertNotNull(figures);
 		assertEquals(0, figures.size());
 		
-		exam.addElementIF(figure1);
-		exam.addElementIF(figure2);
+		exam.addElement(figure1);
+		exam.addElement(figure2);
 		
 		figures = exam.figures();
 		assertNotNull(figures);
@@ -422,9 +417,9 @@ public class ExamTest {
 		assertNotNull(labels);
 		assertEquals(0, labels.size());
 		
-		exam.addElementIF(problem);
-		exam.addElementIF(figure);
-		exam.addElementIF(block);
+		exam.addElement(problem);
+		exam.addElement(figure);
+		exam.addElement(block);
 		
 		labels = exam.labels();
 		assertNotNull(labels);
@@ -446,9 +441,9 @@ public class ExamTest {
 		assertNotNull(topics);
 		assertEquals(0, topics.size());
 		
-		exam.addElementIF(problem);
-		exam.addElementIF(figure);
-		exam.addElementIF(block);
+		exam.addElement(problem);
+		exam.addElement(figure);
+		exam.addElement(block);
 		
 		topics = exam.topics();
 		assertNotNull(topics);
@@ -468,8 +463,8 @@ public class ExamTest {
 		assertNotNull(problems);
 		assertEquals(0, problems.size());
 		
-		exam.addElementIF(problem1);
-		exam.addElementIF(problem2);
+		exam.addElement(problem1);
+		exam.addElement(problem2);
 		
 		problems = exam.problems();
 		assertNotNull(problems);
@@ -490,8 +485,8 @@ public class ExamTest {
 		assertNotNull(problems);
 		assertEquals(0, problems.size());
 		
-		exam.addElementIF(problem1);
-		exam.addElementIF(problem2);
+		exam.addElement(problem1);
+		exam.addElement(problem2);
 		
 		problems = exam.problemsWithTopic("Test Problem Topic");
 		assertNotNull(problems);
@@ -517,9 +512,9 @@ public class ExamTest {
 		assertNotNull(elements);
 		assertEquals(0, elements.size());
 		
-		exam.addElementIF(problem);
-		exam.addElementIF(figure);
-		exam.addElementIF(block);
+		exam.addElement(problem);
+		exam.addElement(figure);
+		exam.addElement(block);
 		
 		elements = exam.elements();
 		assertNotNull(elements);
@@ -529,7 +524,7 @@ public class ExamTest {
 		assertTrue(elements.contains(block));
 		
 		// Trying to add an element that is already there!
-		int res = exam.addElementIF(problem);
+		int res = exam.addElement(problem);
 		assertEquals(-1, res);
 	}
 	
@@ -539,7 +534,7 @@ public class ExamTest {
 		
 		exam = examFactory.newGeneratedExam();
 		
-		exam.addElementIF(null);
+		exam.addElement(null);
 		
 		Collection<ExamElementIF> elements = exam.elements();
 		assertNotNull(elements);
