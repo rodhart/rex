@@ -72,32 +72,40 @@ public class GroupConstraintContainer
 		
 		if (this.strictLow && this.strictHigh)
 			for (ProblemIF currentProblem1 : problemsByTopic)
-				if ((currentProblem1.points() == this.pointValue) &&
-					(this.low < currentProblem1.difficulty()) &&
+				if ((this.low < currentProblem1.difficulty()) &&
 					(currentProblem1.difficulty() < this.high))
+				{
+					currentProblem1.setPoints(this.pointValue);
 					this.set.add(currentProblem1);
-
+				}
+					
 		else if (strictLow && !strictHigh)
 			for (ProblemIF currentProblem2 : problemsByTopic)
-				if ((currentProblem2.points() == this.pointValue) &&
-					(this.low < currentProblem2.difficulty()) &&
+				if ((this.low < currentProblem2.difficulty()) &&
 					(currentProblem2.difficulty() <= this.high))
+				{
+					currentProblem2.setPoints(this.pointValue);
 					this.set.add(currentProblem2);
-				
+				}
+					
 		else if (!strictLow && strictHigh)
 			for (ProblemIF currentProblem3 : problemsByTopic)
-				if ((currentProblem3.points() == this.pointValue) &&
-					(this.low <= currentProblem3.difficulty()) &&
+				if ((this.low <= currentProblem3.difficulty()) &&
 					(currentProblem3.difficulty() < this.high))
+				{
+					currentProblem3.setPoints(this.pointValue);
 					this.set.add(currentProblem1);
-				
+				}
+					
 		else
 			for (ProblemIF currentProblem4 : problemsByTopic)
-				if ((currentProblem4.points() == this.pointValue) &&
-					(this.low <= currentProblem4.points()) &&
+				if ((this.low <= currentProblem4.points()) &&
 					(currentProblem4.points() <= this.high))
+				{
+					currentProblem4.setPoints(this.pointValue);
 					this.set.add(currentProblem1);
-		
+				}
+					
 		if (this.set.size() < this.constraintValue)
 		{
 			System.err.println("The constraint requesting " + this.constraintValue +
