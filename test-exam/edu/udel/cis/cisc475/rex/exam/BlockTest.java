@@ -71,12 +71,6 @@ public class BlockTest {
 	}
 
 	@Test
-	public void testGetTopic() {
-		assertNotNull(block.topic());
-		assertEquals(testTopic, block.topic());
-	}
-
-	@Test
 	public void testGetLabel() {
 		assertNotNull(block.label());
 		assertEquals(testLabel, block.label());
