@@ -10,7 +10,8 @@ import edu.udel.cis.cisc475.rex.output.IF.OutputFactoryIF;
  * OutputFactory creates classes used for writing an Exam object
  * and corresponding AnswerKey to a PrintWriter object
  * 
- * @author Team 5 
+ * @author jsong
+ * @author cardona
  */
 public class OutputFactory implements OutputFactoryIF {
 

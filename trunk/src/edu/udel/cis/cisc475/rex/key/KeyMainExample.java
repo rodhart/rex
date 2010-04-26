@@ -11,7 +11,7 @@ import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
  * general purpose tester of the answer key methods
  * this does not replace junit but complements it
  * 
- * @author  CARDONA
+ * @author  cardona
  *
  */
 public class KeyMainExample {

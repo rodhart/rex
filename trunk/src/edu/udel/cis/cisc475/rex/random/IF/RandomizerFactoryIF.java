@@ -4,7 +4,8 @@ package edu.udel.cis.cisc475.rex.random.IF;
  * this class is a factory which creates a new instance of 
  * a random object chooser
  * 
- *   @author CARDONA
+ *   @author cardona
+ *   @author jsong
  * 
  */
 public interface RandomizerFactoryIF {

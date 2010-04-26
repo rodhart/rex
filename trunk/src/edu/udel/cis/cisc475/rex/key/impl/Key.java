@@ -17,8 +17,7 @@ import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
  * so the representation of a given problem will be an array of answers
  * which most of the time will contain only one element
  * 
- * 
- * @author jim cardona
+ * @author cardona
  */
 public class Key implements AnswerKeyIF {
 

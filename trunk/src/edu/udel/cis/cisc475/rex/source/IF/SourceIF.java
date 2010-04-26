@@ -5,7 +5,8 @@ import java.io.PrintWriter;
 /**
  * Interface for Source class
  * 
- * @author Jim Cardona
+ * @author cardona
+ * @author jsong
  *
  */
 public interface SourceIF {

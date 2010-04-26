@@ -3,7 +3,8 @@ package edu.udel.cis.cisc475.rex.source.IF;
 /**
  * Interface for SourceFactory class
  * 
- * @author Jim Cardona
+ * @author cardona
+ * @author jsong
  *
  */
 public interface SourceFactoryIF {

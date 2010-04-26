@@ -6,7 +6,8 @@ import java.io.PrintWriter;
  * The ExamWriterIF is used to output a Exam object
  * with a print writer object using the public write() function.
  * 
- * @author Team 5
+ * @author cardona
+ * @author jsong
  *
  */
 public interface ExamWriterIF {

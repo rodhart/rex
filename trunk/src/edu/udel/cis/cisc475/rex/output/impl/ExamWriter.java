@@ -12,7 +12,9 @@ import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
  * The ExamWriter class utilizes a print writer and an precreated Exam
  * class to output parts of the exam class to the print writer.
  *  
- *  @author Team 5
+ *  @author kiernan
+ *  @author iburns
+ *  @author jsong
  */
 
 public class ExamWriter implements ExamWriterIF {

@@ -7,7 +7,7 @@ import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
  * this class is a factory which creates a new instance of 
  * a random object chooser
  * 
- *   @author CARDONA
+ *   @author cardona
  * 
  */
 public class RandomizerFactory implements RandomizerFactoryIF 

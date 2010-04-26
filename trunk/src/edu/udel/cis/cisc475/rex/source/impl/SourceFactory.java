@@ -6,7 +6,7 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 /**
  * A class implementing the factory method for Source
  * 
- * @author Jack Song
+ * @author jsong
  *
  */
 public class SourceFactory implements SourceFactoryIF {
