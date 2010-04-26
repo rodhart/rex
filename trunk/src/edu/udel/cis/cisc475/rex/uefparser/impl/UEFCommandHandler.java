@@ -50,13 +50,11 @@ class UEFCommandHandler {
 	 * parts of exam needs to be created.
 	 */
 	private ExamFactoryIF examFactory;
-
 	/**
 	 * Map of all references in the UEF file. The key is the reference name and
 	 * the ExamElement all elements that have that ref
 	 */
 	private Map<String, List<ExamElementIF>> references;
-
 	/**
 	 * This is special List for references by answers. This List is needed for
 	 * two reasons: 1. AnswerIF doesn't implement ExamElementIF. 2. If an answer
@@ -188,19 +186,34 @@ class UEFCommandHandler {
 		int index = 0;
 		List<AnswerIF> answersList = new ArrayList<AnswerIF>();
 
-		while (uefCommandQueue.peek().getType() != Types.endAnswers) {
-			if (uefCommandQueue.peek().getType() == Types.answer) {
+		boolean done = false;
+
+		while (!uefCommandQueue.isEmpty() && !done) {
+			switch (uefCommandQueue.peek().getType()) {
+			case endAnswers: {
+				done = true;
+				// poll the /end{answers} command off the queue
+				uefCommandQueue.poll();
+				break;
+			}
+			case answer: {
 				answersList.add(processAnswer(index));
 				index++;
-			} else if (uefCommandQueue.peek().getType() == Types.ref) {
+				break;
+			}
+			case ref: {
 				this.answerReferences.add(processRef());
-				uefCommandQueue.poll();
-			} else {
-				throw new Exception();
+				// uefCommandQueue.poll();
+				break;
+			}
+			default: {
+				System.err.println("Error: " + uefCommandQueue.peek().getType()
+						+ " found within block environment!");
+				System.exit(-1);
+				break;
+			}
 			}
 		}
-		// poll the /end{answers} command off the queue
-		uefCommandQueue.poll();
 		return answersList.toArray(new AnswerIF[0]);
 	}
 
