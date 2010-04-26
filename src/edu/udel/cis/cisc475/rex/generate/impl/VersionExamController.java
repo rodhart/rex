@@ -318,7 +318,7 @@ public class VersionExamController
 			while (!myBCs.isEmpty())
 			{
 				theBC = (BlockContainer) (this.theRandomizer.choose(1, myBCs.toArray()))[0];
-				versionExam.addElementIF(theBC.getBlock());
+				versionExam.addElement(theBC.getBlock());
 				
 				myFCs.addAll(theBC.getFCs().values());
 				
@@ -329,7 +329,7 @@ public class VersionExamController
 					
 					if (!figureBlacklist.containsKey(identifier))
 					{
-						versionExam.addElementIF(theFC.getFigure());
+						versionExam.addElement(theFC.getFigure());
 						figureBlacklist.put(identifier, theFC.getFigure());
 					}
 					
@@ -347,7 +347,7 @@ public class VersionExamController
 								
 								if (!figureBlacklist.containsKey(otherFigureIdentifier))
 								{
-									versionExam.addElementIF(otherFigure);
+									versionExam.addElement(otherFigure);
 									figureBlacklist.put(otherFigureIdentifier, otherFigure);
 								}
 							}
@@ -357,7 +357,7 @@ public class VersionExamController
 																			 	  theProblemsArray[i].question(), 
 																			 	  randomizeAnswers(theProblemsArray[i]));
 						
-							versionExam.addElementIF(newProblem);
+							versionExam.addElement(newProblem);
 							versionAnswerKey.addProblem(correctAnswers(newProblem));
 							problemBlacklist.put(identifier, theProblemsArray[i]);
 						}
@@ -373,7 +373,7 @@ public class VersionExamController
 		}
 		
 		if (this.mec.getFinalBlock() != null)
-			versionExam.addElementIF(this.mec.getFinalBlock());
+			versionExam.addElement(this.mec.getFinalBlock());
 		
 	}
 }

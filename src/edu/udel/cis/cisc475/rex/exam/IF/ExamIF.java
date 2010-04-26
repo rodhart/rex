@@ -124,7 +124,7 @@ public interface ExamIF {
 	 * 
      * @return the key for the element, or -1 if a duplicate
 	 */
-	int addElementIF(ExamElementIF element);
+	int addElement(ExamElementIF element);
 
 	/**
 	 * Allow one element to use another element. For example a problem can

@@ -334,15 +334,15 @@ class UEFCommandHandler {
 		while (!uefCommandQueue.isEmpty()) {
 			switch (uefCommandQueue.peek().getType()) {
 			case beginBlock: {
-				exam.addElementIF(processBlock());
+				exam.addElement(processBlock());
 				break;
 			}
 			case beginFigure: {
-				exam.addElementIF(processFigure());
+				exam.addElement(processFigure());
 				break;
 			}
 			case beginProblem: {
-				exam.addElementIF(processProblem());
+				exam.addElement(processProblem());
 				break;
 			}
 			case endDocument: {

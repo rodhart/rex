@@ -106,7 +106,7 @@ public class Exam implements ExamIF {
 	 * 
 	 * @return the key for the element, or -1 if a duplicate
 	 */
-	public int addElementIF(ExamElementIF element) {
+	public int addElement(ExamElementIF element) {
 		// Even though we are using a map, we really want a set so should not
 		// add duplicate entries in a single exam
 		if (!elements.containsValue(element) && element != null) {
@@ -115,7 +115,6 @@ public class Exam implements ExamIF {
 				figures.add(key);
 			} else if (element instanceof BlockIF) {
 				blocks.add(key);
-				topics.add(((BlockIF) element).topic());
 			} else if (element instanceof ProblemIF) {
 				problems.add(key);
 				topics.add(((ProblemIF) element).topic());
