@@ -31,7 +31,7 @@ public class Source implements SourceIF {
 	/**
 	 * Constructor for the class
 	 * 
-	 * @param filename The name of the file to be read
+	 * @param filename The name of a file
 	 */
 	public Source(String filename) {
 		//init private vars
@@ -40,41 +40,126 @@ public class Source implements SourceIF {
 		fileName = filename;	
 		myText = new StringBuffer();
 	}
-
-	//getters
-	public String filename() {return fileName;}
-	public String text()	 {return Text;}
-	public int startLine() 	 {return startline;} 
-	public int startColumn() {return startcolumn;}
-	public int lastLine() 	 {return lastline;}
-	public int lastColumn()	 {return lastcolumn;} 
-
-	//setters
-	public void setStartLine(int line) 		{startline=line;} 
-	public void setStartColumn(int column)  {startcolumn=column;}
-	public void setLastLine(int line) 		{lastline=line;}
-	public void setLastColumn(int column) 	{lastcolumn=column;}
-
-	//output of our array list string object
+	
+	/** 
+	 * Constructor for all fields
+	 * 
+	 * @param filename The name of a file
+	 * @param startLine Starting line
+	 * @param startColumn Starting column
+	 * @param lastLine Ending line
+	 * @param lastColumn Ending column
+	 */
+	 
+	public Source(String filename, int startLine, int startColumn,
+			int lastLine, int lastColumn) {
+		startline = startLine;
+		startcolumn = startColumn;
+		lastline = lastLine;
+		lastcolumn = lastColumn;
+		fileName = filename;
+		Text = "";
+		myText = new StringBuffer();
+	}
+	
 	/**
-	 * Writes selected lines and columns to a PrintWriter object.
+	 * Getter for the file name
+	 * @return Name of the file
+	 */
+	public String filename() {
+		return fileName;
+	}
+	
+	/**
+	 * Getter for the body of text
+	 * @return The entire text 
+	 */
+	public String text() {
+		Text = myText.toString();
+		return Text;
+	}
+	
+	/**
+	 * Getter for the starting line
+	 * @return An integer line to start on
+	 */
+	public int startLine() {
+		return startline;
+	} 
+	
+	/**
+	 * Getter for the starting column
+	 * @return An integer column to start on
+	 */
+	public int startColumn() {
+		return startcolumn;
+	}
+	
+	/** 
+	 * Getter for the ending line
+	 * @return An integer line to end on
+	 */
+	public int lastLine() {
+		return lastline;
+	}
+	
+	/**
+	 * Getter for the ending column
+	 * @return An integer column to end on
+	 */
+	public int lastColumn()	{
+		return lastcolumn;
+	} 
+
+	/** 
+	 * Setter for the starting line
+	 * @param line Line to set startLine to
+	 */
+	public void setStartLine(int line) {
+		startline=line;
+	} 
+	
+	/** 
+	 * Setter for the starting column
+	 * @param column Column to set startColumn to
+	 */
+	public void setStartColumn(int column) {
+		startcolumn=column;
+	}
+	
+	/**
+	 * Setter for the ending line
+	 * @param line Line to set lastLine to
+	 */
+	public void setLastLine(int line) {
+		lastline=line;
+	}
+	
+	/**
+	 * Setter for the ending column
+	 * @param column Column to set lastColumn to
+	 */
+	public void setLastColumn(int column) {
+		lastcolumn=column;
+	}
+
+	/**
+	 * Writes Text to the PrintWriter object
 	 * 
 	 * @param out PrintWriter object to output to
 	 */
 	public void write(PrintWriter out) {
-		out.printf("%s\n", Text);
+		out.printf("%s\n", myText.toString());
 		return;
 	} 
 
 	/**
-	 * Adds a line of text to the bottom of the data structure
+	 * Adds a line of text to the data structure
 	 * 
 	 * @param text Text to be added
 	 */
 	public void addText(String text) {
 		myText.append(text);
-		myText.append(newline);
-		Text = myText.toString();
 		return;
 	}
-}//end of class SourceFactoryIF 
+}
