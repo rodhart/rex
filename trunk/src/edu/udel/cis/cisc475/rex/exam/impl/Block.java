@@ -12,17 +12,11 @@ public class Block implements BlockIF {
 	private String topic;
 	private String label;
 	private SourceIF source;
-
-	@Deprecated
-	public Block(String topic, String label, SourceIF source){
-		this.topic = topic;
-		this.source = source;
-		this.label = label;
-	}
 	
 	public Block(String label, SourceIF source){
 		this.label = label;
 		this.source = source;
+		this.topic = null;
 	}
 	
 	public SourceIF source() {
@@ -35,6 +29,11 @@ public class Block implements BlockIF {
 
 	public String label() {
 		return this.label;
+	}
+
+	// To be used by declare use.
+	void setTopic(String topic){
+		this.topic = topic;
 	}
 
 }
