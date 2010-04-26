@@ -17,4 +17,11 @@ public class SourceFactoryStub implements SourceFactoryIF {
 		return new SourceStub(filename);
 	}
 
+	@Override
+	public SourceIF newSource(String filename, int startLine, int startColumn,
+			int lastLine, int lastColumn) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
