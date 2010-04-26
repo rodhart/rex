@@ -30,7 +30,7 @@ public class ExamStub implements ExamIF {
 	
 	
 	@Override
-	public int addElementIF(ExamElementIF element) {
+	public int addElement(ExamElementIF element) {
 		return 0;
 	}
 
@@ -81,7 +81,7 @@ public class ExamStub implements ExamIF {
 		SourceIF finalSource = sourceFactory.newSource("testFile.txt");
 		finalSource.addText("This is the text for the final block");
 		
-		BlockIF finalBlock = examFactory.newBlock("Final topic", "Final label", finalSource);
+		BlockIF finalBlock = examFactory.newBlock("Final label", finalSource);
 		
 		return finalBlock;
 	}
