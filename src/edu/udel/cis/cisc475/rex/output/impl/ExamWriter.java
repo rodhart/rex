@@ -40,7 +40,7 @@ public class ExamWriter implements ExamWriterIF {
 		out.printf("%s\n", E.preamble());
 		out.printf("%s\n", E.frontMatter());
 
-		// output problems with respective answers
+/*		// output problems with respective answers
 		for (int i = 0; i < E.elements().toArray().length; i++) {
 			ExamElementIF temp = (ExamElementIF) E.elements().toArray()[i];
 
@@ -60,9 +60,6 @@ public class ExamWriter implements ExamWriterIF {
 				if (tempProblem.requiredBlock() != null)
 					out.printf("%s\n", tempProblem.requiredBlock());
 
-				// prints the question
-				out.printf("%s\n", tempProblem.question().text());
-
 				// prints all the answers
 				for (int index = 0; index < tempProblem.answers().length; index++) {
 					out.printf("%s\n", tempProblem.answers()[index].source()
@@ -70,6 +67,7 @@ public class ExamWriter implements ExamWriterIF {
 				}// end of for loop
 			}// endo of if(temp instanceof Problem)
 		}// endo of for loop (int i=0; i< E.elements().toArray().length; i++)
+*/
 
 		// output the end block for exam
 		out.printf("%s\n", E.finalBlock());

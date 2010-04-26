@@ -4,10 +4,13 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
+import edu.udel.cis.cisc475.rex.output.ExamStub;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyFactoryIF;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
 import edu.udel.cis.cisc475.rex.output.IF.AnswerKeyWriterIF;
+import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
 import edu.udel.cis.cisc475.rex.output.IF.OutputFactoryIF;
 import edu.udel.cis.cisc475.rex.output.impl.OutputFactory;
 
@@ -54,5 +57,27 @@ public class OutputMainExample {
 		//make call to write out the answer key
 		AKW.write(pw);
 
+		
+		/* now we are done fooling around with answer keys
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * now lets do some exam stuff
+		 * 
+		 */
+		ExamIF EM = new ExamStub();		
+		ExamWriterIF EW = OF.newExamWriter (EM);		
+		
+		EW.write(pw);
+		
 	}//end of main
 }//end of class 
