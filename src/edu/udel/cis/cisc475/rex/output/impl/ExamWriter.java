@@ -51,6 +51,7 @@ public class ExamWriter implements ExamWriterIF {
 				out.printf("%s\n", tempBlockIF.source().text());
 			}
 			else if(temp instanceof FigureIF){
+				out.println("/newpage\n");
 				FigureIF tempFigureIF = (FigureIF)temp;
 				out.printf("%s\n",tempFigureIF.source().text());
 			}
