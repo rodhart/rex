@@ -21,7 +21,7 @@ public class ExamFactory implements ExamFactoryIF {
 	/**
 	 * Creates a new instance of AnswerIF.
 	 * 
-	 * @param correct boolean: Determines if the answer is a correct answer
+	 * @param correct boolean: Determines if the AnswerIF is a correct answer
 	 * @param text SourceIF: The source from the UEF that defines this answer
 	 * @return new instance of AnswerIF
 	 * @exception NullPointerException If text is null
@@ -79,9 +79,9 @@ public class ExamFactory implements ExamFactoryIF {
 	/**
 	 * Creates a new instance of FixedAnswerIF.
 	 * 	
-	 * @param correct boolean: Determines if the answer is a correct answer
+	 * @param correct boolean: Determines if the FixedAnswerIF is a correct answer
 	 * @param index int: The position that this FixedAnswerIF must be placed in.
-	 * @param text SourceIF: The source from the UEF that defines this FigureIF 
+	 * @param text SourceIF: The source from the UEF that defines this FixedAnswerIF 
 	 * @return new instance of FixedAnswerIF
 	 * @exception NullPointerException If text is null
 	 */
