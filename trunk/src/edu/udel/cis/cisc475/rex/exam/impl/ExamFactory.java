@@ -48,7 +48,7 @@ public class ExamFactory implements ExamFactoryIF {
 			throw new NullPointerException();
 		// Will remove the null topic argument when the Block
 		//   constructor is updated.
-		return new Block(null, label, text);
+		return new Block(label, text);
 	}
 	
 	/**
