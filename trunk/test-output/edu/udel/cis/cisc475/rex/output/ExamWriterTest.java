@@ -60,7 +60,9 @@ public class ExamWriterTest {
     public void testPrintBlockIF(){
     	ExamIF e = examFactory.newGeneratedExam();	
     	SourceIF testSource = sourceFactory.newSource("./trunk/test-source/edu/udel/cis/cisc475/rex/source/SampleText.txt");
-    	BlockIF blockTest = examFactory.newBlock("test topic", "test label", testSource );
+    	//BlockIF blockTest = examFactory.newBlock("test topic", "test label", testSource );
+    	//BlockIF changed, needed to fix so code compiles.
+    	BlockIF blockTest = examFactory.newBlock("test topic", testSource );
     	e.addElementIF(blockTest);
     	ExamWriterIF ew = examWriterFactory.newExamWriter(e);
     }
