@@ -27,14 +27,7 @@ public class ExamFactoryStub implements ExamFactoryIF {
 		return null;
 	}
 
-	@Override
-	public BlockIF newBlock(String topic, String label, SourceIF text) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	
-	
 
 	@Override
 	public FigureIF newFigure(String label, SourceIF text) {

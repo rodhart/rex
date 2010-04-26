@@ -20,16 +20,16 @@ public class ExamStub implements ExamIF {
 	@Override
 	public SourceIF preamble() {
 		SourceIF preamble = sourceFactory.newSource("preamble");
-		preamble.addText("\\documentclass[12pt]{article}"); 
-		preamble.addText("\\usepackage{graphicx}");
-		preamble.addText("\\usepackage[letterpaper,textheight=9.5in,left=1in,textwidth=6.5in,bottom=1in]{geometry}");
-		preamble.addText("\\usepackage{amsmath}");
-		preamble.addText("\\author{Dr T. Harvey}");
-		preamble.addText("\\title{test TEST}");
-		preamble.addText("\\date{April 08, 2010}");
-		preamble.addText("\\begin{document}");
-		preamble.addText("\\maketitle");
-		preamble.addText("\\newpage");
+		preamble.addText("\\documentclass[12pt]{article}\n"); 
+		preamble.addText("\\usepackage{graphicx}\n");
+		preamble.addText("\\usepackage[letterpaper,textheight=9.5in,left=1in,textwidth=6.5in,bottom=1in]{geometry}\n");
+		preamble.addText("\\usepackage{amsmath}\n");
+		preamble.addText("\\author{Dr T. Harvey}\n");
+		preamble.addText("\\title{test TEST}\n");
+		preamble.addText("\\date{April 08, 2010}\n");
+		preamble.addText("\\begin{document}\n");
+		preamble.addText("\\maketitle\n");
+		preamble.addText("\\newpage\n");
 
 		return preamble;
 	}
@@ -164,7 +164,7 @@ public class ExamStub implements ExamIF {
 	}
 
 	@Override
-	public int addElementIF(ExamElementIF element) {
+	public int addElement(ExamElementIF element) {
 		return 0;
 	}
 
