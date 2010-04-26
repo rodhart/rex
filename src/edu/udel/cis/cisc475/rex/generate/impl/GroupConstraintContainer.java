@@ -7,6 +7,7 @@ import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
+import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 
 /**
  * @author Greg Simons
@@ -28,11 +29,7 @@ public class GroupConstraintContainer
 	private String topic;
 	private int constraintValue;
 	private int pointValue;
-	
-	private double low;
-	private double high;
-	private boolean strictLow;
-	private boolean strictHigh;
+	private IntervalIF difficultyInterval;
 	
 	private Collection<ProblemIF> set = new ArrayList<ProblemIF>();
 
@@ -53,78 +50,54 @@ public class GroupConstraintContainer
 		this.topic = theGC.topic();
 		this.constraintValue = theGC.numProblems();
 		this.pointValue = theGC.points();
-		
-		this.low = theGC.difficultyInterval().low();
-		this.high = theGC.difficultyInterval().high();
-		this.strictLow = theGC.difficultyInterval().strictLow();
-		this.strictHigh = theGC.difficultyInterval().strictHigh();
+		this.difficultyInterval = theGC.difficultyInterval();
 		
 		Collection<ProblemIF> problemsByTopic = master.problemsWithTopic(this.topic);
 		
-		/* Here, the if-else statement is lifted outside of the for loop;
-		 * in this manner, the if-else check is performed once, rather than
-		 * for each time through the loop.
-		 * 
-		 * However, using the variable name currentProblem confused
-		 * either Java or Eclipse; hence the use of currentProblem1,
-		 * currentProblem2, etc.
-		 */
-		
-		if (this.strictLow && this.strictHigh)
-			for (ProblemIF currentProblem1 : problemsByTopic)
-				if ((this.low < currentProblem1.difficulty()) &&
-					(currentProblem1.difficulty() < this.high))
-				{
-					currentProblem1.setPoints(this.pointValue);
-					this.set.add(currentProblem1);
-				}
-					
-		else if (strictLow && !strictHigh)
-			for (ProblemIF currentProblem2 : problemsByTopic)
-				if ((this.low < currentProblem2.difficulty()) &&
-					(currentProblem2.difficulty() <= this.high))
-				{
-					currentProblem2.setPoints(this.pointValue);
-					this.set.add(currentProblem2);
-				}
-					
-		else if (!strictLow && strictHigh)
-			for (ProblemIF currentProblem3 : problemsByTopic)
-				if ((this.low <= currentProblem3.difficulty()) &&
-					(currentProblem3.difficulty() < this.high))
-				{
-					currentProblem3.setPoints(this.pointValue);
-					this.set.add(currentProblem1);
-				}
-					
-		else
-			for (ProblemIF currentProblem4 : problemsByTopic)
-				if ((this.low <= currentProblem4.points()) &&
-					(currentProblem4.points() <= this.high))
-				{
-					currentProblem4.setPoints(this.pointValue);
-					this.set.add(currentProblem1);
-				}
-					
+		for (ProblemIF currentProblem : problemsByTopic)
+		{
+			if (this.difficultyInterval.contains(currentProblem.difficulty()));
+			{
+				currentProblem.setPoints(this.pointValue);
+				this.set.add(currentProblem);
+			}
+		}
+			
 		if (this.set.size() < this.constraintValue)
 		{
 			System.err.println("The constraint requesting " + this.constraintValue +
 							   " problems from " + this.topic +
 							   " of point value " + this.pointValue +
-							   " within difficulty " + this.low +
-							   " through " + this.high +
+							   " within difficulty " + theGC.difficultyInterval().low() +
+							   " through " + theGC.difficultyInterval().high() +
 							   " is unsatisfiable.");
 			throw new RexUnsatisfiableException();
 		}
 	}
 	
-	public String getTopic() { return this.topic; }
-	public int getConstraintValue() { return this.constraintValue; }
-	public int getPointValue() { return this.pointValue; }
-	public double getLow() { return this.low; }
-	public double getHigh() { return this.high; }
-	public boolean getStrictLow() { return this.strictLow; }
-	public boolean getStrictHigh() { return this.strictHigh; }
-	public Collection<ProblemIF> getSet() { return this.set; }
+	public String getTopic()
+	{ 
+		return this.topic; 
+	}
+	
+	public int getConstraintValue()
+	{ 
+		return this.constraintValue;
+	}
+	
+	public int getPointValue()
+	{ 
+		return this.pointValue; 
+	}
+	
+	public IntervalIF getDifficultyInterval()
+	{ 
+		return this.difficultyInterval; 
+	}
+	
+	public Collection<ProblemIF> getSet()
+	{
+		return this.set; 
+	}
 }
 

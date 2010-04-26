@@ -68,11 +68,30 @@ public class Generator implements GeneratorIF
 		}
 	}
 	
-	public ExamIF getMaster() { return this.master; }
-	public ConfigIF getConfig() { return this.config; }
-	public ExamIF getGeneratedExam(int i) { return this.generatedExams[i]; }
-	public AnswerKeyIF getAnswerKey(int i) { return this.answerKeys[i]; }
-	public int numGeneratedExams() { return this.numExams; }
+	public ExamIF getMaster()
+	{
+		return this.master;
+	}
+	
+	public ConfigIF getConfig()
+	{
+		return this.config;
+	}
+	
+	public ExamIF getGeneratedExam(int i)
+	{
+		return this.generatedExams[i];
+	}
+	
+	public AnswerKeyIF getAnswerKey(int i)
+	{
+		return this.answerKeys[i];
+	}
+	
+	public int numGeneratedExams()
+	{
+		return this.numExams;
+	}
 	
 	private void generate() throws Exception
 	{

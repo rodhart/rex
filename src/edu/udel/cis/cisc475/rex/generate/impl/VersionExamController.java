@@ -219,8 +219,8 @@ public class VersionExamController
 					System.err.print("The constraint requesting " + theGCC.getConstraintValue() +
 									 " problems from " + theGCC.getTopic() +
 									 " of point value " + theGCC.getPointValue() +
-									 " within difficulty " + theGCC.getLow() +
-									 " through " + theGCC.getHigh() +
+									 " within difficulty " + theGCC.getDifficultyInterval().low() +
+									 " through " + theGCC.getDifficultyInterval().high() +
 									 " is unsatisfiable.");
 					throw new RexUnsatisfiableException();
 				}

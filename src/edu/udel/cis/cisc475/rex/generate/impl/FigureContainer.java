@@ -17,7 +17,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
  * refer to a FigureIF.
  */
 
-public class FigureContainer 
+public class FigureContainer
 {
 	private FigureIF theFigure;
 	private Collection<ProblemIF> theProblems = new ArrayList<ProblemIF>();
@@ -27,15 +27,28 @@ public class FigureContainer
 	 * 					-FigureIF representative of the FigureContainer being instantiated.
 	 */
 	
-	public FigureContainer(FigureIF theFigure) { this.theFigure = theFigure; }
+	public FigureContainer(FigureIF theFigure)
+	{
+		this.theFigure = theFigure;
+	}
 	
-	public FigureIF getFigure() { return this.theFigure; }
-	public Collection<ProblemIF> getProblems() { return this.theProblems; }
+	public FigureIF getFigure()
+	{
+		return this.theFigure;
+	}
+	
+	public Collection<ProblemIF> getProblems()
+	{
+		return this.theProblems;
+	}
 	
 	/**
 	 * @param theProblem
 	 * 					 -ProblemIF to be added to the FigureContainer.
 	 */
 	
-	public void addProblem(ProblemIF theProblem) { theProblems.add(theProblem); }
+	public void addProblem(ProblemIF theProblem)
+	{
+		theProblems.add(theProblem);
+	}
 }

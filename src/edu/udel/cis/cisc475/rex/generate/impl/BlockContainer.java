@@ -26,10 +26,20 @@ public class BlockContainer
 	 * 					-BlockIF representative of the BlockContainer being instantiated.
 	 */
 	
-	public BlockContainer(BlockIF theBlock) { this.theBlock = theBlock; }
+	public BlockContainer(BlockIF theBlock)
+	{
+		this.theBlock = theBlock;
+	}
 	
-	public BlockIF getBlock() { return this.theBlock; }
-	public HashMap getFCs() { return this.theFCs; }
+	public BlockIF getBlock()
+	{
+		return this.theBlock;
+	}
+	
+	public HashMap getFCs()
+	{
+		return this.theFCs;
+	}
 	
 	/**
 	 * @param theFigure
