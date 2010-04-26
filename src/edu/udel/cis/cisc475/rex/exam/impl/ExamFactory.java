@@ -1,5 +1,6 @@
 package edu.udel.cis.cisc475.rex.exam.impl;
 
+import edu.udel.cis.cisc475.rex.err.RexException;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
@@ -8,9 +9,6 @@ import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FixedAnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
-
-import java.lang.NullPointerException;
-import java.lang.IllegalArgumentException;
 
 /**
  * 

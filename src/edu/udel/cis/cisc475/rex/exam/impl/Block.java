@@ -13,10 +13,16 @@ public class Block implements BlockIF {
 	private String label;
 	private SourceIF source;
 
+	@Deprecated
 	public Block(String topic, String label, SourceIF source){
 		this.topic = topic;
 		this.source = source;
 		this.label = label;
+	}
+	
+	public Block(String label, SourceIF source){
+		this.label = label;
+		this.source = source;
 	}
 	
 	public SourceIF source() {
