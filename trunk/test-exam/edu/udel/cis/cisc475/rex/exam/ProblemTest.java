@@ -127,8 +127,8 @@ public class ProblemTest {
 		blockSource.addText("Test Block Source");
 		
 		BlockIF block = examFactory.newBlock("Test Block Label", blockSource);
-		exam.addElementIF(block);
-		exam.addElementIF(problem);
+		exam.addElement(block);
+		exam.addElement(problem);
 		
 		// make problem part of required block
 		//((Problem)problem).setRequiredBlock(block);
@@ -155,8 +155,8 @@ public class ProblemTest {
 		figureSource.addText("TestFigureSource");
 		
 		FigureIF figure1 = examFactory.newFigure("testFigure1", figureSource);
-		exam.addElementIF(figure1);
-		exam.addElementIF(problem);
+		exam.addElement(figure1);
+		exam.addElement(problem);
 		
 		// make problem reference figure
 		//((Problem)problem).addReferencedFigure(figure1);
@@ -173,7 +173,7 @@ public class ProblemTest {
 		figureSource = sourceFactory.newSource(testUEFfilename);
 		figureSource.addText("TestFigureSource");
 		FigureIF figure2 = examFactory.newFigure("testFigure2", figureSource);
-		exam.addElementIF(figure2);
+		exam.addElement(figure2);
 		
 		// add to problem the reference to figure
 		//((Problem)problem).addReferencedFigure(figure2);
