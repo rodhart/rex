@@ -63,7 +63,7 @@ public class BlockTest {
 	public void setUp() throws Exception {
 		blockSource = sourceFactory.newSource(testUEFfilename);
 		blockSource.addText("Test Block Source");
-		block = examFactory.newBlock(testTopic, testLabel, blockSource);
+		block = examFactory.newBlock(testLabel, blockSource);
 	}
 
 	@After
