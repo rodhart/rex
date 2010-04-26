@@ -129,7 +129,7 @@ public class Exam implements ExamIF {
 			HashSet<ExamElementIF> useesOfElement = new HashSet<ExamElementIF>();
 			HashSet<ExamElementIF> usersOfElement = new HashSet<ExamElementIF>();
 			uses.put(element, useesOfElement);
-			usedBy.put(element, usersOfElement);
+			//usedBy.put(element, usersOfElement);
 			return key;
 		} else {
 			return -1;
