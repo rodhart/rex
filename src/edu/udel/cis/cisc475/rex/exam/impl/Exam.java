@@ -158,6 +158,13 @@ public class Exam implements ExamIF {
 			}
 			if(user instanceof ProblemIF && usee instanceof BlockIF){
 				((Problem) user).setRequiredBlock((BlockIF) usee);
+				
+				if ( ((ProblemIF) user).topic() != ((BlockIF) usee).topic()){
+					//TODO use actual ERR module
+					System.err.println("error changing a current block's topic");
+				} else{
+					((Block) usee).setTopic(((ProblemIF) usee).topic());
+				}
 			}
 		} else {
 			//TODO use actual ERR module
@@ -238,7 +245,8 @@ public class Exam implements ExamIF {
 				if (((ProblemIF) element).topic().equals(topic))
 					returnSet.add(element);
 			} else if (element instanceof BlockIF) {
-				if (((BlockIF) element).topic().equals(topic)) {
+				// Check for null because block topics CAN be null.
+				if (((BlockIF) element).topic() != null &&  ((BlockIF) element).topic().equals(topic)) {
 					returnSet.add(element);
 				}
 			}
