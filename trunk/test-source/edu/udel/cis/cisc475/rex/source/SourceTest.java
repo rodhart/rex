@@ -1,16 +1,10 @@
-/**
- * 
- */
 package edu.udel.cis.cisc475.rex.source;
-
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -173,8 +167,8 @@ public class SourceTest {
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		S.addText("mvemjsnup");
-		S.addText("JUnit is kinda painful");
+		S.addText("mvemjsnup" + newline);
+		S.addText("JUnit is kinda painful" + newline);
 		
 		
 		String testString = "mvemjsnup" + newline + "JUnit is kinda painful" + newline;
@@ -189,8 +183,8 @@ public class SourceTest {
 		SourceFactoryIF myFactory = new SourceFactory();
 		SourceIF S = myFactory.newSource(filename);
 		
-		S.addText("This is my first line of text");
-		S.addText("Second line of text this is");
+		S.addText("This is my first line of text" + newline);
+		S.addText("Second line of text this is" + newline);
 		
 	
 		PrintWriter pw = null;
