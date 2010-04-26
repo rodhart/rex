@@ -37,7 +37,10 @@ public class ExamWriter implements ExamWriterIF {
 	 */
 	public void write(PrintWriter out) {
 		// output beginning of exam file
+		out.printf("%%here is your preamble \n");
 		E.preamble().write(out);
+
+		out.printf("%%here is your frontmatter \n");
 		E.frontMatter().write(out);
 
 /*		// output problems with respective answers
@@ -70,7 +73,9 @@ public class ExamWriter implements ExamWriterIF {
 */
 
 		// output the end block for exam
-//		out.printf("%s\n", E.finalBlock());
+		out.printf("%%here is your finalBlock \n");
+//		E.finalBlock().write(out);
+		
 
 	}// end of write(PrintWriter out)
 
