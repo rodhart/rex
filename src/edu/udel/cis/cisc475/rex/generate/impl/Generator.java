@@ -34,8 +34,8 @@ public class Generator implements GeneratorIF
 	private ExamIF[] generatedExams;
 	private AnswerKeyIF[] answerKeys;
 	
-	private int numExams = config.numVersions();
-
+	private int numExams;
+	
 	/**
 	 * @param master
 	 * 			-ExamIF representing the master ExamIF. Given to
@@ -54,6 +54,8 @@ public class Generator implements GeneratorIF
 	{
 		this.master = master;
 		this.config = config;
+	
+		this.numExams = config.numVersions();
 		
 		try
 		{
