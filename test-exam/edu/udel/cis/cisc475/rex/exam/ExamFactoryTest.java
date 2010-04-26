@@ -90,7 +90,7 @@ public class ExamFactoryTest {
 	public void testNewBlock() {
 		SourceIF blockSource = sourceFactory.newSource(testUEFfilename);
 		blockSource.addText("test Block Source");
-		ExamElementIF block = examFactory.newBlock("test Topic", "test Label", blockSource);
+		ExamElementIF block = examFactory.newBlock("test Label", blockSource);
 		assertNotNull(block);
 		assertTrue(block instanceof BlockIF);
 	}
@@ -99,13 +99,13 @@ public class ExamFactoryTest {
 	public void testNewBlockBadInput() {
 		SourceIF blockSource = sourceFactory.newSource(testUEFfilename);
 		blockSource.addText("test Block Source");
-		try{
-			ExamElementIF block = examFactory.newBlock(null, "test Label", blockSource);
-			fail("Expected Exceptions not Thrown.");
-		} catch (Exception e) {
-			
-		}
 		// TODO: Remove commented test.
+//		try{
+//			ExamElementIF block = examFactory.newBlock(null, "test Label", blockSource);
+//			fail("Expected Exceptions not Thrown.");
+//		} catch (Exception e) {
+//			
+//		}
 //		try{
 //			ExamElementIF block = examFactory.newBlock("test topic", null, blockSource);
 //			fail("Expected Exceptions not Thrown.");
@@ -113,7 +113,7 @@ public class ExamFactoryTest {
 //			
 //		}
 		try{
-			ExamElementIF block = examFactory.newBlock("test topic", "test label", null);
+			ExamElementIF block = examFactory.newBlock("test label", null);
 			fail("Expected Exceptions not Thrown.");
 		} catch (Exception e) {
 			
