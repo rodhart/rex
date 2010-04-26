@@ -137,12 +137,10 @@ public class MasterExamController
 		GroupConstraintContainer currentGCC;
 		
 		int myConstraintValue = theGCC.getConstraintValue();
-		int myPointValue = theGCC.getPointValue();
 		double myLow = theGCC.getLow();
 		double myHigh = theGCC.getHigh();
 	
 		int yourConstraintValue;
-		int yourPointValue;
 		double yourLow;
 		double yourHigh;
 		
@@ -153,22 +151,18 @@ public class MasterExamController
 			if (!currentGCC.equals(theGCC))
 			{
 				yourConstraintValue = currentGCC.getConstraintValue();
-				yourPointValue = currentGCC.getPointValue();
 				yourLow = currentGCC.getLow();
 				yourHigh = currentGCC.getHigh();
 				
-				if ((myPointValue == yourPointValue) &&
-						(((yourLow <= myLow) && (myLow <= yourHigh)) ||
-						 ((yourLow <= myHigh) && (myHigh <= yourHigh))))
+				if (((yourLow <= myLow) && (myLow <= yourHigh)) ||
+						 ((yourLow <= myHigh) && (myHigh <= yourHigh)))
 					{	
 						System.err.println("Warning: The constraint requesting " + myConstraintValue +
 										   " problems from " + theTO.getTopic() +
-										   " of point-value " + myPointValue +
 										   " within difficulty " + myLow +
 										   " through " + myHigh +
 										   " conflicts with the constraint requesting " + yourConstraintValue +
 										   " problems from " + theTO.getTopic() +
-										   " of point-value " + yourPointValue +
 										   " within difficulty " + yourLow +
 										   " through " + yourHigh +
 										   ". As a result, false-positive RexUnsatisfiableExceptions might occur" +
