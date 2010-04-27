@@ -74,7 +74,7 @@ public class ExamWriter implements ExamWriterIF {
 
 		// output the end block for exam
 		out.printf("%%here is your finalBlock \n");
-//		E.finalBlock().write(out);
+		E.finalBlock().source().write(out);
 		
 
 	}// end of write(PrintWriter out)
