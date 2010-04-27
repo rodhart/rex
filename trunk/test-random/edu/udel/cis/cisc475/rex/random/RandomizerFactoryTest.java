@@ -65,19 +65,5 @@ public class RandomizerFactoryTest {
 		assertNotNull(rfIF);
 		
 	}
-
-	@Test
-	public void testCompareNewRandomizer() {
-		
-		RandomizerFactory rf =  RandomizerFactory;
-		
-		RandomizerIF rfIF1 = rf.newRandomizer(0);
-		
-		RandomizerIF rfIF2 = rf.newRandomizer(0);
-		
-		boolean result = rfIF1.equals(rfIF2);
-		
-		assertTrue(result);
-	}
 		
 }
