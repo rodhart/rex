@@ -113,7 +113,7 @@ public class ExamFactoryTest {
 //			
 //		}
 		try{
-			ExamElementIF block = examFactory.newBlock("test label", null);
+			examFactory.newBlock("test label", null);
 			fail("Expected Exceptions not Thrown.");
 		} catch (Exception e) {
 			
@@ -142,7 +142,7 @@ public class ExamFactoryTest {
 //			
 //		}
 		try{
-			ExamElementIF figure = examFactory.newFigure("test figure label", null);
+			examFactory.newFigure("test figure label", null);
 			fail("Expected Exceptions not Thrown.");
 		} catch(Exception e) {
 			
@@ -162,7 +162,7 @@ public class ExamFactoryTest {
 	
 	@Test(expected = Exception.class)
 	public void testNewAnswerBadInput() {
-		AnswerIF answer1 = examFactory.newAnswer(true, null);
+		examFactory.newAnswer(true, null);
 	}
 	
 	@Test
@@ -180,7 +180,7 @@ public class ExamFactoryTest {
 	
 	@Test(expected = Exception.class)
 	public void testNewFixedAnswerBadInput() {
-		AnswerIF answer2 = examFactory.newFixedAnswer(false, 0, null);
+		examFactory.newFixedAnswer(false, 0, null);
 	}
 	
 	@Test
@@ -213,7 +213,7 @@ public class ExamFactoryTest {
 		
 		try{
 			// answers array is empty
-			ExamElementIF problem = examFactory.newProblem("test Problem Topic", "test Label", problemSource, answers);
+			examFactory.newProblem("test Problem Topic", "test Label", problemSource, answers);
 			fail("Expected Exceptions not Thrown.");
 		} catch (Exception e) {
 			
@@ -221,7 +221,7 @@ public class ExamFactoryTest {
 		answers[0] = answer1;
 		answers[1] = answer2;
 		try{
-			ExamElementIF problem = examFactory.newProblem(null, "test Label", problemSource, answers);
+			examFactory.newProblem(null, "test Label", problemSource, answers);
 			fail("Expected Exceptions not Thrown.");
 		} catch (Exception e) {
 			
@@ -234,13 +234,13 @@ public class ExamFactoryTest {
 //			
 //		}
 		try{
-			ExamElementIF problem = examFactory.newProblem("test Problem Topic", "test Label", null, answers);
+			examFactory.newProblem("test Problem Topic", "test Label", null, answers);
 			fail("Expected Exceptions not Thrown.");
 		} catch (Exception e) {
 			
 		}
 		try{
-			ExamElementIF problem = examFactory.newProblem("test Problem Topic", "test Label", problemSource, null);
+			examFactory.newProblem("test Problem Topic", "test Label", problemSource, null);
 			fail("Expected Exceptions not Thrown.");
 		} catch (Exception e) {
 			

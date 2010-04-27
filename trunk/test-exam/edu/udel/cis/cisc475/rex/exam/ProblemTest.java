@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import edu.udel.cis.cisc475.rex.err.RexException;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
@@ -115,7 +116,7 @@ public class ProblemTest {
 	}
 
 	@Test
-	public void testGetRequiredBlock() {
+	public void testGetRequiredBlock() throws RexException {
 		ExamIF exam = examFactory.newGeneratedExam();
 		
 		assertNull(problem.requiredBlock());
@@ -132,6 +133,7 @@ public class ProblemTest {
 		
 		// make problem part of required block
 		//((Problem)problem).setRequiredBlock(block);
+		
 		exam.declareUse(problem, block);
 		
 		// test returned block is same as created
@@ -142,7 +144,7 @@ public class ProblemTest {
 	}
 	
 	@Test
-	public void testGetReferencedFigures() {
+	public void testGetReferencedFigures() throws RexException {
 		ExamIF exam = examFactory.newGeneratedExam();
 		
 		// I would rather have referenced figures be empty
