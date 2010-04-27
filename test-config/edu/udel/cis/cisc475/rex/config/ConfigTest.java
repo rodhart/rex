@@ -17,6 +17,7 @@ import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
 import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
+import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
@@ -98,10 +99,11 @@ public class ConfigTest {
 	
 	/**
 	 * Tests the addition of group constraints 
+	 * @throws RexUnsatisfiableException 
 	 * 
 	 */
-	@Test
-	public void testAddGroupConstraint() {
+	
+	public void testAddGroupConstraint() throws RexUnsatisfiableException {
 		ConfigIF C = configFactory.newConfig(false, 9999);
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		SourceIF S = sourceFactory.newSource("test");
