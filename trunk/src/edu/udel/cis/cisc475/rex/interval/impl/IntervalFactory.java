@@ -14,12 +14,19 @@ public class IntervalFactory implements IntervalFactoryIF
 	 */
 
 	/**
-	 * this function is a wrapper for the Interval constructor
+	 * This function is a wrapper for the Interval constructor
+	 * 
+	 * If low is greater than high (error condition), return
+	 * null instead of the object created.
 	 */
 	@Override
 	public IntervalIF interval(boolean strictLow, Double low,
 			boolean strictHigh, Double high) {
 		// TODO Auto-generated method stub
+		if (low > high)
+		{
+			return null;
+		}
 		return new Interval(strictLow, low, strictHigh, high);
 	}
 
