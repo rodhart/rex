@@ -31,12 +31,12 @@ public class UEFParserTest
 	@Test
 	public void parseForArgumentTest() throws Exception
 	{
-		// find our test file.
-		URL url = this.getClass().getResource("./parseForArgumentTestFile.tex");
-		File file = new File(url.getFile().replace("%20", " "));
-
 		UEFParser parser = new UEFParser();
+		
+		//Open the file to parse.
+		File file = new File("." + File.separator + "examples" + File.separator + "parseForArgumentTestFile.tex");
 		parser.openFile(file);
+		
 		String argument1 = parser.parseForArgument();
 		assertEquals("arg1", argument1);
 
@@ -78,9 +78,7 @@ public class UEFParserTest
 	@Test
 	public void parseForOptionalArgumentTest() throws Exception
 	{
-		// find our test file.
-		URL url = this.getClass().getResource("./parseForOptionalArgumentTestFile.tex");
-		File file = new File(url.getFile().replace("%20", " "));
+		File file = new File("." + File.separator + "examples" + File.separator + "parseForOptionalArgumentTestFile.tex");
 
 		//Open the file to parse.
 		UEFParser parser = new UEFParser();
@@ -152,12 +150,10 @@ public class UEFParserTest
 	@Test
 	public void parseForCommandTest() throws Exception
 	{
-		// find our test file.
-		URL url = this.getClass().getResource("./parseForCommandTestFile.tex");
-		File file = new File(url.getFile().replace("%20", " "));
+		UEFParser parser = new UEFParser();
 
 		//Open the file to parse.
-		UEFParser parser = new UEFParser();
+		File file = new File("." + File.separator + "examples" + File.separator + "parseForCommandTestFile.tex");
 		parser.openFile(file);
 
 		//Check \documentclass command
