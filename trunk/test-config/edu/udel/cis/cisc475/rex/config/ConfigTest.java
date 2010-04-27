@@ -24,7 +24,7 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 
-/*
+/**
  * @author Jesse Gledhill
  * added a test for addGroupConstraint to test a nullpointer exception -cates
  */
@@ -43,7 +43,7 @@ public class ConfigTest {
     sourceFactory = new SourceFactory();
   }
   
-	/*
+	/**
 	 * Tests that pdfOption() returns the correct boolean when pdfOption is true
 	 */
 	@Test
@@ -53,7 +53,7 @@ public class ConfigTest {
 		assertTrue(C.pdfOption());
 	}
 
-	/*
+	/**
 	 * Tests that pdfOption() returns the correct boolean when pdfOption is false
 	 */
 	@Test
@@ -63,7 +63,7 @@ public class ConfigTest {
 		assertFalse(C.pdfOption());
 	}
 	
-	/*
+	/**
 	 * Tests that numVersions() returns the correct integer when the number of versions is a single
 	 * digit number.
 	 */
@@ -74,7 +74,7 @@ public class ConfigTest {
 		assertEquals(1, C.numVersions());
 	}
 	
-	/*
+	/**
 	 * Tests that numVersions() returns the correct integer when the number of versions is a 
 	 * negative number.
 	 */
@@ -85,7 +85,7 @@ public class ConfigTest {
 		assertEquals(-123, C.numVersions());
 	}
 	
-	/*
+	/**
 	 * Tests that numVersions() returns the correct integer when the number of versions is a 
 	 * 4 digit number.
 	 */
@@ -96,7 +96,7 @@ public class ConfigTest {
 		assertEquals(9999, C.numVersions());
 	}
 	
-	/*
+	/**
 	 * Tests the addition of group constraints 
 	 * 
 	 */
@@ -112,7 +112,7 @@ public class ConfigTest {
 		assertEquals(constraint, Cs.toArray()[0]);
 	}
 	
-	/*
+	/**
 	 * Tests the addition of problem constraints 
 	 * 
 	 */
@@ -128,7 +128,7 @@ public class ConfigTest {
 		assertEquals(constraint, Cs.toArray()[0]);
 	}
 	
-	/*
+	/**
 	 * tests the exam seed setting and getting 
 	 */
 	@Test
@@ -138,7 +138,7 @@ public class ConfigTest {
 		assertEquals(1290, C.seed());
 	}
 	
-	/*
+	/**
 	 * tests the exam final block setting and getting 
 	 */
 	@Test
@@ -148,7 +148,7 @@ public class ConfigTest {
 		assertEquals("This is my final block", C.finalBlock());
 	}
 	
-	/*
+	/**
 	 * tests the exam version strings setting and getting 
 	 */
 	@Test
