@@ -38,7 +38,7 @@ import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
  *
  */
 public class ExamFactoryTest {
-	public final static boolean useStubs = true;
+	public final static boolean useStubs = false;
 	
 	private static SourceFactoryIF sourceFactory;
 	private static ExamFactoryIF examFactory;
