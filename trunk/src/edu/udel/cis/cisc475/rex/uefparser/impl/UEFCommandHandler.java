@@ -29,8 +29,7 @@ import edu.udel.cis.cisc475.rex.uefparser.impl.UEFCommand.Types;
  * @author Aaron Myles Landwehr
  * @author Ahmed El-hassany
  */
-class UEFCommandHandler
-{
+class UEFCommandHandler {
 
 	/**
 	 * Queue of all commands from the file.
@@ -64,23 +63,13 @@ class UEFCommandHandler
 	private List<String> answerReferences;
 
 	/**
-	 * The list of states we have.
-	 */
-	enum States
-	{
-
-		answers, block, document, figure, problem
-	}
-
-	/**
 	 * Constructor for the class. Takes a reference to the underlying
 	 * UEFCharHandler that reads the file.
 	 * 
 	 * @param uefCharHandler
 	 *            the underlying UEFCharHandler.
 	 */
-	UEFCommandHandler(UEFCharHandler uefCharHandler)
-	{
+	UEFCommandHandler(UEFCharHandler uefCharHandler) {
 		this.uefCharHandler = uefCharHandler;
 		this.uefCommandQueue = new LinkedList<UEFCommand>();
 		this.sourceFactory = new SourceFactory();
@@ -95,20 +84,16 @@ class UEFCommandHandler
 	 * @param uefCommand
 	 *            the command to add.
 	 */
-	void add(UEFCommand uefCommand)
-	{
+	void add(UEFCommand uefCommand) {
 		uefCommandQueue.add(uefCommand);
 	}
 
-	private UEFCommand findMatchingCommand(Types types[])
-	{
-		for (Iterator<UEFCommand> iter = uefCommandQueue.iterator(); iter.hasNext();)
-		{
+	private UEFCommand findMatchingCommand(Types types[]) {
+		for (Iterator<UEFCommand> iter = uefCommandQueue.iterator(); iter
+				.hasNext();) {
 			UEFCommand peekedCommand = iter.next();
-			for (int i = 0; i < types.length; i++)
-			{
-				if (peekedCommand.getType() == types[i])
-				{
+			for (int i = 0; i < types.length; i++) {
+				if (peekedCommand.getType() == types[i]) {
 					return peekedCommand;
 				}
 			}
@@ -116,23 +101,17 @@ class UEFCommandHandler
 		return null;
 	}
 
-	private boolean isFixed(String argument)
-	{
+	private boolean isFixed(String argument) {
 
-		if (argument != null)
-		{
+		if (argument != null) {
 			return argument.contains("fixed");
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
 
-	private boolean isCorrect(String argument)
-	{
-		if (argument != null)
-		{
+	private boolean isCorrect(String argument) {
+		if (argument != null) {
 			return argument.contains("correct");
 		}
 		return false;
@@ -142,8 +121,7 @@ class UEFCommandHandler
 	 * Process an \answer command. Increments the answer index. Adds the new
 	 * answer to the answers list.
 	 */
-	AnswerIF processAnswer(int index) throws EOFException, Exception
-	{
+	AnswerIF processAnswer(int index) throws EOFException, Exception {
 		UEFCommand command = uefCommandQueue.poll();
 
 		String optionalArgument = command.getOptionalArgument();
@@ -162,14 +140,21 @@ class UEFCommandHandler
 		type[1] = Types.endAnswers;
 		UEFCommand peekedCommand = findMatchingCommand(type);
 
-		if (peekedCommand == null)
-		{
+		if (peekedCommand == null) {
+			// should always be either endAnswers or answer command
 			throw new Exception();
 		}
 
 		// set the end of the source to the position before
 		// the beginning of the next command.
 		endSource = peekedCommand.getStartPosition();
+
+		// Ignore whitespaces and lines at the end of answers, because latex
+		// does.
+		while (uefCharHandler.read(endSource - 1) == '\n'
+				|| uefCharHandler.read(endSource - 1) == ' ') {
+			endSource--;
+		}
 
 		// get the file content from beginning of '/answer'
 		// to beginning of next command .
@@ -183,13 +168,10 @@ class UEFCommandHandler
 		source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
 		source.addText(content);
 
-		if (!fixed)
-		{
+		if (!fixed) {
 			// System.out.println(content);
 			return examFactory.newAnswer(correct, source);
-		}
-		else
-		{
+		} else {
 			// System.out.println(content);
 			return examFactory.newFixedAnswer(correct, index, source);
 		}
@@ -198,8 +180,7 @@ class UEFCommandHandler
 	/**
 	 * Process a \begin{answers} command.
 	 */
-	AnswerIF[] processAnswers() throws Exception
-	{
+	AnswerIF[] processAnswers() throws Exception {
 		// pop off the /begin{answers} command
 		uefCommandQueue.poll();
 		int index = 0;
@@ -207,35 +188,30 @@ class UEFCommandHandler
 
 		boolean done = false;
 
-		while (!uefCommandQueue.isEmpty() && !done)
-		{
-			switch (uefCommandQueue.peek().getType())
-			{
-				case endAnswers:
-				{
-					done = true;
-					// poll the /end{answers} command off the queue
-					uefCommandQueue.poll();
-					break;
-				}
-				case answer:
-				{
-					answersList.add(processAnswer(index));
-					index++;
-					break;
-				}
-				case ref:
-				{
-					this.answerReferences.add(processRef());
-					// uefCommandQueue.poll();
-					break;
-				}
-				default:
-				{
-					System.err.println("Error: " + uefCommandQueue.peek().getType() + " found within block environment!");
-					System.exit(-1);
-					break;
-				}
+		while (!uefCommandQueue.isEmpty() && !done) {
+			switch (uefCommandQueue.peek().getType()) {
+			case endAnswers: {
+				done = true;
+				// poll the /end{answers} command off the queue
+				uefCommandQueue.poll();
+				break;
+			}
+			case answer: {
+				answersList.add(processAnswer(index));
+				index++;
+				break;
+			}
+			case ref: {
+				this.answerReferences.add(processRef());
+				// uefCommandQueue.poll();
+				break;
+			}
+			default: {
+				System.err.println("Error: " + uefCommandQueue.peek().getType()
+						+ " found within block environment!");
+				System.exit(-1);
+				break;
+			}
 			}
 		}
 		return answersList.toArray(new AnswerIF[0]);
@@ -244,8 +220,7 @@ class UEFCommandHandler
 	/**
 	 * Process a \begin{block} command.
 	 */
-	BlockIF processBlock() throws Exception
-	{
+	BlockIF processBlock() throws Exception {
 		UEFCommand command = uefCommandQueue.poll();
 
 		String name = command.getArgument(0);
@@ -262,30 +237,26 @@ class UEFCommandHandler
 
 		boolean done = false;
 
-		while (!uefCommandQueue.isEmpty() && !done)
-		{
-			switch (uefCommandQueue.peek().getType())
-			{
-				case endBlock:
-				{
-					done = true;
+		while (!uefCommandQueue.isEmpty() && !done) {
+			switch (uefCommandQueue.peek().getType()) {
+			case endBlock: {
+				done = true;
 
-					// poll the /end{problem command off the queue
-					UEFCommand nextCommand = uefCommandQueue.poll();
-					endSource = nextCommand.getEndPosition();
-					break;
-				}
-				case ref:
-				{
-					refs.add(processRef());
-					break;
-				}
-				default:
-				{
-					System.err.println("Error: " + uefCommandQueue.peek().getType() + " found within block environment!");
-					System.exit(-1);
-					break;
-				}
+				// poll the /end{problem command off the queue
+				UEFCommand nextCommand = uefCommandQueue.poll();
+				endSource = nextCommand.getEndPosition();
+				break;
+			}
+			case ref: {
+				refs.add(processRef());
+				break;
+			}
+			default: {
+				System.err.println("Error: " + uefCommandQueue.peek().getType()
+						+ " found within block environment!");
+				System.exit(-1);
+				break;
+			}
 			}
 		}
 
@@ -303,18 +274,13 @@ class UEFCommandHandler
 
 		BlockIF block = examFactory.newBlock(name, source);
 
-		if (refs.size() != 0)
-		{
+		if (refs.size() != 0) {
 			Iterator<String> i = refs.iterator();
-			while (i.hasNext())
-			{
+			while (i.hasNext()) {
 				String r = i.next();
-				if (this.references.containsKey(r))
-				{
+				if (this.references.containsKey(r)) {
 					this.references.get(r).add(block);
-				}
-				else
-				{
+				} else {
 					List<ExamElementIF> list = new ArrayList<ExamElementIF>();
 					list.add(block);
 					this.references.put(r, list);
@@ -328,8 +294,7 @@ class UEFCommandHandler
 	/**
 	 * Process a \begin{document} command.
 	 */
-	ExamIF processDocument() throws Exception
-	{
+	ExamIF processDocument() throws Exception {
 		// pull /begin{document} off the queue
 		UEFCommand command = uefCommandQueue.poll();
 
@@ -337,20 +302,26 @@ class UEFCommandHandler
 		ExamIF exam = examFactory.newMasterExam();
 
 		// get the frontal matter
-		if (!uefCommandQueue.isEmpty())
-		{
+		if (!uefCommandQueue.isEmpty()) {
 			// get the start and end positions of the frontal matter
 			int startOfFrontalMatter = command.getEndPosition();
 			int endOfFrontalMatter = uefCommandQueue.peek().getStartPosition();
 
-			String content = uefCharHandler.getContent(startOfFrontalMatter, endOfFrontalMatter);
+			String content = uefCharHandler.getContent(startOfFrontalMatter,
+					endOfFrontalMatter);
 
 			// Create the source object for frontal matter
-			SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
-			source.setStartLine(uefCharHandler.getLineNumber(startOfFrontalMatter));
-			source.setLastLine(uefCharHandler.getLineNumber(endOfFrontalMatter));
-			source.setStartColumn(uefCharHandler.getColumnNumber(startOfFrontalMatter));
-			source.setLastColumn(uefCharHandler.getColumnNumber(endOfFrontalMatter));
+			SourceIF source = sourceFactory.newSource(uefCharHandler
+					.getFileName());
+			source.setStartLine(uefCharHandler
+					.getLineNumber(startOfFrontalMatter));
+			source
+					.setLastLine(uefCharHandler
+							.getLineNumber(endOfFrontalMatter));
+			source.setStartColumn(uefCharHandler
+					.getColumnNumber(startOfFrontalMatter));
+			source.setLastColumn(uefCharHandler
+					.getColumnNumber(endOfFrontalMatter));
 			source.addText(content);
 
 			// System.out.println(content);
@@ -360,41 +331,35 @@ class UEFCommandHandler
 		}
 
 		// process commands within the document environment
-		while (!uefCommandQueue.isEmpty())
-		{
-			switch (uefCommandQueue.peek().getType())
-			{
-				case beginBlock:
-				{
-					exam.addElement(processBlock());
-					break;
-				}
-				case beginFigure:
-				{
-					exam.addElement(processFigure());
-					break;
-				}
-				case beginProblem:
-				{
-					exam.addElement(processProblem());
-					break;
-				}
-				case endDocument:
-				{
-					// pull /end{document} off the queue.
-					uefCommandQueue.poll();
-					return exam;
-				}
-				default:
-				{
-					System.err.println("Error: " + uefCommandQueue.peek().getType()
-									   + " found within document environment!");
-					System.exit(-1);
-					break;
-				}
+		while (!uefCommandQueue.isEmpty()) {
+			switch (uefCommandQueue.peek().getType()) {
+			case beginBlock: {
+				exam.addElement(processBlock());
+				break;
+			}
+			case beginFigure: {
+				exam.addElement(processFigure());
+				break;
+			}
+			case beginProblem: {
+				exam.addElement(processProblem());
+				break;
+			}
+			case endDocument: {
+				// pull /end{document} off the queue.
+				uefCommandQueue.poll();
+				return exam;
+			}
+			default: {
+				System.err.println("Error: " + uefCommandQueue.peek().getType()
+						+ " found within document environment!");
+				System.exit(-1);
+				break;
+			}
 			}
 		}
-		System.err.println("Error: end of file reached before \\end{document} found!");
+		System.err
+				.println("Error: end of file reached before \\end{document} found!");
 		System.exit(-1);
 		return null;
 	}
@@ -402,8 +367,7 @@ class UEFCommandHandler
 	/**
 	 * Process a \begin{figure} command.
 	 */
-	FigureIF processFigure() throws EOFException, Exception
-	{
+	FigureIF processFigure() throws EOFException, Exception {
 		UEFCommand command = uefCommandQueue.poll();
 
 		// String to be filled with the source content
@@ -420,36 +384,30 @@ class UEFCommandHandler
 
 		boolean done = false;
 
-		while (!uefCommandQueue.isEmpty() && !done)
-		{
-			switch (uefCommandQueue.peek().getType())
-			{
-				case label:
-				{
-					label = processLabel();
-					break;
-				}
-				case ref:
-				{
-					refs.add(processRef());
-					break;
-				}
-				case endFigure:
-				{
-					// use the end of the other command as the end source
-					endSource = uefCommandQueue.peek().getEndPosition();
-					// pull /end{figure} off the queue.
-					uefCommandQueue.poll();
-					done = true;
-					break;
-				}
-				default:
-				{
-					System.err.println("Error: " + uefCommandQueue.peek().getType()
-									   + " found within figure environment!");
-					System.exit(-1);
-					break;
-				}
+		while (!uefCommandQueue.isEmpty() && !done) {
+			switch (uefCommandQueue.peek().getType()) {
+			case label: {
+				label = processLabel();
+				break;
+			}
+			case ref: {
+				refs.add(processRef());
+				break;
+			}
+			case endFigure: {
+				// use the end of the other command as the end source
+				endSource = uefCommandQueue.peek().getEndPosition();
+				// pull /end{figure} off the queue.
+				uefCommandQueue.poll();
+				done = true;
+				break;
+			}
+			default: {
+				System.err.println("Error: " + uefCommandQueue.peek().getType()
+						+ " found within figure environment!");
+				System.exit(-1);
+				break;
+			}
 			}
 		}
 
@@ -467,18 +425,13 @@ class UEFCommandHandler
 
 		FigureIF figure = examFactory.newFigure(label, source);
 
-		if (refs.size() != 0)
-		{
+		if (refs.size() != 0) {
 			Iterator<String> i = refs.iterator();
-			while (i.hasNext())
-			{
+			while (i.hasNext()) {
 				String r = i.next();
-				if (this.references.containsKey(r))
-				{
+				if (this.references.containsKey(r)) {
 					this.references.get(r).add(figure);
-				}
-				else
-				{
+				} else {
 					List<ExamElementIF> list = new ArrayList<ExamElementIF>();
 					list.add(figure);
 					this.references.put(r, list);
@@ -494,8 +447,7 @@ class UEFCommandHandler
 	 * answers in the problem. Resets the index for the answers in the problem.
 	 * Pushes the problem state.
 	 */
-	ProblemIF processProblem() throws EOFException, Exception
-	{
+	ProblemIF processProblem() throws EOFException, Exception {
 		// pull this command off the stack
 		UEFCommand command = uefCommandQueue.poll();
 
@@ -519,83 +471,71 @@ class UEFCommandHandler
 
 		boolean done = false;
 
-		while (!uefCommandQueue.isEmpty() && !done)
-		{
-			switch (uefCommandQueue.peek().getType())
-			{
-				case beginAnswers:
-				{
-					// use the beginning of the other command as the end source
-					endSource = uefCommandQueue.peek().getStartPosition();
+		while (!uefCommandQueue.isEmpty() && !done) {
+			switch (uefCommandQueue.peek().getType()) {
+			case beginAnswers: {
+				// use the beginning of the other command as the end source
+				endSource = uefCommandQueue.peek().getStartPosition();
 
-					// get answers for the problem
-					answers = processAnswers();
-					break;
-				}
-				case label:
-				{
-					label = processLabel();
-					break;
-				}
-				case ref:
-				{
-					refs.add(processRef());
-					break;
-				}
-				case endProblem:
-				{
-					done = true;
-					// poll the /end{problem command off the queue
-					uefCommandQueue.poll();
-					break;
-				}
-				default:
-				{
-					System.err.println("Error: " + uefCommandQueue.peek().getType()
-									   + " found within problem environment!");
-					System.exit(-1);
-					break;
-				}
+				// get answers for the problem
+				answers = processAnswers();
+				break;
+			}
+			case label: {
+				label = processLabel();
+				break;
+			}
+			case ref: {
+				refs.add(processRef());
+				break;
+			}
+			case endProblem: {
+				done = true;
+				// poll the /end{problem command off the queue
+				uefCommandQueue.poll();
+				break;
+			}
+			default: {
+				System.err.println("Error: " + uefCommandQueue.peek().getType()
+						+ " found within problem environment!");
+				System.exit(-1);
+				break;
+			}
 			}
 		}
 
-		if (answers != null)
-		{
+		if (answers != null) {
 			// get the file content from beginning of '/begin{block}'
 			// to the end of '/end{block}'.
 			content = uefCharHandler.getContent(startSource, endSource);
 
 			// Create the source object
-			SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
+			SourceIF source = sourceFactory.newSource(uefCharHandler
+					.getFileName());
 			source.setStartLine(uefCharHandler.getLineNumber(startSource));
 			source.setLastLine(uefCharHandler.getLineNumber(endSource));
 			source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
 			source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
 			source.addText(content);
 
-			ProblemIF problem = examFactory.newProblem(topic, label, source, answers);
+			ProblemIF problem = examFactory.newProblem(topic, label, source,
+					answers);
 
 			// Add references from answers
 
-			for (int i = 0; i < this.answerReferences.size(); i++)
-			{
+			for (int i = 0; i < this.answerReferences.size(); i++) {
 				refs.add(this.answerReferences.get(i));
 			}
 
 			this.answerReferences.clear();
 
-			if (refs.size() != 0)
-			{
+			if (refs.size() != 0) {
 				Iterator<String> i = refs.iterator();
-				while (i.hasNext())
-				{
+				while (i.hasNext()) {
 					String r = i.next();
-					if (this.references.containsKey(r))
-					{
+					if (this.references.containsKey(r)) {
 						this.references.get(r).add(problem);
-					}
-					else
-					{
+					} else {
 						List<ExamElementIF> list = new ArrayList<ExamElementIF>();
 						list.add(problem);
 						this.references.put(r, list);
@@ -603,9 +543,7 @@ class UEFCommandHandler
 				}
 			}
 			return problem;
-		}
-		else
-		{
+		} else {
 			throw new Exception();
 		}
 
@@ -614,16 +552,12 @@ class UEFCommandHandler
 	/**
 	 * Process a \documentclass{} command.
 	 */
-	boolean processDocumentclass()
-	{
+	boolean processDocumentclass() {
 		UEFCommand command = uefCommandQueue.poll();
 		String classType = command.getArgument(0);
-		if (classType.equals("exam"))
-		{
+		if (classType.equals("exam")) {
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
@@ -631,8 +565,7 @@ class UEFCommandHandler
 	/**
 	 * Process a \label command.
 	 */
-	String processLabel()
-	{
+	String processLabel() {
 		UEFCommand command = uefCommandQueue.poll();
 		return command.getArgument(0);
 	}
@@ -640,8 +573,7 @@ class UEFCommandHandler
 	/**
 	 * Process a \ref command.
 	 */
-	String processRef()
-	{
+	String processRef() {
 		UEFCommand command = uefCommandQueue.poll();
 		return command.getArgument(0);
 	}
@@ -650,92 +582,86 @@ class UEFCommandHandler
 	 * Starts the processing of all commands in the command queue. Should be
 	 * called by another class.
 	 */
-	ExamIF process() throws EOFException, Exception
-	{
+	ExamIF process() throws EOFException, Exception {
 		boolean isExamDocumentclass = false;
 		int startOfPreamble = 0;
 		int endOfPreamble = 0;
-		while (!uefCommandQueue.isEmpty())
-		{
-			switch (uefCommandQueue.peek().getType())
-			{
-				case beginDocument:
-				{
-					if (!isExamDocumentclass)
-					{
-						System.err.println("Error: " + uefCommandQueue.peek().getType()
-										   + " found when the documentclass is net set to exam!");
-						System.exit(-1);
-					}
-
-					// retrieve the preamble
-					endOfPreamble = uefCommandQueue.peek().getStartPosition();
-					String content = uefCharHandler.getContent(startOfPreamble, endOfPreamble);
-
-					// process to make an ExamIF
-					ExamIF exam = processDocument();
-
-					// Create the source object for preamble
-					SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
-					source.setStartLine(uefCharHandler.getLineNumber(startOfPreamble));
-					source.setLastLine(uefCharHandler.getLineNumber(endOfPreamble));
-					source.setStartColumn(uefCharHandler.getColumnNumber(startOfPreamble));
-					source.setLastColumn(uefCharHandler.getColumnNumber(endOfPreamble));
-					source.addText(content);
-
-					// set the preamble
-					exam.setPreamble(source);
-
-					// setting uses relationships
-					Iterator<String> i = this.references.keySet().iterator();
-					while (i.hasNext())
-					{
-						String label = i.next();
-						List<ExamElementIF> e = this.references.get(label);
-						ExamElementIF usedElement = null;
-
-						// FIXME: This try is work around to Ticket 74, but it
-						// should be removed once the ticket is closed
-						try
-						{
-							usedElement = exam.elementWithLabel(label);
-						}
-						catch (Exception ex)
-						{
-						}
-
-						if (usedElement == null)
-						{
-							System.err.println("Error: " + "element with label " + label + "is not found");
-						}
-						else
-						{
-							for (int j = 0; j < e.size(); j++)
-							{
-								exam.declareUse(e.get(j), usedElement);
-							}
-						}
-					}
-
-					// return the ExamIF
-					return exam;
-				}
-				case documentclass:
-				{
-					startOfPreamble = uefCommandQueue.peek().getEndPosition();
-					isExamDocumentclass = processDocumentclass();
-					break;
-				}
-				default:
-				{
-					System.err.println("Error: " + uefCommandQueue.peek().getType()
-									   + " found outside of document environment!");
+		while (!uefCommandQueue.isEmpty()) {
+			switch (uefCommandQueue.peek().getType()) {
+			case beginDocument: {
+				if (!isExamDocumentclass) {
+					System.err
+							.println("Error: "
+									+ uefCommandQueue.peek().getType()
+									+ " found when the documentclass is net set to exam!");
 					System.exit(-1);
-					break;
 				}
+
+				// retrieve the preamble
+				endOfPreamble = uefCommandQueue.peek().getStartPosition();
+				String content = uefCharHandler.getContent(startOfPreamble,
+						endOfPreamble);
+
+				// process to make an ExamIF
+				ExamIF exam = processDocument();
+
+				// Create the source object for preamble
+				SourceIF source = sourceFactory.newSource(uefCharHandler
+						.getFileName());
+				source.setStartLine(uefCharHandler
+						.getLineNumber(startOfPreamble));
+				source.setLastLine(uefCharHandler.getLineNumber(endOfPreamble));
+				source.setStartColumn(uefCharHandler
+						.getColumnNumber(startOfPreamble));
+				source.setLastColumn(uefCharHandler
+						.getColumnNumber(endOfPreamble));
+				source.addText(content);
+
+				// set the preamble
+				exam.setPreamble(source);
+
+				// setting uses relationships
+				Iterator<String> i = this.references.keySet().iterator();
+				while (i.hasNext()) {
+					String label = i.next();
+					List<ExamElementIF> e = this.references.get(label);
+					ExamElementIF usedElement = null;
+
+					// FIXME: This try is work around to Ticket 74, but it
+					// should be removed once the ticket is closed
+					try {
+						usedElement = exam.elementWithLabel(label);
+					} catch (Exception ex) {
+					}
+
+					if (usedElement == null) {
+						System.err.println("Error: " + "element with label "
+								+ label + "is not found");
+					} else {
+						for (int j = 0; j < e.size(); j++) {
+							exam.declareUse(e.get(j), usedElement);
+						}
+					}
+				}
+
+				// return the ExamIF
+				return exam;
+			}
+			case documentclass: {
+				startOfPreamble = uefCommandQueue.peek().getEndPosition();
+				isExamDocumentclass = processDocumentclass();
+				break;
+			}
+			default: {
+				System.err.println("Error: " + uefCommandQueue.peek().getType()
+						+ " found outside of document environment!");
+				System.exit(-1);
+				break;
+			}
 			}
 		}
-		System.err.println("Error: end of document before \begin{document} found!");
+		System.err
+				.println("Error: end of document before \begin{document} found!");
 		System.exit(-1);
 		return null;
 	}
