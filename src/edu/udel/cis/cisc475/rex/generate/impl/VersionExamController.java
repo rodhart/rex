@@ -79,7 +79,9 @@ public class VersionExamController
 	 * @return
 	 * 				-An AnswerIF[] with randomized non-FixedAnswers from the
 	 * 				 answer set of the ProblemIF taken as input.
-	 * @throws Exception 
+	 * @throws Exception
+	 * 				-If theRandomizer.choose() fails (or a logic error causes an invalid data set
+	 * 				 to be randomized).
 	 */
 	
 	public AnswerIF[] randomizeAnswers(ProblemIF inputProblem) throws Exception
@@ -161,15 +163,23 @@ public class VersionExamController
 		this.subset.putAll(this.mec.getRequiredProblems());
 	}
 	
+
 	/**
 	 * Adds to the VersionExamController a number of problems from
 	 * the MasterExamController's GroupConstraintContainers specified
 	 * by each GroupConstraintContainer's internal set of ProblemIFs,
 	 * and specified number of ProblemIFs required.
-	 * @throws Exception 
+	 * 	
+	 * @throws RexUnsatisfiableException
+	 * 						-If a RequiredProblemConstraintIF or conflicting
+	 * 						 GroupConstraintIFs preclude a GroupConstraintIF from
+	 * 						 being fulfilled.
+	 * @throws Exception
+	 * 						-If theRandomizer.choose() fails (or a logic error 
+	 * 						 causes an invalid data set to be randomized).
 	 */
 	
-	public void satisfyConstraints() throws Exception
+	public void satisfyConstraints() throws RexUnsatisfiableException, Exception
 	{
 		Iterator<TopicOrganizer> TOIterator =  this.mec.getTheTOs().values().iterator();
 		TopicOrganizer theTO = null;
