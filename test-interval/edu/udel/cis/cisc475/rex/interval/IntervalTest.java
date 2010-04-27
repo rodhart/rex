@@ -11,8 +11,10 @@ import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
 
 /**
+ * Tests the interval class to ensure we get the desired 
+ * results given different values.
  * 
- * @author aplatt
+ * @author Anthony Platt (aplatt)
  *
  */
 
