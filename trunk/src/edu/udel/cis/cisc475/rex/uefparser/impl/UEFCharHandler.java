@@ -117,11 +117,7 @@ class UEFCharHandler {
 	 * 
 	 */
 	Character read() throws EOFException {
-		if (position < fileContents.length()) {
-			return fileContents.charAt(position);
-		} else {
-			throw new EOFException();
-		}
+		return read(this.position);
 	}
 
 	/**
@@ -224,13 +220,7 @@ class UEFCharHandler {
 	 *            the position to get the column number at.
 	 */
 	int getColumnNumber(int position) {
-		position = position - 1;
-		int columnNumber = 1;
-		while (position > -1 && fileContents.charAt(position) != '\n') {
-			columnNumber++;
-			position--;
-		}
-		return columnNumber;
+		return position - positionToLineNumberMap.floorKey(position) + 1;
 	}
 
 	/**
