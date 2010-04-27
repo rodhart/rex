@@ -5,9 +5,13 @@ import java.util.Collection;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
-/*
- * @author team 2
+/**
+ * @author Anthony Platt (aplatt)
+ * @author Jeremy Verchick (verchick)
  *
+ * ConfigIF is the interface for the Config class. 
+ * It provides a list of the class's public methods.
+ * 
  */
 
 public interface ConfigIF {
