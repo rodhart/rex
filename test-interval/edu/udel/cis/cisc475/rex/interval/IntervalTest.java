@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
@@ -22,9 +23,10 @@ public class IntervalTest {
 
 	/**
 	 * Tests that low() returns the correct low value
+	 * @throws RexUnsatisfiableException 
 	 */
 	@Test
-	public void testLow() {
+	public void testLow() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(true, 5.0, true, 10.0);
 		
@@ -33,9 +35,10 @@ public class IntervalTest {
 
 	/**
 	 * Tests that strictLow() returns the correct strictLow value
+	 * @throws RexUnsatisfiableException 
 	 */
 	@Test
-	public void testStrictLow() {
+	public void testStrictLow() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(true, 5.0, true, 10.0);
 		IntervalIF I2 = intervalFactory.interval(false, 5.0, true, 10.0);
@@ -46,9 +49,10 @@ public class IntervalTest {
 
 	/**
 	 * Tests that high() returns the correct high value
+	 * @throws RexUnsatisfiableException 
 	 */
 	@Test
-	public void testHigh() {
+	public void testHigh() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(true, 5.0, true, 10.0);
 		
@@ -57,9 +61,10 @@ public class IntervalTest {
 
 	/**
 	 * Tests that strictHigh() returns the correct strictHigh value
+	 * @throws RexUnsatisfiableException 
 	 */
 	@Test
-	public void testStrictHigh() {
+	public void testStrictHigh() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		IntervalIF I2 = intervalFactory.interval(true, 5.0, false, 10.0);
@@ -70,9 +75,10 @@ public class IntervalTest {
 
 	/**
 	 * Tests that the interval constructor sets the correct values
+	 * @throws RexUnsatisfiableException 
 	 */
 	@Test
-	public void testInterval() {
+	public void testInterval() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
@@ -85,9 +91,10 @@ public class IntervalTest {
 	/**
 	 * Tests that contains() returns whether the value is inside the interval
 	 * depending on the constraints set by the constructor.
+	 * @throws RexUnsatisfiableException 
 	 */
 	@Test
-	public void testContains() {
+	public void testContains() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
