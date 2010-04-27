@@ -35,10 +35,23 @@ public class OutputFactoryTest {
 	}
 
 	/**
-	 * Test method for newExamWriter.
+	 * Test method for outputFactory.
 	 */
 	@Test
 	public void testOutputFactory() {
+		
+		OutputFactory OF = outputFactory;
+		
+		boolean OFExists = OF.equals(null);
+		
+		assertFalse(OFExists);
+	}
+	
+	/**
+	 * Test method for comparing outputFactory.
+	 */
+	@Test
+	public void testCompareOutputFactory() {
 		
 		OutputFactory OF1 = outputFactory;
 		
@@ -81,6 +94,7 @@ public class OutputFactoryTest {
 		
 		boolean ewCompare = ewIF1.equals(ewIF2);
 		
+		//Unsure on why this is false?
 		assertTrue(ewCompare);
 	}
 	
@@ -116,6 +130,8 @@ public class OutputFactoryTest {
 		
 		boolean akfCompare = akf1.equals(akf2);
 		
+		
+		//Unsure on why this is false?
 		assertTrue(akfCompare);
 	}
 	
