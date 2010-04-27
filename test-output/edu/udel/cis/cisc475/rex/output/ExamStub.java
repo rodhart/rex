@@ -16,7 +16,7 @@ import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 
 public class ExamStub implements ExamIF {
 	SourceFactoryIF sourceFactory = new SourceFactory();
-	ExamFactoryIF examFactoryStub = new ExamFactoryStub();
+//	ExamFactoryIF examFactoryStub = new ExamFactoryStub();
 	ExamFactoryIF examFactory = new ExamFactory();
 	
 
@@ -36,6 +36,11 @@ public class ExamStub implements ExamIF {
 		return preamble;
 	}
 	
+	
+	
+	
+	
+	
 	@Override
 	public SourceIF frontMatter() {
 		SourceIF frontMatter = sourceFactory.newSource("frontmatter.txt");
@@ -54,23 +59,10 @@ public class ExamStub implements ExamIF {
 		return finalBlock;
 	}
 
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	@Override
 	public ExamElementIF element(int i) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
