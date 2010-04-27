@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import edu.udel.cis.cisc475.rex.err.RexException;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
@@ -93,7 +94,7 @@ public class BlockTest {
 	}
 	
 	@Test
-	public void testGetTopic(){
+	public void testGetTopic() throws RexException {
 		ExamIF exam = examFactory.newGeneratedExam();
 		
 		exam.addElement(block);
