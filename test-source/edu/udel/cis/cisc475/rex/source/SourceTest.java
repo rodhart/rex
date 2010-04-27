@@ -300,4 +300,18 @@ public class SourceTest {
 		
 		assertTrue(result);
 	}
+	
+	@Test
+	public void testAdditionalConstructor() {
+		String filename = "moo";
+		
+		SourceFactoryIF sourceFactory = new SourceFactory();
+		SourceIF S = sourceFactory.newSource(filename, 1, 2, 3, 4);
+		
+		assertEquals(S.filename(), filename);
+		assertEquals(S.startLine(), 1);
+		assertEquals(S.startColumn(), 2);
+		assertEquals(S.lastLine(), 3);
+		assertEquals(S.lastColumn(), 4);
+	}
 }
