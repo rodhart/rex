@@ -8,6 +8,6 @@ public class Configs {
 	public static ConfigFactoryIF newConfigFactory() {
 //		return new ConfigFactoryStub();
 // this class should not use stubs
-		return new ConfigFactory();
+		return null;
 	}
 }

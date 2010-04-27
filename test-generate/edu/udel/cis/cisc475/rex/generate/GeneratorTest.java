@@ -21,6 +21,7 @@ import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
 import edu.udel.cis.cisc475.rex.config.generatestubs.ConfigFactoryStub;
 import edu.udel.cis.cisc475.rex.config.impl.Config;
+import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
@@ -91,7 +92,7 @@ public class GeneratorTest {
 			intervalFactory = new IntervalFactoryStub();
 			sourceFactory = new SourceFactoryStub();
 		} else {
-			configFactory = Configs.newConfigFactory();
+			configFactory = new ConfigFactory();
 			masterFactory = new ExamFactory();
 			answerKeyFactory = Keys.newAnswerKeyFactory();
 			intervalFactory = new IntervalFactory(); //Intervals not made yet
