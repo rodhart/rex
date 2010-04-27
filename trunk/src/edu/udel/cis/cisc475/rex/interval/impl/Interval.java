@@ -68,6 +68,9 @@ public class Interval implements IntervalIF
 	Interval(boolean strictLow, Double low,
 			boolean strictHigh, Double high)
 			{
+				if(low > high)
+					System.err.print("Warning: Interval low was greater than high");
+				
 				this.strictLow = strictLow;
 				this.strictHigh = strictHigh;
 				this.low = low;
