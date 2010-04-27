@@ -1,6 +1,46 @@
 // Author: Tim Armstrong
 
+/*
 
+Beta comments:
+
+I have the core of the model implemented, and the skeleton of a more detailed model.  I have
+commented out a lot of fields that are irrelevant to my model presently, in order for the diagram
+to be simpler.
+
+The three commands to run are the two shows and the check just below.
+
+The first show predicate just illustrates, in the first instance, the MasterExam having a linked list
+of Problem1, Problem0, and Block, while the GeneratedExam just has the Block.
+
+The second show predicate, in the first two instances, illustrates the functionality
+of my saying that there exists a RexUnsatisfiableException iff a required problem constraint is 
+unsatisfiable.  (I have not gotten to group constraints.)  See the fact requiredProblemUnsatisfiable
+below.  To navigate the diagrams, follow the links between the RequiredProblemConstraints, their labels,
+and their associated ExamElements.
+
+check noDuplicatesInGenerated is an assertion that there are no repeats of an ExamElement in any
+generated exam.  *Presently* my model does *not* insure that there are no duplicates.  Therefore
+the check comes up with a counter-example.  To navigate the diagram, see NonEmptyNodes 0 and 2 both
+pointing to the same figure.  (We don't want any kind of ExamElement duplicated.)
+
+*/
+
+pred show{}
+
+run show for 6 but exactly 1 GeneratedExam, exactly 2 Problem
+
+//run show for 4 but exactly 2 RequiredProblemConstraint,  exactly 2 Problem
+
+//check noDuplicatesInGenerated for 5
+
+
+
+
+
+//*******************************
+//** Data structures and related facts **
+//*******************************
 
 one sig Generator
 {
@@ -8,7 +48,7 @@ one sig Generator
 	config: one Config,
 	generated: set GeneratedExam
 }
-// These seem to be necessary.  They say that all MasterExams, Configs, and GeneratedExams belong to the Generator.
+// These facts say that all MasterExams, Configs, and GeneratedExams belong to the Generator.
 fact masterInGenerator {
 	all m: MasterExam | some g: Generator | m in g.master
 }
@@ -31,7 +71,7 @@ abstract sig Exam {
 }
 // We do not have different classes for the master and generated exams, but we can always tell
 // the difference.  Therefore I make them subclasses of Exam.
-one sig MasterExam extends Exam {}
+sig MasterExam extends Exam {}
 
 sig GeneratedExam extends Exam {}
 
@@ -43,8 +83,8 @@ sig GeneratedExam extends Exam {}
 
 // A linked list of ExamElements:
 abstract sig ElementList {}
-sig EmptyList extends ElementList {}
-sig NonEmptyList extends ElementList {
+sig EmptyNode extends ElementList {}
+sig NonEmptyNode extends ElementList {
 	element: one ExamElement,
 	rest: one ElementList
 }
@@ -55,23 +95,10 @@ fact listInExam { // no lists occur outside of an Exam
 fact listNoCycles{ //there are no cycles in a list
 	all ls:ElementList | not ls in ls.^rest
 }
-
-
 fact listsHaveOwnNodes { // each Exam has its completely own list nodes
-		all  ex, ex': Exam, ls: ElementList | (ex != ex' and ls in ex.elements.*rest) implies not ls in ex'.elements.*rest
+		all  ex, ex': Exam, ls: ElementList | (ex != ex' and ls in ex.elements.*rest)
+				implies not ls in ex'.elements.*rest
 }
-
-/*  Old and incorrect:
-fact listsOwnNodes { // each Exam has its completely own list nodes
-		all  ex, ex': Exam, ls: ElementList | ex != ex' and nodeInList[ls, ex.elements] implies not nodeInList[ls, ex'.elements]
-}
-// asks if List ls is in another list, helper for listsOwnNodes
-pred nodeInList [ls, ls': ElementList] {
-	ls in ls'.^rest
-}
-*/
-
-
 
 
 
@@ -84,14 +111,13 @@ fact allElementsInMaster { // the MasterExam contains all elements
 
 // fields not complete
 one sig Config {
-	// seed: one Int, // Commented out for now for simpler diagram.  Re-insert!
-	constraints: set Constraint   // There is Ticket #52, unresolved as of 4/16, that questions whether the constraints
-														// should be an *oredered* list.
+	// seed: one Int
+	constraints: set Constraint
 }
 
 
 
-// fields complete.  Commented out for now for simpler diagram.  Re-insert!
+// fields complete
 abstract sig Constraint {
 	//source: one Source,
 	//points: one Int  // maybe would want real number?
@@ -104,22 +130,18 @@ fact { // all constraints are in the Config
 sig GroupConstraint extends Constraint {
 	numProblems: one Int,
 	category: one Category,
-//	interval: one Interval
+	interval: one Interval
 }
+
 // A line in the ECF might require several problems, but they break down into individual requests.
-// That's all I model
+// That's all I model.
 sig RequiredProblemConstraint extends Constraint {
-	problemName: one Label  //Commented out for now for simpler diagram.  Re-insert!
+	problemName: one Label
 }
-/* from when I permitted > 1 problem request per RequiredProblemConstraint
-fact { // it is syntactically incorrect for a required request not to ask for any problems
-	all r: RequiredProblemConstraint | #r.problemNames >= 1 
-}
-*/
 
 
-//Commented out for now for simpler diagram.  Re-insert!
-/*
+
+
 // Booleans are difficult to implement in Alloy (see Jackson pg 136).
 // Therefore I omit here the Boolean values for the range being / not being inclusive.
 // For now they have no real bearing on the model.  I also omit the possibilities of infinity values.
@@ -130,12 +152,13 @@ sig Interval {
 fact {
 	all i: Interval | some u: univ | i in u
 }
-*/
+
 
 
 
 abstract sig ExamElement {
-	label: one Label // Just say "one"
+	label: one Label // FOR NOW I'm just saying every exam element has a label.  It is true that Team 3
+							  // gives integer identifiers to every ExamElement.
 }
 
 // all fields accounted for
@@ -146,7 +169,7 @@ sig Problem extends ExamElement {
 	//points: lone Int,   // lone because will be null in master exam.
 	// source: one Source,   // not important for model!
 	//difficulty: one Int,   //actually REAL NUMBER, but it doesn't matter for the Alloy model
-	answers: set Answer   // May be 0 if not a multiple choice.
+	//answers: set Answer   // May be 0 if not a multiple choice.
 }
 
 
@@ -158,16 +181,14 @@ sig OtherProblem extends Problem {} // no answers field
 */
 
 
-
+/*
 // fields not complete
 sig Answer {}
-
-
 
 fact answerInProblem {
 	all a: Answer | some p: Problem | a in p.answers
 }
-
+*/
 
 
 
@@ -195,32 +216,29 @@ fact categoryNotFreeFloating{
 	(some p: Problem | c in p.category) or
 	(some g: GroupConstraint | c in g.category)
 }
-// Doesn't work for some reason:
-//fact { // c belongs to *something* (it's difficult to be specific)
-//	all c: Category | some u: univ | u != c and c in u
-//}
 
 
-
-/* ACTUALLY, don't need Source for model
-sig Source {}
-fact sourceNotFreeFloating {
-	all s: Source |
-	(some e: ExamElement | s in e.source) or
-	(some c: Constraint | s in c.source)
-	// or Exam preamble, frontMatter, but I'm leaving these out of the model
+// Says that there is a RexUnsatisfiableException iff a RequiredProblemConstraint requests by label
+// a problem that doesn't exist in the MasterExam.
+lone sig RexUnsatisfiableException {}
+fact requiredProblemUnsatisfiable {
+	one RexUnsatisfiableException iff some r: RequiredProblemConstraint | all m: MasterExam | r.problemName not in m.elements.*rest.element.label
+	// old attempt: //some RexUnsatisfiableException iff some r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
+		// TODO: OR there is a group constraint that is unsatisfiable
 }
-// Does not work:
-//fact { // s belongs to *something*
-//	all s: Source | some u: univ | u != s  and s in u
+//fact forceUnsatisfiableExceptionToExist {
+//	all r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
 //}
-*/
+//fact forceUnsatisfiableExceptionNotToExist {
+//	all r: RequiredProblemConstraint | some p: Problem | r.problemName = p.label
+//}
 
 
 
-//**************************
+
+//********************
 //** Miscellaneous facts **
-//**************************
+//********************
 
 
 // A Problem may refer to a Block only of the same category.
@@ -240,6 +258,7 @@ fact usedBlockNotAppended {
 
 fact finalBlockSameForAll{
 //TODO
+// attempts:
 //	all m: MasterExam | some m.finalBlock implies (all g: GeneratedExam | g.finalBlock = m.finalBlock)
 //	all m: MasterExam | no m.finalBlock implies (all g: GeneratedExam | no g.finalBlock)
 }
@@ -249,15 +268,16 @@ fact finalBlockSameForAll{
 // If a block is not required by any problem occurring in the generated exam, 
 // and it is not appended, then that block will not occur in the exam.
 fact doNotPrintUnusedBlock {
+// TODO
 // not right:	all b: Block, g: GeneratedExam, p: Problem | (b not in g.finalBlock) and (b not in p.block)  
 //		  implies b not in g.elements
-// TODO
 }
 
 
 
-/* Only partially solved
+/* SOLVED probably sufficiently:
 Requirement: If the answers environment is used, it must include at least one answer.  The maximum number of answers is 26.
+
 For the purposes of the Alloy model, all this says is that if the # of answers = 0, it is a non-multiple-choice problem.
 And then if it is a multiple-choice, it follows that there is at least one answer.
 But for the upper bound:
@@ -275,25 +295,13 @@ is bigger than the maximum integer 7"
 
 
 
-
-
 // REX guarantees that if given the same arguments and seed twice, it will produce the exact same outputs.
+// ...though, what if the UEF changes?  I will possibly issue a ticket on that matter soon.
 fact seedDeterminesOutput {
-	// not right: all g1, g2: GeneratedExam | g1.config.seed = g2.config.seed implies g1 = g2   // is this == or .equals???
 	//TODO
 }
 
 
-
-
-
-
-
-
-//ECF-oriented:
-//  The first <integer> is a positive integer: it is the number of problems satisfying the constraint that
-// should be included.
-//assert?? sumConstraintProblems {
 
 
 
@@ -307,16 +315,17 @@ fact atLeastOneCorrect {
 //TODO
 }
 
-//[fixed]: signifying that this answer must appear in its given position in the answer sequence
+//"fixed": signifying that this answer must appear in its given position in the answer sequence
 fact fixedAtCorrectPosition {
 //TODO
 }
 
 
 
-// Need an ordered list:
 
-// Say that in the generated exams, problems group into categories.  If our model included a Category class
+
+
+// Says that in the generated exams, problems group into categories.  If our model included a Category class
 // in the hierarchy, we could make this an assertion rahter than a fact: ie, we could say that this constraint
 // would logically follow from our model.
 fact generatedIsGrouped {
@@ -332,89 +341,18 @@ fact blockWithQuestions {
 // Says front matter in document environment must appear before anything else.
 fact frontMatterFirst {
 //TODO
+// need to test: all g: GeneratedExam, m: MasterExam | g.elements.element = m.frontMatter
+
 }
 
 
 
-
-// fact regarding probability?
-
-
-
-
+// IMPOSSIBLE to model:
 //A problem refers to a figure if a \ref to the figure's label occurs anywhere in that problem's
 // environment. If at least one problem referring to a figure A is included in a generated exam,
 // the figure will also be included automatically.
 // Alloy probably cannot handle this constraint in that it probably does not have good string abilites.
 
-
-/*
-lone sig RequiredProblemError {}
-
-fact errorIfReqConstInvalid {
-	one RequiredProblemError iff some r: RequiredProblemConstraint | all m: MasterExam | r.problemName not in m.elements.*rest.element.label
-//	some r: RequiredProblemConstraint  implies one Error
-}
-*/
-
-
-
-//******************
-//*** Assertions ***
-//******************
-
-
-// Tries to prove that, based on the model, there can be no duplicate questions in any single GeneratedExam.
-// The number of nodes in the list = total number of elements, + 1 for the empty list.  If any of the elements
-// are *duplicated*, the count will be less.
-assert noDuplicatesInGenerated {
-	all g: GeneratedExam | #(g.elements.*rest) = #(g.elements.*rest.element) + 1
-}
-//check noDuplicatesInGenerated for 5
-
-
-
-// If one Exam contains a final block, all do. 
-// Should follow from how generated axams are produced.
-assert finalBlockForAll {
-	all e, e': Exam | #e.finalBlock = #e'.finalBlock
-}
-
-
-
-
-
-/*  look at, maybe good
-assert validReqConstraintInAll { // if there is a valid RequiredProblemConstraint. this problem is in all GeneratedExams
-	all r: RequiredProblemConstraint, m: MasterExam | r.problemName in m.elements.*rest.element.label
-		implies all g: GeneratedExam | r.problemName in g.elements.*rest.element.label
-}
-*/
-
-
-
-// if the Constraint is fulfillable from the MasterExam, then there exist satisfying problems in the generated exams
-assert constraintFulfilled {
-// TODO
-}
-
-// if the constraint is possible to fill, there exists a ConstraintError
-assert impossibleConstraintRejected {
-// TODO
-}
-
-
-// 2010 04 20: interesting to say # problems in MasterExam = total # problems?  Follows trivialy from allElementsInMaster
-assert {
-//TODO
-}
-
-
-//*************************
-//** Predicates to run? **
-//*************************
-
-// 2010 04 20
 
 // I assume that we checked for this possibility!
 fact elementsDoNotHaveIdenticalLabels
@@ -422,18 +360,6 @@ fact elementsDoNotHaveIdenticalLabels
 	all e, e': ExamElement | e != e' implies e.label != e'.label
 }
 
-
-// Use only if needed:
-// assume ONE OF THESE to be true for test purposes here:
-//fact allRequiredProblemsAreInMaster {
-//	all r: RequiredProblemConstraint | some p: Problem | r.problemName = p.label
-//}
-// OR: NOT WORKING!:
-//fact someRequiredProblemNotInMaster {
-//		some r: RequiredProblemConstraint | some p:Problem| l: Label | r.problemName = p.label
-//		not all r: RequiredProblemConstraint | some p: Problem | r.problemName = p.label
-//		all r: RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
-//}
 
 
 // Just assume we have this check implemented
@@ -443,23 +369,65 @@ fact doNotRequestSameProblemTwice
 }
 
 
+//*************
+//** Assertions **
+//*************
 
 
-//2010 04 21:
+// Tries to prove that, based on the model, there can be no duplicate questions in any single GeneratedExam.
+// The number of nodes in the list = total number of elements, + 1 for the empty list.  If any of the elements
+// are *duplicated*, the count will be less.  WORKS!  It's round-about since recursion is difficult in Alloy.
+assert noDuplicatesInGenerated {
+	all g: GeneratedExam | #(g.elements.*rest) = #(g.elements.*rest.element) + 1
+}
+
+
+
+// If one Exam contains a final block, all do. 
+// Should follow from how generated axams are produced.
+assert finalBlockForAll {
+	//TODO: need to test
+	//all e, e': Exam | #e.finalBlock = #e'.finalBlock
+}
+
+
+
+
+assert validReqConstraintInAll { // if there is a valid RequiredProblemConstraint. this problem is in all GeneratedExams
+	// TODO: need to test
+//	all r: RequiredProblemConstraint, m: MasterExam | r.problemName in m.elements.*rest.element.label
+//		implies all g: GeneratedExam | r.problemName in g.elements.*rest.element.label
+}
+
+
+
+
+//********************
+//** MAIN CODE TO DO **
+//********************
+
+// if the Constraint is satisfiable from the MasterExam, then there exist satisfying problems in the generated exams
+assert constraintFulfilled {
+// TODO
+}
+
+// if the constraint is possible to fill, there exists a RexUnsatisfiableException
+assert impossibleConstraintRejected {
+// TODO
+}
+
+// end main code todo
+
+
+
+
+
+
+//*****************************************
+//** beginning of implementing Team 3's approach **
+//*****************************************
 
 /*
-sig SatisfiedContainer {
-	category: one Category,
-	requiredProblems: set Problem,
-	groupConstraints: set ConstraintContainer
-}
-
-sig ConstraintContainer {
-	numProblems: one Int,
-	satisfiedProblems: set Problem
-}
-*/
-
 sig SatisfiedContainer {
 	category: one Category,
 	requiredProblems: one ElementList,
@@ -473,61 +441,9 @@ sig ConstraintContainer {
 
 
 
-
-
-lone sig RequiredProblemUnsatisfiableError {}
-fact isReqProblemUnsatError{
-	some RequiredProblemUnsatisfiableError iff some r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
-	// all p are in the MasterExam as specified elsewhere
-}
-//fact forceErrorToExist {
-//	all r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
-//}
-//fact forceErrorNotToExist {
-//	all r: RequiredProblemConstraint | some p: Problem | r.problemName = p.label
-//}
-
-
-/* DO LATER:
-lone sig GroupProblemUnsatisfiableError {}
-fact isGroupProblemUnsatError{
-	some GroupProblemUnsatisfiableError iff
-		
-		some g:GroupConstraint | not all    //not some p: Problem | r.problemName = p.label
-	// all p are in the MasterExam as specified elsewhere
-}
-*/
-
-
-
 pred isProblemAlreadyIncluded [p: Problem, s: SatisfiedContainer] {
 	p in s.requiredProblems.*rest.element or p in s.groupConstraints.satisfiedProblems.*rest.element
 }
-/*
-pred addToGenerated {
-	all 
-
-	isProblemAlreadyIncluded
-}
-*/
-
-//run isProblemAlreadyIncluded for 5 but exactly 2 Problem
-
-
-//fun getAllSatisfyingSingleGroupConstraint (g) {
-//}
-
-
-//pred fulfillGroupConstraints(g: GroupConstraint, s, s': SatisfiedContainer, c, c': ConstraintContainer) {
-//	#s = 0
-//	#c = 0
-//	s'.groupConstraints.satisfiedProblems = 
-//}
-
-
-// end 2010 04 21
-
-//run fulfillGroupConstraints for 3
 
 
 pred generateExams (g, g': GeneratedExam, r: RequiredProblemConstraint, m, m': MasterExam) {
@@ -543,24 +459,4 @@ pred generateExams (g, g': GeneratedExam, r: RequiredProblemConstraint, m, m': M
 //	(#g'.elements.*rest.element = g'.elements.*rest.element + (r.)
 }
 
-//run generateExams for 7
-//run generateExams for 3 but exactly 2 GeneratedExam, exactly 1 MasterExam
-
-
-//end 2010 04 20
-
-
-
-
-
-pred show{}
-
-// PROBLEM: need to get it so that can specify exactly 3 of each subclass of ExamElement!
-
-//run show for 5 but exactly 1 GeneratedExam, exactly 2 Problem, exactly 2 RequiredProblemConstraint,
-//	exactly 0 GroupConstraint, exactly 0 Answer
-
-//run show for 7 but exactly 1 GeneratedExam, exactly 3 NonEmptyList, exactly 3 ExamElement, exactly 0 Answer, exactly 1 RequiredProblemConstraint // not good: modified!
-run show for 4 but exactly 1 RequiredProblemConstraint, exactly 2 Problem
-
-//check noDuplicatesInGenerated for 5 // GOOD!
+*/
