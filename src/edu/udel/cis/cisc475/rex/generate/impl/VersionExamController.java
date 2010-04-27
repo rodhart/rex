@@ -79,9 +79,10 @@ public class VersionExamController
 	 * @return
 	 * 				-An AnswerIF[] with randomized non-FixedAnswers from the
 	 * 				 answer set of the ProblemIF taken as input.
+	 * @throws Exception 
 	 */
 	
-	public AnswerIF[] randomizeAnswers(ProblemIF inputProblem)
+	public AnswerIF[] randomizeAnswers(ProblemIF inputProblem) throws Exception
 	{
 		AnswerIF[] theAnswers = inputProblem.answers();
 		Collection<AnswerIF> beforeRandomization = new ArrayList<AnswerIF>();
@@ -165,16 +166,10 @@ public class VersionExamController
 	 * the MasterExamController's GroupConstraintContainers specified
 	 * by each GroupConstraintContainer's internal set of ProblemIFs,
 	 * and specified number of ProblemIFs required.
-	 * 
-	 * @throws RexUnsatisfiableException
-	 * 				-If the specified number of ProblemIFs required
-	 * 				 is less than the narrowly-scoped Collection of
-	 * 				 ProblemIFs remaining (if required problems or
-	 * 				 overlapping GroupConstraintIFs preclude a 
-	 * 				 GroupConstraintIF from being satisfied).
+	 * @throws Exception 
 	 */
 	
-	public void satisfyConstraints() throws RexUnsatisfiableException
+	public void satisfyConstraints() throws Exception
 	{
 		Iterator<TopicOrganizer> TOIterator =  this.mec.getTheTOs().values().iterator();
 		TopicOrganizer theTO = null;
@@ -288,9 +283,10 @@ public class VersionExamController
 	 *     of BlockContainers to be processed. Repeat until all BlockContainers in the TopicContainer
 	 *     have been processed, then remove the TopicContainer from the set of TopicContainers
 	 *     to be processed.
+	 * @throws Exception 
 	 */
 	
-	public void fillExam(ExamIF versionExam, AnswerKeyIF versionAnswerKey)
+	public void fillExam(ExamIF versionExam, AnswerKeyIF versionAnswerKey) throws Exception
 	{
 		HashMap figureBlacklist = new HashMap();
 		HashMap problemBlacklist = new HashMap();
