@@ -7,7 +7,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 /**
  * Interface to the Universal Exam Parser (UEF).
  * 
- * @author Team 4
+ * @author Ahmed El-Hassany
  * 
  */
 public interface UEFParserIF {
