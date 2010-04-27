@@ -4,11 +4,11 @@ import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /**
- * @author Anthony Platt (aplatt)
- * @author Jeremy Verchick (verchick)
- *
  * ConfigFactoryIF is the interface for the ConfigFactory class. 
  * It provides a list of the class's public methods.
+ * 
+ * @author Anthony Platt (aplatt)
+ * @author Jeremy Verchick (verchick)
  * 
  */
 

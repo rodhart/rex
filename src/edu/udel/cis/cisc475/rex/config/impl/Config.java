@@ -74,10 +74,19 @@ public class Config implements ConfigIF {
 
 	/**
 	 * Sets the exam seed number
+	 * @param value - the exam seed value
 	 */
 	public void setSeed(long value) {
 		this.seed = value;
 
+	}
+	
+	/**
+	 * Sets the final block
+	 * @param label  - the label of the final block
+	 */
+	public void setFinalBlock(String label) {
+		this.finalBlock = label;
 	}
 
 	/**
@@ -122,13 +131,6 @@ public class Config implements ConfigIF {
 	 */
 	public long seed() {
 		return this.seed;
-	}
-
-	/**
-	 * Returns the final block
-	 */
-	public void setFinalBlock(String label) {
-		this.finalBlock = label;
 	}
 
 	/**
