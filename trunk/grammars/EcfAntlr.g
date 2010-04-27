@@ -44,10 +44,8 @@ import java.lang.Integer;
 // parser
 //------------------
 ecf[ConfigIF configuration]
-    :   statement* EOF!
-    {
-        config = (ConfigIF)$configuration;
-    }
+    :   {config = (ConfigIF)$configuration;}
+        statement* EOF!
     ;
 
 // catch all for a statement
@@ -63,7 +61,6 @@ include
 		AT p=numInt POINTS
 		SEMI
 		{   SourceIF funsauce = sourceFactory.newSource("TODO");
-		    System.out.println(funsauce.filename());
 		    config.addGroupConstraint($topic.text, $interval.i, $n.value, $p.value, funsauce);
 		}
 	;
@@ -72,7 +69,6 @@ include
 interval returns [IntervalIF i]
 	:	l=leftBound COMMA r=rightBound
 	    {
-	        System.out.println(" " + $l.strict + " " + $l.value + " " + $r.strict + " " + $r.value);
 	        $i = intervalFactory.interval($l.strict, $l.value, $r.strict, $r.value);
 	    }
 	;
