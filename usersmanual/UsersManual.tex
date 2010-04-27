@@ -35,12 +35,29 @@ place the \texttt{rex.jar} executable in a directory within the user
 path on UNIX systems, but this is not necessary for proper operation
 of the software.
 
+While REX does not require an installer or any unpacking of it's software,
+there must be a version of the Java Runtime Environment installed. The following list of system requirements must be met in order to run REX.
+
+\subsection{Minimum System Requirements}
+\begin{itemize}
+\item Java Runtime Environment (JRE) 1.6: 
+
+Available at 
+\verb|http://java.sun.com/javase/downloads|
+% do we need memory requirements? like a 1G of ram? -Haley
+\end{itemize}
+
 \section{Usage}
 After creating a UEF and ECF file \texttt{rex input.uef input.ecf}. 
 REX will parse the contents of the UEF and ECF and generate the appropriate number of
 output exams, as specified in the ECF file.
 
+Please see the following sections for information on UEF and ECF
+content format.
+
 \section{The UEF File}
+
+Please see Figure \ref{fig:SampleUEF} for an example Universal Exam File.
 
 \section{The ECF File}
 
@@ -100,5 +117,57 @@ semester. The TA for this class was Charlie Greenbacker.
 \item Zach Hine
 \end{itemize}
 \end{multicols}
+
+% How do we add color to this to make it easier
+% to read? -Haley
+\begin{figure}
+\begin{verbatim}
+    \documentclass{exam} 
+    \usepackage{fullpage}
+    \usepackage{amsmath}
+    \usepackage{comment}
+    \usepackage{graphicx}
+
+    \begin{document}
+
+    \examheader{CISC 106}{UEF Example}{Developed: 2010}
+
+    \section{Topic}
+
+    \begin{block}{FSA Description}
+      In the following four problems, let $A$ denote a finite-state
+      automaton with exactly one accepting state.
+    \end{block}
+
+    \begin{problem}{topic}{15}
+      This is a problem
+      \begin{answers}
+        \answer This is an answer that is not correct
+        \answer answer
+        \answer[fixed] This is a fixed answer that is not correct
+        \answer[correct] This is a correct answer
+        \answer answer
+        \answer[fixed,correct] fixed correct answer
+      \end{answers}
+    \end{problem}
+
+    \begin{figure}[placement h]
+      \begin{center}
+          \includegraphics[scale=0.50]{binary_tree.png}
+          \caption{Traverse Binary Tree}
+          \label{fig:binary tree}
+      \end{center}
+    \end{figure}
+
+    \begin{block}{Goodbye Message}
+      Did you remember to write your name on the first page?  Did you
+      attempt to answer every question?    Have a good holiday.
+    \end{block}
+
+    \end{document}
+\end{verbatim}
+\caption{Sample UEF.txt}
+\label{fig:SampleUEF}
+\end{figure}
 
 \end{document}
