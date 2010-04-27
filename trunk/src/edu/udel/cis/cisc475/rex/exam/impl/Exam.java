@@ -85,7 +85,9 @@ public class Exam implements ExamIF {
 	 */
 	private Map<ExamElementIF, HashSet<ExamElementIF>> uses;
 	
-	private Map<ExamElementIF, HashSet<ExamElementIF>> usedBy;
+	// TODO Is this needed? I commented it out since it wasn't being read
+	// by anyone. --Fran
+	//private Map<ExamElementIF, HashSet<ExamElementIF>> usedBy;
 
 	/**
 	 * Default constructor
@@ -128,7 +130,9 @@ public class Exam implements ExamIF {
 			labels.add(element.label());
 			// Allocate a new HashSet for the uses map
 			HashSet<ExamElementIF> useesOfElement = new HashSet<ExamElementIF>();
-			HashSet<ExamElementIF> usersOfElement = new HashSet<ExamElementIF>();
+			// TODO Is this needed? I commented it out since it wasn't being read
+			// by anyone. --Fran
+			//HashSet<ExamElementIF> usersOfElement = new HashSet<ExamElementIF>();
 			uses.put(element, useesOfElement);
 			//usedBy.put(element, usersOfElement);
 			return key;
