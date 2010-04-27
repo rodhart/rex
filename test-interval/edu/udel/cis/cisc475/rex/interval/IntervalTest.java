@@ -96,10 +96,17 @@ public class IntervalTest {
 		
 		IntervalIF I2 = intervalFactory.interval(true, 5.0, false, 10.0);
 		
-		assertFalse(I.contains(11.0));
+		assertFalse(I2.contains(11.0));
 		assertFalse(I2.contains(5.0));
 		assertTrue(I2.contains(8.0));
 		assertTrue(I2.contains(10.0));
+		
+		IntervalIF I3 = intervalFactory.interval(true, 10.0, false, 5.0);
+		
+		assertFalse(I3.contains(11.0));
+		assertFalse(I3.contains(5.0));
+		assertTrue(I3.contains(8.0));
+		assertTrue(I3.contains(10.0));
 	}
 
 
