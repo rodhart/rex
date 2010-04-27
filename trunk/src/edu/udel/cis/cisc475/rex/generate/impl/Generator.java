@@ -7,6 +7,7 @@ import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
@@ -106,7 +107,7 @@ public class Generator implements GeneratorIF
 		MasterExamController mec = new MasterExamController(master);
 		VersionExamController vec;
 		
-		ConstraintIF[] theConstraints = (ConstraintIF[]) config.constraints().toArray();
+		ConstraintIF[] theConstraints = (ConstraintIF[]) config.constraints().toArray(new ConstraintIF[config.constraints().size()]);
 		Collection<RequiredProblemConstraintIF> theRPCs = new ArrayList<RequiredProblemConstraintIF>();
 		Collection<GroupConstraintIF> theGCs = new ArrayList<GroupConstraintIF>();
 		
@@ -115,11 +116,19 @@ public class Generator implements GeneratorIF
 		 */
 		
 		for (ConstraintIF theConstraint : theConstraints)
-		{
+		{	
+			/* Replacing with .equals attempt for now
 			if (theConstraint.getClass().isInstance(GroupConstraintIF.class))
 				theGCs.add((GroupConstraintIF) theConstraint);
 			
 			else if (theConstraint.getClass().isInstance(RequiredProblemConstraintIF.class))
+				theRPCs.add((RequiredProblemConstraintIF) theConstraint);
+			*/
+			
+			if (theConstraint.getClass().getSimpleName().equals("GroupConstraint"))
+				theGCs.add((GroupConstraintIF) theConstraint);
+			
+			else if (theConstraint.getClass().getSimpleName().equals("RequiredProblemConstraint"))
 				theRPCs.add((RequiredProblemConstraintIF) theConstraint);
 			
 			else
