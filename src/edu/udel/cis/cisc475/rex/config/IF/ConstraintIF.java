@@ -12,6 +12,9 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
  */
 
 public interface ConstraintIF {
+	/**
+	 * @return source (location of constraint in ECF file)
+	 */
 	SourceIF source();
 
 }// end of interface
