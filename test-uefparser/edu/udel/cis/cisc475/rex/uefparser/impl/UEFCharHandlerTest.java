@@ -6,7 +6,6 @@ package edu.udel.cis.cisc475.rex.uefparser.impl;
 import java.io.EOFException;
 import org.junit.Test;
 import java.io.File;
-import java.net.URL;
 import org.junit.After;
 import org.junit.Before;
 import static org.junit.Assert.assertEquals;
@@ -38,10 +37,7 @@ public class UEFCharHandlerTest
 		// create the object.
 		this.uefCharHandler = new UEFCharHandler();
 
-		// find our test file.
-		URL url = this.getClass().getResource("./uefCharHandlerTestFile.txt");
-
-		File file = new File(url.getFile().replace("%20", " "));
+		File file = new File("." + File.separator + "examples" + File.separator + "uefCharHandlerTestFile.txt");
 		this.uefCharHandler.openFile(file);
 	}
 
