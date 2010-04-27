@@ -2,6 +2,7 @@ package edu.udel.cis.cisc475.rex.interval.impl;
 
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
+import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 
 public class IntervalFactory implements IntervalFactoryIF
 {
@@ -21,13 +22,20 @@ public class IntervalFactory implements IntervalFactoryIF
 	 */
 	@Override
 	public IntervalIF interval(boolean strictLow, Double low,
-			boolean strictHigh, Double high) {
-		// TODO Auto-generated method stub
-		if (low > high)
+			boolean strictHigh, Double high) throws RexUnsatisfiableException{
+
+		if(low > high)
 		{
-			return null;
+			throw new RexUnsatisfiableException();
 		}
-		return new Interval(strictLow, low, strictHigh, high);
+		else
+		{
+			return new Interval(strictLow, low, strictHigh, high);
+		}
+
+		//return null;
+
+		
 	}
 
 }
