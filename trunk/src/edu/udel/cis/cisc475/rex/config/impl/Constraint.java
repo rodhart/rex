@@ -16,7 +16,8 @@ public class Constraint implements ConstraintIF {
 	
 	/**
 	 * Constructor creates a new instance of Constraint using the parameters passed.
-	 * @param source
+	 * 
+	 * @param source - The location of the constraint if the ECF file.
 	 */
 	public Constraint(SourceIF source){
 		this.source = source;

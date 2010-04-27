@@ -4,9 +4,12 @@ import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 
 /**
- * 
- * @author aplatt + verchick
+ * @author Anthony Platt (aplatt)
+ * @author Jeremy Verchick (verchick)
  *
+ * ConfigFactory creates a new instance of the Config class and
+ * returns it.
+ * 
  */
 public class ConfigFactory implements ConfigFactoryIF {
 
