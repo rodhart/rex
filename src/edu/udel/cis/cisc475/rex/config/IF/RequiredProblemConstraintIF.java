@@ -10,8 +10,16 @@ package edu.udel.cis.cisc475.rex.config.IF;
  */
 
 public interface RequiredProblemConstraintIF extends ConstraintIF{
+	/**
+	 * Getter for the problem label of the required problem
+	 * @return problem label
+	 */
 	String label();
 
+	/**
+	 * Getter for the points of the required problem
+	 * @return required problem point value
+	 */
 	int points();
 
 }// end of interface
