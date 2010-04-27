@@ -7,11 +7,15 @@ public class IntervalFactory implements IntervalFactoryIF
 {
 	
 	/**
-	 * Added by Team 3 
-	 * 7:47 4/12/10
-	 * Needed a stub for Generator's generate() method
+	 * The IntervalFactory class handles the creation of an
+	 * Interval object.
+	 * 
+	 *  @author Kyle Bouchard (bouchard)
 	 */
 
+	/**
+	 * this function is a wrapper for the Interval constructor
+	 */
 	@Override
 	public IntervalIF interval(boolean strictLow, Double low,
 			boolean strictHigh, Double high) {
