@@ -208,8 +208,6 @@ public class ExamTest {
 
 	@Test
 	public void testDeclareUseBad() {
-		// TODO Waiting for declareUse to throw Exceptions instead of
-		// System.err messages.
 		ExamIF exam = examFactory.newGeneratedExam();
 		Collection<ExamElementIF> elements;
 
@@ -219,10 +217,8 @@ public class ExamTest {
 
 		try {
 			exam.declareUse(problem, figure);
-			System.out.println("TEST!!!");
 			fail("Did not throw expected exception.");
 		} catch (RexException e) {
-			e.printStackTrace();
 			elements = exam.elementsUsingElement(figure);
 			assertEquals(0, elements.size());
 		}
@@ -233,7 +229,6 @@ public class ExamTest {
 			exam.declareUse(problem, figure);
 			fail("Did not throw expected exception.");
 		} catch (RexException e) {
-			e.printStackTrace();
 			elements = exam.elementsUsingElement(figure);
 			assertEquals(0, elements.size());
 		}
@@ -244,8 +239,20 @@ public class ExamTest {
 			elements = exam.elementsUsingElement(figure);
 			assertEquals(1, elements.size());
 		} catch (RexException e) {
-			e.printStackTrace();
 			fail("An exception should not have been thrown.");
+		}
+		
+		try {
+			exam.declareUse(figure,block);
+			
+			// We SHOULD get an error here because the declareUse above
+			// sets the block's topic to taht of the figure. Since problem's
+			// topic is different than figure, we cannot set block's topic
+			// to problem.
+			exam.declareUse(problem,block);
+			fail("Did not throw expected exception.");
+		} catch (RexException e) {
+
 		}
 
 		try {
@@ -316,6 +323,9 @@ public class ExamTest {
 		BlockIF block = createTestBlock();
 
 		ExamElementIF element = exam.elementWithLabel("Test Problem Label");
+		assertNull(element);
+		
+		element = exam.elementWithLabel(null);
 		assertNull(element);
 
 		exam.addElement(problem);
