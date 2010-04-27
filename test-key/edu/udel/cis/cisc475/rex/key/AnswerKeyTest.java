@@ -72,14 +72,16 @@ public class AnswerKeyTest {
 
 		result = Answer_c.equals(K.answers(2));
 		assertEquals (true, result);
-	
-		//make an out of bounds call
-		Collection <String> error_c = new ArrayList <String>();
-		error_c.add(new String("error_out_of_bounds"));
-		result = error_c.equals(K.answers(3));
-		assertEquals (true, result);
 	}//end of test_collections() 	
 
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void testOutOfBoundsException() throws IndexOutOfBoundsException {
+		Collection <String> Answer_A = new ArrayList <String>();
+		Answer_A.add(new String("A"));
+		K.addProblem(Answer_A);
+		
+		System.out.println(K.answers(3));
+	}
 	
 	
 	

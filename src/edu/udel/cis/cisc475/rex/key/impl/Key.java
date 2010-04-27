@@ -38,8 +38,6 @@ public class Key implements AnswerKeyIF {
 		_examName = examName;	
 		_date = date;	
 		_Answers = new ArrayList< Collection<String>  >();
-		error_out_of_bounds = new ArrayList<String>();
-		error_out_of_bounds.add(new String("error_out_of_bounds"));
 	}//end of constructor
 
 
@@ -78,14 +76,15 @@ public class Key implements AnswerKeyIF {
 	/**
 	 * getter that returns answer(s) given a problem index
 	 * @param index the problem number that we want answers for
-	 * @return a collection of correct answers (maybe just one) 
+	 * @return a collection of correct answers (maybe just one)
+	 * @throws IndexOutOfBoundsException Throws exception when index > number of answers 
 	 */
-	public Collection <String> answers(int index) {	
+	public Collection <String> answers(int index) throws IndexOutOfBoundsException {	
 		//since _numAnswers is 1 based and index is 0 based use less than
 		if (index<_numAnswers)
 			return _Answers.get(index);
-		//else
-		return error_out_of_bounds;
+		else
+			throw new IndexOutOfBoundsException("index: " + index + " _numAnswers: " + _numAnswers);
 	}
 
 	//setters
@@ -107,5 +106,4 @@ public class Key implements AnswerKeyIF {
 	private String _date;	
 	private int _numAnswers;
 	private ArrayList < Collection<String> > _Answers;
-	private  Collection <String> error_out_of_bounds;
 }//end of class 
