@@ -114,6 +114,12 @@ public class ProblemTest {
 	@After
 	public void tearDown() throws Exception {
 	}
+	
+	@Test
+	public void testNullLabel(){
+		ProblemIF newProblem = examFactory.newProblem(testTopic, null, testQuestionSource, testAnswers);
+		assertNull(newProblem.label());
+	}
 
 	@Test
 	public void testGetRequiredBlock() throws RexException {
