@@ -43,7 +43,10 @@ public class ExamWriter implements ExamWriterIF {
 		out.printf("%%here is your frontmatter \n");
 		E.frontMatter().write(out);
 
-/*		// output problems with respective answers
+		
+		System.out.println(E.elements().toArray().length + "length");
+		System.out.flush();
+		// output problems with respective answers
 		for (int i = 0; i < E.elements().toArray().length; i++) {
 			ExamElementIF temp = (ExamElementIF) E.elements().toArray()[i];
 
@@ -51,32 +54,38 @@ public class ExamWriter implements ExamWriterIF {
 			// and prints accordingly
 			if (temp instanceof BlockIF) {
 				BlockIF tempBlockIF = (BlockIF) temp;
-				out.printf("%s\n", tempBlockIF.source().text());
+				tempBlockIF.source().write(out);
 			} else if (temp instanceof FigureIF) {
 				out.println("/newpage\n");
 				FigureIF tempFigureIF = (FigureIF) temp;
-				out.printf("%s\n", tempFigureIF.source().text());
+				tempFigureIF.source().write(out);
 			} else if (temp instanceof Problem) {
+				
 				Problem tempProblem = (Problem) temp;
 
+				
+				
 				// prints the required block if it does not equal null
 				if (tempProblem.requiredBlock() != null)
-					out.printf("%s\n", tempProblem.requiredBlock());
+					tempProblem.requiredBlock().source().write(out);
 
+				//prints the question
+				tempProblem.question().write(out);
+				
 				// prints all the answers
 				for (int index = 0; index < tempProblem.answers().length; index++) {
-					out.printf("%s\n", tempProblem.answers()[index].source()
-							.text());
+					tempProblem.answers()[index].source().write(out);
 				}// end of for loop
 			}// endo of if(temp instanceof Problem)
 		}// endo of for loop (int i=0; i< E.elements().toArray().length; i++)
-*/
 
+		
+		
 		// output the end block for exam
 		out.printf("%%here is your finalBlock \n");
 		E.finalBlock().source().write(out);
 		
-
+		
 	}// end of write(PrintWriter out)
 
 	// private vars
