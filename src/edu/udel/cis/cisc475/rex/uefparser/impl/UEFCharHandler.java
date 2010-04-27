@@ -124,6 +124,21 @@ class UEFCharHandler {
 		}
 	}
 
+	/**
+	 * Reads one character from the underlying file at the specified position
+	 * and returns it.
+	 * 
+	 * @return The character read or null if at the end of the file.
+	 * 
+	 */
+	Character read(int position) throws EOFException {
+		if (position < fileContents.length()) {
+			return fileContents.charAt(position);
+		} else {
+			throw new EOFException();
+		}
+	}
+
 	boolean eof() {
 		if (position < fileContents.length()) {
 			return false;
