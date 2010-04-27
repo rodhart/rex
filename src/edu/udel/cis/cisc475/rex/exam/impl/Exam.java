@@ -168,7 +168,6 @@ public class Exam implements ExamIF {
 						((BlockIF) usee).topic() == ((ProblemIF) user).topic()){
 					((Block) usee).setTopic( ((ProblemIF) user).topic());
 				} else {
-					// TODO use err module
 					System.err.println("error trying to change a block's topic to a new topic!");
 					throw new RexException();
 				}
