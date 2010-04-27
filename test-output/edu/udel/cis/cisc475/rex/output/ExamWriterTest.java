@@ -2,6 +2,16 @@ package edu.udel.cis.cisc475.rex.output;
 
 import static org.junit.Assert.*;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,9 +42,8 @@ import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 /**
  * Junit Testing for ExamWriter
  * 
- * @author jsong
  * @author kiernan
- *
+ * @author justin
  */
 public class ExamWriterTest {
 	
@@ -44,27 +53,81 @@ public class ExamWriterTest {
 	
 	@Before
 	public void setUp() {
-		examFactory = new ExamFactory();
-	    sourceFactory = new SourceFactory();
-	    examWriterFactory = new OutputFactory();
+		//examFactory = new ExamFactory();
+	    //sourceFactory = new SourceFactory();
+	    //examWriterFactory = new OutputFactory();
 	}
 	
     @Test
     public void testExamWriterNull() {
-		ExamIF e = examFactory.newGeneratedExam();
-		ExamWriterIF ew = examWriterFactory.newExamWriter(e);
-		assertNotNull(ew);	
+		//ExamIF e = examFactory.newGeneratedExam();
+		//ExamWriterIF ew = examWriterFactory.newExamWriter(e);
+		//assertNotNull(ew);	
 	}
     
     @Test
     public void testPrintBlockIF(){
-    	ExamIF e = examFactory.newGeneratedExam();	
-    	SourceIF testSource = sourceFactory.newSource("./trunk/test-source/edu/udel/cis/cisc475/rex/source/SampleText.txt");
+    	Exam e = new Exam(true);	
+    	
     	//BlockIF blockTest = examFactory.newBlock("test topic", "test label", testSource );
     	//BlockIF changed, needed to fix so code compiles.
-    	BlockIF blockTest = examFactory.newBlock("test topic", testSource );
-    	e.addElement(blockTest);
+    	
+    	//sets up the exam
+    	
+    	//sets the preamble
+    	Source preamble = new Source("preamble");
+    	preamble.addText("hello");
+		e.setPreamble(preamble);
+		
+    	//sets the  front matter
+    	Source frontMatter = new Source("frontmatter.txt");
+    	e.setFrontMatter(frontMatter);
+    	
+    	//sets the final matter
+		Source finalSource = new Source("finalBlock.txt");
+		Block finalBlock = new Block("Final topic", finalSource);
+		e.setFinalBlock(finalBlock);
+		
+		//adds the block element   
+		Source testSource = new Source("test file");
+    	testSource.addText("test");
+		Block blockTest = new Block("test topic", testSource );
+		e.addElement(blockTest);
+    	
+    	
     	ExamWriterIF ew = examWriterFactory.newExamWriter(e);
+    	String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test.txt";
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new FileWriter(filename));
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+			    	
+    	//the examWriter writes out to the printwriter
+    	ew.write(pw);
+    	
+    	//read in the data 
+    	FileInputStream fileInput = null;
+		try {
+			fileInput = new FileInputStream(filename);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	DataInputStream dataInput = new DataInputStream(fileInput);
+    	
+    	String testData = "";
+    	try {
+			testData = dataInput.readLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	
+		assertEquals(testData, "test");
+    	
     }
     
     @Test
@@ -83,6 +146,20 @@ public class ExamWriterTest {
     	AnswerIF answerTest = examFactory.newAnswer(true, testSource);
     	AnswerIF answerTest2 = examFactory.newAnswer(false, testSource);
     	AnswerIF[] answerArrayTest = {answerTest, answerTest2};
+    	
+    	//Problem problemTest = new Problem("test topic", "test label", testSource, answerArrayTest );
+    	//e.addElementIF(problemTest);
+    	ExamWriterIF ew = examWriterFactory.newExamWriter(e);    
+    }
+    
+    @Test
+    public void testPrintProblem2(){
+    	ExamIF e = examFactory.newGeneratedExam();	
+    	SourceIF testSource = sourceFactory.newSource("./trunk/test-source/edu/udel/cis/cisc475/rex/source/SampleText.txt");
+    	AnswerIF answerTest = examFactory.newAnswer(true, testSource);
+    	AnswerIF answerTest2 = examFactory.newAnswer(false, testSource);
+    	AnswerIF[] answerArrayTest = {answerTest, answerTest2};
+    	
     	
     	//Problem problemTest = new Problem("test topic", "test label", testSource, answerArrayTest );
     	//e.addElementIF(problemTest);
