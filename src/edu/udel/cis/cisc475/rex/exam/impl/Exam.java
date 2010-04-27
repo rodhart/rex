@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.udel.cis.cisc475.rex.err.RexException;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
@@ -150,7 +151,7 @@ public class Exam implements ExamIF {
 	 * @param usee
 	 *            - singular element others are connected with
 	 */
-	public void declareUse(ExamElementIF user, ExamElementIF usee) {
+	public void declareUse(ExamElementIF user, ExamElementIF usee) throws RexException{
 		if (elements.containsValue(user) && elements.containsValue(usee)) {
 			uses.get(user).add(usee);
 			if(user instanceof ProblemIF && usee instanceof FigureIF) {
@@ -168,8 +169,8 @@ public class Exam implements ExamIF {
 				}
 			}
 		} else {
-			//TODO use actual ERR module
 			System.err.println("error calling exam.DeclareUse(user, usee), must add elements to the exam before declaring a relationship");
+			throw new RexException();
 		}
 		
 		
