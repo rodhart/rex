@@ -12,8 +12,8 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
  * @author Anthony Platt (aplatt)
  * @author Jeremy Verchick (verchick)
  *
- * ConfigFactory creates a new instance of the Config class and
- * returns it.
+ * ConfigFactory creates a new instance of the various classes
+ * contained in the config package.
  * 
  */
 public class ConfigFactory implements ConfigFactoryIF {
