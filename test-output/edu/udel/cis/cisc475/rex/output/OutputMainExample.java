@@ -144,7 +144,7 @@ public class OutputMainExample {
 		
 		Answer[] answerArray = {ans1, ans2};
 		
-		Problem testProblem = new Problem("test topic", "test label", testSourceProblem, answerArray );
+		//Problem testProblem = new Problem("test topic", "test label", testSourceProblem, answerArray );
 		
 		
 		
@@ -153,14 +153,14 @@ public class OutputMainExample {
 		testSourceProblem.addText("this is the text inside the problem2");
 		
 		
-		Problem testProblem2= new Problem("test topic", "test label", testSourceProblem, answerArray );
-		testProblem2.setRequiredBlock(testblock);
+		//Problem testProblem2= new Problem("test topic", "test label", testSourceProblem, answerArray );
+		//testProblem2.setRequiredBlock(testblock);
 		
 		
 		EM.addElement(testblock);
 		EM.addElement(testFigure);
-		EM.addElement(testProblem);
-		EM.addElement(testProblem2);
+		//EM.addElement(testProblem);
+		//EM.addElement(testProblem2);
 		ExamWriterIF EW = OF.newExamWriter (EM);		
 		
 		EW.write(pw);
