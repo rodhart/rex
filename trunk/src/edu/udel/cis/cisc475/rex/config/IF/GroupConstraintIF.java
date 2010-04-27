@@ -13,9 +13,33 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
  */
 
 public interface GroupConstraintIF extends ConstraintIF{
+	/**
+	 * Getter for the number of problems in the group
+	 * @return number of problems
+	 */
 	int numProblems();
+	
+	/**
+	 * Getter for the difficulty interval of the group
+	 * @return difficulty interval
+	 */
 	IntervalIF difficultyInterval();
+	
+	/**
+	 * Getter for the topic of the group
+	 * @return group topic
+	 */
 	String topic();
+	
+	/**
+	 * Getter for the number of points for the group
+	 * @return required points
+	 */
 	int points();
+	
+	/**
+	 * Getter for the source of the requirement
+	 * @return requirement source
+	 */
 	SourceIF source();
 }// end of interface
