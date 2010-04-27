@@ -13,8 +13,27 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
  */
 
 public interface ConfigFactoryIF {
+	/**
+	 * Creates a new instance of Config
+	 * @return new instance of Config
+	 */
 	ConfigIF newConfig(boolean pdf, int numVersions);
+	
+	/**
+	 * Creates a new instance of Constraint
+	 * @return new instance of Constraint
+	 */
 	ConstraintIF newConstraint(SourceIF source);
+	
+	/**
+	 * Creates a new instance of GroupConstraint
+	 * @return new instance of GroupConstraint
+	 */
 	GroupConstraintIF newGroupConstraint(IntervalIF difficulty, int numProblems, int points, String topic, SourceIF source);
+	
+	/**
+	 * Creates a new instance of RequiredProblemConstraint
+	 * @return new instance of RequiredProblemConstraint
+	 */
 	RequiredProblemConstraintIF newRequiredProblemConstraint(String label, int points, SourceIF source);
 }
