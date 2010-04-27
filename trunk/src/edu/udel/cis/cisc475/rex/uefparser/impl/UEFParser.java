@@ -21,17 +21,17 @@ public class UEFParser implements UEFParserIF {
 	/**
 	 * Underlying file handler to move through and read the file.
 	 */
-	UEFCharHandler uefCharHandler;
+	private UEFCharHandler uefCharHandler;
 	/**
 	 * Instance of the class that handles processing all read in commands.
 	 */
-	UEFCommandHandler uefCommandHandler;
+	private UEFCommandHandler uefCommandHandler;
 
 	/**
 	 * End of Line Exception for when something is suppose to occur by the end
 	 * of a line and doesn't.
 	 */
-	public class EOLException extends EOFException {
+	class EOLException extends EOFException {
 
 		public EOLException(String detail) {
 			super(detail);

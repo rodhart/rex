@@ -12,7 +12,7 @@ import java.util.List;
  * @author Aaron Myles Landwehr
  * @author Ahmed El-hassany
  */
-public class UEFCommand
+class UEFCommand
 {
 
 	/**
@@ -49,7 +49,7 @@ public class UEFCommand
 	/**
 	 * The simple constructor for creating a Command.
 	 */
-	public UEFCommand()
+	UEFCommand()
 	{
 		this.Arguments = new ArrayList<String>();
 	}
