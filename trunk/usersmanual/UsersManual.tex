@@ -36,7 +36,8 @@ path on UNIX systems, but this is not necessary for proper operation
 of the software.
 
 While REX does not require an installer or any unpacking of it's software,
-there must be a version of the Java Runtime Environment installed. The following list of system requirements must be met in order to run REX.
+there must be a version of the Java Runtime Environment installed. The
+following list of system requirements must be met in order to run REX.
 
 \subsection{Minimum System Requirements}
 \begin{itemize}
@@ -60,6 +61,21 @@ content format.
 Please see Figure \ref{fig:SampleUEF} for an example Universal Exam File.
 
 \section{The ECF File}
+The ECF file is a text file with a \texttt{.tex} extension that consists of a series of 
+constraints. Each constraint is separated by a semicolor, with comments being all text
+that follows after a pound symbol (\texttt{#}) until the end of the line.
+
+There are four defined commands for the ECF file
+\subsection{Group Constraints}
+A group constaint is a command of the form \texttt{'include' <integer> 'problems on' <string>
+'with difficulty in' <interval> 'at' <integer> 'points' ';'}
+
+\subsection{Required Problem Constraints}
+
+\subsection{Append Text}
+
+\subsection{Version Definition
+}
 
 \section{Troubleshooting}
 Because of the requirements that REX places upon the input it parses,
