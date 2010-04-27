@@ -25,6 +25,7 @@ import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
+import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import java.util.LinkedList;
 import java.lang.Double;
 import java.lang.Integer;
@@ -66,12 +67,13 @@ include
 	;
 
 // interval statement
-interval returns [IntervalIF i]
+interval returns [IntervalIF i] 
 	:	l=leftBound COMMA r=rightBound
 	    {
 	        $i = intervalFactory.interval($l.strict, $l.value, $r.strict, $r.value);
 	    }
 	;
+	catch [RexUnsatisfiableException e] { }
 
 
 leftBound returns [boolean strict, Double value]
