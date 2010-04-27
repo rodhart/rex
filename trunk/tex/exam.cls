@@ -1,3 +1,4 @@
+%Author: Lucero Carmona
 \NeedsTeXFormat{LaTeX2e}
 
 \LoadClass{article}
@@ -5,16 +6,22 @@
 \RequirePackage{ifthen}
 
 %declare boolean variable, initiate it as false
+%used to print answers, if master option is present
 \newif\ifprintanswers
 \printanswersfalse
 
         %example:
         %       \documentclass[master]{exam}
+        %prints stars next to correct answers
+        %       \documentclass{exam}
+        %does not print stars
 \DeclareOption{master}{\printanswerstrue}
 \ProcessOptions
 
         %example:
         %       \examheader{CISC 106 Fall 2009}{First Midterm Learning Experience}{Date}
+        %prints header on page, includes sections for students to enter information
+        %options allow for instructor to initiate Course, Exam, Date/Version
 \newcommand{\examheader}[3]{
 \vskip .1in
 \noindent
@@ -34,6 +41,8 @@ Lecture Section:   \rule{.5in}{1pt}\rule{.25in}{0pt} Lab Section:   \rule{.5in}{
 	%example:
 	%	\begin{block}{FSA Description}
 	%	\end{block}
+        %creates environment for message blocks
+        %ex. instruction, goodbye message
 \newenvironment{block}[1]{}{}
 
 %create problem number counter, set
@@ -43,16 +52,21 @@ Lecture Section:   \rule{.5in}{1pt}\rule{.25in}{0pt} Lab Section:   \rule{.5in}{
 	%example:
 	%	\begin{problem}[requires=FSA Description,points=3]{topic}{difficulty}
 	%	\end{problem}
+        %creates environment for problems, counter used to number problems
+        %does not need to include answer environment
 \newenvironment{problem}[3][]{\begin{enumerate} \item[] \arabic{probnum}. \stepcounter{probnum} }{\end{enumerate}}
 
 
 	%example:
 	%	\begin{answers}
 	%	end{answers}
+        %creates environment for multiple choice answers
 \newenvironment{answers}{\begin{enumerate}}{\end{enumerate}}
 
         %example:
         %       \answer[correct,fixed] text
+        %lists answers, has ability to mark which answers are correct
+        %or fixed, more than one correct or fixed answer is permitted
 \newcommand{\answer}[1][\@empty]{
  \ifprintanswers %if master option present
    \ifthenelse{\equal{#1}{correct}}{\item $\star$}{ %if correct, mark w/star
