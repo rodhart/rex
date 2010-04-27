@@ -1,5 +1,6 @@
 package edu.udel.cis.cisc475.rex.output;
 import java.util.Collection;
+
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
@@ -7,6 +8,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.generatestubs.ExamFactoryStub;
+import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
@@ -14,7 +16,8 @@ import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 
 public class ExamStub implements ExamIF {
 	SourceFactoryIF sourceFactory = new SourceFactory();
-	ExamFactoryIF examFactory = new ExamFactoryStub();
+	ExamFactoryIF examFactoryStub = new ExamFactoryStub();
+	ExamFactoryIF examFactory = new ExamFactory();
 	
 
 	@Override
@@ -46,7 +49,7 @@ public class ExamStub implements ExamIF {
 	@Override
 	public BlockIF finalBlock() {
 		SourceIF finalSource = sourceFactory.newSource("finalBlock.txt");
-		finalSource.addText("\\end{document}");
+		finalSource.addText("\\end{document}\n");
 		BlockIF finalBlock = examFactory.newBlock("Final topic", finalSource);
 		return finalBlock;
 	}

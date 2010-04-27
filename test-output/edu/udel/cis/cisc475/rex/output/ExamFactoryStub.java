@@ -7,6 +7,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FixedAnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
+import edu.udel.cis.cisc475.rex.exam.impl.Block;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 public class ExamFactoryStub implements ExamFactoryIF {
@@ -14,7 +15,6 @@ public class ExamFactoryStub implements ExamFactoryIF {
 	
 	@Override
 	public BlockIF newBlock(String topic, SourceIF text) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
