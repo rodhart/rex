@@ -21,13 +21,37 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
  */
 
 public class Config implements ConfigIF {
+	/**
+	 * Stores the exam seed for replication
+	 */
 	private long seed;
+	/**
+	 * stores the version strings for version differentiation
+	 */
 	private String[] versionStrings;
+	/**
+	 * stores the final block of the exam
+	 */
 	private String finalBlock;
+	/**
+	 * stores whether or not pdf versions of the exam should be printed
+	 */
 	private boolean pdfOption;
+	/**
+	 * stores how many versions of the exam should be created
+	 */
 	private int numVersions;
+	/**
+	 * stores all the problem and group constraints for the exam.
+	 */
 	private HashSet<ConstraintIF> constraints;
 	
+	/**
+	 * Constructor creates a new Config object with the passed parameters.
+	 *  
+	 * @param pdf - true or false whether or not pdf versions of the exam should be created
+	 * @param numVersions - the number of versions of the exam that should be printed
+	 */
 	public Config(boolean pdf, int numVersions){
 		this.numVersions = numVersions;
 		this.pdfOption = pdf;
