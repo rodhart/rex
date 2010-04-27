@@ -21,11 +21,13 @@ public class GroupConstraint implements GroupConstraintIF {
 	
 	/**
 	 * Constructor creates a new instance of GroupConstraint with the passed parameters.
-	 * @param difficulty
-	 * @param numProblems
-	 * @param points
-	 * @param topic
-	 * @param source
+	 * 
+	 * @param topic - the required topic
+	 * @param difficulty - the range of problem difficulties to be included in the topic
+	 * @param numProblems - the number of problems to include within the topic
+	 * @param points - the point value of the problem
+	 * @param source - the location in the ECF file of the group constraint
+	 * 
 	 */
 	public GroupConstraint(IntervalIF difficulty, int numProblems, int points, String topic, SourceIF source){
 		this.difficultyInterval = difficulty;

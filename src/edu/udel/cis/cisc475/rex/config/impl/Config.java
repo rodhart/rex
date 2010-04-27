@@ -37,6 +37,13 @@ public class Config implements ConfigIF {
 	/**
 	 * Constructor creates a new GroupConstraint object with the passed parameters and adds it to
 	 * the constraints collection.  
+	 * 
+	 * @param topic - the required topic
+	 * @param difficulty - the range of problem difficulties to be included in the topic
+	 * @param numProblems - the number of problems to include within the topic
+	 * @param points - the point value of the problem
+	 * @param source - the location in the ECF file of the group constraint
+	 * 
 	 */
 	public GroupConstraintIF addGroupConstraint(String topic,
 			IntervalIF difficulty, int numProblems, int points, SourceIF source) {
@@ -50,6 +57,11 @@ public class Config implements ConfigIF {
 	/**
 	 * Creates a new RequiredProblemConstraint object with the passed parameters and adds 
 	 * it to the constraints collection.  
+	 * 
+	 * @param label - the required problem's label
+	 * @param points - the point value of the problem
+	 * @param source - the location in the ECF file of the problem constraint
+	 * 
 	 */
 	public RequiredProblemConstraintIF addRequiredProblemConstraint(
 			String label, int points, SourceIF source) {
@@ -70,6 +82,7 @@ public class Config implements ConfigIF {
 
 	/**
 	 * sets the version strings for exam version differentiation
+	 * @param names - the list of version strings.
 	 */
 	public void setVersionStrings(String[] names) {
 		this.versionStrings = names;

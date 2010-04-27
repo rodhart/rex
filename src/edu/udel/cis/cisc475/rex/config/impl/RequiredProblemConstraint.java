@@ -20,9 +20,10 @@ public class RequiredProblemConstraint implements RequiredProblemConstraintIF {
 	/**
 	 * Constructor creates a new instance of GroupConstraint with the passed parameters.
 	 * 
-	 * @param label
-	 * @param points
-	 * @param source
+	 * @param label - the required problem's label
+	 * @param points - the point value of the problem
+	 * @param source - the location in the ECF file of the problem constraint
+	 * 
 	 */
 	public RequiredProblemConstraint(String label, int points, SourceIF source){
 		this.label = label;
@@ -38,14 +39,14 @@ public class RequiredProblemConstraint implements RequiredProblemConstraintIF {
 	}
 
 	/**
-	 * returns the required point value
+	 * returns the required problem point value
 	 */
 	public int points() {
 		return this.points;
 	}
 
 	/**
-	 * returns the constraint source
+	 * returns the constraint source (the location of the constraint in the ECF file)
 	 */
 	public SourceIF source() {
 		return this.source;
