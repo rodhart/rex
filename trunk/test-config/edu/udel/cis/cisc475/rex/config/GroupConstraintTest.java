@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.impl.GroupConstraint;
+import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
@@ -24,7 +25,7 @@ public class GroupConstraintTest {
 	 * Tests that difficultyInterval() returns the correct interval from groupConstraint.
 	 */
 	@Test
-	public void testDifficultyInterval() {
+	public void testDifficultyInterval() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
@@ -47,7 +48,7 @@ public class GroupConstraintTest {
 	 * Second Test: Tests that difficultyInterval() returns the correct interval from groupConstraint.
 	 */
 	@Test
-	public void testDifficultyInterval2() {
+	public void testDifficultyInterval2() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(true, 50.5, false, 100.2);
 		
@@ -70,7 +71,7 @@ public class GroupConstraintTest {
 	 * Tests that numProblems() returns the correct integer from groupConstraint.
 	 */
 	@Test
-	public void testNumProblems() {
+	public void testNumProblems() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
@@ -89,7 +90,7 @@ public class GroupConstraintTest {
 	 * Second Test: Tests that numProblems() returns the correct integer from groupConstraint.
 	 */
 	@Test
-	public void testNumProblems2() {
+	public void testNumProblems2() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
@@ -108,7 +109,7 @@ public class GroupConstraintTest {
 	 * Tests that source() returns the correct source from groupConstraint.
 	 */
 	@Test
-	public void testSource() {
+	public void testSource() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
@@ -129,7 +130,7 @@ public class GroupConstraintTest {
 	 * Second Test: Tests that source() returns the correct source from groupConstraint.
 	 */
 	@Test
-	public void testSource2() {
+	public void testSource2() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
@@ -150,7 +151,7 @@ public class GroupConstraintTest {
 	 * Tests that points() returns the correct integer from groupConstraint.
 	 */
 	@Test
-	public void testPoints() {
+	public void testPoints() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
@@ -169,7 +170,7 @@ public class GroupConstraintTest {
 	 * Second Test: Tests that points() returns the correct integer from groupConstraint.
 	 */
 	@Test
-	public void testPoints2() {
+	public void testPoints2() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
@@ -188,7 +189,7 @@ public class GroupConstraintTest {
 	 * Tests that topic() returns the correct string from groupConstraint.
 	 */
 	@Test
-	public void testTopic() {
+	public void testTopic() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
@@ -207,7 +208,7 @@ public class GroupConstraintTest {
 	 * Second Test: Tests that topic() returns the correct string from groupConstraint.
 	 */
 	@Test
-	public void testTopic2() {
+	public void testTopic2() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
