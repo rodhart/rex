@@ -3,10 +3,13 @@ package edu.udel.cis.cisc475.rex.config.IF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
-/*
- * @author team 2
- * Edited by team 3 to correctly reflect the design document (5pm, 4/10/2010)
- * (Extended ConstraintIF)
+/**
+ * @author Anthony Platt (aplatt)
+ * @author Jeremy Verchick (verchick)
+ *
+ * GroupConstraintIF is the interface for the GroupConstraint class. 
+ * It provides a list of the class's public methods.
+ * 
  */
 
 public interface GroupConstraintIF extends ConstraintIF{
