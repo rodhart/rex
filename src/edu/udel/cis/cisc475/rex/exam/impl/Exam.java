@@ -195,13 +195,13 @@ public class Exam implements ExamIF {
 
 	/**
 	 * Returns the element with a matching label to the argument, there should be only one element
-	 * with the given label specified in the UEF but this is not guaranteed 
+	 * with the given label specified in the UEF but this is not guaranteed.
 	 */
 	public ExamElementIF elementWithLabel(String label) {
 		Iterator<ExamElementIF> i = elements.values().iterator();
 		while (i.hasNext()) {
 			ExamElementIF element = i.next();
-			if (element.label().equals(label)) {
+			if (element.label() != null && element.label().equals(label)) {
 				return element;
 			}
 		}
