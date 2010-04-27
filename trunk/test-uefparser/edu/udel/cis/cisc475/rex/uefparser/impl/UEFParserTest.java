@@ -34,7 +34,8 @@ public class UEFParserTest
 		UEFParser parser = new UEFParser();
 		
 		//Open the file to parse.
-		File file = new File("." + File.separator + "examples" + File.separator + "parseForArgumentTestFile.tex");
+		File file = new File(".", "examples" + File.separator + "parseForArgumentTestFile.tex");
+		System.err.println(file.getAbsolutePath());
 		parser.openFile(file);
 		
 		String argument1 = parser.parseForArgument();
@@ -79,7 +80,7 @@ public class UEFParserTest
 	public void parseForOptionalArgumentTest() throws Exception
 	{
 		File file = new File("." + File.separator + "examples" + File.separator + "parseForOptionalArgumentTestFile.tex");
-
+		System.err.println(file.getAbsolutePath());
 		//Open the file to parse.
 		UEFParser parser = new UEFParser();
 		parser.openFile(file);
