@@ -3,7 +3,7 @@ package edu.udel.cis.cisc475.rex.uefparser.IF;
 /**
  * Factory class for creating objects of type UEFParserIF.
  * 
- * @author Team 4
+ * @author Ahmed El-Hassany
  * 
  */
 public interface UEFParserFactoryIF {
