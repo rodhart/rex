@@ -1,5 +1,6 @@
 package edu.udel.cis.cisc475.rex.exam.IF;
 
+import edu.udel.cis.cisc475.rex.err.RexException;
 import edu.udel.cis.cisc475.rex.source.IF.*;
 
 import java.util.Collection;
@@ -134,6 +135,7 @@ public interface ExamIF {
 	 *            - one of several elements to depend on the usee
 	 * @param usee
 	 *            - singular element others are connected with
+	 * @throws RexException 
 	 */
-	void declareUse(ExamElementIF user, ExamElementIF usee);
+	void declareUse(ExamElementIF user, ExamElementIF usee) throws RexException;
 }
