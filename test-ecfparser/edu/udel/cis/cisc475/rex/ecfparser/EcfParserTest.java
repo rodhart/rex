@@ -45,4 +45,6 @@ public class EcfParserTest {
 
     assertEquals("Goodbye Message", config.finalBlock());
   }
+
 }
+
