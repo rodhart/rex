@@ -10,7 +10,9 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
 /**
- * Parser for the Universal Exam File (UEF).
+ * Parser for the Universal Exam File (UEF). Provides methods
+ * that allow an ExamIF to produced from valid tex file that
+ * uses the exam documentclass.
  * 
  * @author Aaron Myles Landwehr
  * @author Ahmed El-hassany
@@ -39,8 +41,10 @@ public class UEFParser implements UEFParserIF {
 	}
 
 	/**
-	 * Creates new object of the parser. UEFParserFactory should be used to
-	 * create this object.
+	 * This constructor internally creates a new UEFCharHandler object
+	 * to handle the parsing of the file. And creates a new
+	 * UEFCommandHandler object to handle the processing of the command
+	 * queue that is created during parsing.
 	 * 
 	 * @see UEFParserFactoryIF
 	 */
@@ -454,7 +458,7 @@ public class UEFParser implements UEFParserIF {
 	}
 
 	/**
-	 * Parse UEF file and generate ExamIF from it.
+	 * Parses UEF file and generate ExamIF from it.
 	 * 
 	 * @param file
 	 *            the file handler for the uef file.
