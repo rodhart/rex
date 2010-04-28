@@ -460,6 +460,16 @@ class UEFCommandHandler {
 
 		// Variables to hold the beginning and end of the source
 		int startSource = command.getEndPosition();// use the end of this
+
+		// Ignore whitespaces and lines at the beginning of the question,
+		// because latex
+		// does.
+		while (uefCharHandler.read(startSource) == '\n'
+				|| uefCharHandler.read(startSource) == ' '
+				|| uefCharHandler.read(startSource) == '\t') {
+			startSource++;
+		}
+
 		// command
 		int endSource = 0;
 
@@ -479,6 +489,14 @@ class UEFCommandHandler {
 				// use the beginning of the other command as the end source
 				endSource = uefCommandQueue.peek().getStartPosition();
 
+				// Ignore whitespaces and lines at the end of question, because
+				// latex
+				// does.
+				while (uefCharHandler.read(endSource - 1) == '\n'
+						|| uefCharHandler.read(endSource - 1) == ' '
+						|| uefCharHandler.read(endSource - 1) == '\t') {
+					endSource--;
+				}
 				// get answers for the problem
 				answers = processAnswers();
 				break;
