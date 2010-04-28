@@ -12,16 +12,14 @@ import edu.udel.cis.cisc475.rex.random.impl.RandomizerFactory;
 /**
  * Junit tests for Random module
  * @author cardona
- * @author jsong
  *
  */
 public class RandomTest {
 
-
 	@Test
 	//test that random numbers picked are
 	//same with same seed
-	public void testChooseA1() throws Exception {
+	public void testChooseA1()  {
 		int i = 0;
 		seed = 3;
 		numToPick = 9;
@@ -38,7 +36,7 @@ public class RandomTest {
 	@Test
 	//test that random numbers picked are
 	//same with same seed
-	public void testChooseA2() throws Exception {
+	public void testChooseA2()  {
 		int i = 0;
 		seed = 4236;
 		numToPick = 19;
@@ -55,7 +53,7 @@ public class RandomTest {
 	//test that random numbers picked are
 	//same with same seed
 	@Test
-	public void testChooseA3() throws Exception {
+	public void testChooseA3()  {
 		int i = 0;
 		seed = 36;
 		numToPick = 29;
@@ -72,7 +70,7 @@ public class RandomTest {
 	@Test
 	//test that random numbers picked are
 	//same with same seed
-	public void testChooseA4() throws Exception {
+	public void testChooseA4()  {
 		int i = 0;
 		seed = 4236;
 		numToPick = 39;
@@ -90,7 +88,7 @@ public class RandomTest {
 	//test that random numbers picked are
 	//same with same seed
 	//test that all 40 diff elements are used
-	public void testChooseA5() throws Exception {
+	public void testChooseA5()  {
 		int i = 0;
 		seed = 4236;
 		numToPick = 40;
@@ -104,30 +102,40 @@ public class RandomTest {
 		}
 	}//end of method
 
+	@SuppressWarnings("deprecation")
+	@Test
+	//test if number of objects to pick is == 0
+	public void testChooseB1()  {
+		seed = 4236;
+		numToPick = 0;
+		R1 = RF.newRandomizer(seed);
+		b = R1.choose (numToPick, a);
+		Object testObject[] = {};
+		
+		assertEquals(testObject, b);
+	}//end of method
 
-	@Test(expected=Exception.class)
+	@Test(expected=IllegalArgumentException.class)
 	//test if number of objects to pick is <1
-	public void testChooseB2() throws Exception {
+	public void testChooseB2()  {
 		seed = 4236;
 		numToPick = -10;
 		R1 = RF.newRandomizer(seed);
 		b = R1.choose(numToPick, a);
 	}//end of method
 
-	@Test(expected=Exception.class)
+	@Test(expected=IllegalArgumentException.class)
 	//test if number of objects is > avail objects
-	public void testChooseB3() throws Exception {
+	public void testChooseB3()  {
 		seed = 4236;
 		numToPick = 42;//we have only 40 objects cannot pick 42
 		R1 = RF.newRandomizer(seed);
 		b = R1.choose (numToPick, a);
 	}//end of method
 
-
-
 	@Test
 	//test if result is random to 5%
-	public void testChooseMillion1() throws Exception {
+	public void testChooseMillion1()  {
 		seed = 426;
 		numToPick = 1;
 		R1 = RF.newRandomizer(seed);
@@ -156,11 +164,9 @@ public class RandomTest {
 		}	
 	}//end of method
 
-
-
 	@Test
 	//test if result is random to 1%
-	public void testChooseMillion2() throws Exception {
+	public void testChooseMillion2()  {
 		seed = 426;
 		numToPick = 1;//we have only 40 objects cannot pick 42
 		R1 = RF.newRandomizer(seed);
@@ -189,12 +195,9 @@ public class RandomTest {
 		}	
 	}//end of method
 
-
-
-
 	@Test
 	//test if result is random to .5%
-	public void testChooseMillion3() throws Exception {
+	public void testChooseMillion3()  {
 		seed = 426;
 		numToPick = 1;//we have only 40 objects cannot pick 42
 		R1 = RF.newRandomizer(seed);
@@ -223,14 +226,6 @@ public class RandomTest {
 		}	
 	}//end of method
 
-	
-
-
-
-
-
-
-
 	//class variables		
 	private String a[] = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
 			"two_one", "two_two", "two_three", "two_four", "two_five", "two_six", "two_seven", "two_eight", "two_nine", "two_ten",
@@ -247,19 +242,4 @@ public class RandomTest {
 	private int numToPick = 0;
 	private RandomizerIF R1;
 	private RandomizerIF R1_2;
-	//System.out.printf("call: %d,  %s,    %s\n",i, b[i], b_check[i]);
-
-	/*		System.out.printf("counter[1]: %d  \n", counter[1]);
-	System.out.printf("counter[2]: %d  \n", counter[2]);
-	System.out.printf("counter[3]: %d  \n", counter[3]);
-	System.out.printf("counter[4]: %d  \n", counter[4]);
-	System.out.printf("counter[5]: %d  \n", counter[5]);
-	System.out.printf("counter[6]: %d  \n", counter[6]);
-	System.out.printf("counter[7]: %d  \n", counter[7]);
-	System.out.printf("counter[8]: %d  \n", counter[8]);
-	System.out.printf("counter[9]: %d  \n", counter[9]);
-	System.out.printf("counter[10]: %d \n", counter[10]);
-	 */
-
-
 }//end of class
