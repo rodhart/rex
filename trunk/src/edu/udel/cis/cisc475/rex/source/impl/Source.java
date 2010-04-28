@@ -159,7 +159,6 @@ public class Source implements SourceIF {
 			throw new IOException("Null PrintWriter");
 		
 		out.printf("%s\n", myText.toString());
-		return;
 	} 
 
 	/**
@@ -169,6 +168,5 @@ public class Source implements SourceIF {
 	 */
 	public void addText(String text) {
 		myText.append(text);
-		return;
 	}
 }
