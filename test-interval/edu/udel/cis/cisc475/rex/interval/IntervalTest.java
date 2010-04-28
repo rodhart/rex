@@ -110,6 +110,12 @@ public class IntervalTest {
 		assertTrue(I2.contains(8.0));
 		assertTrue(I2.contains(10.0));
 		
+		try{
+			intervalFactory.interval(true, 10.0, false, 5.0);
+		}
+		catch (RexUnsatisfiableException e){
+			assertEquals("The operation you have requested is unsatisfiable.", e.getMessage());
+		}
 	}
 
 
