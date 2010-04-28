@@ -7,6 +7,7 @@ import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
+import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
@@ -51,7 +52,7 @@ public class Generator implements GeneratorIF
 	 * 			 if a ConstraintIF is not satisfiable.
 	 */
 	
-	Generator(ExamIF master, ConfigIF config) throws Exception
+	Generator(ExamIF master, ConfigIF config) throws RexUnsatisfiableException, Exception
 	{
 		this.master = master;
 		this.config = config;
@@ -94,7 +95,7 @@ public class Generator implements GeneratorIF
 		return this.numExams;
 	}
 	
-	private void generate() throws Exception
+	private void generate() throws RexUnsatisfiableException, Exception
 	{
 		this.generatedExams = new ExamIF[this.numExams];
 		this.answerKeys = new AnswerKeyIF[this.numExams];
