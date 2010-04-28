@@ -6,6 +6,7 @@ import org.junit.Test;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
 import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
+import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
@@ -123,4 +124,32 @@ public class RequiredProblemConstraintTest {
 	
 	}
 	
+	/**
+	 * Tests that the factory method throws the correct exceptions given
+	 * the desired incorrect input.
+	 * @throws RexUnsatisfiableException
+	 */
+	@Test
+	public void testExceptions() {
+		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
+		
+		SourceFactoryIF sourceFactory = new SourceFactory();
+		SourceIF S = sourceFactory.newSource(filename);
+		
+		ConfigFactoryIF configFactory = new ConfigFactory();
+		try{
+			configFactory.newRequiredProblemConstraint(null, 999310, S);
+		}
+		catch(Exception e){
+			assertEquals("argument 'label' cannot be null", e.getMessage());
+		}
+		
+		try{
+			configFactory.newRequiredProblemConstraint("32423testing000", 999310, null);
+		}
+		catch(Exception e){
+			assertEquals("argument 'source' cannot be null", e.getMessage());
+		}
+		
+	}
 }

@@ -6,6 +6,7 @@ import org.junit.Test;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
+import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
@@ -55,4 +56,19 @@ public class ConstraintTest {
 	
 	}
 	
+	/**
+	 * Tests that the factory method throws the correct exceptions given
+	 * the desired incorrect input.
+	 * @throws RexUnsatisfiableException
+	 */
+	@Test
+	public void testExceptions() {
+		ConfigFactoryIF configFactory = new ConfigFactory();
+		try{
+			configFactory.newConstraint(null);
+		}
+		catch(Exception e){
+			assertEquals("argument 'label' cannot be null", e.getMessage());
+		}
+	}
 }

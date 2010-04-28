@@ -234,4 +234,42 @@ public class GroupConstraintTest {
 		assertEquals(GroupConstraint.topic(), "-8test33ing2");
 	
 	}
+	
+	/**
+	 * Tests that the factory method throws the correct exceptions given
+	 * the desired incorrect input.
+	 * @throws RexUnsatisfiableException
+	 */
+	@Test
+	public void testExceptions() throws RexUnsatisfiableException {
+		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
+		
+		SourceFactoryIF sourceFactory = new SourceFactory();
+		SourceIF S = sourceFactory.newSource(filename);
+		
+		IntervalFactoryIF intervalFactory = new IntervalFactory();
+		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
+		
+		ConfigFactoryIF configFactory = new ConfigFactory();
+		try{
+			configFactory.newGroupConstraint(null, 10, 20, "-8test33ing2", S);
+		}
+		catch(Exception e){
+			assertEquals("argument 'difficulty' cannot be null", e.getMessage());
+		}
+		
+		try{
+			configFactory.newGroupConstraint(I, 10, 20, null, S);
+		}
+		catch(Exception e){
+			assertEquals("argument 'topic' cannot be null", e.getMessage());
+		}
+		
+		try{
+			configFactory.newGroupConstraint(I, 10, 20, "-8test33ing2", null);
+		}
+		catch(Exception e){
+			assertEquals("argument 'source' cannot be null", e.getMessage());
+		}
+	}
 }
