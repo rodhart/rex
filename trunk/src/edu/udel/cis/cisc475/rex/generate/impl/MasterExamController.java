@@ -108,7 +108,7 @@ public class MasterExamController
 		
 		if (requiredProblem == null)
 		{
-			System.err.println("The label" + requiredLabel +
+			System.err.println("The label " + requiredLabel +
 					   " does not have an associated problem.");
 			throw new Exception();
 		}
