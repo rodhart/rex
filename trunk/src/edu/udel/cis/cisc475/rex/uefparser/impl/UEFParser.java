@@ -153,7 +153,7 @@ public class UEFParser implements UEFParserIF
 		{
 			// unexpected end of file after an argument began
 			throw new RexParseException(
-					"Unexpected EOF when parsing for an argument.");
+					"Unexpected EOF when parsing for an argument.", null);
 		}
 	}
 
@@ -228,7 +228,7 @@ public class UEFParser implements UEFParserIF
 		{
 			// unexpected end of file after an optional argument began
 			throw new RexParseException(
-					"Unexpected EOF when parsing for an optional argument.");
+					"Unexpected EOF when parsing for an optional argument.", null);
 		}
 	}
 
@@ -314,7 +314,7 @@ public class UEFParser implements UEFParserIF
 								throw new RexParseException(
 										"Verb delimiter '"
 										+ delimiter
-										+ "' not matched in file by end of line.");
+										+ "' not matched in file by end of line.", null);
 							}
 							uefCharHandler.move();
 						}
@@ -488,7 +488,7 @@ public class UEFParser implements UEFParserIF
 			catch (EOFException e)
 			{
 				throw new RexParseException(
-						"Unexpected end of file when parsing for command.");
+						"Unexpected end of file when parsing for command.", null);
 			}
 		}
 		return null;

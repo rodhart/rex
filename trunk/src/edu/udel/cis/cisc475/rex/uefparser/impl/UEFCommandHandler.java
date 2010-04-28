@@ -145,7 +145,7 @@ class UEFCommandHandler {
 		if (peekedCommand == null) {
 			// should always be either endAnswers or answer command
 			throw new RexParseException(
-					"No \\end{answer} after \\begin{answer}.");
+					"No \\end{answer} after \\begin{answer}.", null);
 		}
 
 		// set the end of the source to the position before
@@ -212,7 +212,7 @@ class UEFCommandHandler {
 			}
 			default: {
 				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found within answers environment!");
+						+ " found within answers environment!", null);
 			}
 			}
 		}
@@ -255,7 +255,7 @@ class UEFCommandHandler {
 			}
 			default: {
 				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found within block environment!");
+						+ " found within block environment!", null);
 			}
 			}
 		}
@@ -351,12 +351,12 @@ class UEFCommandHandler {
 			}
 			default: {
 				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found within document environment!");
+						+ " found within document environment!", null);
 			}
 			}
 		}
 		throw new RexParseException(
-				"End of file reached before \\end{document} found!");
+				"End of file reached before \\end{document} found!", null);
 	}
 
 	/**
@@ -399,7 +399,7 @@ class UEFCommandHandler {
 			}
 			default: {
 				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found within figure environment!");
+						+ " found within figure environment!", null);
 			}
 			}
 		}
@@ -493,7 +493,7 @@ class UEFCommandHandler {
 				answers = processAnswers();
 				if (answers == null) {
 					throw new RexParseException(
-							"No answers found within a problem environment.");
+							"No answers found within a problem environment.", null);
 				}
 				break;
 			}
@@ -513,7 +513,7 @@ class UEFCommandHandler {
 			}
 			default: {
 				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found within problem environment!");
+						+ " found within problem environment!", null);
 			}
 			}
 		}
@@ -637,7 +637,7 @@ class UEFCommandHandler {
 
 					if (usedElement == null) {
 						throw new RexParseException("Element with label "
-								+ label + " not found within file.");
+								+ label + " not found within file.", null);
 					} else {
 						for (int j = 0; j < e.size(); j++) {
 							exam.declareUse(e.get(j), usedElement);
@@ -655,11 +655,11 @@ class UEFCommandHandler {
 			}
 			default: {
 				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found outside of document environment!");
+						+ " found outside of document environment!", null);
 			}
 			}
 		}
 		throw new RexParseException(
-				"End of document before \begin{document} found!");
+				"End of document before \begin{document} found!", null);
 	}
 }
