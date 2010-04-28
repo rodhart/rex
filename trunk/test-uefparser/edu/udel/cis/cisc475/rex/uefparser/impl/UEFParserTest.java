@@ -3,11 +3,12 @@
  */
 package edu.udel.cis.cisc475.rex.uefparser.impl;
 
+import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
-import java.net.URL;
 import org.junit.Test;
 
 /**
@@ -32,12 +33,11 @@ public class UEFParserTest
 	public void parseForArgumentTest() throws Exception
 	{
 		UEFParser parser = new UEFParser();
-		
+
 		//Open the file to parse.
-		File file = new File(".", "examples" + File.separator + "parseForArgumentTestFile.tex");
-		System.err.println(file.getAbsolutePath());
+		File file = new File("." + File.separator + "examples" + File.separator + "parseForArgumentTestFile.tex");
 		parser.openFile(file);
-		
+
 		String argument1 = parser.parseForArgument();
 		assertEquals("arg1", argument1);
 
@@ -80,7 +80,7 @@ public class UEFParserTest
 	public void parseForOptionalArgumentTest() throws Exception
 	{
 		File file = new File("." + File.separator + "examples" + File.separator + "parseForOptionalArgumentTestFile.tex");
-		System.err.println(file.getAbsolutePath());
+
 		//Open the file to parse.
 		UEFParser parser = new UEFParser();
 		parser.openFile(file);
@@ -300,5 +300,25 @@ public class UEFParserTest
 		assertEquals(804, beginAnswers.getEndPosition());
 		assertEquals(15, beginAnswers.getSize());
 		assertEquals(null, beginAnswers.getOptionalArgument());
+	}
+
+	/**
+	 * This test simply makes sure that the parser actually returns an exam. Since
+	 * the UEFCommandHandler actually creates the ExamIF, we test the UEFCommandHandler
+	 * extensively and not this class since this class doesn't modify the ExamIF.
+	 * We just wanted line testing for cobertura.
+	 *
+	 * @throws Exception If the test somehow throws some kind of exception.
+	 * The likely scenerio is that the needed resource file isn't being found for some reason.
+	 */
+	@Test
+	public void parseTest() throws Exception
+	{
+		UEFParser parser = new UEFParser();
+
+		//Open the file to parse.
+		File file = new File("." + File.separator + "examples" + File.separator + "exam.tex");
+		ExamIF exam = parser.parse(file);
+		assertNotNull(exam);
 	}
 }
