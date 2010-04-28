@@ -69,6 +69,7 @@ public class GeneratorTest {
 	private static AnswerKeyFactoryIF answerKeyFactory;
 	
 	private static ExamFactoryIF masterFactory;
+	private static ExamFactoryIF examFactory;
 	
 	private static IntervalFactoryIF intervalFactory;
 	
@@ -137,6 +138,7 @@ public class GeneratorTest {
 		// Create sample Config
 		config1 = configFactory.newConfig(true, 1);
 		
+		config1.setSeed(5);
 		source1 = sourceFactory.newSource("testFile.txt");
 		source1.addText("question1");
 		source2 = sourceFactory.newSource("testFile.txt");
@@ -149,16 +151,12 @@ public class GeneratorTest {
 		
 		// Create sample AnswerKey
 		generatedkey = keyFactory.newAnswerKey("Version1", "examName", "date");
-		
 		Collection<String> answerProb1 = new ArrayList<String>();
 		answerProb1.add("A");
 		generatedkey.addProblem(answerProb1);
-		
 		Collection<String> answerProb2 = new ArrayList<String>();
 		answerProb2.add("B");
 		generatedkey.addProblem(answerProb2);
-		
-		System.out.println(generatedkey.answers(0));
 		
 		generator1 = generatorFactory.newGenerator(master1, config1);
 	}
@@ -211,36 +209,28 @@ public class GeneratorTest {
 		assertEquals(config1.numVersions(),numexams);
 	}
 	
-	@Test @Ignore
+	@Test
 	// To be implemented when Generate() works
 	public void testGetGeneratedExam(){
-		generatedexam = generator1.getGeneratedExam(0);
-		
+		ExamIF exam = generator1.getGeneratedExam(0);
+		//in this case all of the master is being used, so use it as a generatedExam
+		ExamIF exam2 = master1;
 		// Currently in my test I added two ProblemIFs and nothing else, subject to change
-		assertEquals(2,generatedexam.numElements());
-		assertTrue(generatedexam.elements().contains(prob1));
-		assertTrue(generatedexam.elements().contains(prob2));
-		
-		//assertEquals(masterFactory.newGeneratedExam(),generatedexam);
+		// after being randomized exam1.elements(0) corresponds to exam2.elements(1)
+		// after being randomized exam2.elements(0) corresponds to exam1.elements(0)
+		assertEquals(exam2.numElements(),exam.numElements());
+		assertEquals(exam2.element(1).label(), exam.element(0).label());
+		assertEquals(exam2.element(0).label(), exam.element(1).label());
 	}
 
-	@Test @Ignore
-	// To be implemented when Generate() works
+	@Test
 	public void testGetAnswerKey(){
 		AnswerKeyIF key = generator1.getAnswerKey(0);
 		
-		System.out.println(key.answers(0));
-		System.out.println(generatedkey.answers(0));
-		
-		assertEquals(generatedkey, key);
-		//System.out.println(generatedkey.answers(0));
-		// merely checks that answer key is successfully retrieved
-		// does not verify if correct problem has correct answer
-		//assertTrue(generatedkey.answers(0).contains(answers1[0].source()));
-		//assertTrue(generatedkey.answers(0).contains(answers1[1].source()));
-		//assertTrue(generatedkey.answers(0).contains(answers2[0].source()));
-		//assertTrue(generatedkey.answers(0).contains(answers2[1].source()));
-		
-		//assertEquals(key1,generator1.getAnswerKey(1));
+		assertEquals(generatedkey.version(), key.version());
+		assertEquals(generatedkey.examName(), key.examName());
+		assertEquals(generatedkey.date(), key.date());
+		assertEquals(generatedkey.answers(0), key.answers(0));
+		assertEquals(generatedkey.answers(1), key.answers(1));
 	}
 }
