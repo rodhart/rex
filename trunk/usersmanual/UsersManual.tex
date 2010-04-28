@@ -54,11 +54,13 @@ Available at
 
 
 
-\section(Universal Exam File (UEF)}
+\section{Universal Exam File (UEF)}
 
 Please see Figure \ref{fig:SampleUEF} for an example Universal Exam File.
 
 \section{Exam Configuration File (ECF)}
+Please see Figure \ref{fig:SampleECF} on page \pageref{fig:SampleECF} for an example Universal Exam File.
+
 The ECF file is a text file with a \texttt{.tex} extension that consists
 of a series of constraints. Each constraint is separated by a semicolon,
 with comments being all text that follows after a pound symbol 
@@ -161,6 +163,27 @@ will require at least 10 satisfactory questions.
 \end{verbatim}
 \caption{Sample UEF.txt}
 \label{fig:SampleUEF}
+\end{figure}
+
+\begin{figure}
+\begin{verbatim}
+include 5 problems on "Finite State Automata" with difficulty in [0,20)
+  at 3 points;
+include 5 problems on "ssort" with difficulty in [20,\infty) at 2 points;
+include 3 problems on "arithmetic" with difficulty in [0,10] at 1 points;
+include 3 problems on "arithmetic" with difficulty in (-\infty,\infty) at 3 points;
+
+# the following problems will be included in their corresponding
+# sections on any generated exam
+includeall prob:arithmetic:prime, prob:arithmetic:composite, prob:misc:hat,
+  prob:misc:complexity at 5 points;
+
+append "Goodbye Message"; # this block will be added at end
+
+versions are "1/21/2010", "Jan.\ 21, 2010", "21-jan-2010", "JAN.\ 21 2010";
+\end{verbatim}
+\caption{Sample ECF.ecf}
+\label{fig:SampleECF}
 \end{figure}
 
 \end{document}
