@@ -209,7 +209,7 @@ class UEFCommandHandler {
 			}
 			default: {
 				System.err.println("Error: " + uefCommandQueue.peek().getType()
-						+ " found within block environment!");
+						+ " found within answers environment!");
 				System.exit(-1);
 				break;
 			}
