@@ -66,6 +66,16 @@ public class UEFParserTest
 		//Check for argument following a command.
 		String argument9 = parser.parseForArgument();
 		assertEquals(null, argument9);
+
+		parser.parseForCommand();
+		parser.parseForCommand();
+
+		//optional argument 8
+		assertNotNull(parser.parseForArgument());
+
+		//end of file
+		assertNull(parser.parseForArgument());
+
 	}
 
 	/**
@@ -136,6 +146,13 @@ public class UEFParserTest
 		//Check for optional argument behind command
 		String argument10 = parser.parseForOptionalArgument();
 		assertEquals(null, argument10);
+
+		//optional argument 11
+		assertNotNull(parser.parseForCommand());
+
+		//end of file
+		parser.parseForOptionalArgument();
+		assertNull(parser.parseForOptionalArgument());
 	}
 
 	/**
