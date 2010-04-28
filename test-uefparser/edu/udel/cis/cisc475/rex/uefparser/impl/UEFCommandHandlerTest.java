@@ -1,6 +1,7 @@
 package edu.udel.cis.cisc475.rex.uefparser.impl;
 
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
+import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FixedAnswerIF;
@@ -156,7 +157,7 @@ public class UEFCommandHandlerTest
 		assertEquals("\\answer[correct] another test\n             test", answer[1].source().text());
 
 		//test the problems topic
-		assertEquals("topic",problem.topic());
+		assertEquals("topic", problem.topic());
 
 		//test difficulty
 		assertEquals(45.0, problem.difficulty(), 0.0);
@@ -165,11 +166,34 @@ public class UEFCommandHandlerTest
 		assertEquals("label 1", problem.label());
 
 		//test the correctness of getting the problem's SourceIF
-		assertEquals(2,problem.question().startLine());
-		assertEquals(4,problem.question().lastLine());
-		assertEquals(1,problem.question().startColumn());
-		assertEquals(10,problem.question().lastColumn());
+		assertEquals(2, problem.question().startLine());
+		assertEquals(4, problem.question().lastLine());
+		assertEquals(1, problem.question().startColumn());
+		assertEquals(10, problem.question().lastColumn());
 		assertEquals("Here is the problem question?\\ref{fig1}\n\\label{   label 1   }\nYes here.", problem.question().text());
+	}
+
+	@Test
+	public void processBlockTest() throws Exception
+	{
+		UEFParser parser = new UEFParser();
+
+		//Open the file to parse.
+		File file = new File("." + File.separator + "examples" + File.separator + "processBlockTestFile.tex");
+		parser.parseForAllCommands(file);
+
+		//get a reference to the handler to allow direct calls to the process methods of the handler
+		UEFCommandHandler handler = parser.getUEFCommandHandler();
+
+		BlockIF block = handler.processBlock();
+		assertEquals("name of block", block.label());
+		assertEquals(1, block.source().startLine());
+		assertEquals(7, block.source().lastLine());
+		assertEquals(1, block.source().startColumn());
+		assertEquals(12, block.source().lastColumn());
+		assertEquals(
+				"\\begin{block}{name of block}\n\\ref{somefig}\n\\begin{verbatim} some }{{} \\end{verbatim}\n\n\\verb!test this verb!\n\n\\end{block}",
+				block.source().text());
 	}
 
 	/**
