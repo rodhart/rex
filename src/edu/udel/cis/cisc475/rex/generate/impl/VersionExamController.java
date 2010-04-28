@@ -97,7 +97,15 @@ public class VersionExamController
 			if (!(theAnswers[i].getClass().isInstance(FixedAnswerIF.class)))
 				beforeRandomization.add(theAnswers[i]);
 		
-		afterRandomization = (AnswerIF[]) this.theRandomizer.choose(beforeRandomization.size(), beforeRandomization.toArray());
+		//Next 6 lines are maybe a fix to the problem we were having.  Certainly there is a better way.
+		Object[] array = this.theRandomizer.choose(beforeRandomization.size(), beforeRandomization.toArray());
+		afterRandomization = new AnswerIF[array.length];
+		for(int i = 0; i < array.length; i++)
+		{
+			afterRandomization[i] = (AnswerIF)array[i];
+		}
+		
+		//afterRandomization = (AnswerIF[]) this.theRandomizer.choose(beforeRandomization.size(), beforeRandomization.toArray());
 		
 		for (int i = 0; i < theAnswers.length; i++)
 			if (!(theAnswers[i].getClass().isInstance(FixedAnswerIF.class)))
@@ -346,7 +354,16 @@ public class VersionExamController
 						figureBlacklist.put(identifier, theFC.getFigure());
 					}
 					
-					theProblemsArray = (ProblemIF[]) (this.theRandomizer.choose(theFC.getProblems().size(), theFC.getProblems().toArray(new ProblemIF[theFC.getProblems().size()])));
+					//Next 6 lines are maybe a fix to the problem we were having.  Certainly there is a better way.
+					Object[] array = this.theRandomizer.choose(theFC.getProblems().size(), theFC.getProblems().toArray());
+					theProblemsArray = new ProblemIF[array.length];
+					for(int i = 0; i < array.length; i++)
+					{
+						theProblemsArray[i] = (ProblemIF)array[i];
+					}
+					
+					//The line that was causing the problem, fixed (maybe?) by the 6 lines above
+					//theProblemsArray = (ProblemIF[]) (this.theRandomizer.choose(theFC.getProblems().size(), theFC.getProblems().toArray(new ProblemIF[theFC.getProblems().size()])));
 					
 					for (int i = 0; i < theProblemsArray.length; i++)
 					{
