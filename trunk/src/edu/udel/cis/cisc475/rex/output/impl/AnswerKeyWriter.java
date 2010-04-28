@@ -1,6 +1,7 @@
 package edu.udel.cis.cisc475.rex.output.impl;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,7 +40,11 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 	 * 
 	 * @param out a pointer to where the user wants the output to go
 	 */
-	public void write(PrintWriter out){
+	public void write(PrintWriter out) throws IOException {
+		
+		if(out == null)
+			throw new IOException("Null PrintWriter");
+		
 		TimeZone zone = TimeZone.getDefault();
 		Calendar now = Calendar.getInstance(zone);
 		Date day = new Date(now.getTimeInMillis());
