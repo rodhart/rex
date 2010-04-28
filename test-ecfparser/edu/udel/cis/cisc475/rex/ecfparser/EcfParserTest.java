@@ -41,9 +41,16 @@ public class EcfParserTest {
     "versions are \"1/21/2010\", \"Jan.\\ 21, 2010\", \"21-jan-2010\", \"JAN.\\ 21 2010\";";
 
     EcfParser parser = new EcfParser(5);
-    ConfigIF config = parser.parseString(reqDocExample);
 
-    assertEquals("Goodbye Message", config.finalBlock());
+		ConfigIF config;
+    try {
+			config = parser.parseString(reqDocExample);
+			assertEquals("Goodbye Message", config.finalBlock());
+		} catch (Exception e) {
+			System.out.println("something went wrong");
+			assertTrue(false);
+		}
+
   }
 
 }
