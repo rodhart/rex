@@ -21,7 +21,7 @@ public interface SourceIF {
 	void setStartColumn(int column);
 	void setLastLine(int line);
 	void setLastColumn(int column);
-	void write(PrintWriter out); 
+	void write(PrintWriter out) throws IOException; 
 	void addText(String text);
 	
 }//end of interface SourceIF 

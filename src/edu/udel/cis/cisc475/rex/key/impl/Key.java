@@ -79,7 +79,7 @@ public class Key implements AnswerKeyIF {
 	 * @return a collection of correct answers (maybe just one)
 	 * @throws IndexOutOfBoundsException Throws exception when index > number of answers 
 	 */
-	public Collection <String> answers(int index) throws IndexOutOfBoundsException {	
+	public Collection <String> answers(int index) {	
 		//since _numAnswers is 1 based and index is 0 based use less than
 		if (index<_numAnswers)
 			return _Answers.get(index);

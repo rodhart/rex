@@ -58,22 +58,21 @@ public class Randomizer implements RandomizerIF {
 		//holds the shuffled list
 		ArrayList shuffledItems  = new ArrayList();
 
+		// If numItems == 0, return an empty array
+		if(numItems == 0){
+			Object emptyArray[] = {};
+			return emptyArray;
+		}
+		
 		//adds all the items to the arraylist
 		for(int i=0; i< items.length; i++){
 			itemsArray.add(items[i]);	
 		}
-
-		//if picked items is less then zero return null
-		if(numItems <= 0){
-			// Should be changed to RexException when it's implemented
-			//throw new Exception("Number of items: " + numItems + "\n numItems <= 0");
-			return null;
-		}
-		//if they request more objects then in the list
-		if(numItems > items.length + 1){	
-			//throw new Exception("Number of items: " + numItems + "\n"
-				//	+ "Length of array: " + (items.length+1));
-			return null;
+		
+		// If numItems > number of items in the array or negative numItems, throw exception
+		if((numItems > items.length + 1) || (numItems < 0)){	
+			throw new IllegalArgumentException("Number of items: " + numItems + "\n" + 
+					"Number of of items in the array: " + (items.length + 1));
 		}
 		
 		while(shuffledItems.size()!=numItems ){
