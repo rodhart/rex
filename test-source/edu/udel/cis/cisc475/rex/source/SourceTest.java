@@ -177,7 +177,7 @@ public class SourceTest {
 	}	
 	
 	@Test
-	public void testWrite() {
+	public void testWrite() throws IOException {
 		String filename = "./trunk/test-source/edu/udel/cis/cisc475/rex/source/test.txt";
 		
 		SourceFactoryIF myFactory = new SourceFactory();
@@ -186,14 +186,8 @@ public class SourceTest {
 		S.addText("This is my first line of text" + newline);
 		S.addText("Second line of text this is" + newline);
 		
-	
 		PrintWriter pw = null;
-		try {
-			pw = new PrintWriter(new FileWriter(filename));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		pw = new PrintWriter(new FileWriter(filename));
 		
 		S.write(pw);
 		pw.flush();
@@ -313,5 +307,20 @@ public class SourceTest {
 		assertEquals(S.startColumn(), 2);
 		assertEquals(S.lastLine(), 3);
 		assertEquals(S.lastColumn(), 4);
+	}
+	
+	@Test(expected=IOException.class)
+	public void testNullPrintWriter() throws IOException {
+		String filename = "moo";
+		
+		SourceFactoryIF sourceFactory = new SourceFactory();
+		SourceIF S = sourceFactory.newSource(filename);
+		
+		PrintWriter pw = null;
+		
+		S.addText("meow" + newline);
+		
+		S.write(pw);
+		pw.flush();
 	}
 }

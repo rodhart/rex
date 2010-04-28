@@ -1,5 +1,6 @@
 package edu.udel.cis.cisc475.rex.source.impl;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
@@ -153,8 +154,11 @@ public class Source implements SourceIF {
 	 * 
 	 * @param out PrintWriter object to output to
 	 */
-	public void write(PrintWriter out) {
-		out.printf("%s\n", myText.toString());
+	public void write(PrintWriter out) throws IOException {
+		if(out == null)
+			throw new IOException("Null PrintWriter");
+		else
+			out.printf("%s\n", myText.toString());
 		return;
 	} 
 
