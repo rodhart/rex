@@ -1,6 +1,7 @@
 package edu.udel.cis.cisc475.rex.output.IF;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
@@ -18,8 +19,9 @@ public interface AnswerKeyWriterIF {
 	 * Writes the Key object to a file using a PrintWriter object
 	 * 	
 	 * @param out any PrintWriter object used to output data
+	 * @throws IOException 
 	 */
-	void write(PrintWriter out);
+	void write(PrintWriter out) throws IOException;
 	/**
 	 * Writes a scantron formatted file using the answer Key object.
 	 * 
