@@ -4,6 +4,7 @@ import edu.udel.cis.cisc475.rex.err.RexException;
 import edu.udel.cis.cisc475.rex.err.RexParseException;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FixedAnswerIF;
@@ -268,6 +269,10 @@ public class UEFCommandHandlerTest
 
 		Collection<ProblemIF> problemCollection = exam.problems();
 		ProblemIF problem[] = problemCollection.toArray(new ProblemIF[0]);
+
+		FigureIF figure = (FigureIF)exam.elementWithLabel("fig:example topic");
+
+		assertEquals("fig:example topic", figure.label());
 
 		//ExamFactoryIF examFactory = new ExamFactory();
 		//SourceFactoryIF sourceFactory = newSource
