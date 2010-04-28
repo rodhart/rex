@@ -18,6 +18,7 @@ package edu.udel.cis.cisc475.rex.ecfparser.impl.parser;
 // tons of stuff to include
 @header {
 package edu.udel.cis.cisc475.rex.ecfparser.impl.parser; 
+import edu.udel.cis.cisc475.rex.ecfparser.impl.err.EcfParserHackException;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
@@ -67,13 +68,13 @@ include
 	;
 
 // interval statement
-interval returns [IntervalIF i] 
+interval returns [IntervalIF i]
 	:	l=leftBound COMMA r=rightBound
 	    {
 	        $i = intervalFactory.interval($l.strict, $l.value, $r.strict, $r.value);
 	    }
 	;
-	catch [RexUnsatisfiableException e] { }
+	catch [RexUnsatisfiableException e] { throw new EcfParserHackException(e); }
 
 
 leftBound returns [boolean strict, Double value]
