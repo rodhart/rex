@@ -71,16 +71,15 @@ public class GeneratorTest {
 	private static ExamIF master1;
 	
 	private static AnswerKeyIF key1;
-	
-	private static IntervalIF interval1;
-
+	private static SourceIF question1;
+	private static SourceIF question2;
+	private static AnswerIF[] answers1;
+	private static AnswerIF[] answers2;
+	private static ProblemIF prob1;
+	private static ProblemIF prob2;
 	private static SourceIF source1;
-	
-	private static ProblemIF problem1;
-	
-	private static AnswerIF answer1;
-	
-	private static AnswerIF[] num1Answers = {answer1};
+	private static SourceIF source2;
+	private static IntervalIF interval;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -94,8 +93,8 @@ public class GeneratorTest {
 			configFactory = new ConfigFactory();
 			masterFactory = new ExamFactory();
 			answerKeyFactory = Keys.newAnswerKeyFactory();
-			intervalFactory = new IntervalFactory(); //Intervals not made yet
-			sourceFactory = new SourceFactory(); //Sources not made
+			intervalFactory = new IntervalFactory();
+			sourceFactory = new SourceFactory();
 		}
 		
 		generatorFactory = new GeneratorFactory();
@@ -104,32 +103,34 @@ public class GeneratorTest {
 		// Create sample master exam
 		master1 = masterFactory.newMasterExam();
 		
-		SourceIF question1 = sourceFactory.newSource("testFile.txt");		
+		
+		question1 = sourceFactory.newSource("testFile.txt");		
 		question1.addText("question1");		
-		AnswerIF[] answers1 = new Answer[2];
+		answers1 = new Answer[2];
 		answers1[0] = new Answer(true, sourceFactory.newSource("option1"));
 		answers1[1] = new Answer(false, sourceFactory.newSource("option2"));
-		ProblemIF prob1 = masterFactory.newProblem("topic1", "label1", question1, answers1);
+		prob1 = masterFactory.newProblem("topic1", "label1", question1, answers1);
+		prob1.setDifficulty(3.0);
 		
-		SourceIF question2 = sourceFactory.newSource("testFile.txt");
+		question2 = sourceFactory.newSource("testFile.txt");
 		question2.addText("question2");		
-		AnswerIF[] answers2 = new Answer[2];
+		answers2 = new Answer[2];
 		answers2[0] = new Answer(false, sourceFactory.newSource("option3"));
 		answers2[1] = new Answer(true, sourceFactory.newSource("option4"));
-		ProblemIF prob2 = masterFactory.newProblem("topic2", "label2", question2, answers2);
+		prob2 = masterFactory.newProblem("topic2", "label2", question2, answers2);
+		prob2.setDifficulty(3.0);
 		
 		master1.addElement(prob1);
 		master1.addElement(prob2);
 		
-		
 		// Create sample Config
 		config1 = configFactory.newConfig(true, 1);
 		
-		SourceIF source1 = sourceFactory.newSource("testFile.txt");
+		source1 = sourceFactory.newSource("testFile.txt");
 		source1.addText("question1");
-		SourceIF source2 = sourceFactory.newSource("testFile.txt");
+		source2 = sourceFactory.newSource("testFile.txt");
 		source2.addText("question2");
-		IntervalIF interval = intervalFactory.interval(true, 1.0, true, 5.0);
+		interval = intervalFactory.interval(true, 1.0, true, 5.0);
 		config1.addRequiredProblemConstraint("label1", 4, source1);
 		config1.addGroupConstraint("topic2", interval, 1, 3, source2);
 		String[] versions = {"Version1"};
@@ -170,16 +171,15 @@ public class GeneratorTest {
 	public void tearDown() throws Exception {
 	}
 
-	@Test @Ignore
+	@Test
 	public void testGetMaster() {
 		ExamIF master = generator1.getMaster();
 		assertEquals(master1, master);
 	}
 	
-	@Test @Ignore
+	@Test
 	public void testGetConfig() {
 		ConfigIF config = generator1.getConfig();
-
 		assertEquals(config1, config);
 	}	
 	
@@ -201,4 +201,9 @@ public class GeneratorTest {
 		
 	}
 	
+	@Test @Ignore
+	public void testBlackList(){
+		//adding additional information to master1 and config1 defined at the top
+		config1.addGroupConstraint("topic1", interval, 1, 3, source2);
+	}
 }
