@@ -1,6 +1,8 @@
 package edu.udel.cis.cisc475.rex.output;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import edu.udel.cis.cisc475.rex.output.impl.OutputFactory;
 import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyFactoryIF;
