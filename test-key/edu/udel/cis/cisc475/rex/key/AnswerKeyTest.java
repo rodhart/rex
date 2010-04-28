@@ -30,15 +30,12 @@ public class AnswerKeyTest {
 		assertEquals (true, result);
 	}
 
-
 	@Test
 	// test getter
 	public void test_date() {
 		boolean result = c.equals(K.date());
 		assertEquals (true, result);
 	}
-
-
 
 	@Test
 	//test adding problems to collection
@@ -75,7 +72,7 @@ public class AnswerKeyTest {
 	}//end of test_collections() 	
 
 	@Test(expected=IndexOutOfBoundsException.class)
-	public void testOutOfBoundsException() throws IndexOutOfBoundsException {
+	public void testOutOfBoundsException() {
 		Collection <String> Answer_A = new ArrayList <String>();
 		Answer_A.add(new String("A"));
 		K.addProblem(Answer_A);

@@ -325,6 +325,5 @@ public class SourceTest {
 		S.addText("meow" + newline);
 		
 		S.write(pw);
-		pw.flush();
 	}
 }
