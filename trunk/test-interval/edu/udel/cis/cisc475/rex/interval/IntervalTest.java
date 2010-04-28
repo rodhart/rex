@@ -42,7 +42,7 @@ public class IntervalTest {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		IntervalIF I = intervalFactory.interval(true, 5.0, true, 10.0);
 		IntervalIF I2 = intervalFactory.interval(false, 5.0, true, 10.0);
-		
+
 		assertEquals(true, I.strictLow());
 		assertEquals(false, I2.strictLow());
 	}
@@ -110,12 +110,6 @@ public class IntervalTest {
 		assertTrue(I2.contains(8.0));
 		assertTrue(I2.contains(10.0));
 		
-		IntervalIF I3 = intervalFactory.interval(true, 10.0, false, 5.0);
-		
-		assertFalse(I3.contains(11.0));
-		assertFalse(I3.contains(5.0));
-		assertTrue(I3.contains(8.0));
-		assertTrue(I3.contains(10.0));
 	}
 
 
