@@ -1,5 +1,6 @@
 package edu.udel.cis.cisc475.rex.output;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,7 +29,7 @@ public class OutputMainExample {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		//declare a pointer to an interface and
 		//create an object of the interface type
 		AnswerKeyFactoryIF AKF = new AnswerKeyFactory(); 
