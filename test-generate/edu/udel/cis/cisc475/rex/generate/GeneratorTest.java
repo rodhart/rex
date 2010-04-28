@@ -8,6 +8,7 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Random;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -24,6 +25,7 @@ import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
 import edu.udel.cis.cisc475.rex.config.generatestubs.ConfigFactoryStub;
 import edu.udel.cis.cisc475.rex.config.impl.Config;
 import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
+import edu.udel.cis.cisc475.rex.config.impl.Constraint;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
@@ -46,6 +48,8 @@ import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyFactoryIF;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 import edu.udel.cis.cisc475.rex.key.generatestubs.AnswerKeyFactoryStub;
 import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
+import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
+import edu.udel.cis.cisc475.rex.random.impl.Randomizer;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 import edu.udel.cis.cisc475.rex.source.generatestubs.SourceFactoryStub;
@@ -81,16 +85,15 @@ public class GeneratorTest {
 	
 	private static ExamIF master1;
 	
-	private static SourceIF question1;
-	private static SourceIF question2;
-	private static AnswerIF[] answers1;
-	private static AnswerIF[] answers2;
-	private static ProblemIF prob1;
-	private static ProblemIF prob2;
+	private static SourceIF question1, question2, question3, question4, question5, question6, question7;
+	private static AnswerIF[] answers1, answers2, answers3, answers4, answers5, answers6, answers7;
+	private static ProblemIF prob1, prob2, prob3, prob4, prob5, prob6, prob7;
 	private static SourceIF source1;
 	private static SourceIF source2;
 	private static SourceIF source3;
 	private static IntervalIF interval;
+	private static Collection<String> answerProb1;
+	private static Collection<String> answerProb2;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -118,22 +121,35 @@ public class GeneratorTest {
 		
 		question1 = sourceFactory.newSource("testFile.txt");		
 		question1.addText("question1");		
-		answers1 = new Answer[2];
+		answers1 = new Answer[7];
 		answers1[0] = new Answer(true, sourceFactory.newSource("option1"));
-		answers1[1] = new Answer(false, sourceFactory.newSource("option2"));
+		answers1[1] = new Answer(true, sourceFactory.newSource("option2"));
+		answers1[2] = new Answer(true, sourceFactory.newSource("option3"));
+		answers1[3] = new Answer(true, sourceFactory.newSource("option4"));
+		answers1[4] = new Answer(true, sourceFactory.newSource("option5"));
+		answers1[5] = new Answer(true, sourceFactory.newSource("option6"));
+		answers1[6] = new Answer(true, sourceFactory.newSource("option7"));
 		prob1 = masterFactory.newProblem("topic1", "label1", question1, answers1);
 		prob1.setDifficulty(3.0);
 		
 		question2 = sourceFactory.newSource("testFile.txt");
 		question2.addText("question2");		
-		answers2 = new Answer[2];
-		answers2[0] = new Answer(false, sourceFactory.newSource("option3"));
-		answers2[1] = new Answer(true, sourceFactory.newSource("option4"));
+		answers2 = new Answer[7];
+		answers2[0] = new Answer(false, sourceFactory.newSource("option8"));
+		answers2[1] = new Answer(true, sourceFactory.newSource("option9"));
+		answers2[2] = new Answer(false, sourceFactory.newSource("option10"));
+		answers2[3] = new Answer(false, sourceFactory.newSource("option11"));
+		answers2[4] = new Answer(false, sourceFactory.newSource("option12"));
+		answers2[5] = new Answer(false, sourceFactory.newSource("option13"));
+		answers2[6] = new Answer(false, sourceFactory.newSource("option14"));
 		prob2 = masterFactory.newProblem("topic2", "label2", question2, answers2);
 		prob2.setDifficulty(3.0);
 		
+		
+		
 		master1.addElement(prob1);
 		master1.addElement(prob2);
+
 		
 		// Create sample Config
 		config1 = configFactory.newConfig(true, 1);
@@ -151,12 +167,19 @@ public class GeneratorTest {
 		
 		// Create sample AnswerKey
 		generatedkey = keyFactory.newAnswerKey("Version1", "examName", "date");
-		Collection<String> answerProb1 = new ArrayList<String>();
+		answerProb1 = new ArrayList<String>();
 		answerProb1.add("A");
+		answerProb1.add("B");
+		answerProb1.add("C");
+		answerProb1.add("D");
+		answerProb1.add("E");
+		answerProb1.add("F");
+		answerProb1.add("G");
 		generatedkey.addProblem(answerProb1);
-		Collection<String> answerProb2 = new ArrayList<String>();
-		answerProb2.add("B");
+		answerProb2 = new ArrayList<String>();
+		answerProb2.add("E");
 		generatedkey.addProblem(answerProb2);
+
 		
 		generator1 = generatorFactory.newGenerator(master1, config1);
 	}
@@ -210,7 +233,7 @@ public class GeneratorTest {
 	}
 	
 	@Test
-	// To be implemented when Generate() works
+	// This just tests getting generated exam, does not test if correct
 	public void testGetGeneratedExam(){
 		ExamIF exam = generator1.getGeneratedExam(0);
 		//in this case all of the master is being used, so use it as a generatedExam
@@ -218,19 +241,21 @@ public class GeneratorTest {
 		// Currently in my test I added two ProblemIFs and nothing else, subject to change
 		// after being randomized exam1.elements(0) corresponds to exam2.elements(1)
 		// after being randomized exam2.elements(0) corresponds to exam1.elements(0)
-		assertEquals(exam2.numElements(),exam.numElements());
+		assertEquals(2,exam.numElements());
 		assertEquals(exam2.element(1).label(), exam.element(0).label());
 		assertEquals(exam2.element(0).label(), exam.element(1).label());
 	}
 
 	@Test
+	//This just tests getting answer key, does not test if answer key is correct
 	public void testGetAnswerKey(){
 		AnswerKeyIF key = generator1.getAnswerKey(0);
 		
 		assertEquals(generatedkey.version(), key.version());
 		assertEquals(generatedkey.examName(), key.examName());
 		assertEquals(generatedkey.date(), key.date());
-		assertEquals(generatedkey.answers(0), key.answers(0));
-		assertEquals(generatedkey.answers(1), key.answers(1));
+		
+		assertEquals(answerProb1, key.answers(1));
+		assertEquals(answerProb2, key.answers(0));
 	}
 }
