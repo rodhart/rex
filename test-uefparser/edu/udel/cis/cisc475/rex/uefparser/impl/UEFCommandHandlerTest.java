@@ -1,8 +1,13 @@
 package edu.udel.cis.cisc475.rex.uefparser.impl;
 
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FixedAnswerIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
+import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
+import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
+import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import java.io.File;
@@ -84,6 +89,39 @@ public class UEFCommandHandlerTest
 		assertEquals("\\answer[fixed] none of the above", answer.source().text());
 	}
 
+	@Test
+	public void processAnswersTest() throws Exception
+	{
+		UEFParser parser = new UEFParser();
+
+		//Open the file to parse.
+		File file = new File("." + File.separator + "examples" + File.separator + "processAnswersTestFile.tex");
+		parser.parseForAllCommands(file);
+
+		//get a reference to the handler to allow direct calls to the process methods of the handler
+		UEFCommandHandler handler = parser.getUEFCommandHandler();
+
+		AnswerIF answer[] = handler.processAnswers();
+
+		assertEquals(true, answer[0].isCorrect());
+		assertEquals("processAnswersTestFile.tex", answer[0].source().filename());
+		assertEquals(2, answer[0].source().startLine());
+		assertEquals(2, answer[0].source().lastLine());
+		assertEquals(1, answer[0].source().startColumn());
+		assertEquals(26, answer[0].source().lastColumn());
+		assertEquals("\\answer[correct] $2^{-1}$", answer[0].source().text());
+
+		assertEquals(true, answer[1].isCorrect());
+		assertEquals("processAnswersTestFile.tex", answer[1].source().filename());
+		assertEquals(3, answer[1].source().startLine());
+		assertEquals(3, answer[1].source().lastLine());
+		assertEquals(1, answer[1].source().startColumn());
+		assertEquals(23, answer[1].source().lastColumn());
+		assertEquals("\\answer[correct] $2^0$", answer[1].source().text());
+
+		assertEquals(2, answer.length);
+	}
+
 	/**
 	 * Tests that process() returns a correct ExamIF after reading in a valid UEF file.
 	 *
@@ -110,5 +148,19 @@ public class UEFCommandHandlerTest
 		assertTrue(topics.contains("example topic"));
 		assertTrue(topics.contains("matrix matlab"));
 		assertTrue(topics.contains("function call"));
+
+		assertTrue(exam.isMaster());
+
+		Collection<ProblemIF> problemCollection = exam.problems();
+		ProblemIF problem[] = problemCollection.toArray(new ProblemIF[0]);
+
+		//ExamFactoryIF examFactory = new ExamFactory();
+		//SourceFactoryIF sourceFactory = newSource
+
+		//SourceIF source =
+
+		//AnswerIF answer1 = new ExamFactory().newAnswer(true, null);
+
+		//assertEquals(15,problem[0].difficulty(),0);
 	}
 }
