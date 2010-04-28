@@ -49,6 +49,15 @@ public class UEFCharHandlerTest
 	{
 		char ch = this.uefCharHandler.read();
 		assertEquals('L', ch);
+
+		ch = this.uefCharHandler.read(5);
+		assertEquals('0', ch);
+
+		ch = this.uefCharHandler.read(7);
+		assertEquals('\n', ch);
+
+		ch = this.uefCharHandler.read(8);
+		assertEquals('L', ch);
 	}
 
 	/**
@@ -138,6 +147,88 @@ public class UEFCharHandlerTest
 
 		buffer = this.uefCharHandler.getContent(16, 23);
 		assertEquals("Line 2.", buffer);
+	}
+
+	@Test
+	public void getLineNumberTest() throws EOFException
+	{
+		int lineNumber = this.uefCharHandler.getLineNumber();
+		assertEquals(1, lineNumber);
+
+		this.uefCharHandler.setPosition(7);
+		lineNumber = this.uefCharHandler.getLineNumber();
+		assertEquals(1, lineNumber);
+
+		this.uefCharHandler.setPosition(8);
+		lineNumber = this.uefCharHandler.getLineNumber();
+		assertEquals(2, lineNumber);
+
+		lineNumber = this.uefCharHandler.getLineNumber(23);
+		assertEquals(3, lineNumber);
+	}
+
+	@Test
+	public void getColumnNumberTest() throws EOFException
+	{
+		int columnNumber = this.uefCharHandler.getColumnNumber();
+		assertEquals(1, columnNumber);
+
+		this.uefCharHandler.setPosition(7);
+		columnNumber = this.uefCharHandler.getColumnNumber();
+		assertEquals(8, columnNumber);
+
+		this.uefCharHandler.setPosition(8);
+		columnNumber = this.uefCharHandler.getColumnNumber();
+		assertEquals(1, columnNumber);
+
+		columnNumber = this.uefCharHandler.getColumnNumber(22);
+		assertEquals(7, columnNumber);
+	}
+
+	@Test
+	public void isLineBreakTest() throws EOFException
+	{
+		this.uefCharHandler.setPosition(7);
+		assertEquals(true, this.uefCharHandler.isLineBreak());
+		this.uefCharHandler.setPosition(8);
+		assertEquals(false, this.uefCharHandler.isLineBreak());
+		this.uefCharHandler.setPosition(9);
+		assertEquals(false, this.uefCharHandler.isLineBreak());
+		this.uefCharHandler.setPosition(10);
+		assertEquals(false, this.uefCharHandler.isLineBreak());
+		this.uefCharHandler.setPosition(11);
+		assertEquals(false, this.uefCharHandler.isLineBreak());
+		this.uefCharHandler.setPosition(12);
+		assertEquals(false, this.uefCharHandler.isLineBreak());
+		this.uefCharHandler.setPosition(13);
+		assertEquals(false, this.uefCharHandler.isLineBreak());
+		this.uefCharHandler.setPosition(14);
+		assertEquals(false, this.uefCharHandler.isLineBreak());
+		this.uefCharHandler.setPosition(15);
+		assertEquals(true, this.uefCharHandler.isLineBreak());
+	}
+
+	@Test
+	public void isWhiteSpace() throws EOFException
+	{
+		this.uefCharHandler.setPosition(0);
+		assertEquals(false, this.uefCharHandler.isWhiteSpace());
+		this.uefCharHandler.setPosition(1);
+		assertEquals(false, this.uefCharHandler.isWhiteSpace());
+		this.uefCharHandler.setPosition(2);
+		assertEquals(false, this.uefCharHandler.isWhiteSpace());
+		this.uefCharHandler.setPosition(3);
+		assertEquals(false, this.uefCharHandler.isWhiteSpace());
+		this.uefCharHandler.setPosition(4);
+		assertEquals(true, this.uefCharHandler.isWhiteSpace());
+		this.uefCharHandler.setPosition(5);
+		assertEquals(false, this.uefCharHandler.isWhiteSpace());
+		this.uefCharHandler.setPosition(6);
+		assertEquals(false, this.uefCharHandler.isWhiteSpace());
+		this.uefCharHandler.setPosition(7);
+		assertEquals(true, this.uefCharHandler.isWhiteSpace());
+		this.uefCharHandler.setPosition(8);
+		assertEquals(false, this.uefCharHandler.isWhiteSpace());
 	}
 
 	/**
