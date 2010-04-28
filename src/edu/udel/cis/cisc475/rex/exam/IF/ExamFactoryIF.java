@@ -3,8 +3,10 @@ package edu.udel.cis.cisc475.rex.exam.IF;
 import edu.udel.cis.cisc475.rex.source.IF.*;
 
 /**
+ * Provides a series of methods for creating objects within the Exam package.
  * 
- * @author Team 1
+ * 
+ * @author Reed Martz (martz)
  *
  */
 public interface ExamFactoryIF {
