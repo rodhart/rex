@@ -137,6 +137,7 @@ public class UEFCommandHandlerTest
 		ProblemIF problem = handler.processProblem();
 		AnswerIF answer[] = problem.answers();
 
+		//test the problems first answer
 		assertEquals(true, answer[0].isCorrect());
 		assertEquals("processProblemTestFile.tex", answer[0].source().filename());
 		assertEquals(7, answer[0].source().startLine());
@@ -145,6 +146,7 @@ public class UEFCommandHandlerTest
 		assertEquals(9, answer[0].source().lastColumn());
 		assertEquals("\\answer[correct] Text here\n\n    test", answer[0].source().text());
 
+		//test the problems second answer
 		assertEquals(true, answer[1].isCorrect());
 		assertEquals("processProblemTestFile.tex", answer[1].source().filename());
 		assertEquals(11, answer[1].source().startLine());
@@ -152,6 +154,22 @@ public class UEFCommandHandlerTest
 		assertEquals(1, answer[1].source().startColumn());
 		assertEquals(18, answer[1].source().lastColumn());
 		assertEquals("\\answer[correct] another test\n             test", answer[1].source().text());
+
+		//test the problems topic
+		assertEquals("topic",problem.topic());
+
+		//test difficulty
+		assertEquals(45.0, problem.difficulty(), 0.0);
+
+		//test label correctness
+		assertEquals("label 1", problem.label());
+
+		//test the correctness of getting the problem's SourceIF
+		assertEquals(2,problem.question().startLine());
+		assertEquals(4,problem.question().lastLine());
+		assertEquals(1,problem.question().startColumn());
+		assertEquals(10,problem.question().lastColumn());
+		assertEquals("Here is the problem question?\n\\label{   label 1   }\nYes here.", problem.question().text());
 	}
 
 	/**
