@@ -144,7 +144,7 @@ public class UEFCommandHandlerTest
 		assertEquals(9, answer[0].source().lastLine());
 		assertEquals(1, answer[0].source().startColumn());
 		assertEquals(9, answer[0].source().lastColumn());
-		assertEquals("\\answer[correct] Text here\n\n    test", answer[0].source().text());
+		assertEquals("\\answer[correct] Text here \\ref{fig2}\n\n    test", answer[0].source().text());
 
 		//test the problems second answer
 		assertEquals(true, answer[1].isCorrect());
@@ -169,7 +169,7 @@ public class UEFCommandHandlerTest
 		assertEquals(4,problem.question().lastLine());
 		assertEquals(1,problem.question().startColumn());
 		assertEquals(10,problem.question().lastColumn());
-		assertEquals("Here is the problem question?\n\\label{   label 1   }\nYes here.", problem.question().text());
+		assertEquals("Here is the problem question?\\ref{fig1}\n\\label{   label 1   }\nYes here.", problem.question().text());
 	}
 
 	/**
