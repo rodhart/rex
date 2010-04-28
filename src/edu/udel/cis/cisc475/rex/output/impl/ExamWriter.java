@@ -36,16 +36,18 @@ public class ExamWriter implements ExamWriterIF {
 	 *            any writer used to output data
 	 */
 	public void write(PrintWriter out) {
-		// output beginning of exam file
-		out.printf("%%here is your preamble \n");
-		E.preamble().write(out);
-
-		out.printf("%%here is your frontmatter \n");
-		E.frontMatter().write(out);
-
+		// output preamble if it exists
+		if(E.preamble()!=null){
+			E.preamble().write(out);
+			out.flush();
+		}
 		
-		System.out.println(E.elements().toArray().length + "length");
-		System.out.flush();
+		//prints the front matter if it exists
+		if(E.frontMatter()!=null){
+			E.frontMatter().write(out);
+			out.flush();
+		}
+		
 		// output problems with respective answers
 		for (int i = 0; i < E.elements().toArray().length; i++) {
 			ExamElementIF temp = (ExamElementIF) E.elements().toArray()[i];
@@ -56,16 +58,12 @@ public class ExamWriter implements ExamWriterIF {
 				BlockIF tempBlockIF = (BlockIF) temp;
 				tempBlockIF.source().write(out);
 			} else if (temp instanceof FigureIF) {
-				out.println("/newpage\n");
 				FigureIF tempFigureIF = (FigureIF) temp;
 				tempFigureIF.source().write(out);
 			} else if (temp instanceof Problem) {
-				
 				Problem tempProblem = (Problem) temp;
-
 				
-				
-				// prints the required block if it does not equal null
+				// if there is a required block, print it
 				if (tempProblem.requiredBlock() != null)
 					tempProblem.requiredBlock().source().write(out);
 
@@ -77,14 +75,16 @@ public class ExamWriter implements ExamWriterIF {
 					tempProblem.answers()[index].source().write(out);
 				}// end of for loop
 			}// endo of if(temp instanceof Problem)
+			out.flush();
 		}// endo of for loop (int i=0; i< E.elements().toArray().length; i++)
 
 		
 		
-		// output the end block for exam
-		out.printf("%%here is your finalBlock \n");
-		E.finalBlock().source().write(out);
-		
+		// output the end block for exam if it exists
+		if(E.finalBlock()!=null){
+			E.finalBlock().source().write(out);
+			out.flush();
+		}
 		
 	}// end of write(PrintWriter out)
 
