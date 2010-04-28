@@ -178,11 +178,11 @@ public class MasterExamController
 						|| ((yourLow <= myHigh) && (myHigh <= yourHigh))) 
 				{
 					System.err.println("Warning: The constraint requesting " + myConstraintValue +
-									   " problems from " + theTO.getTopic() +
+									   " problem(s) from " + theTO.getTopic() +
 									   " within difficulty " + myLow +
 									   " through " + myHigh +
 									   " conflicts with the constraint requesting " + yourConstraintValue +
-									   " problems from " + theTO.getTopic() +
+									   " problem(s) from " + theTO.getTopic() +
 									   " within difficulty " + yourLow +
 									   " through " + yourHigh +
 									   ". As a result, false-positive RexUnsatisfiableExceptions might occur " +
