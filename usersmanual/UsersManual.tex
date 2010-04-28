@@ -2,6 +2,7 @@
 \usepackage[pdfborder={0 0 0}, colorlinks=false]{hyperref}
 \usepackage{multicol}
 \usepackage{color}
+\usepackage{hyperref}
 \author{CISC475/675 Spring 2010}
 
 \title{REX User's Manual}
@@ -67,7 +68,8 @@ of a series of constraints. Each constraint is separated by a semicolon,
 with comments being all text that follows after a pound symbol 
 (\texttt{\#}) until the end of the line.
 
-There are four defined commands for the ECF file
+There are four defined commands for the ECF file. For overlapping commands, REX will attempt find the largest set of questions that resolves all constraints. That is, if there exist two identical constraints for 5 problems each, REX will attempt to find 10 questions total. If REX cannot
+accomplish this, the request will result in an \hyperref[RexUnsatisfiableException]{RexUnsatisfiableException}. 
 
 An interval is a pair of decimals separated by two periods, in between a pair of braces or parenthesis, where a brace on an end indicates that edge is inclusive, and a parenthesis that the edge is exclusive. An example would be \texttt{[3..5)}, which would be the range from 3 to 5, including 3 but not including 5.
 
@@ -75,7 +77,7 @@ An interval is a pair of decimals separated by two periods, in between a pair of
 A group constraint is a command of the form \texttt{include \textcolor{blue}{int count}
 problems on \textcolor{blue}{string topic} with difficulty in \textcolor{blue}{interval difficulty} at \textcolor{blue}{int points} points;}.
 
-The command will choose \textcolor{blue}{count} problems from \textcolor{blue}{topic} 
+The command will choose \textcolor{blue}{count} problems from \textcolor{blue}{topic} that fall in the \textcolor{blue}{difficulty}, and assigns all of them \textcolor{blue}{points} points.
 
 \subsection{Required Problem Constraints}
 A required problem constraint is a command of the form \texttt{includeall \textcolor{blue}{string label} at \textcolor{blue}{int points} points;}.
@@ -107,6 +109,7 @@ UEF or ECF file. Please consult the provided error message for more
 information.
 
 \subsubsection{RexUnsatisfiableException}
+\label{RexUnsatisfiableException}
 This error means that the input files were parsed correctly, but that
 REX determined that the requirements from the ECF cannot be resolved
 using the provided UEF file. Generally, this means that there aren't
