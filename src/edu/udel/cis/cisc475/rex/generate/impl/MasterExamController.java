@@ -97,13 +97,21 @@ public class MasterExamController
 	 *            -RequiredProblemConstraintIF referring to a required ProblemIF
 	 *            to be added to random exam versions. (a warning is printed if
 	 *            this RequiredProblemConstraintIF has already been added).
+	 * @throws Exception
+	 * 			  -If theRPC has a label that does not refer to a ProblemIF.
 	 */
 
-	public void addRequiredProblem(RequiredProblemConstraintIF theRPC)
+	public void addRequiredProblem(RequiredProblemConstraintIF theRPC) throws Exception
 	{
 		String requiredLabel = theRPC.label();
-		ProblemIF requiredProblem = (ProblemIF) this.master
-				.elementWithLabel(requiredLabel);
+		ProblemIF requiredProblem = (ProblemIF) this.master.elementWithLabel(requiredLabel);
+		
+		if (requiredProblem == null)
+		{
+			System.err.println("The label" + requiredLabel +
+					   " does not have an associated problem.");
+			throw new Exception();
+		}
 
 		Integer identifier = (Integer) this.identifiers.get(requiredProblem);
 
