@@ -1,5 +1,6 @@
 package edu.udel.cis.cisc475.rex.output.impl;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
@@ -34,8 +35,9 @@ public class ExamWriter implements ExamWriterIF {
 	 * 
 	 * @param out
 	 *            any writer used to output data
+	 * @throws IOException 
 	 */
-	public void write(PrintWriter out) {
+	public void write(PrintWriter out) throws IOException {
 		// output preamble if it exists
 		if(E.preamble()!=null){
 			E.preamble().write(out);
