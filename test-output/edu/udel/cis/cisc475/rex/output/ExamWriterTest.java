@@ -67,7 +67,7 @@ public class ExamWriterTest {
 	}
     
     @Test
-    public void testPrintBlockIF(){
+    public void testPrintBlockIF() throws IOException {
     	Exam e = new Exam(true);	
     	String testString = "test string";
 		
@@ -115,7 +115,7 @@ public class ExamWriterTest {
     }
     
     @Test
-    public void testPrintFigureIF(){
+    public void testPrintFigureIF() throws IOException {
     	Exam e = new Exam(true);	
     	String testString = "test string";
 		
@@ -163,7 +163,7 @@ public class ExamWriterTest {
     }
     
     @Test
-    public void testPrintProblem(){
+    public void testPrintProblem() throws IOException {
     	Exam e = new Exam(true);	
     	String testString = "test string";
 		
