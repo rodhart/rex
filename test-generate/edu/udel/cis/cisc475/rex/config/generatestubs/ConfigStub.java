@@ -10,6 +10,7 @@ import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
 import edu.udel.cis.cisc475.rex.config.impl.GroupConstraint;
 import edu.udel.cis.cisc475.rex.config.impl.RequiredProblemConstraint;
+import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.interval.generatestubs.IntervalFactoryStub;
@@ -31,26 +32,33 @@ public class ConfigStub implements ConfigIF {
 	SourceFactoryIF sourceFactory = new SourceFactoryStub();
 	ConfigFactoryIF configFactory = new ConfigFactoryStub();
 	IntervalFactoryIF intervalFactory = new IntervalFactoryStub();
-	
+
 	public ConfigStub(boolean pdf, int numVersions) {
 		this.pdfOption = pdf;
 		this.numVersions = numVersions;
-		
+
 		SourceIF source1 = sourceFactory.newSource("testFile.txt");
 		source1.addText("question1");
-		
+
 		SourceIF source2 = sourceFactory.newSource("testFile.txt");
 		source1.addText("question2");
-		
-		IntervalIF interval = intervalFactory.interval(true, 1.0, true, 5.0);
-		
-		RequiredProblemConstraint constraint1 = new RequiredProblemConstraint("label1", 4, source1);
-		GroupConstraint constraint2 = new GroupConstraint(interval, 1, 3, "topic2", source2);
-		
+		IntervalIF interval = null;
+
+		try {
+			interval = intervalFactory.interval(true, 1.0, true, 5.0);
+		} catch (RexUnsatisfiableException e) {
+			System.out.println(e);
+			System.exit(1);
+		}
+
+		RequiredProblemConstraint constraint1 = new RequiredProblemConstraint(
+				"label1", 4, source1);
+		GroupConstraint constraint2 = new GroupConstraint(interval, 1, 3,
+				"topic2", source2);
+
 		this.constraints.add(constraint1);
 		this.constraints.add(constraint2);
 	}
-
 
 	@Override
 	public RequiredProblemConstraintIF addRequiredProblemConstraint(
@@ -113,13 +121,12 @@ public class ConfigStub implements ConfigIF {
 		return null;
 	}
 
-//	@Override
-//	public GroupConstraintIF addGroupConstraintIF(String topic,
-//			IntervalIF difficulty, int numProblems, int points, SourceIF source) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
+	// @Override
+	// public GroupConstraintIF addGroupConstraintIF(String topic,
+	// IntervalIF difficulty, int numProblems, int points, SourceIF source) {
+	// // TODO Auto-generated method stub
+	// return null;
+	// }
 
 	@Override
 	public GroupConstraintIF addGroupConstraint(String topic,
