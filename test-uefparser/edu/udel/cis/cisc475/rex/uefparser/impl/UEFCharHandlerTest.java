@@ -6,10 +6,12 @@ package edu.udel.cis.cisc475.rex.uefparser.impl;
 import java.io.EOFException;
 import org.junit.Test;
 import java.io.File;
+import java.util.regex.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 
 /**
  * Testing for UEFCharHandler
@@ -254,7 +256,7 @@ public class UEFCharHandlerTest
 	}
 
 	@Test
-	public void isWhiteSpace() throws EOFException
+	public void isWhiteSpaceTest() throws EOFException
 	{
 		this.uefCharHandler.setPosition(0);
 		assertEquals(false, this.uefCharHandler.isWhiteSpace());
@@ -285,6 +287,21 @@ public class UEFCharHandlerTest
 		{
 			assertTrue(true);
 		}
+	}
+
+	@Test
+	public void regexTest()
+	{
+		Matcher matcher = this.uefCharHandler.regex("Line 0");
+		assertEquals(0, matcher.start());
+		assertEquals(6, matcher.end());
+
+		matcher = this.uefCharHandler.regex("ne 1");
+		assertEquals(10, matcher.start());
+		assertEquals(14, matcher.end());
+
+		matcher = this.uefCharHandler.regex("NOT IN FILE");
+		assertNull(matcher);
 	}
 
 	/**
