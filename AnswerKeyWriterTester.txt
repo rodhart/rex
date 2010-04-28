@@ -1,10 +1,5 @@
-Exam version :   version string name
-Exam Name :      C++ and you
-Date :           date 01/01/2010 string
-
-This Exam contains 3 problems.
-
-        Answer Key
-problem 1 :   [B]
-problem 2 :   [A, C]
-problem 3 :   [B]
+Answer Key for UEF <UEF filename> ECF <ECF filename> generated on Wed Apr 28 18:34:16 EDT 2010
+Total points: <integer>
+1. [B]
+2. [A, C]
+3. [B]
