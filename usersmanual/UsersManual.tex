@@ -3,8 +3,7 @@
 \usepackage{multicol}
 \author{CISC475/675 Spring 2010}
 
-% \title{REX User's Manual}
-\title{The Hitchhiker's Guide To REX}
+\title{REX User's Manual}
 \date{\today}
 
 \begin{document}
@@ -29,6 +28,9 @@ need of an appropriate Java VirtualMachine. The REX software will take
 UEF File and an ECF File as input, and non-deterministically save
 some number of exam files and answer key files in a desired directory.
 
+\section{Overview}
+The Rex 
+
 \section{Installation}
 The REX software does not require any installation. It is suggested to
 place the \texttt{rex.jar} executable in a directory within the user
@@ -48,25 +50,22 @@ Available at
 % do we need memory requirements? like a 1G of ram? -Haley
 \end{itemize}
 
-\section{Usage}
-After creating a UEF and ECF file \texttt{rex input.uef input.ecf}. 
-REX will parse the contents of the UEF and ECF and generate the
-appropriate number of output exams, as specified in the ECF file.
+\subsection{Building From Source}
 
-Please see the following sections for information on UEF and ECF
-content format.
 
-\section{The UEF File}
+
+\section(Universal Exam File (UEF)}
 
 Please see Figure \ref{fig:SampleUEF} for an example Universal Exam File.
 
-\section{The ECF File}
+\section{Exam Configuration File (ECF)}
 The ECF file is a text file with a \texttt{.tex} extension that consists
 of a series of constraints. Each constraint is separated by a semicolon,
 with comments being all text that follows after a pound symbol 
-(\texttt{#}) until the end of the line.
+(\texttt{\#}) until the end of the line.
 
 There are four defined commands for the ECF file
+
 \subsection{Group Constraints}
 A group constaint is a command of the form \texttt{'include' <integer>
 'problems on' <string> 'with difficulty in' <interval> 'at' <integer>
@@ -76,8 +75,15 @@ A group constaint is a command of the form \texttt{'include' <integer>
 
 \subsection{Append Text}
 
-\subsection{Version Definition
-}
+\subsection{Version Definition}
+
+\section{Usage}
+After creating a UEF and ECF file \texttt{rex input.uef input.ecf}. 
+REX will parse the contents of the UEF and ECF and generate the
+appropriate number of output exams, as specified in the ECF file.
+
+Please see the following sections for information on UEF and ECF
+content format.
 
 \section{Troubleshooting}
 Because of the requirements that REX places upon the input it parses,
@@ -103,38 +109,7 @@ Note: REX resolves the requirements in the ECF simultaneously. This means
 that if the ECF has two identical requirements of 5 questions each, REX
 will require at least 10 satisfactory questions.
 
-\section{Credits}
-REX was coded by Prof. Siegel's CISC475 class for the 2010 Spring
-semester. The TA for this class was Charlie Greenbacker.
 
-\begin{multicols}{2}
-\begin{itemize}
-\item Aaron Landwehr
-\item Ahmed El-Hassany
-\item Anthony Platt
-\item Burke Cates
-\item Fran "Da Man" Fitzpatrick
-\item Greg Simons
-\item Haley Boyd
-\item Ian Burns
-\item Jack Song
-\item James Cardona
-\item Jeremy Verchick
-\item Jesse Gledhill
-\item Josh Rothhaupt
-\item Justin Johnson
-\item Keith McLoughlin
-\item Kevin Schultz
-\item Kyle Bouchard
-\item Lucero Carmona
-\item Reed Martz
-\item Tim Armstrong
-\item Tim McClory
-\item Trevor Kiernan
-\item William Gordon
-\item Zach Hine
-\end{itemize}
-\end{multicols}
 
 % How do we add color to this to make it easier
 % to read? -Haley
