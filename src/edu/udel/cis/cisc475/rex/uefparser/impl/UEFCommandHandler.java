@@ -211,10 +211,8 @@ class UEFCommandHandler {
 				break;
 			}
 			default: {
-				System.err.println("Error: " + uefCommandQueue.peek().getType()
+				throw new RexParseException(uefCommandQueue.peek().getType()
 						+ " found within answers environment!");
-				System.exit(-1);
-				break;
 			}
 			}
 		}
@@ -224,7 +222,7 @@ class UEFCommandHandler {
 	/**
 	 * Process a \begin{block} command.
 	 */
-	BlockIF processBlock() throws EOFException {
+	BlockIF processBlock() throws RexParseException, EOFException {
 		UEFCommand command = uefCommandQueue.poll();
 
 		String name = command.getArgument(0);
@@ -256,10 +254,8 @@ class UEFCommandHandler {
 				break;
 			}
 			default: {
-				System.err.println("Error: " + uefCommandQueue.peek().getType()
+				throw new RexParseException(uefCommandQueue.peek().getType()
 						+ " found within block environment!");
-				System.exit(-1);
-				break;
 			}
 			}
 		}
@@ -291,7 +287,6 @@ class UEFCommandHandler {
 				}
 			}
 		}
-
 		return block;
 	}
 
@@ -355,17 +350,13 @@ class UEFCommandHandler {
 				return exam;
 			}
 			default: {
-				System.err.println("Error: " + uefCommandQueue.peek().getType()
+				throw new RexParseException(uefCommandQueue.peek().getType()
 						+ " found within document environment!");
-				System.exit(-1);
-				break;
 			}
 			}
 		}
-		System.err
-				.println("Error: end of file reached before \\end{document} found!");
-		System.exit(-1);
-		return null;
+		throw new RexParseException(
+				"End of file reached before \\end{document} found!");
 	}
 
 	/**
