@@ -88,6 +88,12 @@ public class Exam implements ExamIF {
 	// TODO Is this needed? I commented it out since it wasn't being read
 	// by anyone. --Fran
 	private Map<ExamElementIF, HashSet<ExamElementIF>> usedBy;
+	
+	private Map<String, ExamElementIF> labelToElement;
+	
+	private Map<String, HashSet<ExamElementIF>> topicToElements;
+	
+	private Map<String, HashSet<ExamElementIF>> topicToProblems;
 
 	/**
 	 * Default constructor
@@ -103,6 +109,9 @@ public class Exam implements ExamIF {
 		this.topics = new HashSet<String>();
 		this.uses = new LinkedHashMap<ExamElementIF, HashSet<ExamElementIF>>();
 		this.usedBy = new LinkedHashMap<ExamElementIF, HashSet<ExamElementIF>>();
+		this.labelToElement = new LinkedHashMap<String, ExamElementIF>();
+		this.topicToElements = new LinkedHashMap<String, HashSet<ExamElementIF>>();
+		this.topicToProblems = new LinkedHashMap<String, HashSet<ExamElementIF>>();
 	}
 
 	/**
@@ -129,6 +138,8 @@ public class Exam implements ExamIF {
 			// also need to make some kind of record of whether it is
 			// a problem, a block, or a figure.
 			labels.add(element.label());
+			labelToElement.put(element.label(), element);
+			
 			// Allocate a new HashSet for the uses map
 			HashSet<ExamElementIF> useesOfElement = new HashSet<ExamElementIF>();
 			// TODO Is this needed? I commented it out since it wasn't being read
@@ -199,14 +210,7 @@ public class Exam implements ExamIF {
 	 * with the given label specified in the UEF but this is not guaranteed.
 	 */
 	public ExamElementIF elementWithLabel(String label) {
-		Iterator<ExamElementIF> i = elements.values().iterator();
-		while (i.hasNext()) {
-			ExamElementIF element = i.next();
-			if (element.label() != null && element.label().equals(label)) {
-				return element;
-			}
-		}
-		return null;
+		return labelToElement.get(label);
 	}
 
 	/**
