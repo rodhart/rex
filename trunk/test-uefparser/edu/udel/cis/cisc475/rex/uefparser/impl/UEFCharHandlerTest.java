@@ -9,6 +9,7 @@ import java.io.File;
 import org.junit.After;
 import org.junit.Before;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Testing for UEFCharHandler
@@ -58,6 +59,17 @@ public class UEFCharHandlerTest
 
 		ch = this.uefCharHandler.read(8);
 		assertEquals('L', ch);
+
+		//out of bound check
+		try
+		{
+			this.uefCharHandler.setPosition(500);
+			this.uefCharHandler.read();
+		}
+		catch (EOFException e)
+		{
+			assertTrue(true);
+		}
 	}
 
 	/**
@@ -165,6 +177,17 @@ public class UEFCharHandlerTest
 
 		lineNumber = this.uefCharHandler.getLineNumber(23);
 		assertEquals(3, lineNumber);
+
+		//out of bound check
+		try
+		{
+			this.uefCharHandler.setPosition(500);
+			this.uefCharHandler.getLineNumber();
+		}
+		catch (EOFException e)
+		{
+			assertTrue(true);
+		}
 	}
 
 	@Test
@@ -183,6 +206,17 @@ public class UEFCharHandlerTest
 
 		columnNumber = this.uefCharHandler.getColumnNumber(22);
 		assertEquals(7, columnNumber);
+
+		//out of bound check
+		try
+		{
+			this.uefCharHandler.setPosition(500);
+			this.uefCharHandler.getColumnNumber();
+		}
+		catch (EOFException e)
+		{
+			assertTrue(true);
+		}
 	}
 
 	@Test
@@ -206,6 +240,17 @@ public class UEFCharHandlerTest
 		assertEquals(false, this.uefCharHandler.isLineBreak());
 		this.uefCharHandler.setPosition(15);
 		assertEquals(true, this.uefCharHandler.isLineBreak());
+
+		//out of bound check
+		try
+		{
+			this.uefCharHandler.setPosition(500);
+			this.uefCharHandler.isLineBreak();
+		}
+		catch (EOFException e)
+		{
+			assertTrue(true);
+		}
 	}
 
 	@Test
@@ -229,6 +274,17 @@ public class UEFCharHandlerTest
 		assertEquals(true, this.uefCharHandler.isWhiteSpace());
 		this.uefCharHandler.setPosition(8);
 		assertEquals(false, this.uefCharHandler.isWhiteSpace());
+
+		//out of bound check
+		try
+		{
+			this.uefCharHandler.setPosition(500);
+			this.uefCharHandler.isWhiteSpace();
+		}
+		catch (EOFException e)
+		{
+			assertTrue(true);
+		}
 	}
 
 	/**

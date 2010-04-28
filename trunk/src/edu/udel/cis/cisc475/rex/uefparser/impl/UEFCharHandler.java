@@ -209,7 +209,7 @@ class UEFCharHandler {
 	/**
 	 * Get the column number at the current position in the file.
 	 */
-	int getColumnNumber() {
+	int getColumnNumber() throws EOFException {
 		return getColumnNumber(this.position);
 	}
 
@@ -219,8 +219,13 @@ class UEFCharHandler {
 	 * @param position
 	 *            the position to get the column number at.
 	 */
-	int getColumnNumber(int position) {
-		return position - positionToLineNumberMap.floorKey(position) + 1;
+	int getColumnNumber(int position) throws EOFException {
+		if (position < fileContents.length()) {
+			return position - positionToLineNumberMap.floorKey(position) + 1;
+		} else {
+
+			throw new EOFException();
+		}
 	}
 
 	/**
