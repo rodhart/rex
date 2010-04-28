@@ -44,10 +44,6 @@ public class ConfigFactory implements ConfigFactoryIF {
 	public GroupConstraintIF newGroupConstraint(IntervalIF difficulty, int numProblems, int points, String topic, SourceIF source){
 		if(difficulty == null)
 			throw new NullPointerException("argument 'difficulty' cannot be null");
-		if(numProblems <= 0) 
-			throw new NullPointerException("argument 'numProblems' cannot be less than or equal to 0");
-		if(points <= 0)
-			throw new NullPointerException("argument 'points' cannot be less than or equal to 0");
 		if(topic == null)
 			throw new NullPointerException("argument 'topic' cannot be null");
 		if(source == null)
@@ -63,8 +59,6 @@ public class ConfigFactory implements ConfigFactoryIF {
 	public RequiredProblemConstraintIF newRequiredProblemConstraint(String label, int points, SourceIF source){
 		if(label == null) 
 			throw new NullPointerException("argument 'label' cannot be null");
-		if(points <= 0)
-			throw new NullPointerException("argument 'points' cannot be less than or equal to 0");
 		if(source == null)
 			throw new NullPointerException("argument 'source' cannot be null");
 
