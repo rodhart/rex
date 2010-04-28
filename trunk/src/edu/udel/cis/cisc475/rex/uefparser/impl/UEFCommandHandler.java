@@ -152,7 +152,8 @@ class UEFCommandHandler {
 		// Ignore whitespaces and lines at the end of answers, because latex
 		// does.
 		while (uefCharHandler.read(endSource - 1) == '\n'
-				|| uefCharHandler.read(endSource - 1) == ' ') {
+				|| uefCharHandler.read(endSource - 1) == ' '
+				|| uefCharHandler.read(endSource - 1) == '\t') {
 			endSource--;
 		}
 
