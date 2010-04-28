@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
@@ -13,6 +14,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FixedAnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
+import edu.udel.cis.cisc475.rex.exam.impl.Problem;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
 
@@ -254,8 +256,10 @@ public class VersionExamController
 			theBC = theTC.getBC(currentProblem.requiredBlock());
 			
 			if (currentProblem.referencedFigures().isEmpty())
+			{
 				theFC = theBC.getFC(null);
-			
+				theFC.addProblem(currentProblem);
+			}
 			else
 				for (FigureIF currentFigure : currentProblem.referencedFigures())
 				{
@@ -304,33 +308,36 @@ public class VersionExamController
 		Integer otherFigureIdentifier;
 		
 		Collection<TopicContainer> myTCs = new ArrayList<TopicContainer>();
+		
 		myTCs.addAll(this.theTCs.values());
+
 		TopicContainer theTC;
 		
-		Collection<BlockContainer> myBCs = null;
+		Collection<BlockContainer> myBCs = new ArrayList<BlockContainer>();
 		BlockContainer theBC;
 		
-		Collection<FigureContainer> myFCs = null;
+		Collection<FigureContainer> myFCs = new ArrayList<FigureContainer>();
 		FigureContainer theFC;
 		
 		ProblemIF[] theProblemsArray;
 		
 		while (!myTCs.isEmpty())
 		{
-			theTC = (TopicContainer) (this.theRandomizer.choose(1, myTCs.toArray()))[0];
+			theTC = (TopicContainer) (this.theRandomizer.choose(1, myTCs.toArray(new TopicContainer[myTCs.size()])))[0];
 			
 			myBCs.addAll(theTC.getBCs().values());
 			
 			while (!myBCs.isEmpty())
 			{
-				theBC = (BlockContainer) (this.theRandomizer.choose(1, myBCs.toArray()))[0];
+				theBC = (BlockContainer) (this.theRandomizer.choose(1, myBCs.toArray(new BlockContainer[myBCs.size()])))[0];
 				versionExam.addElement(theBC.getBlock());
 				
 				myFCs.addAll(theBC.getFCs().values());
 				
 				while (!myFCs.isEmpty())
 				{
-					theFC = (FigureContainer) (this.theRandomizer.choose(1, myFCs.toArray()))[0];
+					theFC = (FigureContainer) (this.theRandomizer.choose(1, myFCs.toArray(new FigureContainer[myFCs.size()])))[0];		
+					
 					identifier = (Integer) this.mec.getIdentifiers().get(theFC.getFigure());
 					
 					if (!figureBlacklist.containsKey(identifier))
@@ -339,7 +346,7 @@ public class VersionExamController
 						figureBlacklist.put(identifier, theFC.getFigure());
 					}
 					
-					theProblemsArray = (ProblemIF[]) this.theRandomizer.choose(theFC.getProblems().size(), theFC.getProblems().toArray());
+					theProblemsArray = (ProblemIF[]) (this.theRandomizer.choose(theFC.getProblems().size(), theFC.getProblems().toArray(new ProblemIF[theFC.getProblems().size()])));
 					
 					for (int i = 0; i < theProblemsArray.length; i++)
 					{
