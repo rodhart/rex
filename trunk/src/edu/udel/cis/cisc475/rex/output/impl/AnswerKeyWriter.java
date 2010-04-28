@@ -17,7 +17,6 @@ import edu.udel.cis.cisc475.rex.output.IF.AnswerKeyWriterIF;
  * The file is written to a PrintWriter specified by the caller
  * 
  * @author cardona
- * @author iburns
  *
  */
 public class AnswerKeyWriter implements AnswerKeyWriterIF {
@@ -34,7 +33,7 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 
 	/**
 	 * writes the answer key
-	 * data is written to whichever output is specified by the caller
+	 * data is written to whichever printWriter is specified by the caller
 	 * 
 	 * @param out a pointer to where the user wants the output to go
 	 */
@@ -62,6 +61,8 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 
 	/**
 	 * writes the answer key data to a scantron
+	 * 
+	 * not implemented yet because optional
 	 * 
 	 * @param file pointer to a file
 	 */
