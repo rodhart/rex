@@ -452,6 +452,7 @@ class UEFCommandHandler {
 		UEFCommand command = uefCommandQueue.poll();
 
 		String topic = command.getArgument(0);
+		String difficulty = command.getArgument(1);
 
 		// String to be filled with the source content
 		String content;
@@ -520,6 +521,7 @@ class UEFCommandHandler {
 
 			ProblemIF problem = examFactory.newProblem(topic, label, source,
 					answers);
+			problem.setDifficulty(Double.valueOf(difficulty));
 
 			// Add references from answers
 
