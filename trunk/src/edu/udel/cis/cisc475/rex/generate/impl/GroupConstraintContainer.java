@@ -67,7 +67,7 @@ public class GroupConstraintContainer
 		if (this.set.size() < this.constraintValue)
 		{
 			throw new RexUnsatisfiableException("The constraint requesting " + this.constraintValue +
-					   " problems from " + this.topic +
+					   " problem(s) from " + this.topic +
 					   " of point value " + this.pointValue +
 					   " within difficulty " + theGC.difficultyInterval().low() +
 					   " through " + theGC.difficultyInterval().high() +

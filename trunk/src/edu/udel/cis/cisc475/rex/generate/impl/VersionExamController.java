@@ -224,7 +224,7 @@ public class VersionExamController
 				if (problemsAdded < theGCC.getConstraintValue())
 				{
 					System.err.print("The constraint requesting " + theGCC.getConstraintValue() +
-									 " problems from " + theGCC.getTopic() +
+									 " problem(s) from " + theGCC.getTopic() +
 									 " of point value " + theGCC.getPointValue() +
 									 " within difficulty " + theGCC.getDifficultyInterval().low() +
 									 " through " + theGCC.getDifficultyInterval().high() +
