@@ -633,12 +633,7 @@ class UEFCommandHandler {
 					List<ExamElementIF> e = this.references.get(label);
 					ExamElementIF usedElement = null;
 
-					// FIXME: This try is work around to Ticket 74, but it
-					// should be removed once the ticket is closed
-					try {
-						usedElement = exam.elementWithLabel(label);
-					} catch (Exception ex) {
-					}
+					usedElement = exam.elementWithLabel(label);
 
 					if (usedElement == null) {
 						throw new RexParseException("Element with label "
