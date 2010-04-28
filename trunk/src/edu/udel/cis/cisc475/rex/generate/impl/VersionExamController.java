@@ -86,7 +86,7 @@ public class VersionExamController
 	 * 				 to be randomized).
 	 */
 	
-	public AnswerIF[] randomizeAnswers(ProblemIF inputProblem)throws NullPointerException// throws Exception
+	public AnswerIF[] randomizeAnswers(ProblemIF inputProblem)
 	{
 		AnswerIF[] theAnswers = inputProblem.answers();
 		Collection<AnswerIF> beforeRandomization = new ArrayList<AnswerIF>();
@@ -189,7 +189,7 @@ public class VersionExamController
 	 * 				 		 to be randomized).
 	 */
 	
-	public void satisfyConstraints() throws RexUnsatisfiableException, NullPointerException//, Exception
+	public void satisfyConstraints() throws RexUnsatisfiableException
 	{
 		Iterator<TopicOrganizer> TOIterator =  this.mec.getTheTOs().values().iterator();
 		TopicOrganizer theTO = null;
@@ -230,15 +230,12 @@ public class VersionExamController
 				}
 				
 				if (problemsAdded < theGCC.getConstraintValue())
-				{
-					System.err.print("The constraint requesting " + theGCC.getConstraintValue() +
-									 " problem(s) from " + theGCC.getTopic() +
-									 " of point value " + theGCC.getPointValue() +
-									 " within difficulty " + theGCC.getDifficultyInterval().low() +
-									 " through " + theGCC.getDifficultyInterval().high() +
-									 " is unsatisfiable.");
-					throw new RexUnsatisfiableException();
-				}
+					throw new RexUnsatisfiableException("The constraint requesting " + theGCC.getConstraintValue() +
+							 							" problem(s) from " + theGCC.getTopic() +
+							 							" of point value " + theGCC.getPointValue() +
+							 							" within difficulty " + theGCC.getDifficultyInterval().low() +
+							 							" through " + theGCC.getDifficultyInterval().high() +
+														" is unsatisfiable.", theGCC.getSource());
 			}
 			
 			superset.clear();
@@ -310,7 +307,7 @@ public class VersionExamController
 	 *     to be processed.
 	 */
 	
-	public void fillExam(ExamIF versionExam, AnswerKeyIF versionAnswerKey) throws NullPointerException// throws Exception
+	public void fillExam(ExamIF versionExam, AnswerKeyIF versionAnswerKey)
 	{
 		HashMap figureBlacklist = new HashMap();
 		HashMap problemBlacklist = new HashMap();

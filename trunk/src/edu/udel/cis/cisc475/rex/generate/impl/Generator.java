@@ -57,7 +57,7 @@ public class Generator implements GeneratorIF
 	 * 			 to be randomized).
 	 */
 	
-	Generator(ExamIF master, ConfigIF config) throws RexException, NullPointerException
+	Generator(ExamIF master, ConfigIF config) throws RexException
 	{
 		this.master = master;
 		this.config = config;
@@ -100,7 +100,7 @@ public class Generator implements GeneratorIF
 		return this.numExams;
 	}
 	
-	private void generate() throws RexException, NullPointerException
+	private void generate() throws RexException
 	{
 		this.generatedExams = new ExamIF[this.numExams];
 		this.answerKeys = new AnswerKeyIF[this.numExams];
@@ -139,7 +139,7 @@ public class Generator implements GeneratorIF
 			
 			else
 				throw new RexParseException("Generator recieved a ConstraintIF that is not a " +
-											 "RequiredProblemConstraintIF or a GroupConstraintIF.");
+											 "RequiredProblemConstraintIF or a GroupConstraintIF.", theConstraint.source());
 		}
 		
 		//Add all RequiredProblemConstraintIFs to the MasterExamController.

@@ -14,6 +14,6 @@ public interface GeneratorFactoryIF {
 	 * 
 	 */
 
-	GeneratorIF newGenerator(ExamIF master, ConfigIF config) throws RexException, NullPointerException;
+	GeneratorIF newGenerator(ExamIF master, ConfigIF config) throws RexException;
 	
 }
