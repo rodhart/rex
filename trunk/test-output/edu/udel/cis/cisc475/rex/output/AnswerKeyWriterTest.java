@@ -1,5 +1,6 @@
 package edu.udel.cis.cisc475.rex.output;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,14 +9,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
+import java.util.TimeZone;
 
 import org.junit.Test;
 
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyFactoryIF;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
-import edu.udel.cis.cisc475.rex.key.impl.Key;
 import edu.udel.cis.cisc475.rex.output.IF.AnswerKeyWriterIF;
 import edu.udel.cis.cisc475.rex.output.IF.OutputFactoryIF;
 import edu.udel.cis.cisc475.rex.output.impl.OutputFactory;
@@ -92,30 +95,18 @@ public class AnswerKeyWriterTest {
 		} catch (FileNotFoundException e) {e.printStackTrace();}
 		//now our entire writing that was done by AKW.write should be located
 		//in our stringbuffer 'contents'
-		
+		TimeZone zone = TimeZone.getDefault();
+		Calendar now = Calendar.getInstance(zone);
+		Date day = new Date(now.getTimeInMillis());
 		// here is the text that we were expecting
-		String testString = 
-		"Exam version :   version string name" + newline +  
-		"Exam Name :      C++ and you" + newline + 
-		"Date :           date 01/01/2010 string" + newline + 
-		newline +  
-		"This Exam contains 3 problems." + newline +
-		newline +  
-		"        Answer Key"+ newline + 
-		"problem 1 :   [B]" + newline + 
-		"problem 2 :   [A, C]" + newline + 
-		"problem 3 :   [B]" + newline;		
-
-
-		//these few lines are for dumping output
-		//to the screen to see output visually
-//		System.out.println(contents.toString());
-//		System.out.println(testString);
-//		AKW.write(ScreenW);
-		System.out.println( testString.compareTo( contents.toString() ) );
-
-		//now compare the two	
-		assertEquals(0,(testString.compareTo( contents.toString() ) ));
-	}// end test
+		String testString = "Answer Key for UEF " + "<UEF filename> " + "ECF" +
+		" <ECF filename> " + "generated on " + day.toString() + newline + 
+		"Total points: " + "<integer>" + newline + 
+		"1. [B]" + newline + 
+		"2. [A, C]" + newline + 
+		"3. [B]" + newline;	
+		 
+		assertTrue(testString.equals(contents.toString()));
+	}
 
 }// end of class

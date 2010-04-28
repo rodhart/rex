@@ -5,9 +5,14 @@ import java.io.PrintWriter;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /**
- * A class that reads in a text-based input and writes it 
- * with a PrintWriter.  A section can be selected with starting
- * line, ending line, starting column, and ending column.
+ * This class holds a body of text, integer values for startLine, 
+ * startColumn, lastLine, lastColumn, and the file name.  The class
+ * is used to store a body of text and the parameters for the region of
+ * text from the file it is from.
+ * 
+ * The class allows for the building of the body of text via the addText() method.
+ * The other parameters have no bearing on any output and are simply there to hold 
+ * the values.
  * 
  * @author cardona
  * @author justinjo
@@ -29,7 +34,7 @@ public class Source implements SourceIF {
 	private StringBuffer myText;
 
 	/**
-	 * Constructor for the class
+	 * Basic constructor for the class, requires only a file name
 	 * 
 	 * @param filename The name of a file
 	 */

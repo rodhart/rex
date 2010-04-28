@@ -21,6 +21,8 @@ import edu.udel.cis.cisc475.rex.output.IF.AnswerKeyWriterIF;
  */
 public class AnswerKeyWriter implements AnswerKeyWriterIF {
 
+	public static String newline = System.getProperty("line.separator");
+
 	/**
 	 * 
 	 * constructor, establishes a pointer to the answer key object
@@ -42,9 +44,10 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 		Calendar now = Calendar.getInstance(zone);
 		Date day = new Date(now.getTimeInMillis());
 		
-		out.println("Answer Key for UEF " + "<UEF filename> " + "ECF" +
-				" <ECF filename> " + "generated on " + day.toString());
-		out.println("Total points: " + "<integer>\n");
+		// <UEF filename>, <ECF filename>, and <integer> are placeholders for now
+		out.print("Answer Key for UEF " + "<UEF filename> " + "ECF" +
+				" <ECF filename> " + "generated on " + day.toString() + newline);
+		out.print("Total points: " + "<integer>" + newline);
 		/*out.printf("Exam version :   %s\n", K.version() ); 
 		out.printf("Exam Name :      %s\n", K.examName() );
 		out.printf("Date :           %s\n", K.date() ); 
@@ -54,7 +57,8 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 		out.printf("        Answer Key\n"); 
 */
 		for (int i = 0; i < K.numProblems(); i ++) {
-			out.printf("%d. %s\n", i+1, K.answers(i) ); 
+			out.printf("%d. %s%s", i+1, K.answers(i), newline );
+			
 		}
 	}//end of write(PrintWriter out)
 
