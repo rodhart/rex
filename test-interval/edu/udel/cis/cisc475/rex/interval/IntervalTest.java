@@ -110,6 +110,17 @@ public class IntervalTest {
 		assertTrue(I2.contains(8.0));
 		assertTrue(I2.contains(10.0));
 		
+	}
+	
+	/**
+	 * Tests that the factory method throws the correct exceptions given
+	 * the desired incorrect input.
+	 * @throws RexUnsatisfiableException
+	 */
+	@Test
+	public void testExceptions() throws RexUnsatisfiableException {
+		IntervalFactoryIF intervalFactory = new IntervalFactory();
+		
 		try{
 			intervalFactory.interval(true, 10.0, false, 5.0);
 		}
