@@ -169,7 +169,7 @@ public class UEFCommandHandlerTest
 		//test the correctness of getting the problem's SourceIF
 		assertEquals(2, problem.question().startLine());
 		assertEquals(4, problem.question().lastLine());
-		assertEquals(1, problem.question().startColumn());
+		assertEquals(2, problem.question().startColumn());
 		assertEquals(10, problem.question().lastColumn());
 		assertEquals("Here is the problem question?\\ref{fig1}\n\\label{   label 1   }\nYes here.", problem.question().text());
 	}
