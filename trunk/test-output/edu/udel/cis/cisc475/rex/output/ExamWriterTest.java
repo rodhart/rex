@@ -89,7 +89,12 @@ public class ExamWriterTest {
 		}
 		
     	//the examWriter writes out to the printwriter
-    	ew.write(pw);
+    	try {
+			ew.write(pw);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
     	
     	//read in the data 
     	FileInputStream fileInput = null;
@@ -137,7 +142,12 @@ public class ExamWriterTest {
 		}
 		
     	//the examWriter writes out to the printwriter
-    	ew.write(pw);
+    	try {
+			ew.write(pw);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
     	
     	//read in the data 
     	FileInputStream fileInput = null;
@@ -195,7 +205,163 @@ public class ExamWriterTest {
 		}
 		
     	//the examWriter writes out to the printwriter
-    	ew.write(pw);
+    	try {
+			ew.write(pw);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+    	
+    	//read in the data 
+    	FileInputStream fileInput = null;
+		try {
+			fileInput = new FileInputStream(filename);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	DataInputStream dataInput = new DataInputStream(fileInput);
+    	
+    	//checks the question
+    	String questionData = "";
+    	try {
+			questionData = dataInput.readLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	assertEquals(questionData.compareTo(testString), 0);
+   
+    	//checks ans1 data is correct
+		String ans1Data = "";
+    	try {
+			ans1Data = dataInput.readLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	 	assertEquals(ans1Data.compareTo("this is the answer 1"), 0);
+	    
+	 	//checks ans1 data is correct
+		String ans2Data = "";
+    	try {
+			ans2Data = dataInput.readLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	 	assertEquals(ans2Data.compareTo("this is the answer 2"), 0);
+    }
+    
+    @Test
+    public void testPrintProblemWithBlock(){
+    	Exam e = new Exam(true);	
+    	String testString = "test string";
+		
+    	//adds the block element   
+		Source testSource = new Source("test file");
+    	testSource.addText(testString);
+    	
+    	//creates an answer array
+    	Source ans1Source = new Source("ans1");
+		ans1Source.addText("this is the answer 1");
+		Answer ans1 = new Answer(true,ans1Source);
+		Source ans2Source = new Source("ans2");
+		ans2Source.addText("this is the answer 2");
+		Answer ans2 = new Answer(true,ans2Source);
+		Answer[] answerArray = {ans1, ans2};
+		
+		ProblemIF problemTest = new ProblemStub("topic", "label" ,testSource, answerArray);
+		e.addElement(problemTest);
+    
+		//creates an exam writer
+    	ExamWriter ew = new ExamWriter(e);
+    	String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test.txt";
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new FileWriter(filename));
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+    	//the examWriter writes out to the printwriter
+    	try {
+			ew.write(pw);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+    	
+    	//read in the data 
+    	FileInputStream fileInput = null;
+		try {
+			fileInput = new FileInputStream(filename);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	DataInputStream dataInput = new DataInputStream(fileInput);
+    	
+    	//checks the question
+    	String questionData = "";
+    	try {
+			questionData = dataInput.readLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	assertEquals(questionData.compareTo(testString), 0);
+   
+    	//checks ans1 data is correct
+		String ans1Data = "";
+    	try {
+			ans1Data = dataInput.readLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	 	assertEquals(ans1Data.compareTo("this is the answer 1"), 0);
+	    
+	 	//checks ans1 data is correct
+		String ans2Data = "";
+    	try {
+			ans2Data = dataInput.readLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	 	assertEquals(ans2Data.compareTo("this is the answer 2"), 0);
+    }
+    
+    @Test
+    public void testFrontMatter(){
+    	Exam e = new Exam(true);	
+    	String testString = "test string";
+    	
+    	//sets the  front matter
+    	Source frontMatter = new Source("frontmatter.txt");
+    	frontMatter.addText(testString);
+    	e.setFrontMatter(frontMatter);
+    
+    	//creates an exam writer
+    	ExamWriter ew = new ExamWriter(e);
+    	String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test.txt";
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new FileWriter(filename));
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+    	//the examWriter writes out to the printwriter
+    	try {
+			ew.write(pw);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
     	
     	//read in the data 
     	FileInputStream fileInput = null;
@@ -216,21 +382,120 @@ public class ExamWriterTest {
 		}
     	
 		//checks if the saved testData is the same as the 
-		//testString that was stored in a block
+		//testString that was stored the front matter
 		assertEquals(testData.compareTo(testString), 0);
     }
     
     @Test
-    public void testPrintProblem2(){
-    	ExamIF e = examFactory.newGeneratedExam();	
-    	SourceIF testSource = sourceFactory.newSource("./trunk/test-source/edu/udel/cis/cisc475/rex/source/SampleText.txt");
-    	AnswerIF answerTest = examFactory.newAnswer(true, testSource);
-    	AnswerIF answerTest2 = examFactory.newAnswer(false, testSource);
-    	AnswerIF[] answerArrayTest = {answerTest, answerTest2};
+    public void testPreamble(){
+    	Exam e = new Exam(true);	
+    	String testString = "test string";
     	
+    	//sets the  front matter
+    	Source preamble = new Source("preamble");
+    	preamble.addText(testString);
+    	e.setPreamble(preamble);
+
+    	//creates an exam writer
+    	ExamWriter ew = new ExamWriter(e);
+    	String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test.txt";
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new FileWriter(filename));
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+    	//the examWriter writes out to the printwriter
+    	try {
+			ew.write(pw);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
     	
-    	//Problem problemTest = new Problem("test topic", "test label", testSource, answerArrayTest );
-    	//e.addElementIF(problemTest);
-    	ExamWriterIF ew = examWriterFactory.newExamWriter(e);    
+    	//read in the data 
+    	FileInputStream fileInput = null;
+		try {
+			fileInput = new FileInputStream(filename);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	DataInputStream dataInput = new DataInputStream(fileInput);
+    	
+    	String testData = "";
+    	try {
+			testData = dataInput.readLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	
+		//checks if the saved testData is the same as the 
+		//testString that was stored in preamble
+		assertEquals(testData.compareTo(testString), 0);
+    
     }
+    
+    @Test 
+    public void testFinalBlock(){
+    	Exam e = new Exam(true);	
+    	String testString = "test string";
+    	
+    	//sets the  final block
+    	Source finalSource = new Source("finalBlock.txt");
+		finalSource.addText(testString);
+    	Block finalBlock = new Block("Final topic", finalSource);
+		e.setFinalBlock(finalBlock);
+		
+
+    	//creates an exam writer
+    	ExamWriter ew = new ExamWriter(e);
+    	String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test.txt";
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new FileWriter(filename));
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+    	//the examWriter writes out to the printwriter
+    	try {
+			ew.write(pw);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+    	
+    	//read in the data 
+    	FileInputStream fileInput = null;
+		try {
+			fileInput = new FileInputStream(filename);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	DataInputStream dataInput = new DataInputStream(fileInput);
+    	
+    	String testData = "";
+    	try {
+			testData = dataInput.readLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	
+		//checks if the saved testData is the same as the 
+		//testString that was stored in a final matter
+		assertEquals(testData.compareTo(testString), 0);
+    
+
+    }
+    
+    
+    
+    
 }
