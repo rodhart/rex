@@ -17,8 +17,8 @@ public class IntervalFactory implements IntervalFactoryIF
 	/**
 	 * This function is a wrapper for the Interval constructor
 	 * 
-	 * If low is greater than high (error condition), return
-	 * null instead of the object created.
+	 * If low is greater than high (error condition), throw
+	 * RexUnsatisfiableException
 	 */
 	@Override
 	public IntervalIF interval(boolean strictLow, Double low,
