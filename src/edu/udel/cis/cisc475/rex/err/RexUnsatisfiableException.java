@@ -20,8 +20,12 @@ public class RexUnsatisfiableException extends RexException {
 		this.source = source;
 	}
 
+	public RexUnsatisfiableException(String message) {
+		this(message, null);
+	}
+
 	public RexUnsatisfiableException() {
-		this("The request is not satisfiable", null);
+		this("The request is not satisfiable");
 	}
 
 	public SourceIF source() {
