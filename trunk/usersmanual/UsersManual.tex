@@ -109,6 +109,12 @@ A version definition of a command of the form \texttt{versions are \textcolor{bl
 In the UEF file, you can use the \textbackslash{examversion} command to insert the current version string. One example use for this is to have a different date format for each generated exam, so that the exams can be easily distinguished from one another, but a naive student would not know how to tell if his neighbor has a similar exam.
 
 \section{Usage}
+java -cp REX.jar edu.udel.cis.cisc475.rex.main.Rex 
+Usage: rex [options] <UEF filename> <ECF filename>
+Options: 
+    -n numExams : int numExams declares number of exams
+    -seed seed : long seed declaresthe seed for randomization
+    -pdf       : sets the pdf optionin order to have the exams output in pdf as well as .tex files.
 
 \subsection{Synopsis}
 rex [-n num] [-seed s] [-pdf] UEF-file ECF-file
