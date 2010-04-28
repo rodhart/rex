@@ -1,5 +1,6 @@
 package edu.udel.cis.cisc475.rex.uefparser.impl;
 
+import edu.udel.cis.cisc475.rex.err.RexParseException;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserIF;
 import java.io.EOFException;
@@ -10,9 +11,8 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
 /**
- * Parser for the Universal Exam File (UEF). Provides methods
- * that allow an ExamIF to produced from valid tex file that
- * uses the exam documentclass.
+ * Parser for the Universal Exam File (UEF). Provides methods that allow an
+ * ExamIF to produced from valid tex file that uses the exam documentclass.
  * 
  * @author Aaron Myles Landwehr
  * @author Ahmed El-hassany
@@ -30,21 +30,10 @@ public class UEFParser implements UEFParserIF {
 	private UEFCommandHandler uefCommandHandler;
 
 	/**
-	 * End of Line Exception for when something is suppose to occur by the end
-	 * of a line and doesn't.
-	 */
-	class EOLException extends EOFException {
-
-		public EOLException(String detail) {
-			super(detail);
-		}
-	}
-
-	/**
-	 * This constructor internally creates a new UEFCharHandler object
-	 * to handle the parsing of the file. And creates a new
-	 * UEFCommandHandler object to handle the processing of the command
-	 * queue that is created during parsing.
+	 * This constructor internally creates a new UEFCharHandler object to handle
+	 * the parsing of the file. And creates a new UEFCommandHandler object to
+	 * handle the processing of the command queue that is created during
+	 * parsing.
 	 * 
 	 * @see UEFParserFactoryIF
 	 */
@@ -100,7 +89,7 @@ public class UEFParser implements UEFParserIF {
 	 * @throws EOFException
 	 *             if an EOF occurs after an argument begins.
 	 */
-	String parseForArgument() throws EOFException {
+	String parseForArgument() throws RexParseException {
 		int position = uefCharHandler.getPosition();
 		try {
 			// Read until the first argument
@@ -144,7 +133,7 @@ public class UEFParser implements UEFParserIF {
 			return argument.toString().trim();
 		} catch (EOFException ex) {
 			// unexpected end of file after an argument began
-			throw new EOFException(
+			throw new RexParseException(
 					"Unexpected EOF when parsing for an argument.");
 		}
 	}
@@ -163,7 +152,7 @@ public class UEFParser implements UEFParserIF {
 	 * @throws EOFException
 	 *             if an EOF occurs after an optional argument begins.
 	 */
-	String parseForOptionalArgument() throws EOFException {
+	String parseForOptionalArgument() throws RexParseException {
 		int position = uefCharHandler.getPosition();
 		try {
 			while (uefCharHandler.read() != '[') {
@@ -206,7 +195,7 @@ public class UEFParser implements UEFParserIF {
 			return argument.toString().trim();
 		} catch (EOFException ex) {
 			// unexpected end of file after an optional argument began
-			throw new EOFException(
+			throw new RexParseException(
 					"Unexpected EOF when parsing for an optional argument.");
 		}
 	}
@@ -224,7 +213,7 @@ public class UEFParser implements UEFParserIF {
 	 * @throws EOFException
 	 *             if an unexpected EOF occurs.
 	 */
-	UEFCommand parseForCommand() throws EOLException, EOFException {
+	UEFCommand parseForCommand() throws RexParseException {
 		UEFCommand uefCommand = new UEFCommand();
 		while (!uefCharHandler.eof()) {
 			try {
@@ -242,193 +231,209 @@ public class UEFParser implements UEFParserIF {
 			}
 
 			// Not OKAY to reach EOF below this
-
-			// check for a command
-			if (uefCharHandler.read() == '\\') {
-				// not OK to reach EOF within this if(); unless in the case
-				// of optional argument. Which is handled by the
-				// parseForOptionalArgument() method anyway.nN
-
-				int commandStart = uefCharHandler.getPosition();
-				// move forward in the file.
-				uefCharHandler.move();
-
-				// Handle actual double backslash escape character: \\
+			try {
+				// check for a command
 				if (uefCharHandler.read() == '\\') {
-					uefCharHandler.move();
-					continue;
-				}
+					// not OK to reach EOF within this if(); unless in the case
+					// of optional argument. Which is handled by the
+					// parseForOptionalArgument() method anyway.nN
 
-				// Grab each letter in the command while there are letters
-				// remember only letters are valid for command names
-				StringBuffer commandBuffer = new StringBuffer();
-				while (Character.isLetter(uefCharHandler.read())) {
-					commandBuffer = commandBuffer.append(uefCharHandler.read());
+					int commandStart = uefCharHandler.getPosition();
+					// move forward in the file.
 					uefCharHandler.move();
-				}
-				String commandString = commandBuffer.toString();
 
-				// Handle \verb
-				if (commandString.equals("verb")) {
-					char delimiter = uefCharHandler.read();
-					uefCharHandler.move();
-					while (uefCharHandler.read() != delimiter) {
-						if (uefCharHandler.read() == '\n') {
-							// EOL should not be reached before a matching
-							// delimiter
-							throw new EOLException("Error: Verb delimiter '"
-									+ delimiter
-									+ "' not matched in file by end of line.");
-						}
+					// Handle actual double backslash escape character: \\
+					if (uefCharHandler.read() == '\\') {
+						uefCharHandler.move();
+						continue;
+					}
+
+					// Grab each letter in the command while there are letters
+					// remember only letters are valid for command names
+					StringBuffer commandBuffer = new StringBuffer();
+					while (Character.isLetter(uefCharHandler.read())) {
+						commandBuffer = commandBuffer.append(uefCharHandler
+								.read());
 						uefCharHandler.move();
 					}
-					continue;
-				}
-				// Handle \answer
-				else if (commandString.equals("answer")) {
-					String optionalArgument = parseForOptionalArgument();
-					uefCommand.setType(UEFCommand.Types.answer);
-					uefCommand.setStartPosition(commandStart);
-					uefCommand.setEndPosition(uefCharHandler.getPosition());
-					uefCommand.setOptionalArgument(optionalArgument);
-					return uefCommand;
-				}
-				// Handle \begin{}
-				else if (commandString.equals("begin")) {
-					String environment = parseForArgument();
+					String commandString = commandBuffer.toString();
 
-					// Handle \begin{verbatim}
-					if (environment.equals("verbatim")) {
-						// Handle \end{verbatim} technically...
-						Matcher matcher = uefCharHandler
-								.regex("\\\\end *\\{ *verbatim *\\}");
-						if (matcher != null) {
-							uefCharHandler.setPosition(matcher.end());
-							continue;
-						} else {
-							// starting at the current position no match was
-							// found within the file
-							throw new EOFException(
-									"\\begin{verbatim} without matching \\end{verbatim}");
+					// Handle \verb
+					if (commandString.equals("verb")) {
+						char delimiter = uefCharHandler.read();
+						uefCharHandler.move();
+						while (uefCharHandler.read() != delimiter) {
+							if (uefCharHandler.read() == '\n') {
+								// EOL should not be reached before a matching
+								// delimiter
+								throw new RexParseException(
+										"Verb delimiter '"
+												+ delimiter
+												+ "' not matched in file by end of line.");
+							}
+							uefCharHandler.move();
+						}
+						continue;
+					}
+					// Handle \answer
+					else if (commandString.equals("answer")) {
+						String optionalArgument = parseForOptionalArgument();
+						uefCommand.setType(UEFCommand.Types.answer);
+						uefCommand.setStartPosition(commandStart);
+						uefCommand.setEndPosition(uefCharHandler.getPosition());
+						uefCommand.setOptionalArgument(optionalArgument);
+						return uefCommand;
+					}
+					// Handle \begin{}
+					else if (commandString.equals("begin")) {
+						String environment = parseForArgument();
+
+						// Handle \begin{verbatim}
+						if (environment.equals("verbatim")) {
+							// Handle \end{verbatim} technically...
+							Matcher matcher = uefCharHandler
+									.regex("\\\\end *\\{ *verbatim *\\}");
+							if (matcher != null) {
+								uefCharHandler.setPosition(matcher.end());
+								continue;
+							} else {
+								// starting at the current position no match was
+								// found within the file
+								throw new EOFException(
+										"\\begin{verbatim} without matching \\end{verbatim}");
+							}
+						}
+						// Handle \begin{answers}
+						else if (environment.equals("answers")) {
+							String optionalArgument = parseForOptionalArgument();
+							uefCommand.setType(UEFCommand.Types.beginAnswers);
+							uefCommand.setStartPosition(commandStart);
+							uefCommand.setEndPosition(uefCharHandler
+									.getPosition());
+							uefCommand.setOptionalArgument(optionalArgument);
+							return uefCommand;
+						}
+						// Handle \begin{block}
+						else if (environment.equals("block")) {
+							String name = parseForArgument();
+							uefCommand.setType(UEFCommand.Types.beginBlock);
+							uefCommand.setStartPosition(commandStart);
+							uefCommand.setEndPosition(uefCharHandler
+									.getPosition());
+							uefCommand.addArgument(name);
+							return uefCommand;
+						}
+						// Handle \begin{document}
+						else if (environment.equals("document")) {
+							uefCommand.setType(UEFCommand.Types.beginDocument);
+							uefCommand.setStartPosition(commandStart);
+							uefCommand.setEndPosition(uefCharHandler
+									.getPosition());
+							return uefCommand;
+						}
+						// Handle \begin{figure}
+						else if (environment.equals("figure")) {
+							uefCommand.setType(UEFCommand.Types.beginFigure);
+							uefCommand.setStartPosition(commandStart);
+							uefCommand.setEndPosition(uefCharHandler
+									.getPosition());
+							return uefCommand;
+						}
+						// Handle \begin{problem}
+						else if (environment.equals("problem")) {
+							String optionalArgument = parseForOptionalArgument();
+							String topic = parseForArgument();
+							String difficulty = parseForArgument();
+							uefCommand.setType(UEFCommand.Types.beginProblem);
+							uefCommand.setStartPosition(commandStart);
+							uefCommand.setEndPosition(uefCharHandler
+									.getPosition());
+							uefCommand.setOptionalArgument(optionalArgument);
+							uefCommand.addArgument(topic);
+							uefCommand.addArgument(difficulty);
+							return uefCommand;
 						}
 					}
-					// Handle \begin{answers}
-					else if (environment.equals("answers")) {
-						String optionalArgument = parseForOptionalArgument();
-						uefCommand.setType(UEFCommand.Types.beginAnswers);
+					// Handle \documentclass
+					else if (commandString.equals("documentclass")) {
+						String master = parseForOptionalArgument();
+						String cls = parseForArgument();
+						uefCommand.setType(UEFCommand.Types.documentclass);
 						uefCommand.setStartPosition(commandStart);
 						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.setOptionalArgument(optionalArgument);
+						uefCommand.setOptionalArgument(master);
+						uefCommand.addArgument(cls);
 						return uefCommand;
 					}
-					// Handle \begin{block}
-					else if (environment.equals("block")) {
-						String name = parseForArgument();
-						uefCommand.setType(UEFCommand.Types.beginBlock);
-						uefCommand.setStartPosition(commandStart);
-						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.addArgument(name);
-						return uefCommand;
-					}
-					// Handle \begin{document}
-					else if (environment.equals("document")) {
-						uefCommand.setType(UEFCommand.Types.beginDocument);
-						uefCommand.setStartPosition(commandStart);
-						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						return uefCommand;
-					}
-					// Handle \begin{figure}
-					else if (environment.equals("figure")) {
-						uefCommand.setType(UEFCommand.Types.beginFigure);
-						uefCommand.setStartPosition(commandStart);
-						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						return uefCommand;
-					}
-					// Handle \begin{problem}
-					else if (environment.equals("problem")) {
-						String optionalArgument = parseForOptionalArgument();
-						String topic = parseForArgument();
-						String difficulty = parseForArgument();
-						uefCommand.setType(UEFCommand.Types.beginProblem);
-						uefCommand.setStartPosition(commandStart);
-						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.setOptionalArgument(optionalArgument);
-						uefCommand.addArgument(topic);
-						uefCommand.addArgument(difficulty);
-						return uefCommand;
-					}
-				}
-				// Handle \documentclass
-				else if (commandString.equals("documentclass")) {
-					String master = parseForOptionalArgument();
-					String cls = parseForArgument();
-					uefCommand.setType(UEFCommand.Types.documentclass);
-					uefCommand.setStartPosition(commandStart);
-					uefCommand.setEndPosition(uefCharHandler.getPosition());
-					uefCommand.setOptionalArgument(master);
-					uefCommand.addArgument(cls);
-					return uefCommand;
-				}
-				// Handle \end{}
-				else if (commandString.equals("end")) {
-					String environment = parseForArgument();
-					// Handle \end{answers}
-					if (environment.equals("answers")) {
-						uefCommand.setType(UEFCommand.Types.endAnswers);
-						uefCommand.setStartPosition(commandStart);
-						uefCommand.setEndPosition(uefCharHandler.getPosition());
+					// Handle \end{}
+					else if (commandString.equals("end")) {
+						String environment = parseForArgument();
+						// Handle \end{answers}
+						if (environment.equals("answers")) {
+							uefCommand.setType(UEFCommand.Types.endAnswers);
+							uefCommand.setStartPosition(commandStart);
+							uefCommand.setEndPosition(uefCharHandler
+									.getPosition());
 
-						return uefCommand;
+							return uefCommand;
+						}
+						// Handle \end{block}
+						else if (environment.equals("block")) {
+							uefCommand.setType(UEFCommand.Types.endBlock);
+							uefCommand.setStartPosition(commandStart);
+							uefCommand.setEndPosition(uefCharHandler
+									.getPosition());
+							return uefCommand;
+						}
+						// Handle \end{document}
+						else if (environment.equals("document")) {
+							uefCommand.setType(UEFCommand.Types.endDocument);
+							uefCommand.setStartPosition(commandStart);
+							uefCommand.setEndPosition(uefCharHandler
+									.getPosition());
+							return uefCommand;
+						}
+						// Handle \end{figure}
+						else if (environment.equals("figure")) {
+							uefCommand.setType(UEFCommand.Types.endFigure);
+							uefCommand.setStartPosition(commandStart);
+							uefCommand.setEndPosition(uefCharHandler
+									.getPosition());
+							return uefCommand;
+						}
+						// Handle \end{problem}
+						else if (environment.equals("problem")) {
+							uefCommand.setType(UEFCommand.Types.endProblem);
+							uefCommand.setStartPosition(commandStart);
+							uefCommand.setEndPosition(uefCharHandler
+									.getPosition());
+							return uefCommand;
+						}
 					}
-					// Handle \end{block}
-					else if (environment.equals("block")) {
-						uefCommand.setType(UEFCommand.Types.endBlock);
+					// Handle \label
+					else if (commandString.equals("label")) {
+						String label = parseForArgument();
+						uefCommand.setType(UEFCommand.Types.label);
 						uefCommand.setStartPosition(commandStart);
 						uefCommand.setEndPosition(uefCharHandler.getPosition());
+						uefCommand.addArgument(label);
 						return uefCommand;
 					}
-					// Handle \end{document}
-					else if (environment.equals("document")) {
-						uefCommand.setType(UEFCommand.Types.endDocument);
+					// Handle \ref
+					else if (commandString.equals("ref")) {
+						String label = parseForArgument();
+						uefCommand.setType(UEFCommand.Types.ref);
 						uefCommand.setStartPosition(commandStart);
 						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						return uefCommand;
-					}
-					// Handle \end{figure}
-					else if (environment.equals("figure")) {
-						uefCommand.setType(UEFCommand.Types.endFigure);
-						uefCommand.setStartPosition(commandStart);
-						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						return uefCommand;
-					}
-					// Handle \end{problem}
-					else if (environment.equals("problem")) {
-						uefCommand.setType(UEFCommand.Types.endProblem);
-						uefCommand.setStartPosition(commandStart);
-						uefCommand.setEndPosition(uefCharHandler.getPosition());
+						uefCommand.addArgument(label);
 						return uefCommand;
 					}
 				}
-				// Handle \label
-				else if (commandString.equals("label")) {
-					String label = parseForArgument();
-					uefCommand.setType(UEFCommand.Types.label);
-					uefCommand.setStartPosition(commandStart);
-					uefCommand.setEndPosition(uefCharHandler.getPosition());
-					uefCommand.addArgument(label);
-					return uefCommand;
-				}
-				// Handle \ref
-				else if (commandString.equals("ref")) {
-					String label = parseForArgument();
-					uefCommand.setType(UEFCommand.Types.ref);
-					uefCommand.setStartPosition(commandStart);
-					uefCommand.setEndPosition(uefCharHandler.getPosition());
-					uefCommand.addArgument(label);
-					return uefCommand;
-				}
+				uefCharHandler.move();
+			} catch (EOFException e) {
+				throw new RexParseException(
+						"Unexpected end of file when parsing for command.");
 			}
-			uefCharHandler.move();
 		}
 		return null;
 	}
@@ -447,13 +452,17 @@ public class UEFParser implements UEFParserIF {
 	 * @throws IOException
 	 *             If an I/O problem occurs.
 	 */
-	void parseForAllCommands(File file) throws EOLException, EOFException,
-			IOException {
-		this.openFile(file);
-		UEFCommand uefCommand = parseForCommand();
-		while (uefCommand != null) {
-			uefCommandHandler.add(uefCommand);
-			uefCommand = parseForCommand();
+	void parseForAllCommands(File file) throws RexParseException {
+		try {
+
+			this.openFile(file);
+			UEFCommand uefCommand = parseForCommand();
+			while (uefCommand != null) {
+				uefCommandHandler.add(uefCommand);
+				uefCommand = parseForCommand();
+			}
+		} catch (IOException e) {
+			throw new RexParseException("open UEF file for parsing.");
 		}
 	}
 
@@ -475,21 +484,16 @@ public class UEFParser implements UEFParserIF {
 			}
 			// completely parse the file
 			parseForAllCommands(file);
-			try {
-				// process the queue
-				return uefCommandHandler.process();
-			} catch (Exception ex) {
-				Logger.getLogger(UEFParser.class.getName()).log(Level.SEVERE,
-						null, ex);
-			}
-			return null;
-		} catch (EOLException ex) {
-			System.out.println("EOLException: " + ex.getMessage());
-		} catch (EOFException ex) {
-			System.out.println("EOFException: " + ex.getMessage());
-		} catch (IOException ex) {
-			System.out.println("IOException: " + ex.getMessage());
+
+			// process the queue
+			return uefCommandHandler.process();
+		} catch (RexParseException e) {
+			System.out.println("RexParseException: " + e.getMessage());
+		} catch (Exception ex) {
+			Logger.getLogger(UEFParser.class.getName()).log(Level.SEVERE, null,
+					ex);
 		}
+
 		return null;
 	}
 }
