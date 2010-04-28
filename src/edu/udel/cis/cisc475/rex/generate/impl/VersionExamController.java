@@ -86,7 +86,7 @@ public class VersionExamController
 	 * 				 to be randomized).
 	 */
 	
-	public AnswerIF[] randomizeAnswers(ProblemIF inputProblem) throws Exception
+	public AnswerIF[] randomizeAnswers(ProblemIF inputProblem)// throws Exception
 	{
 		AnswerIF[] theAnswers = inputProblem.answers();
 		Collection<AnswerIF> beforeRandomization = new ArrayList<AnswerIF>();
@@ -184,12 +184,9 @@ public class VersionExamController
 	 * 						-If a RequiredProblemConstraintIF or conflicting
 	 * 						 GroupConstraintIFs preclude a GroupConstraintIF from
 	 * 						 being fulfilled.
-	 * @throws Exception
-	 * 						-If theRandomizer.choose() fails (or a logic error 
-	 * 						 causes an invalid data set to be randomized).
 	 */
 	
-	public void satisfyConstraints() throws RexUnsatisfiableException, Exception
+	public void satisfyConstraints() throws RexUnsatisfiableException//, Exception
 	{
 		Iterator<TopicOrganizer> TOIterator =  this.mec.getTheTOs().values().iterator();
 		TopicOrganizer theTO = null;
@@ -305,10 +302,9 @@ public class VersionExamController
 	 *     of BlockContainers to be processed. Repeat until all BlockContainers in the TopicContainer
 	 *     have been processed, then remove the TopicContainer from the set of TopicContainers
 	 *     to be processed.
-	 * @throws Exception 
 	 */
 	
-	public void fillExam(ExamIF versionExam, AnswerKeyIF versionAnswerKey) throws Exception
+	public void fillExam(ExamIF versionExam, AnswerKeyIF versionAnswerKey)// throws Exception
 	{
 		HashMap figureBlacklist = new HashMap();
 		HashMap problemBlacklist = new HashMap();
