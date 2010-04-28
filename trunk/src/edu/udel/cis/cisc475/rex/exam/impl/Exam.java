@@ -87,7 +87,7 @@ public class Exam implements ExamIF {
 	
 	// TODO Is this needed? I commented it out since it wasn't being read
 	// by anyone. --Fran
-	//private Map<ExamElementIF, HashSet<ExamElementIF>> usedBy;
+	private Map<ExamElementIF, HashSet<ExamElementIF>> usedBy;
 
 	/**
 	 * Default constructor
@@ -102,6 +102,7 @@ public class Exam implements ExamIF {
 		this.labels = new HashSet<String>();
 		this.topics = new HashSet<String>();
 		this.uses = new LinkedHashMap<ExamElementIF, HashSet<ExamElementIF>>();
+		this.usedBy = new LinkedHashMap<ExamElementIF, HashSet<ExamElementIF>>();
 	}
 
 	/**
@@ -132,9 +133,9 @@ public class Exam implements ExamIF {
 			HashSet<ExamElementIF> useesOfElement = new HashSet<ExamElementIF>();
 			// TODO Is this needed? I commented it out since it wasn't being read
 			// by anyone. --Fran
-			//HashSet<ExamElementIF> usersOfElement = new HashSet<ExamElementIF>();
+			HashSet<ExamElementIF> usersOfElement = new HashSet<ExamElementIF>();
 			uses.put(element, useesOfElement);
-			//usedBy.put(element, usersOfElement);
+			usedBy.put(element, usersOfElement);
 			return key;
 		} else {
 			return -1;
@@ -158,6 +159,7 @@ public class Exam implements ExamIF {
 	public void declareUse(ExamElementIF user, ExamElementIF usee) throws RexException{
 		if (elements.containsValue(user) && elements.containsValue(usee)) {
 			uses.get(user).add(usee);
+			usedBy.get(usee).add(user);
 			if(user instanceof ProblemIF && usee instanceof FigureIF) {
 				((Problem) user).addReferencedFigure((FigureIF) usee);
 			}
@@ -228,15 +230,11 @@ public class Exam implements ExamIF {
 	 * are found, an empty collection will be returned
 	 */
 	public Collection<ExamElementIF> elementsUsingElement(ExamElementIF element) {
-		Set<ExamElementIF> returnSet = new HashSet<ExamElementIF>();
-		Iterator<ExamElementIF> i = elements.values().iterator();
-		while (i.hasNext()) {
-			ExamElementIF newElement = i.next();
-			if (uses.get(newElement).contains(element)) {
-				returnSet.add(newElement);
-			}
+		Set<ExamElementIF> emptySet = new HashSet<ExamElementIF>();
+		if (usedBy.get(element)==null) {
+			return emptySet;
 		}
-		return (Collection<ExamElementIF>) returnSet;
+		return usedBy.get(element);
 	}
 
 	/**
