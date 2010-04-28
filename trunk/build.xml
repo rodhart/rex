@@ -7,8 +7,9 @@
 	<property name="rex_src" value="${src}/edu/udel/cis/cisc475/rex" />
 	<property name="jar-name" value="REX.jar" />
 	<property name="jar-path" value="${basedir}/${jar-name}" />
-	<property name="main-class" value="edu.udel.cis.cisc475.rex.REX" />
+	<property name="main-class" value="edu.udel.cis.cisc475.rex.main.Rex" />
 	<property name="64bit" value="-d64" />
+	<property name="manifest-file" value="MANIFEST.MF" />
 
 	<!-- Junit: automated unit tester Properties  -->
 	<property name="test.bin.dir" location="${basedir}/bin-test" />
@@ -105,8 +106,14 @@
 		</javac>
 	</target>
 
+	<manifest file="${manifest-file}">
+                <attribute name="Built-By" value="${user.name}"/>
+                <attribute name="Main-Class" value="${main-class}"/>
+	</manifest>
+
+
 	<target name="jar" depends="compile" description="Jar all class files into a single file.">
-		<jar destfile="${jar-path}" basedir="${bin}">
+		<jar destfile="${jar-path}" basedir="${bin}" manifest="${manifest-file}">
 		</jar>
 	</target>
 
@@ -117,6 +124,8 @@
 		<delete file="${cob.ser.file}" />
 		<delete file="${cob.log.file}" />
 		<delete dir="${antlr.ecf.gen.dir}" />
+		<delete file="${manifest-file}"/>
+		
 	</target>
 
 
