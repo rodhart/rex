@@ -190,9 +190,9 @@ public class GeneratorTest {
 		ConfigIF config = generator1.getConfig();
 		assertEquals(config1, config);
 	}	
-
-	@Test @Ignore //(expected = RexUnsatisfiableException.class)
-	public void name() throws Exception
+	
+	@Test(expected = RexUnsatisfiableException.class)
+	public void testNotEnoughProblemsToMeetGroupConstraints() throws Exception
 	{
 		config1.addRequiredProblemConstraint("label2", 3, source2);
 		
