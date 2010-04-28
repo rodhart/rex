@@ -44,12 +44,7 @@ public class ConfigStub implements ConfigIF {
 		source1.addText("question2");
 		IntervalIF interval = null;
 
-		try {
-			interval = intervalFactory.interval(true, 1.0, true, 5.0);
-		} catch (RexUnsatisfiableException e) {
-			System.out.println(e);
-			System.exit(1);
-		}
+		interval = intervalFactory.interval(true, 1.0, true, 5.0);
 
 		RequiredProblemConstraint constraint1 = new RequiredProblemConstraint(
 				"label1", 4, source1);

@@ -9,7 +9,7 @@ import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
 
 public class GeneratorFactory implements GeneratorFactoryIF 
 {
-	public GeneratorIF newGenerator(ExamIF master, ConfigIF config) throws RexException, NullPointerException
+	public GeneratorIF newGenerator(ExamIF master, ConfigIF config) throws RexException
 	{
 			return new Generator(master, config);
 	}

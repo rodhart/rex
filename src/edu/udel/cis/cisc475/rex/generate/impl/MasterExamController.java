@@ -110,7 +110,7 @@ public class MasterExamController
 		
 		if (requiredProblem == null)
 			throw new RexParseException("The label " + requiredLabel +
-										" does not have an associated problem.");
+										" does not have an associated problem.", theRPC.source());
 
 		Integer identifier = (Integer) this.identifiers.get(requiredProblem);
 
@@ -121,8 +121,8 @@ public class MasterExamController
 		}
 
 		else
-			System.err.println("The problem \"" + requiredProblem.question()
-					+ "\" is referenced by two required problem constraints.");
+			throw new RexParseException("The problem \"" + requiredProblem.question() +
+										"\" is referenced by two RequiredProblemConstraints.", theRPC.source());
 	}
 
 	/**

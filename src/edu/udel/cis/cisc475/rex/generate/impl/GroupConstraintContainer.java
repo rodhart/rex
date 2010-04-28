@@ -8,6 +8,7 @@ import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
+import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /**
  * @author Greg Simons
@@ -30,6 +31,7 @@ public class GroupConstraintContainer
 	private int constraintValue;
 	private int pointValue;
 	private IntervalIF difficultyInterval;
+	private SourceIF theSource;
 	
 	
 	private Collection<ProblemIF> set = new ArrayList<ProblemIF>();
@@ -52,6 +54,7 @@ public class GroupConstraintContainer
 		this.constraintValue = theGC.numProblems();
 		this.pointValue = theGC.points();
 		this.difficultyInterval = theGC.difficultyInterval();
+		this.theSource = theGC.source();
 		
 		Collection<ProblemIF> problemsByTopic = master.problemsWithTopic(this.topic);
 		
@@ -67,11 +70,11 @@ public class GroupConstraintContainer
 		if (this.set.size() < this.constraintValue)
 		{
 			throw new RexUnsatisfiableException("The constraint requesting " + this.constraintValue +
-					   " problem(s) from " + this.topic +
-					   " of point value " + this.pointValue +
-					   " within difficulty " + theGC.difficultyInterval().low() +
-					   " through " + theGC.difficultyInterval().high() +
-					   " is unsatisfiable.");
+					   							" problem(s) from " + this.topic +
+					   							" of point value " + this.pointValue +
+					   							" within difficulty " + theGC.difficultyInterval().low() +
+					   							" through " + theGC.difficultyInterval().high() +
+												" is unsatisfiable.", theGC.source());
 		}
 	}
 	
@@ -93,6 +96,11 @@ public class GroupConstraintContainer
 	public IntervalIF getDifficultyInterval()
 	{ 
 		return this.difficultyInterval; 
+	}
+	
+	public SourceIF getSource()
+	{
+		return this.theSource;
 	}
 	
 	public Collection<ProblemIF> getSet()
