@@ -3,9 +3,8 @@
  */
 package edu.udel.cis.cisc475.rex.uefparser.impl;
 
-import edu.udel.cis.cisc475.rex.uefparser.impl.UEFParser.EOLException;
+import edu.udel.cis.cisc475.rex.err.RexParseException;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
-import java.io.EOFException;
 import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -324,7 +323,7 @@ public class UEFParserTest
 	}
 
 	@Test
-	public void negativeVerbTest() throws EOFException, IOException
+	public void negativeVerbTest()
 	{
 		try
 		{
@@ -333,14 +332,14 @@ public class UEFParserTest
 			File file = new File("." + File.separator + "examples" + File.separator + "negativeVerbTestFile.tex");
 			parser.parseForAllCommands(file);
 		}
-		catch (EOLException e)
+		catch (RexParseException e)
 		{
 			assertTrue(true);
 		}
 	}
 
 	@Test
-	public void negativeVerbatimTest() throws EOLException, IOException
+	public void negativeVerbatimTest()
 	{
 		try
 		{
@@ -349,14 +348,14 @@ public class UEFParserTest
 			File file = new File("." + File.separator + "examples" + File.separator + "negativeVerbatimTestFile.tex");
 			parser.parseForAllCommands(file);
 		}
-		catch (EOFException e)
+		catch (RexParseException e)
 		{
 			assertTrue(true);
 		}
 	}
 
 	@Test
-	public void negativeCommentTest() throws EOLException, EOFException, IOException
+	public void negativeCommentTest() throws IOException, RexParseException
 	{
 		UEFParser parser = new UEFParser();
 		File file = new File("." + File.separator + "examples" + File.separator + "negativeCommentTestFile.tex");
