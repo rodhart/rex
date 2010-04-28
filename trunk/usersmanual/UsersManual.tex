@@ -1,6 +1,7 @@
 \documentclass{article}
 \usepackage[pdfborder={0 0 0}, colorlinks=false]{hyperref}
 \usepackage{multicol}
+\usepackage{color}
 \author{CISC475/675 Spring 2010}
 
 \title{REX User's Manual}
@@ -68,16 +69,22 @@ with comments being all text that follows after a pound symbol
 
 There are four defined commands for the ECF file
 
+An interval is a pair of decimals separated by two periods, in between a pair of braces or parenthesis, where a brace on an end indicates that edge is inclusive, and a parenthesis that the edge is exclusive. An example would be \texttt{[3..5)}, which would be the range from 3 to 5, including 3 but not including 5.
+
 \subsection{Group Constraints}
-A group constaint is a command of the form \texttt{'include' <integer>
-'problems on' <string> 'with difficulty in' <interval> 'at' <integer>
-'points' ';'}
+A group constraint is a command of the form \texttt{include \textcolor{blue}{int count}
+problems on \textcolor{blue}{string topic} with difficulty in \textcolor{blue}{interval difficulty} at \textcolor{blue}{int points} points;}.
+
+The command will choose \textcolor{blue}{count} problems from \textcolor{blue}{topic} 
 
 \subsection{Required Problem Constraints}
+A required problem constraint is a command of the form \texttt{includeall \textcolor{blue}{string label} at \textcolor{blue}{int points} points;}.
 
 \subsection{Append Text}
+An append text command is a command of the form \texttt{append \textcolor{blue}{string label};}
 
 \subsection{Version Definition}
+A version definition of a command of the form \texttt{versions are \textcolor{blue}{string versions};}
 
 \section{Usage}
 After creating a UEF and ECF file \texttt{rex input.uef input.ecf}. 
@@ -115,6 +122,12 @@ will require at least 10 satisfactory questions.
 
 % How do we add color to this to make it easier
 % to read? -Haley
+
+% We can add color by using \textcolor{declared-color}{text} - BUT, we can't put that in a verbatim.
+% We'd have to escape all the LaTeX commands to use that. We'd have to at the least place a 
+% \textbackslash for ever instance of a backslash - \begin, \section, etc.
+% Also, I can't find an easy way to make a long section of text appear teletype other than
+% using \begin{verbatim}.
 \begin{figure}
 \begin{verbatim}
     \documentclass{exam} 
