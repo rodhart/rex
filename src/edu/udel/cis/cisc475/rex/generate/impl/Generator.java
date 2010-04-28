@@ -52,9 +52,12 @@ public class Generator implements GeneratorIF
 	 * 			-If the ConfigIF contains a ConstraintIF that is not a 
 	 * 			 RequiredProblemConstraintIF or a GroupConstraintIF, or
 	 * 			 if a ConstraintIF is not satisfiable.
+	 * @throws NullPointerException
+	 * 	  		-If theRandomizer.choose() fails (or a logic error causes an invalid data set
+	 * 			 to be randomized).
 	 */
 	
-	Generator(ExamIF master, ConfigIF config) throws RexException
+	Generator(ExamIF master, ConfigIF config) throws RexException, NullPointerException
 	{
 		this.master = master;
 		this.config = config;
@@ -97,7 +100,7 @@ public class Generator implements GeneratorIF
 		return this.numExams;
 	}
 	
-	private void generate() throws RexException
+	private void generate() throws RexException, NullPointerException
 	{
 		this.generatedExams = new ExamIF[this.numExams];
 		this.answerKeys = new AnswerKeyIF[this.numExams];

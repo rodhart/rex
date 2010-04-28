@@ -81,12 +81,12 @@ public class VersionExamController
 	 * @return
 	 * 				-An AnswerIF[] with randomized non-FixedAnswers from the
 	 * 				 answer set of the ProblemIF taken as input.
-	 * @throws Exception
+	 * @throws NullPointerException
 	 * 				-If theRandomizer.choose() fails (or a logic error causes an invalid data set
 	 * 				 to be randomized).
 	 */
 	
-	public AnswerIF[] randomizeAnswers(ProblemIF inputProblem)// throws Exception
+	public AnswerIF[] randomizeAnswers(ProblemIF inputProblem)throws NullPointerException// throws Exception
 	{
 		AnswerIF[] theAnswers = inputProblem.answers();
 		Collection<AnswerIF> beforeRandomization = new ArrayList<AnswerIF>();
@@ -184,9 +184,12 @@ public class VersionExamController
 	 * 						-If a RequiredProblemConstraintIF or conflicting
 	 * 						 GroupConstraintIFs preclude a GroupConstraintIF from
 	 * 						 being fulfilled.
+	 * @throws NullPointerException
+	 * 	  					-If theRandomizer.choose() fails (or a logic error causes an invalid data set
+	 * 				 		 to be randomized).
 	 */
 	
-	public void satisfyConstraints() throws RexUnsatisfiableException//, Exception
+	public void satisfyConstraints() throws RexUnsatisfiableException, NullPointerException//, Exception
 	{
 		Iterator<TopicOrganizer> TOIterator =  this.mec.getTheTOs().values().iterator();
 		TopicOrganizer theTO = null;
@@ -279,6 +282,9 @@ public class VersionExamController
 	 * 				-The ExamIF that will have ExamElementIFs added to it.
 	 * @param versionAnswerKey
 	 * 				-The AnswerKey that will have correct answer sets added to it.
+	 * @throws NullPointerException
+	 * 	  			-If theRandomizer.choose() fails (or a logic error causes an invalid data set
+	 * 				 to be randomized).
 	 * 
 	 * 1.) Randomly selects a TopicOrganizer, a BlockContainer within the TopicOrganizer,
 	 * 	   and a FigureContainer within the BlockContainer.
@@ -304,7 +310,7 @@ public class VersionExamController
 	 *     to be processed.
 	 */
 	
-	public void fillExam(ExamIF versionExam, AnswerKeyIF versionAnswerKey)// throws Exception
+	public void fillExam(ExamIF versionExam, AnswerKeyIF versionAnswerKey) throws NullPointerException// throws Exception
 	{
 		HashMap figureBlacklist = new HashMap();
 		HashMap problemBlacklist = new HashMap();
