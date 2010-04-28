@@ -58,15 +58,15 @@ public class Generator implements GeneratorIF
 	
 		this.numExams = config.numVersions();
 		
-		try
-		{
+		//try
+		//{
 			generate();
-		}
+		/*}
 		
 		catch (Exception e)
 		{
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	public ExamIF getMaster()
