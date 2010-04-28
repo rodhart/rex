@@ -8,6 +8,9 @@ import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
 import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
 
+import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
+import edu.udel.cis.cisc475.rex.err.RexParseException;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -37,20 +40,15 @@ public class EcfParser implements EcfParserIF {
     this.numGeneratedExams = numGeneratedExams;
   }
 
-  public ConfigIF parse(File file) {
-    try {
-      return this.genericInputParse(new ANTLRFileStream(file.toString()));
-    } catch(IOException e) {
-      System.out.println("ERROR reading file.");
-      return null;
-    }
+  public ConfigIF parse(File file) throws IOException, RexUnsatisfiableException, RexParseException {
+    return this.genericInputParse(new ANTLRFileStream(file.toString()));
   }
   
-  public ConfigIF parseString(String ecfString) {
+  public ConfigIF parseString(String ecfString) throws RexUnsatisfiableException, RexParseException {
     return this.genericInputParse(new ANTLRStringStream(ecfString));
   }
   
-  public ConfigIF genericInputParse(CharStream stream) {
+  public ConfigIF genericInputParse(CharStream stream) throws RexUnsatisfiableException, RexParseException {
     ConfigFactoryIF configFactory = new ConfigFactory();
     ConfigIF config = configFactory.newConfig(pdfOption, numGeneratedExams);
 
@@ -62,12 +60,9 @@ public class EcfParser implements EcfParserIF {
       g.ecf(config);
     } catch (EcfParserHackException e) {
 			//throw e.releaseTheRex();
-			System.err.println("Parse error!");
-			System.err.println(e.releaseTheRex().getMessage());
+			throw new RexUnsatisfiableException(e.releaseTheRex().getMessage());
     } catch (RecognitionException e) {
-      System.err.println("parse error!");
-      System.err.println(e.getMessage());
-      return null;
+			throw new RexParseException(e.getMessage());
     }
     
     return config;
