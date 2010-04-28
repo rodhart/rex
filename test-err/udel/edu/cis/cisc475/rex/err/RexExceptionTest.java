@@ -1,12 +1,9 @@
 package udel.edu.cis.cisc475.rex.err;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import edu.udel.cis.cisc475.rex.err.RexException;
-import edu.udel.cis.cisc475.rex.err.RexParseException;
-import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 
 public class RexExceptionTest {
 
