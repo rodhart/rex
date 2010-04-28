@@ -3,8 +3,12 @@
  */
 package edu.udel.cis.cisc475.rex.uefparser.impl;
 
+import edu.udel.cis.cisc475.rex.uefparser.impl.UEFParser.EOLException;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
+import java.io.EOFException;
+import java.io.IOException;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
 
@@ -317,6 +321,47 @@ public class UEFParserTest
 		assertEquals(804, beginAnswers.getEndPosition());
 		assertEquals(15, beginAnswers.getSize());
 		assertEquals(null, beginAnswers.getOptionalArgument());
+	}
+
+	@Test
+	public void negativeVerbTest() throws EOFException, IOException
+	{
+		try
+		{
+			UEFParser parser = new UEFParser();
+			//Open the file to parse.
+			File file = new File("." + File.separator + "examples" + File.separator + "negativeVerbTestFile.tex");
+			parser.parseForAllCommands(file);
+		}
+		catch (EOLException e)
+		{
+			assertTrue(true);
+		}
+	}
+
+	@Test
+	public void negativeVerbatimTest() throws EOLException, IOException
+	{
+		try
+		{
+			UEFParser parser = new UEFParser();
+			//Open the file to parse.
+			File file = new File("." + File.separator + "examples" + File.separator + "negativeVerbatimTestFile.tex");
+			parser.parseForAllCommands(file);
+		}
+		catch (EOFException e)
+		{
+			assertTrue(true);
+		}
+	}
+
+	@Test
+	public void negativeCommentTest() throws EOLException, EOFException, IOException
+	{
+		UEFParser parser = new UEFParser();
+		File file = new File("." + File.separator + "examples" + File.separator + "negativeCommentTestFile.tex");
+		parser.openFile(file);
+		assertNull(parser.parseForCommand());
 	}
 
 	/**
