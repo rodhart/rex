@@ -31,6 +31,6 @@ public interface RandomizerIF {
 	 * @return an array of chosen objects
 	 * @throws Exception 
 	 */
-	Object[] choose(int numItems, Object[] items) throws Exception;
+	Object[] choose(int numItems, Object[] items);
 
 }// end of interface

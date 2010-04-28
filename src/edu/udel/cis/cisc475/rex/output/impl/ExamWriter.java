@@ -1,13 +1,12 @@
 package edu.udel.cis.cisc475.rex.output.impl;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
-import edu.udel.cis.cisc475.rex.exam.impl.Problem;
+import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
 
 /**
@@ -35,9 +34,9 @@ public class ExamWriter implements ExamWriterIF {
 	 * 
 	 * @param out
 	 *            any writer used to output data
-	 * @throws IOException 
+	 *  
 	 */
-	public void write(PrintWriter out) throws IOException {
+	public void write(PrintWriter out) {
 		// output preamble if it exists
 		if(E.preamble()!=null){
 			E.preamble().write(out);
@@ -62,8 +61,8 @@ public class ExamWriter implements ExamWriterIF {
 			} else if (temp instanceof FigureIF) {
 				FigureIF tempFigureIF = (FigureIF) temp;
 				tempFigureIF.source().write(out);
-			} else if (temp instanceof Problem) {
-				Problem tempProblem = (Problem) temp;
+			} else if (temp instanceof ProblemIF) {
+				ProblemIF tempProblem = (ProblemIF) temp;
 				
 				// if there is a required block, print it
 				if (tempProblem.requiredBlock() != null)
