@@ -57,7 +57,7 @@ public class GroupConstraintContainer
 		
 		for (ProblemIF currentProblem : problemsByTopic)
 		{
-			if (this.difficultyInterval.contains(currentProblem.difficulty()));
+			if (this.difficultyInterval.contains(currentProblem.difficulty()))
 			{
 				currentProblem.setPoints(this.pointValue);
 				this.set.add(currentProblem);
