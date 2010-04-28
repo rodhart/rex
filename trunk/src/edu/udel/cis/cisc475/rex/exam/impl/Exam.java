@@ -212,13 +212,11 @@ public class Exam implements ExamIF {
 						((BlockIF) usee).topic() == ((ProblemIF) user).topic()){
 					((Block) usee).setTopic( ((ProblemIF) user).topic());
 				} else {
-					System.err.println("error trying to change a block's topic to a new topic!");
-					throw new RexException();
+					throw new RexException("Cannot change a blocks topic once it is set!");
 				}
 			}
 		} else {
-			System.err.println("error calling exam.DeclareUse(user, usee), must add elements to the exam before declaring a relationship");
-			throw new RexException();
+			throw new RexException("error calling exam.DeclareUse(user, usee), must add elements to the exam before declaring a relationship");
 		}
 		
 		
