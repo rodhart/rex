@@ -31,6 +31,7 @@ public class GroupConstraintContainer
 	private int pointValue;
 	private IntervalIF difficultyInterval;
 	
+	
 	private Collection<ProblemIF> set = new ArrayList<ProblemIF>();
 
 	/**
@@ -65,13 +66,12 @@ public class GroupConstraintContainer
 			
 		if (this.set.size() < this.constraintValue)
 		{
-			System.err.println("The constraint requesting " + this.constraintValue +
-							   " problems from " + this.topic +
-							   " of point value " + this.pointValue +
-							   " within difficulty " + theGC.difficultyInterval().low() +
-							   " through " + theGC.difficultyInterval().high() +
-							   " is unsatisfiable.");
-			throw new RexUnsatisfiableException();
+			throw new RexUnsatisfiableException("The constraint requesting " + this.constraintValue +
+					   " problems from " + this.topic +
+					   " of point value " + this.pointValue +
+					   " within difficulty " + theGC.difficultyInterval().low() +
+					   " through " + theGC.difficultyInterval().high() +
+					   " is unsatisfiable.");
 		}
 	}
 	
