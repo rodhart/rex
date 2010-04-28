@@ -356,10 +356,12 @@ public class UEFParser implements UEFParserIF {
 				}
 				// Handle \documentclass
 				else if (commandString.equals("documentclass")) {
+					String master = parseForOptionalArgument();
 					String cls = parseForArgument();
 					uefCommand.setType(UEFCommand.Types.documentclass);
 					uefCommand.setStartPosition(commandStart);
 					uefCommand.setEndPosition(uefCharHandler.getPosition());
+					uefCommand.setOptionalArgument(master);
 					uefCommand.addArgument(cls);
 					return uefCommand;
 				}
