@@ -22,6 +22,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.impl.Answer;
 import edu.udel.cis.cisc475.rex.exam.impl.Block;
 import edu.udel.cis.cisc475.rex.exam.impl.Exam;
@@ -68,34 +69,16 @@ public class ExamWriterTest {
     @Test
     public void testPrintBlockIF(){
     	Exam e = new Exam(true);	
-    	
-    	//BlockIF blockTest = examFactory.newBlock("test topic", "test label", testSource );
-    	//BlockIF changed, needed to fix so code compiles.
-    	
-    	//sets up the exam
-    	
-    	//sets the preamble
-    	Source preamble = new Source("preamble");
-    	preamble.addText("hello");
-		e.setPreamble(preamble);
+    	String testString = "test string";
 		
-    	//sets the  front matter
-    	Source frontMatter = new Source("frontmatter.txt");
-    	e.setFrontMatter(frontMatter);
-    	
-    	//sets the final matter
-		Source finalSource = new Source("finalBlock.txt");
-		Block finalBlock = new Block("Final topic", finalSource);
-		e.setFinalBlock(finalBlock);
-		
-		//adds the block element   
+    	//adds the block element   
 		Source testSource = new Source("test file");
-    	testSource.addText("test");
+    	testSource.addText(testString);
 		Block blockTest = new Block("test topic", testSource );
 		e.addElement(blockTest);
     	
-    	
-    	ExamWriterIF ew = examWriterFactory.newExamWriter(e);
+		//creates an exam writer
+    	ExamWriter ew = new ExamWriter(e);
     	String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test.txt";
 		PrintWriter pw = null;
 		try {
@@ -104,7 +87,7 @@ public class ExamWriterTest {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-			    	
+		
     	//the examWriter writes out to the printwriter
     	ew.write(pw);
     	
@@ -126,30 +109,115 @@ public class ExamWriterTest {
 			e1.printStackTrace();
 		}
     	
-		assertEquals(testData, "test");
-    	
+		//checks if the saved testData is the same as the 
+		//testString that was stored in a block
+		assertEquals(testData.compareTo(testString), 0);
     }
     
     @Test
     public void testPrintFigureIF(){
-    	ExamIF e = examFactory.newGeneratedExam();	
-    	SourceIF testSource = sourceFactory.newSource("./trunk/test-source/edu/udel/cis/cisc475/rex/source/SampleText.txt");
-    	FigureIF figureTest = examFactory.newFigure("test label", testSource );
-    	e.addElement(figureTest);
-    	ExamWriterIF ew = examWriterFactory.newExamWriter(e);
+    	Exam e = new Exam(true);	
+    	String testString = "test string";
+		
+    	//adds the figure element   
+		Source testSource = new Source("test file");
+    	testSource.addText(testString);
+		Figure figureTest = new Figure("test topic", testSource );
+		e.addElement(figureTest);
+    	
+		//creates an exam writer
+    	ExamWriter ew = new ExamWriter(e);
+    	String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test.txt";
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new FileWriter(filename));
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+    	//the examWriter writes out to the printwriter
+    	ew.write(pw);
+    	
+    	//read in the data 
+    	FileInputStream fileInput = null;
+		try {
+			fileInput = new FileInputStream(filename);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	DataInputStream dataInput = new DataInputStream(fileInput);
+    	
+    	String testData = "";
+    	try {
+			testData = dataInput.readLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	
+		//checks if the saved testData is the same as the 
+		//testString that was stored in a figure
+		assertEquals(testData.compareTo(testString), 0);
     }
     
     @Test
     public void testPrintProblem(){
-    	ExamIF e = examFactory.newGeneratedExam();	
-    	SourceIF testSource = sourceFactory.newSource("./trunk/test-source/edu/udel/cis/cisc475/rex/source/SampleText.txt");
-    	AnswerIF answerTest = examFactory.newAnswer(true, testSource);
-    	AnswerIF answerTest2 = examFactory.newAnswer(false, testSource);
-    	AnswerIF[] answerArrayTest = {answerTest, answerTest2};
+    	Exam e = new Exam(true);	
+    	String testString = "test string";
+		
+    	//adds the block element   
+		Source testSource = new Source("test file");
+    	testSource.addText(testString);
     	
-    	//Problem problemTest = new Problem("test topic", "test label", testSource, answerArrayTest );
-    	//e.addElementIF(problemTest);
-    	ExamWriterIF ew = examWriterFactory.newExamWriter(e);    
+    	//creates an answer array
+    	Source ans1Source = new Source("ans1");
+		ans1Source.addText("this is the answer 1");
+		Answer ans1 = new Answer(true,ans1Source);
+		Source ans2Source = new Source("ans2");
+		ans2Source.addText("this is the answer 2");
+		Answer ans2 = new Answer(true,ans2Source);
+		Answer[] answerArray = {ans1, ans2};
+		
+		ProblemIF problemTest = new ProblemStub("topic", "label" ,testSource, answerArray);
+		e.addElement(problemTest);
+    
+		//creates an exam writer
+    	ExamWriter ew = new ExamWriter(e);
+    	String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test.txt";
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new FileWriter(filename));
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+    	//the examWriter writes out to the printwriter
+    	ew.write(pw);
+    	
+    	//read in the data 
+    	FileInputStream fileInput = null;
+		try {
+			fileInput = new FileInputStream(filename);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	DataInputStream dataInput = new DataInputStream(fileInput);
+    	
+    	String testData = "";
+    	try {
+			testData = dataInput.readLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	
+		//checks if the saved testData is the same as the 
+		//testString that was stored in a block
+		assertEquals(testData.compareTo(testString), 0);
     }
     
     @Test
@@ -165,5 +233,4 @@ public class ExamWriterTest {
     	//e.addElementIF(problemTest);
     	ExamWriterIF ew = examWriterFactory.newExamWriter(e);    
     }
-    
 }
