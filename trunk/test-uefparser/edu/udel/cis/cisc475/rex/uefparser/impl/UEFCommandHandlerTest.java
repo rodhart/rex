@@ -89,6 +89,16 @@ public class UEFCommandHandlerTest
 		assertEquals(1, answer.source().startColumn());
 		assertEquals(33, answer.source().lastColumn());
 		assertEquals("\\answer[fixed] none of the above", answer.source().text());
+
+		//check when no more command in queue
+		try
+		{
+			answer = handler.processAnswer(5);
+		}
+		catch (Exception e)
+		{
+			assertTrue(true);
+		}
 	}
 
 	@Test
