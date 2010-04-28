@@ -4,7 +4,6 @@ package edu.udel.cis.cisc475.rex.source.IF;
  * Interface for SourceFactory class
  * 
  * @author cardona
- * @author jsong
  *
  */
 public interface SourceFactoryIF {
