@@ -1,6 +1,7 @@
 package edu.udel.cis.cisc475.rex.ecfparser.impl;
 
 import edu.udel.cis.cisc475.rex.ecfparser.IF.EcfParserIF;
+import edu.udel.cis.cisc475.rex.ecfparser.impl.err.EcfParserHackException;
 import edu.udel.cis.cisc475.rex.ecfparser.impl.parser.EcfAntlrLexer;
 import edu.udel.cis.cisc475.rex.ecfparser.impl.parser.EcfAntlrParser;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
@@ -59,9 +60,13 @@ public class EcfParser implements EcfParserIF {
     
     try {
       g.ecf(config);
+    } catch (EcfParserHackException e) {
+			//throw e.releaseTheRex();
+			System.err.println("Parse error!");
+			System.err.println(e.releaseTheRex().getMessage());
     } catch (RecognitionException e) {
-      System.out.println("parse error!");
-      System.out.println(e.getMessage());
+      System.err.println("parse error!");
+      System.err.println(e.getMessage());
       return null;
     }
     
