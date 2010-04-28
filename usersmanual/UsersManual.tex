@@ -1,8 +1,7 @@
 \documentclass{article}
-\usepackage[pdfborder={0 0 0}, colorlinks=false]{hyperref}
+\usepackage[pdfborder={0 0 0}, colorlinks=true]{hyperref}
 \usepackage{multicol}
 \usepackage{color}
-\usepackage{hyperref}
 \author{CISC475/675 Spring 2010}
 
 \title{REX User's Manual}
@@ -68,45 +67,47 @@ of a series of constraints. Each constraint is separated by a semicolon,
 with comments being all text that follows after a pound symbol 
 (\texttt{\#}) until the end of the line.
 
-There are four defined commands for the ECF file. For overlapping commands, REX will attempt find the largest set of questions that resolves all constraints. That is, if there exist two identical constraints for 5 problems each, REX will attempt to find 10 questions total. If REX cannot
-accomplish this, the request will result in an \hyperref[RexUnsatisfiableException]{RexUnsatisfiableException}. 
-
-An interval is a pair of decimals separated by two periods, in between a pair of braces or parenthesis, where a brace on an end indicates that edge is inclusive, and a parenthesis that the edge is exclusive. An example would be \texttt{[3..5)}, which would be the range from 3 to 5, including 3 but not including 5.
+There are four defined commands for the ECF file.
 
 \subsection{Group Constraints}
 A group constraint is a command of the form \texttt{include \textcolor{blue}{int count}
-problems on \textcolor{blue}{string topic} with difficulty in \textcolor{blue}{interval difficulty} at \textcolor{blue}{int points} points;}.
+problems on \textcolor{blue}{string topic} with difficulty in \textcolor{blue}{interval\footnote{An interval is a pair of decimals separated by two periods, in between a pair of braces or parenthesis. A brace on an end indicates that edge is inclusive, and a parenthesis that the edge is exclusive. For example, \texttt{[3..5)} would be the range from 3 to 5, including 3 but not including 5.} difficulty} at \textcolor{blue}{int points} points;}.
 
-The command will choose \textcolor{blue}{count} problems from \textcolor{blue}{topic} that fall in the \textcolor{blue}{difficulty}, and assigns all of them \textcolor{blue}{points} points.
+The command will choose \textcolor{blue}{count} problems from \textcolor{blue}{topic} that fall in the \textcolor{blue}{difficulty} range, and assigns all of them \textcolor{blue}{points} points.
+
+For overlapping constraints, REX will attempt find the largest set of questions that resolves all constraints. That is, if there exist two identical constraints for 5 problems each, REX will attempt to find 10 questions total. If REX cannot accomplish this, the request will result in an \hyperref[RexUnsatisfiableException]{RexUnsatisfiableException}. 
 
 \subsection{Required Problem Constraints}
 A required problem constraint is a command of the form \texttt{includeall \textcolor{blue}{string label} at \textcolor{blue}{int points} points;}.
 
+This will ensure the the question with the \textcolor{blue}{label} given is included in every
+generated exam, and will be given \textcolor{blue}{points} points. 
+
+Multiple \textcolor{blue}{label}'s can be given in one command by separating them by commas. This will have the same effect as if each label was given on its own line.
+
 \subsection{Append Text}
 An append text command is a command of the form \texttt{append \textcolor{blue}{string label};}
+
+This will take the text contained in the block with the given \textcolor{blue}{label}, and append it to the end of the exam.
 
 \subsection{Version Definition}
 A version definition of a command of the form \texttt{versions are \textcolor{blue}{string versions};}
 
-\section{Usage}
-After creating a UEF and ECF file \texttt{rex input.uef input.ecf}. 
-REX will parse the contents of the UEF and ECF and generate the
-appropriate number of output exams, as specified in the ECF file.
+\textcolor{blue}{Versions} are a list of strings, separated by commas, used to distinguish the different exams generated. Each generated exam will use one item in the list, and so there must be at least as many items as there will be exams generated. 
 
-Please see the following sections for information on UEF and ECF
-content format.
+In the UEF file, you can use the \textbackslash{examversion} command to insert the current version string. One example use for this is to have a different date format for each generated exam, so that the exams can be easily distinguished from one another, but a naive student would not know how to tell if his neighbor has a similar exam.
+
+\section{Usage}
+After creating a UEF and ECF file \texttt{rex input.uef input.ecf}.  REX will parse the contents of the UEF and ECF and generate the appropriate number of output exams, as specified in the ECF file.
+
+Please see the following sections for information on UEF and ECF content format.
 
 \section{Troubleshooting}
-Because of the requirements that REX places upon the input it parses,
-REX may present the user with a variety of errors. Additionally, it's
-possible that REX might process the request without any errors or warnings,
-but will provide an undesired output.
+Because of the requirements that REX places upon the input it parses, REX may present the user with a variety of errors. Additionally, it's possible that REX might process the request without any errors or warnings, but will provide an undesired output.
 
 \subsection{Errors}
 \subsubsection{RexParseException}
-This error means that REX encountered a syntactic error in either the
-UEF or ECF file. Please consult the provided error message for more
-information.
+This error means that REX encountered a syntactic error in either the UEF or ECF file. Please consult the provided error message for more information.
 
 \subsubsection{RexUnsatisfiableException}
 \label{RexUnsatisfiableException}
