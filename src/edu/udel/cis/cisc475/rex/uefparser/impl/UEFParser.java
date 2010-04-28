@@ -462,7 +462,7 @@ public class UEFParser implements UEFParserIF {
 				uefCommand = parseForCommand();
 			}
 		} catch (IOException e) {
-			throw new RexParseException("open UEF file for parsing.");
+			throw new RexParseException("Problem opening UEF file for parsing.");
 		}
 	}
 
