@@ -1,5 +1,7 @@
 package edu.udel.cis.cisc475.rex.uefparser.impl;
 
+import edu.udel.cis.cisc475.rex.err.RexException;
+import edu.udel.cis.cisc475.rex.err.RexParseException;
 import java.io.EOFException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,7 +123,7 @@ class UEFCommandHandler {
 	 * Process an \answer command. Increments the answer index. Adds the new
 	 * answer to the answers list.
 	 */
-	AnswerIF processAnswer(int index) throws EOFException, Exception {
+	AnswerIF processAnswer(int index) throws RexParseException, EOFException {
 		UEFCommand command = uefCommandQueue.poll();
 
 		String optionalArgument = command.getOptionalArgument();
@@ -142,7 +144,8 @@ class UEFCommandHandler {
 
 		if (peekedCommand == null) {
 			// should always be either endAnswers or answer command
-			throw new Exception();
+			throw new RexParseException(
+					"No \\end{answer} after \\begin{answer}.");
 		}
 
 		// set the end of the source to the position before
@@ -181,7 +184,7 @@ class UEFCommandHandler {
 	/**
 	 * Process a \begin{answers} command.
 	 */
-	AnswerIF[] processAnswers() throws Exception {
+	AnswerIF[] processAnswers() throws RexParseException, EOFException {
 		// pop off the /begin{answers} command
 		uefCommandQueue.poll();
 		int index = 0;
@@ -221,7 +224,7 @@ class UEFCommandHandler {
 	/**
 	 * Process a \begin{block} command.
 	 */
-	BlockIF processBlock() throws Exception {
+	BlockIF processBlock() throws EOFException {
 		UEFCommand command = uefCommandQueue.poll();
 
 		String name = command.getArgument(0);
@@ -295,7 +298,7 @@ class UEFCommandHandler {
 	/**
 	 * Process a \begin{document} command.
 	 */
-	ExamIF processDocument() throws Exception {
+	ExamIF processDocument() throws RexParseException, EOFException {
 		// pull /begin{document} off the queue
 		UEFCommand command = uefCommandQueue.poll();
 
@@ -368,7 +371,7 @@ class UEFCommandHandler {
 	/**
 	 * Process a \begin{figure} command.
 	 */
-	FigureIF processFigure() throws EOFException, Exception {
+	FigureIF processFigure() throws EOFException {
 		UEFCommand command = uefCommandQueue.poll();
 
 		// String to be filled with the source content
@@ -448,7 +451,7 @@ class UEFCommandHandler {
 	 * answers in the problem. Resets the index for the answers in the problem.
 	 * Pushes the problem state.
 	 */
-	ProblemIF processProblem() throws EOFException, Exception {
+	ProblemIF processProblem() throws RexParseException, EOFException {
 		// pull this command off the stack
 		UEFCommand command = uefCommandQueue.poll();
 
@@ -499,6 +502,10 @@ class UEFCommandHandler {
 				}
 				// get answers for the problem
 				answers = processAnswers();
+				if (answers == null) {
+					throw new RexParseException(
+							"No answers found within a problem environment.");
+				}
 				break;
 			}
 			case label: {
@@ -523,51 +530,44 @@ class UEFCommandHandler {
 			}
 			}
 		}
+		// get the file content from beginning of '/begin{block}'
+		// to the end of '/end{block}'.
+		content = uefCharHandler.getContent(startSource, endSource);
 
-		if (answers != null) {
-			// get the file content from beginning of '/begin{block}'
-			// to the end of '/end{block}'.
-			content = uefCharHandler.getContent(startSource, endSource);
+		// Create the source object
+		SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
+		source.setStartLine(uefCharHandler.getLineNumber(startSource));
+		source.setLastLine(uefCharHandler.getLineNumber(endSource));
+		source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
+		source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
+		source.addText(content);
 
-			// Create the source object
-			SourceIF source = sourceFactory.newSource(uefCharHandler
-					.getFileName());
-			source.setStartLine(uefCharHandler.getLineNumber(startSource));
-			source.setLastLine(uefCharHandler.getLineNumber(endSource));
-			source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
-			source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
-			source.addText(content);
+		ProblemIF problem = examFactory.newProblem(topic, label, source,
+				answers);
+		problem.setDifficulty(Double.valueOf(difficulty));
 
-			ProblemIF problem = examFactory.newProblem(topic, label, source,
-					answers);
-			problem.setDifficulty(Double.valueOf(difficulty));
+		// Add references from answers
 
-			// Add references from answers
-
-			for (int i = 0; i < this.answerReferences.size(); i++) {
-				refs.add(this.answerReferences.get(i));
-			}
-
-			this.answerReferences.clear();
-
-			if (refs.size() != 0) {
-				Iterator<String> i = refs.iterator();
-				while (i.hasNext()) {
-					String r = i.next();
-					if (this.references.containsKey(r)) {
-						this.references.get(r).add(problem);
-					} else {
-						List<ExamElementIF> list = new ArrayList<ExamElementIF>();
-						list.add(problem);
-						this.references.put(r, list);
-					}
-				}
-			}
-			return problem;
-		} else {
-			throw new Exception();
+		for (int i = 0; i < this.answerReferences.size(); i++) {
+			refs.add(this.answerReferences.get(i));
 		}
 
+		this.answerReferences.clear();
+
+		if (refs.size() != 0) {
+			Iterator<String> i = refs.iterator();
+			while (i.hasNext()) {
+				String r = i.next();
+				if (this.references.containsKey(r)) {
+					this.references.get(r).add(problem);
+				} else {
+					List<ExamElementIF> list = new ArrayList<ExamElementIF>();
+					list.add(problem);
+					this.references.put(r, list);
+				}
+			}
+		}
+		return problem;
 	}
 
 	/**
@@ -603,7 +603,7 @@ class UEFCommandHandler {
 	 * Starts the processing of all commands in the command queue. Should be
 	 * called by another class.
 	 */
-	ExamIF process() throws EOFException, Exception {
+	ExamIF process() throws RexParseException, RexException, EOFException {
 		boolean isExamDocumentclass = false;
 		int startOfPreamble = 0;
 		int endOfPreamble = 0;

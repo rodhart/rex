@@ -1,15 +1,14 @@
 package edu.udel.cis.cisc475.rex.uefparser.impl;
 
+import edu.udel.cis.cisc475.rex.err.RexException;
+import edu.udel.cis.cisc475.rex.err.RexParseException;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
-import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FixedAnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
-import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
-import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
-import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
+import java.io.EOFException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import java.io.File;
@@ -28,16 +27,17 @@ public class UEFCommandHandlerTest
 	 * Tests that processAnswer() returns correct AnswerIF objects after reading in a number of
 	 * \answer commands from a file.
 	 *
-	 * @throws Exception If the test somehow throws some kind of exception.
-	 * The likely scenerio is that the needed resource file isn't being found for some reason.
+	 * @throws EOFException
+	 * @throws RexParseException
 	 */
 	@Test
-	public void processAnswerTest() throws Exception
+	public void processAnswerTest() throws RexParseException, EOFException
 	{
 		UEFParser parser = new UEFParser();
 
 		//Open the file to parse.
-		File file = new File("." + File.separator + "examples" + File.separator + "processAnswerTestFile.tex");
+		File file = new File("." + File.separator + "examples" + File.separator
+							 + "processAnswerTestFile.tex");
 		parser.parseForAllCommands(file);
 
 		//get a reference to the handler to allow direct calls to the process methods of the handler
@@ -95,19 +95,20 @@ public class UEFCommandHandlerTest
 		{
 			answer = handler.processAnswer(5);
 		}
-		catch (Exception e)
+		catch (RexParseException e)
 		{
 			assertTrue(true);
 		}
 	}
 
 	@Test
-	public void processAnswersTest() throws Exception
+	public void processAnswersTest() throws RexParseException, EOFException
 	{
 		UEFParser parser = new UEFParser();
 
 		//Open the file to parse.
-		File file = new File("." + File.separator + "examples" + File.separator + "processAnswersTestFile.tex");
+		File file = new File("." + File.separator + "examples" + File.separator
+							 + "processAnswersTestFile.tex");
 		parser.parseForAllCommands(file);
 
 		//get a reference to the handler to allow direct calls to the process methods of the handler
@@ -135,12 +136,13 @@ public class UEFCommandHandlerTest
 	}
 
 	@Test
-	public void processProblemTest() throws Exception
+	public void processProblemTest() throws RexParseException, EOFException
 	{
 		UEFParser parser = new UEFParser();
 
 		//Open the file to parse.
-		File file = new File("." + File.separator + "examples" + File.separator + "processProblemTestFile.tex");
+		File file = new File("." + File.separator + "examples" + File.separator
+							 + "processProblemTestFile.tex");
 		parser.parseForAllCommands(file);
 
 		//get a reference to the handler to allow direct calls to the process methods of the handler
@@ -156,7 +158,8 @@ public class UEFCommandHandlerTest
 		assertEquals(9, answer[0].source().lastLine());
 		assertEquals(1, answer[0].source().startColumn());
 		assertEquals(9, answer[0].source().lastColumn());
-		assertEquals("\\answer[correct] Text here \\ref{fig2}\n\n    test", answer[0].source().text());
+		assertEquals("\\answer[correct] Text here \\ref{fig2}\n\n    test",
+					 answer[0].source().text());
 
 		//test the problems second answer
 		assertEquals(true, answer[1].isCorrect());
@@ -181,16 +184,18 @@ public class UEFCommandHandlerTest
 		assertEquals(4, problem.question().lastLine());
 		assertEquals(2, problem.question().startColumn());
 		assertEquals(10, problem.question().lastColumn());
-		assertEquals("Here is the problem question?\\ref{fig1}\n\\label{   label 1   }\nYes here.", problem.question().text());
+		assertEquals("Here is the problem question?\\ref{fig1}\n\\label{   label 1   }\nYes here.", problem.
+				question().text());
 	}
 
 	@Test
-	public void processBlockTest() throws Exception
+	public void processBlockTest() throws RexParseException, EOFException
 	{
 		UEFParser parser = new UEFParser();
 
 		//Open the file to parse.
-		File file = new File("." + File.separator + "examples" + File.separator + "processBlockTestFile.tex");
+		File file = new File("." + File.separator + "examples" + File.separator
+							 + "processBlockTestFile.tex");
 		parser.parseForAllCommands(file);
 
 		//get a reference to the handler to allow direct calls to the process methods of the handler
@@ -209,12 +214,13 @@ public class UEFCommandHandlerTest
 	}
 
 	@Test
-	public void processFigureTest() throws Exception
+	public void processFigureTest() throws RexParseException, EOFException
 	{
 		UEFParser parser = new UEFParser();
 
 		//Open the file to parse.
-		File file = new File("." + File.separator + "examples" + File.separator + "processFigureTestFile.tex");
+		File file = new File("." + File.separator + "examples" + File.separator
+							 + "processFigureTestFile.tex");
 		parser.parseForAllCommands(file);
 
 		//get a reference to the handler to allow direct calls to the process methods of the handler
@@ -238,7 +244,7 @@ public class UEFCommandHandlerTest
 	 * The likely scenerio is that the needed resource file isn't being found for some reason.
 	 */
 	@Test
-	public void process() throws Exception
+	public void process() throws RexParseException, RexException, EOFException
 	{
 		UEFParser parser = new UEFParser();
 
