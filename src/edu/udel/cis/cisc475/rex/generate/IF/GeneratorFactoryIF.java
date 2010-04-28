@@ -8,9 +8,11 @@ public interface GeneratorFactoryIF {
 	
 	/**
 	 * @author Team 3
+	 * @throws Exception 
+	 * @throws RexUnsatisfiableException 
 	 * 
 	 */
 
-	GeneratorIF newGenerator(ExamIF master, ConfigIF config);
+	GeneratorIF newGenerator(ExamIF master, ConfigIF config) throws RexUnsatisfiableException, Exception;
 	
 }
