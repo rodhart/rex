@@ -1,5 +1,6 @@
 package edu.udel.cis.cisc475.rex.generate;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -21,6 +22,7 @@ import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
 import edu.udel.cis.cisc475.rex.config.generatestubs.ConfigFactoryStub;
 import edu.udel.cis.cisc475.rex.config.impl.Config;
 import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
+import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
@@ -51,6 +53,7 @@ public class GeneratorTest {
 	public int numexams;
 	
 	public static ExamIF generatedexam;
+	public static AnswerKeyIF generatedkey;
 
 	private static ConfigFactoryIF configFactory;
 
@@ -79,6 +82,7 @@ public class GeneratorTest {
 	private static ProblemIF prob2;
 	private static SourceIF source1;
 	private static SourceIF source2;
+	private static SourceIF source3;
 	private static IntervalIF interval;
 	
 	@BeforeClass
@@ -136,7 +140,7 @@ public class GeneratorTest {
 		String[] versions = {"Version1"};
 		config1.setVersionStrings(versions);
 		
-		generator1 = generatorFactory.newGenerator(master1, config1);
+		//generator1 = generatorFactory.newGenerator(master1, config1);
 		
 		/* Dan's Work
 		interval1 = intervalFactory.interval(false, 10.0, true, 25.0);
@@ -173,16 +177,52 @@ public class GeneratorTest {
 
 	@Test
 	public void testGetMaster() {
+		generator1 = generatorFactory.newGenerator(master1, config1);
 		ExamIF master = generator1.getMaster();
 		assertEquals(master1, master);
 	}
 	
 	@Test
 	public void testGetConfig() {
+		generator1 = generatorFactory.newGenerator(master1, config1);
 		ConfigIF config = generator1.getConfig();
 		assertEquals(config1, config);
 	}	
+
+	@Test @Ignore //(expected = RexUnsatisfiableException.class)
+	public void name() throws Exception
+	{
+		config1.addRequiredProblemConstraint("label2", 3, source2);
+		
+		generator1 = generatorFactory.newGenerator(master1, config1);
+	}
 	
+	@Test @Ignore
+	public void testRequireNonExistantProblem() throws Exception
+	{
+		try
+		{
+		config1.addRequiredProblemConstraint("label3", 3, source1);
+		source3 = sourceFactory.newSource("testFile.txt");
+		source3.addText("question3");
+		
+		generator1 = generatorFactory.newGenerator(master1, config1);
+		fail("Generate() should have failed");
+		} catch (Exception e) {
+			// This is suppose to fail so ignore and let test pass
+		}
+	}
+	/*
+	@Test(expected=Exception.class)
+	public void testRequireNonExistantProblem() throws Exception
+	{
+		config1.addRequiredProblemConstraint("label3", 3, source1);
+		source3 = sourceFactory.newSource("testFile.txt");
+		source3.addText("question3");
+		
+		generator1 = generatorFactory.newGenerator(master1, config1);
+	}
+	*/
 	@Test @Ignore
 	public void testNumGeneratedExams() {
 		numexams = generator1.numGeneratedExams();
@@ -190,20 +230,30 @@ public class GeneratorTest {
 	}
 	
 	@Test @Ignore
+	// To be implemented when Generate() works
 	public void testGetGeneratedExam(){
-		generatedexam = generator1.getGeneratedExam(1);
-		assertEquals(masterFactory.newGeneratedExam(),generatedexam);
+		generatedexam = generator1.getGeneratedExam(0);
+		
+		// Currently in my test I added two ProblemIFs and nothing else, subject to change
+		assertEquals(2,generatedexam.numElements());
+		assertTrue(generatedexam.elements().contains(prob1));
+		assertTrue(generatedexam.elements().contains(prob2));
+		
+		//assertEquals(masterFactory.newGeneratedExam(),generatedexam);
 	}
 
 	@Test @Ignore
+	// To be implemented when Generate() works
 	public void testGetAnswerKey(){
-		assertEquals(key1,generator1.getAnswerKey(1));
+		generatedkey = generator1.getAnswerKey(0);
 		
-	}
-	
-	@Test @Ignore
-	public void testBlackList(){
-		//adding additional information to master1 and config1 defined at the top
-		config1.addGroupConstraint("topic1", interval, 1, 3, source2);
+		// merely checks that answer key is successfully retrieved
+		// does not verify if correct problem has correct answer
+		assertTrue(generatedkey.answers(0).contains(answers1[0].source()));
+		assertTrue(generatedkey.answers(0).contains(answers1[1].source()));
+		assertTrue(generatedkey.answers(0).contains(answers2[0].source()));
+		assertTrue(generatedkey.answers(0).contains(answers2[1].source()));
+		
+		//assertEquals(key1,generator1.getAnswerKey(1));
 	}
 }
