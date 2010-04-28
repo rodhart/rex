@@ -50,8 +50,8 @@ Available at
 
 \section{Usage}
 After creating a UEF and ECF file \texttt{rex input.uef input.ecf}. 
-REX will parse the contents of the UEF and ECF and generate the appropriate number of
-output exams, as specified in the ECF file.
+REX will parse the contents of the UEF and ECF and generate the
+appropriate number of output exams, as specified in the ECF file.
 
 Please see the following sections for information on UEF and ECF
 content format.
@@ -61,14 +61,16 @@ content format.
 Please see Figure \ref{fig:SampleUEF} for an example Universal Exam File.
 
 \section{The ECF File}
-The ECF file is a text file with a \texttt{.tex} extension that consists of a series of 
-constraints. Each constraint is separated by a semicolor, with comments being all text
-that follows after a pound symbol (\texttt{#}) until the end of the line.
+The ECF file is a text file with a \texttt{.tex} extension that consists
+of a series of constraints. Each constraint is separated by a semicolon,
+with comments being all text that follows after a pound symbol 
+(\texttt{#}) until the end of the line.
 
 There are four defined commands for the ECF file
 \subsection{Group Constraints}
-A group constaint is a command of the form \texttt{'include' <integer> 'problems on' <string>
-'with difficulty in' <interval> 'at' <integer> 'points' ';'}
+A group constaint is a command of the form \texttt{'include' <integer>
+'problems on' <string> 'with difficulty in' <interval> 'at' <integer>
+'points' ';'}
 
 \subsection{Required Problem Constraints}
 
