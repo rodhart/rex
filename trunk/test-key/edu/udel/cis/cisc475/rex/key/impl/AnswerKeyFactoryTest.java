@@ -20,6 +20,8 @@ public class AnswerKeyFactoryTest {
 		
 	}
 
+	
+	
 	@Test
 	public void testAnswerKeyFactory() {
 		
@@ -27,6 +29,8 @@ public class AnswerKeyFactoryTest {
 		
 		assertNotNull(akf);
 	}
+	
+	
 	
 	@Test
 	public void testCompareAnswerKeyFactory() {
@@ -40,6 +44,8 @@ public class AnswerKeyFactoryTest {
 		assertTrue(result);
 	}
 
+	
+	
 	@Test
 	public void testNewAnswerKey() {
 		
@@ -50,18 +56,6 @@ public class AnswerKeyFactoryTest {
 		assertNotNull(akfIF);
 	}
 
-	@Test
-	public void testCompareNewAnswerKey() {
-		
-		AnswerKeyFactory akf =  AnswerKeyFactory;
-		
-		AnswerKeyIF akfIF1 = akf.newAnswerKey("version", "examName", "date");
-		
-		AnswerKeyIF akfIF2 = akf.newAnswerKey("version", "examName", "date");
-		
-		boolean result = akfIF1.equals(akfIF2);
-		
-		assertTrue(result);
-	}
-	
-}
+
+
+}//end of class
