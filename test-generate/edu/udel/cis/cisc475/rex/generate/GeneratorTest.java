@@ -60,15 +60,21 @@ public class GeneratorTest {
 	public final static boolean useStubs = false;
 	
 	public int numexams;
-	
-	public static ExamIF generatedexam;
-	public static AnswerKeyIF generatedkey;
 
+	
+	private static GeneratorFactoryIF generatorFactory;
+	public static AnswerKeyIF generatedkey;
 	private static AnswerKeyFactoryIF keyFactory;
+	private static SourceFactoryIF sourceFactory;
+	/*
+	public static ExamIF generatedexam;
+	
+
+	
 	
 	private static ConfigFactoryIF configFactory;
 
-	private static GeneratorFactoryIF generatorFactory;
+	
 	
 	private static AnswerKeyFactoryIF answerKeyFactory;
 	
@@ -77,93 +83,47 @@ public class GeneratorTest {
 	
 	private static IntervalFactoryIF intervalFactory;
 	
-	private static SourceFactoryIF sourceFactory;
-
-	private static GeneratorIF generator1;
-
-	private static ConfigIF config1;
 	
-	private static ExamIF master1;
+*/
+	//private static GeneratorIF generator1;
+
+	//private static ConfigIF config1;
 	
-	private static SourceIF question1, question2, question3, question4, question5, question6, question7;
-	private static AnswerIF[] answers1, answers2, answers3, answers4, answers5, answers6, answers7;
-	private static ProblemIF prob1, prob2, prob3, prob4, prob5, prob6, prob7;
+	//private static ExamIF master1;
+	/*
+	private static SourceIF question1, question2, question3;
+	private static AnswerIF[] answers1, answers2, answers3;
+	private static ProblemIF prob1, prob2, prob3;
 	private static SourceIF source1;
 	private static SourceIF source2;
-	private static SourceIF source3;
 	private static IntervalIF interval;
-	private static Collection<String> answerProb1;
-	private static Collection<String> answerProb2;
 	
+	*/
+	private static Collection<String> answerProb1;
+	private static Collection<String> answerProb2, answerProb3;
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+		
 		if (useStubs) {
-			configFactory = new ConfigFactoryStub();
+			/*configFactory = new ConfigFactoryStub();
 			masterFactory = new ExamFactoryStub();
 			answerKeyFactory = new AnswerKeyFactoryStub();
 			intervalFactory = new IntervalFactoryStub();
-			sourceFactory = new SourceFactoryStub();
+			sourceFactory = new SourceFactoryStub();*/
 		} else {
-			configFactory = new ConfigFactory();
-			masterFactory = new ExamFactory();
-			answerKeyFactory = Keys.newAnswerKeyFactory();
-			intervalFactory = new IntervalFactory();
+			//configFactory = new ConfigFactory();
+			//masterFactory = new ExamFactory();
+			//answerKeyFactory = Keys.newAnswerKeyFactory();
+			//intervalFactory = new IntervalFactory();
 			sourceFactory = new SourceFactory();
 			keyFactory = new AnswerKeyFactory();
 		}
-		
+	
 		generatorFactory = new GeneratorFactory();
 		
 		
-		// Create sample master exam
-		master1 = masterFactory.newMasterExam();
 		
-		
-		question1 = sourceFactory.newSource("testFile.txt");		
-		question1.addText("question1");		
-		answers1 = new Answer[7];
-		answers1[0] = new Answer(true, sourceFactory.newSource("option1"));
-		answers1[1] = new Answer(true, sourceFactory.newSource("option2"));
-		answers1[2] = new Answer(true, sourceFactory.newSource("option3"));
-		answers1[3] = new Answer(true, sourceFactory.newSource("option4"));
-		answers1[4] = new Answer(true, sourceFactory.newSource("option5"));
-		answers1[5] = new Answer(true, sourceFactory.newSource("option6"));
-		answers1[6] = new Answer(true, sourceFactory.newSource("option7"));
-		prob1 = masterFactory.newProblem("topic1", "label1", question1, answers1);
-		prob1.setDifficulty(3.0);
-		
-		question2 = sourceFactory.newSource("testFile.txt");
-		question2.addText("question2");		
-		answers2 = new Answer[7];
-		answers2[0] = new Answer(false, sourceFactory.newSource("option8"));
-		answers2[1] = new Answer(true, sourceFactory.newSource("option9"));
-		answers2[2] = new Answer(false, sourceFactory.newSource("option10"));
-		answers2[3] = new Answer(false, sourceFactory.newSource("option11"));
-		answers2[4] = new Answer(false, sourceFactory.newSource("option12"));
-		answers2[5] = new Answer(false, sourceFactory.newSource("option13"));
-		answers2[6] = new Answer(false, sourceFactory.newSource("option14"));
-		prob2 = masterFactory.newProblem("topic2", "label2", question2, answers2);
-		prob2.setDifficulty(3.0);
-		
-		
-		
-		master1.addElement(prob1);
-		master1.addElement(prob2);
 
-		
-		// Create sample Config
-		config1 = configFactory.newConfig(true, 1);
-		
-		config1.setSeed(5);
-		source1 = sourceFactory.newSource("testFile.txt");
-		source1.addText("question1");
-		source2 = sourceFactory.newSource("testFile.txt");
-		source2.addText("question2");
-		interval = intervalFactory.interval(true, 1.0, true, 5.0);
-		config1.addRequiredProblemConstraint("label1", 4, source1);
-		config1.addGroupConstraint("topic2", interval, 1, 3, source2);
-		String[] versions = {"Version1"};
-		config1.setVersionStrings(versions);
 		
 		// Create sample AnswerKey
 		generatedkey = keyFactory.newAnswerKey("Version1", "examName", "date");
@@ -177,11 +137,22 @@ public class GeneratorTest {
 		answerProb1.add("G");
 		generatedkey.addProblem(answerProb1);
 		answerProb2 = new ArrayList<String>();
-		answerProb2.add("E");
+		answerProb2.add("A");
 		generatedkey.addProblem(answerProb2);
+		// All answers are correct so ? should appear in answer sheet as of now 
+		answerProb3 = new ArrayList<String>();
+		answerProb3.add("A");
+		answerProb3.add("B");
+		answerProb3.add("C");
+		answerProb3.add("D");
+		answerProb3.add("E");
+		answerProb3.add("F");
+		answerProb3.add("G");
+		answerProb3.add("?");
+		generatedkey.addProblem(answerProb3);
 
 		
-		generator1 = generatorFactory.newGenerator(master1, config1);
+		//generator1 = generatorFactory.newGenerator(master1, config1);
 	}
 
 	@AfterClass
@@ -197,13 +168,27 @@ public class GeneratorTest {
 	}
 
 	@Test
-	public void testGetMaster() {
+	public void testGetMaster() throws RexUnsatisfiableException, Exception {
+		TestExam1 exam1 = new TestExam1();
+		ExamIF master1 = exam1.getMaster();
+		
+		TestConfig1 con1 = new TestConfig1();
+		ConfigIF config1 = con1.getConfig();
+		
+		GeneratorIF generator1 = generatorFactory.newGenerator(master1, config1);
 		ExamIF master = generator1.getMaster();
 		assertEquals(master1, master);
 	}
 	
 	@Test
-	public void testGetConfig() {
+	public void testGetConfig() throws RexUnsatisfiableException, Exception {
+		TestExam1 exam1 = new TestExam1();
+		ExamIF master1 = exam1.getMaster();
+		
+		TestConfig1 con1 = new TestConfig1();
+		ConfigIF config1 = con1.getConfig();
+		
+		GeneratorIF generator1 = generatorFactory.newGenerator(master1, config1);
 		ConfigIF config = generator1.getConfig();
 		assertEquals(config1, config);
 	}	
@@ -211,30 +196,61 @@ public class GeneratorTest {
 	@Test(expected = RexUnsatisfiableException.class)
 	public void testNotEnoughProblemsToMeetGroupConstraints() throws Exception
 	{
+		TestExam1 exam1 = new TestExam1();
+		ExamIF master1 = exam1.getMaster();
+		
+		TestConfig1 con1 = new TestConfig1();
+		ConfigIF config1 = con1.getConfig();
+		
+		SourceIF source2 = sourceFactory.newSource("testFile.txt");
+		source2.addText("question2");
+		
 		config1.addRequiredProblemConstraint("label2", 3, source2);
 		
-		GeneratorIF generator2 = generatorFactory.newGenerator(master1, config1);	
+		GeneratorIF generator1 = generatorFactory.newGenerator(master1, config1);	
 	}
 	
 	@Test(expected=Exception.class)
 	public void testRequireNonExistantProblem() throws Exception
 	{
-		config1.addRequiredProblemConstraint("label3", 3, source1);
-		source3 = sourceFactory.newSource("testFile.txt");
-		source3.addText("question3");
+		TestExam1 exam1 = new TestExam1();
+		ExamIF master1 = exam1.getMaster();
 		
-		GeneratorIF generator2 = generatorFactory.newGenerator(master1, config1);
+		TestConfig1 con1 = new TestConfig1();
+		ConfigIF config1 = con1.getConfig();
+		
+		SourceIF source4 = sourceFactory.newSource("testFile.txt");
+		source4.addText("question4");
+		config1.addRequiredProblemConstraint("label4", 3, source4);	
+		
+		GeneratorIF generator1 = generatorFactory.newGenerator(master1, config1);
 	}
 	
 	@Test
-	public void testNumGeneratedExams() {
+	public void testNumGeneratedExams() throws RexUnsatisfiableException, Exception {
+		TestExam1 exam1 = new TestExam1();
+		ExamIF master1 = exam1.getMaster();
+		
+		TestConfig1 con1 = new TestConfig1();
+		ConfigIF config1 = con1.getConfig();
+		
+		GeneratorIF generator1 = generatorFactory.newGenerator(master1, config1);
+		
 		numexams = generator1.numGeneratedExams();
 		assertEquals(config1.numVersions(),numexams);
 	}
 	
 	@Test
 	// This just tests getting generated exam, does not test if correct
-	public void testGetGeneratedExam(){
+	public void testGetGeneratedExam() throws RexUnsatisfiableException, Exception{
+		TestExam1 exam1 = new TestExam1();
+		ExamIF master1 = exam1.getMaster();
+		
+		TestConfig1 con1 = new TestConfig1();
+		ConfigIF config1 = con1.getConfig();
+		
+		GeneratorIF generator1 = generatorFactory.newGenerator(master1, config1);
+		
 		ExamIF exam = generator1.getGeneratedExam(0);
 		//in this case all of the master is being used, so use it as a generatedExam
 		ExamIF exam2 = master1;
@@ -248,7 +264,15 @@ public class GeneratorTest {
 
 	@Test
 	//This just tests getting answer key, does not test if answer key is correct
-	public void testGetAnswerKey(){
+	public void testGetAnswerKey() throws RexUnsatisfiableException, Exception{
+		TestExam1 exam1 = new TestExam1();
+		ExamIF master1 = exam1.getMaster();
+		
+		TestConfig1 con1 = new TestConfig1();
+		ConfigIF config1 = con1.getConfig();
+		
+		GeneratorIF generator1 = generatorFactory.newGenerator(master1, config1);
+		
 		AnswerKeyIF key = generator1.getAnswerKey(0);
 		
 		assertEquals(generatedkey.version(), key.version());
@@ -257,5 +281,26 @@ public class GeneratorTest {
 		
 		assertEquals(answerProb1, key.answers(1));
 		assertEquals(answerProb2, key.answers(0));
+	}
+	
+	
+	
+	@Test @Ignore //(expected = RexUnsatisfiableException.class)
+	// I want to test what happens if default is returned inside public String answerChar(int input)
+	// but it is not working
+	public void testDefaultAnswerChar() throws Exception{
+		TestExam1 exam1 = new TestExam1();
+		ExamIF master1 = exam1.getMaster();
+		
+		TestConfig1 con1 = new TestConfig1();
+		ConfigIF config1 = con1.getConfig();
+		
+		SourceIF source3 = sourceFactory.newSource("testFile.txt");
+		source3.addText("question3");
+		
+		//config1.addGroupConstraint("topic3", intervalFactory.interval(true, 2.0, true, 4.0), 1, 3, source3);
+		config1.addRequiredProblemConstraint("label3", 3, source3);
+		
+		GeneratorIF generator1 = generatorFactory.newGenerator(master1, config1);
 	}
 }
