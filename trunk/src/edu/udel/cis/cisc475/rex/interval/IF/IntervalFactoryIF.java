@@ -1,7 +1,5 @@
 package edu.udel.cis.cisc475.rex.interval.IF;
 
-import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
-
 /**
  * 
  * Interface for IntervalFactory.
@@ -15,7 +13,6 @@ public interface IntervalFactoryIF
 			boolean strictLow, 
 			Double low, 
 			boolean strictHigh, 
-			Double high) 
-	throws RexUnsatisfiableException;
+			Double high);
 }
 
