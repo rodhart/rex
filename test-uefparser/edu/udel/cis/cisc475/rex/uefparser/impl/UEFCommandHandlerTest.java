@@ -122,6 +122,38 @@ public class UEFCommandHandlerTest
 		assertEquals(2, answer.length);
 	}
 
+	@Test
+	public void processProblemTest() throws Exception
+	{
+		UEFParser parser = new UEFParser();
+
+		//Open the file to parse.
+		File file = new File("." + File.separator + "examples" + File.separator + "processProblemTestFile.tex");
+		parser.parseForAllCommands(file);
+
+		//get a reference to the handler to allow direct calls to the process methods of the handler
+		UEFCommandHandler handler = parser.getUEFCommandHandler();
+
+		ProblemIF problem = handler.processProblem();
+		AnswerIF answer[] = problem.answers();
+
+		assertEquals(true, answer[0].isCorrect());
+		assertEquals("processProblemTestFile.tex", answer[0].source().filename());
+		assertEquals(7, answer[0].source().startLine());
+		assertEquals(9, answer[0].source().lastLine());
+		assertEquals(1, answer[0].source().startColumn());
+		assertEquals(9, answer[0].source().lastColumn());
+		assertEquals("\\answer[correct] Text here\n\n    test", answer[0].source().text());
+
+		assertEquals(true, answer[1].isCorrect());
+		assertEquals("processProblemTestFile.tex", answer[1].source().filename());
+		assertEquals(11, answer[1].source().startLine());
+		assertEquals(12, answer[1].source().lastLine());
+		assertEquals(1, answer[1].source().startColumn());
+		assertEquals(18, answer[1].source().lastColumn());
+		assertEquals("\\answer[correct] another test\n             test", answer[1].source().text());
+	}
+
 	/**
 	 * Tests that process() returns a correct ExamIF after reading in a valid UEF file.
 	 *
