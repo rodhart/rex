@@ -118,13 +118,13 @@ public class IntervalTest {
 	 * @throws RexUnsatisfiableException
 	 */
 	@Test
-	public void testExceptions() throws RexUnsatisfiableException {
+	public void testExceptions() {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
 		
 		try{
 			intervalFactory.interval(true, 10.0, false, 5.0);
 		}
-		catch (RexUnsatisfiableException e){
+		catch (RuntimeException e){
 			assertEquals("The operation you have requested is unsatisfiable.", e.getMessage());
 		}
 	}
