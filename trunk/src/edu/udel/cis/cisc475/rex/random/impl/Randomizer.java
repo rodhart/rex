@@ -50,7 +50,7 @@ public class Randomizer implements RandomizerIF {
 	 * @param items  the arrays of objects to choose from
 	 * @return an array of chosen objects
 	 */
-	public Object[] choose(int numItems, Object[] items) throws Exception {
+	public Object[] choose(int numItems, Object[] items) {
 
 		int index;
 		//holds the original list
@@ -66,12 +66,14 @@ public class Randomizer implements RandomizerIF {
 		//if picked items is less then zero return null
 		if(numItems <= 0){
 			// Should be changed to RexException when it's implemented
-			throw new Exception("Number of items: " + numItems + "\n numItems <= 0");
+			//throw new Exception("Number of items: " + numItems + "\n numItems <= 0");
+			return null;
 		}
 		//if they request more objects then in the list
 		if(numItems > items.length + 1){	
-			throw new Exception("Number of items: " + numItems + "\n"
-					+ "Length of array: " + (items.length+1));
+			//throw new Exception("Number of items: " + numItems + "\n"
+				//	+ "Length of array: " + (items.length+1));
+			return null;
 		}
 		
 		while(shuffledItems.size()!=numItems ){

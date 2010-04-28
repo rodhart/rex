@@ -21,7 +21,7 @@ public interface AnswerKeyWriterIF {
 	 * @param out any PrintWriter object used to output data
 	 * @throws IOException 
 	 */
-	void write(PrintWriter out) throws IOException;
+	void write(PrintWriter out);
 	/**
 	 * Writes a scantron formatted file using the answer Key object.
 	 * 
