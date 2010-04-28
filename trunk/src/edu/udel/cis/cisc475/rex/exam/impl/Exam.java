@@ -85,15 +85,23 @@ public class Exam implements ExamIF {
 	 */
 	private Map<ExamElementIF, HashSet<ExamElementIF>> uses;
 	
-	// TODO Is this needed? I commented it out since it wasn't being read
-	// by anyone. --Fran
 	private Map<ExamElementIF, HashSet<ExamElementIF>> usedBy;
 	
+	/**
+	 * Mapping from label (String) to the Exam element that uses this label
+	 */
 	private Map<String, ExamElementIF> labelToElement;
 	
+	/**
+	 * Mapping from topic (String) to all Exam elements described by this topic.
+	 * Only Blocks and Problems have topics.
+	 */
 	private Map<String, HashSet<ExamElementIF>> topicToElements;
 	
-	private Map<String, HashSet<ExamElementIF>> topicToProblems;
+	/**
+	 * Mapping from topic (String) to problems that are described by this topic.
+	 */
+	private Map<String, HashSet<ProblemIF>> topicToProblems;
 
 	/**
 	 * Default constructor
@@ -111,7 +119,7 @@ public class Exam implements ExamIF {
 		this.usedBy = new LinkedHashMap<ExamElementIF, HashSet<ExamElementIF>>();
 		this.labelToElement = new LinkedHashMap<String, ExamElementIF>();
 		this.topicToElements = new LinkedHashMap<String, HashSet<ExamElementIF>>();
-		this.topicToProblems = new LinkedHashMap<String, HashSet<ExamElementIF>>();
+		this.topicToProblems = new LinkedHashMap<String, HashSet<ProblemIF>>();
 	}
 
 	/**
@@ -128,9 +136,34 @@ public class Exam implements ExamIF {
 				figures.add(key);
 			} else if (element instanceof BlockIF) {
 				blocks.add(key);
+				if(topicToElements.containsKey(((BlockIF) element).topic())) {
+					topicToElements.get(((BlockIF) element).topic()).add(element);
+				}
+				else {
+					HashSet<ExamElementIF> newSet = new HashSet<ExamElementIF>();
+					newSet.add(element);
+					topicToElements.put(((BlockIF) element).topic(), newSet);
+				}
 			} else if (element instanceof ProblemIF) {
 				problems.add(key);
 				topics.add(((ProblemIF) element).topic());
+				if(topicToProblems.containsKey(((ProblemIF) element).topic())) {
+					topicToProblems.get(((ProblemIF) element).topic()).add((ProblemIF) element);
+				}
+				else {
+					HashSet<ProblemIF> newSet = new HashSet<ProblemIF>();
+					newSet.add((ProblemIF) element);
+					topicToProblems.put(((ProblemIF) element).topic(), newSet);
+				}
+				if(topicToElements.containsKey(((ProblemIF) element).topic())) {
+					topicToElements.get(((ProblemIF) element).topic()).add(element);
+				}
+				else {
+					HashSet<ExamElementIF> newSet = new HashSet<ExamElementIF>();
+					newSet.add(element);
+					topicToElements.put(((ProblemIF) element).topic(), newSet);
+				}
+		
 			} 
 		
 			// put into linked hash set
@@ -142,8 +175,6 @@ public class Exam implements ExamIF {
 			
 			// Allocate a new HashSet for the uses map
 			HashSet<ExamElementIF> useesOfElement = new HashSet<ExamElementIF>();
-			// TODO Is this needed? I commented it out since it wasn't being read
-			// by anyone. --Fran
 			HashSet<ExamElementIF> usersOfElement = new HashSet<ExamElementIF>();
 			uses.put(element, useesOfElement);
 			usedBy.put(element, usersOfElement);
@@ -245,21 +276,11 @@ public class Exam implements ExamIF {
 	 * Returns all elements that have a matching topic to the argument
 	 */	
 	public Collection<ExamElementIF> elementsWithTopic(String topic) {
-		Set<ExamElementIF> returnSet = new HashSet<ExamElementIF>();
-		Iterator<ExamElementIF> i = elements.values().iterator();
-		while (i.hasNext()) {
-			ExamElementIF element = i.next();
-			if (element instanceof ProblemIF) {
-				if (((ProblemIF) element).topic().equals(topic))
-					returnSet.add(element);
-			} else if (element instanceof BlockIF) {
-				// Check for null because block topics CAN be null.
-				if (((BlockIF) element).topic() != null &&  ((BlockIF) element).topic().equals(topic)) {
-					returnSet.add(element);
-				}
-			}
+		Set<ExamElementIF> emptySet = new HashSet<ExamElementIF>();
+		if (topicToElements.get(topic) == null) {
+			return emptySet;
 		}
-		return (Collection<ExamElementIF>) returnSet;
+		return topicToElements.get(topic);
 	}
 
 	/**
@@ -340,18 +361,11 @@ public class Exam implements ExamIF {
 	 * A collection of all problems in the exam with the specified topic
 	 */
 	public Collection<ProblemIF> problemsWithTopic(String topic) {
-		Set<ProblemIF> returnSet = new HashSet<ProblemIF>();
-		
-		ProblemIF problem;
-		Iterator<Integer> i = problems.iterator();
-		while (i.hasNext()) {
-			problem = (ProblemIF) elements.get(i.next());
-			if (problem.topic().equals(topic)) {
-				returnSet.add(problem);
-			}
+		Set<ProblemIF> emptySet = new HashSet<ProblemIF>();
+		if (topicToElements.get(topic) == null) {
+			return emptySet;
 		}
-
-		return (Collection<ProblemIF>) returnSet;
+		return topicToProblems.get(topic);
 	}
 
 	/**
