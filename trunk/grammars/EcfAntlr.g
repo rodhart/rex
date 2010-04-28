@@ -74,7 +74,6 @@ interval returns [IntervalIF i]
 	        $i = intervalFactory.interval($l.strict, $l.value, $r.strict, $r.value);
 	    }
 	;
-	catch [RexUnsatisfiableException e] { throw new EcfParserHackException(e); }
 
 
 leftBound returns [boolean strict, Double value]

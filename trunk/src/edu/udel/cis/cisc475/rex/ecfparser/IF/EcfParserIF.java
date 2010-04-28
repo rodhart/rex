@@ -1,8 +1,11 @@
 package edu.udel.cis.cisc475.rex.ecfparser.IF;
 
 import java.io.File;
+import java.io.IOException;
 
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
+import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
+import edu.udel.cis.cisc475.rex.err.RexParseException;
 
 /**
  * Interface to the ECF parser, which will parse an ECF file into a ConfigIF object.
@@ -28,5 +31,5 @@ public interface EcfParserIF {
 	 * @param file file to open and parse.
 	 * @return ConfigIF object containing configuration parameters found in the parsed file.
 	 */
-	ConfigIF parse(File file);
+	ConfigIF parse(File file) throws IOException, RexUnsatisfiableException, RexParseException;
 }
