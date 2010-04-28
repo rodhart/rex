@@ -62,7 +62,7 @@ public class EcfParser implements EcfParserIF {
 			//throw e.releaseTheRex();
 			throw new RexUnsatisfiableException(e.releaseTheRex().getMessage());
     } catch (RecognitionException e) {
-			throw new RexParseException(e.getMessage());
+			throw new RexParseException(e.getMessage(), null);
     }
     
     return config;
