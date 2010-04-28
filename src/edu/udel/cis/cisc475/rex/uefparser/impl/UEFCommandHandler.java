@@ -362,7 +362,7 @@ class UEFCommandHandler {
 	/**
 	 * Process a \begin{figure} command.
 	 */
-	FigureIF processFigure() throws EOFException {
+	FigureIF processFigure() throws RexParseException, EOFException {
 		UEFCommand command = uefCommandQueue.poll();
 
 		// String to be filled with the source content
@@ -398,10 +398,8 @@ class UEFCommandHandler {
 				break;
 			}
 			default: {
-				System.err.println("Error: " + uefCommandQueue.peek().getType()
+				throw new RexParseException(uefCommandQueue.peek().getType()
 						+ " found within figure environment!");
-				System.exit(-1);
-				break;
 			}
 			}
 		}
@@ -514,10 +512,8 @@ class UEFCommandHandler {
 				break;
 			}
 			default: {
-				System.err.println("Error: " + uefCommandQueue.peek().getType()
+				throw new RexParseException(uefCommandQueue.peek().getType()
 						+ " found within problem environment!");
-				System.exit(-1);
-				break;
 			}
 			}
 		}
@@ -602,11 +598,9 @@ class UEFCommandHandler {
 			switch (uefCommandQueue.peek().getType()) {
 			case beginDocument: {
 				if (!isExamDocumentclass) {
-					System.err
-							.println("Error: "
-									+ uefCommandQueue.peek().getType()
+					throw new RexException(
+							uefCommandQueue.peek().getType()
 									+ " found when the documentclass is net set to exam!");
-					System.exit(-1);
 				}
 
 				// retrieve the preamble
@@ -647,8 +641,8 @@ class UEFCommandHandler {
 					}
 
 					if (usedElement == null) {
-						System.err.println("Error: " + "element with label "
-								+ label + "is not found");
+						throw new RexParseException("Element with label "
+								+ label + " not found within file.");
 					} else {
 						for (int j = 0; j < e.size(); j++) {
 							exam.declareUse(e.get(j), usedElement);
@@ -665,16 +659,12 @@ class UEFCommandHandler {
 				break;
 			}
 			default: {
-				System.err.println("Error: " + uefCommandQueue.peek().getType()
+				throw new RexParseException(uefCommandQueue.peek().getType()
 						+ " found outside of document environment!");
-				System.exit(-1);
-				break;
 			}
 			}
 		}
-		System.err
-				.println("Error: end of document before \begin{document} found!");
-		System.exit(-1);
-		return null;
+		throw new RexParseException(
+				"End of document before \begin{document} found!");
 	}
 }
