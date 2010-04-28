@@ -309,7 +309,11 @@ public class SourceTest {
 		assertEquals(S.lastColumn(), 4);
 	}
 	
-	@Test(expected=IOException.class)
+	
+	
+	
+	
+	@Test(expected=NullPointerException.class)
 	public void testNullPrintWriter() throws IOException {
 		String filename = "moo";
 		
