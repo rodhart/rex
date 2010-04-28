@@ -51,6 +51,9 @@ Available at
 % do we need memory requirements? like a 1G of ram? -Haley
 \end{itemize}
 
+% do we need this section? Not all programs give users this
+% option. We could make it easier for us and say that anyone
+% wanting to use REX must use our .jar file. :-P
 \subsection{Building From Source}
 
 
@@ -98,9 +101,21 @@ A version definition of a command of the form \texttt{versions are \textcolor{bl
 In the UEF file, you can use the \textbackslash{examversion} command to insert the current version string. One example use for this is to have a different date format for each generated exam, so that the exams can be easily distinguished from one another, but a naive student would not know how to tell if his neighbor has a similar exam.
 
 \section{Usage}
-After creating a UEF and ECF file \texttt{rex input.uef input.ecf}.  REX will parse the contents of the UEF and ECF and generate the appropriate number of output exams, as specified in the ECF file.
 
-Please see the following sections for information on UEF and ECF content format.
+\subsection{Synopsis}
+rex [-n num] [-seed s] [-pdf] UEF-file ECF-file
+
+\subsection{Description}
+REX will parse through the UEF and ECF files and generate the appropriate number
+of output exams, as specified in the ECF file or on the command line.
+\\
+\\
+\noindent Below are the options:\\
+\indent \textbf{-n num} will generate \textbf{num} different exams\\
+\indent \textbf{-seed s} will generate the exams based on the specific seed \textbf{s}\\
+\indent \textbf{-pdf} will create a PDF file from the generatex \LaTeX{} files\\
+
+\noindent \textbf{NOTE:} The PDF option requires a \LaTeX{} interpreter to be installed.
 
 \section{Troubleshooting}
 Because of the requirements that REX places upon the input it parses, REX may present the user with a variety of errors. Additionally, it's possible that REX might process the request without any errors or warnings, but will provide an undesired output.
