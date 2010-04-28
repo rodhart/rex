@@ -23,8 +23,7 @@ public class ExamWriter implements ExamWriterIF {
 	/**
 	 * Default constructor
 	 * 
-	 * @param exam
-	 *            an exam object with a preamble, front matter, and problems
+	 * @param exam an exam object with a preamble, front matter, and problems
 	 */
 	public ExamWriter(ExamIF exam) {
 		this.E = exam;
@@ -33,8 +32,7 @@ public class ExamWriter implements ExamWriterIF {
 	/**
 	 * Loops through each exam element and writes it to the PrintWriter object.
 	 * 
-	 * @param out
-	 *            any writer used to output data
+	 * @param out any writer used to output data
 	 * @throws IOException 
 	 *  
 	 */
@@ -43,13 +41,13 @@ public class ExamWriter implements ExamWriterIF {
 		if(E.preamble()!=null){
 			E.preamble().write(out);
 			out.flush();
-		}
+			}
 		
 		//prints the front matter if it exists
 		if(E.frontMatter()!=null){
 			E.frontMatter().write(out);
 			out.flush();
-		}
+			}
 		
 		// output problems with respective answers
 		for (int i = 0; i < E.elements().toArray().length; i++) {
@@ -77,9 +75,9 @@ public class ExamWriter implements ExamWriterIF {
 				for (int index = 0; index < tempProblem.answers().length; index++) {
 					tempProblem.answers()[index].source().write(out);
 				}// end of for loop
-			}// endo of if(temp instanceof Problem)
+			}//end of if(temp instanceof Problem)
 			out.flush();
-		}// endo of for loop (int i=0; i< E.elements().toArray().length; i++)
+		}//end of for loop (int i=0; i< E.elements().toArray().length; i++)
 
 		
 		
