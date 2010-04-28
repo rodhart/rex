@@ -4,7 +4,6 @@ import edu.udel.cis.cisc475.rex.err.RexException;
 import edu.udel.cis.cisc475.rex.err.RexParseException;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
-import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FixedAnswerIF;
@@ -13,6 +12,7 @@ import java.io.EOFException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import org.junit.Test;
 
@@ -28,11 +28,11 @@ public class UEFCommandHandlerTest
 	 * Tests that processAnswer() returns correct AnswerIF objects after reading in a number of
 	 * \answer commands from a file.
 	 *
-	 * @throws EOFException
+	 * @throws IOException
 	 * @throws RexParseException
 	 */
 	@Test
-	public void processAnswerTest() throws RexParseException, EOFException
+	public void processAnswerTest() throws RexParseException, IOException
 	{
 		UEFParser parser = new UEFParser();
 
@@ -103,7 +103,7 @@ public class UEFCommandHandlerTest
 	}
 
 	@Test
-	public void processAnswersTest() throws RexParseException, EOFException
+	public void processAnswersTest() throws RexParseException, IOException
 	{
 		UEFParser parser = new UEFParser();
 
@@ -137,7 +137,7 @@ public class UEFCommandHandlerTest
 	}
 
 	@Test
-	public void processProblemTest() throws RexParseException, EOFException
+	public void processProblemTest() throws RexParseException, IOException
 	{
 		UEFParser parser = new UEFParser();
 
@@ -190,7 +190,7 @@ public class UEFCommandHandlerTest
 	}
 
 	@Test
-	public void processBlockTest() throws RexParseException, EOFException
+	public void processBlockTest() throws RexParseException, IOException
 	{
 		UEFParser parser = new UEFParser();
 
@@ -215,7 +215,7 @@ public class UEFCommandHandlerTest
 	}
 
 	@Test
-	public void processFigureTest() throws RexParseException, EOFException
+	public void processFigureTest() throws RexParseException, IOException
 	{
 		UEFParser parser = new UEFParser();
 
@@ -245,7 +245,7 @@ public class UEFCommandHandlerTest
 	 * The likely scenerio is that the needed resource file isn't being found for some reason.
 	 */
 	@Test
-	public void process() throws RexParseException, RexException, EOFException
+	public void process() throws RexParseException, RexException, IOException
 	{
 		UEFParser parser = new UEFParser();
 
@@ -270,7 +270,7 @@ public class UEFCommandHandlerTest
 		Collection<ProblemIF> problemCollection = exam.problems();
 		ProblemIF problem[] = problemCollection.toArray(new ProblemIF[0]);
 
-		FigureIF figure = (FigureIF)exam.elementWithLabel("fig:example topic");
+		FigureIF figure = (FigureIF) exam.elementWithLabel("fig:example topic");
 
 		assertEquals("fig:example topic", figure.label());
 

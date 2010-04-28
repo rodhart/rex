@@ -323,7 +323,7 @@ public class UEFParserTest
 	}
 
 	@Test
-	public void negativeVerbTest()
+	public void negativeVerbTest() throws IOException
 	{
 		try
 		{
@@ -339,7 +339,7 @@ public class UEFParserTest
 	}
 
 	@Test
-	public void negativeVerbatimTest()
+	public void negativeVerbatimTest() throws IOException
 	{
 		try
 		{

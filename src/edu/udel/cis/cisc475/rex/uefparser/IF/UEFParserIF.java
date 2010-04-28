@@ -1,8 +1,10 @@
 package edu.udel.cis.cisc475.rex.uefparser.IF;
 
+import edu.udel.cis.cisc475.rex.err.RexException;
 import java.io.File;
 
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
+import java.io.IOException;
 
 /**
  * Interface for the parser of the Universal Exam File (UEF).
@@ -24,6 +26,6 @@ public interface UEFParserIF {
 	 *            the file handler for the ueffile.
 	 * @return ExamIF of the uef file.
 	 */
-	ExamIF parse(File file);
+	ExamIF parse(File file) throws RexException, IOException;
 }
 
