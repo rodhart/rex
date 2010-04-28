@@ -1,7 +1,10 @@
 package edu.udel.cis.cisc475.rex.random;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
+
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerFactoryIF;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
 import edu.udel.cis.cisc475.rex.random.impl.RandomizerFactory;
@@ -267,5 +270,3 @@ public class RandomTest {
 
 
 }//end of class
-
-
