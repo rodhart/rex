@@ -7,6 +7,8 @@ import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
+import edu.udel.cis.cisc475.rex.err.RexException;
+import edu.udel.cis.cisc475.rex.err.RexParseException;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
@@ -46,13 +48,13 @@ public class Generator implements GeneratorIF
 	 * 			-ConfigIF containing all of the ConstraintIFs used for
 	 * 			 each randomly generated ExamIF, as well as other
 	 * 			 information.
-	 * @throws Exception
-	 * 			-If the ConfigIF contains a ConstraintIF that is not a
+	 * @throws RexException
+	 * 			-If the ConfigIF contains a ConstraintIF that is not a 
 	 * 			 RequiredProblemConstraintIF or a GroupConstraintIF, or
 	 * 			 if a ConstraintIF is not satisfiable.
 	 */
 	
-	Generator(ExamIF master, ConfigIF config) throws RexUnsatisfiableException, Exception
+	Generator(ExamIF master, ConfigIF config) throws RexException
 	{
 		this.master = master;
 		this.config = config;
@@ -95,7 +97,7 @@ public class Generator implements GeneratorIF
 		return this.numExams;
 	}
 	
-	private void generate() throws RexUnsatisfiableException, Exception
+	private void generate() throws RexException
 	{
 		this.generatedExams = new ExamIF[this.numExams];
 		this.answerKeys = new AnswerKeyIF[this.numExams];
@@ -133,7 +135,8 @@ public class Generator implements GeneratorIF
 				theRPCs.add((RequiredProblemConstraintIF) theConstraint);
 			
 			else
-				throw new Exception();
+				throw new RexParseException("Generator recieved a ConstraintIF that is not a " +
+											 "RequiredProblemConstraintIF or a GroupConstraintIF.");
 		}
 		
 		//Add all RequiredProblemConstraintIFs to the MasterExamController.

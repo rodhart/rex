@@ -7,6 +7,7 @@ import java.util.Iterator;
 
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
+import edu.udel.cis.cisc475.rex.err.RexParseException;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
@@ -97,21 +98,19 @@ public class MasterExamController
 	 *            -RequiredProblemConstraintIF referring to a required ProblemIF
 	 *            to be added to random exam versions. (a warning is printed if
 	 *            this RequiredProblemConstraintIF has already been added).
+	 * @throws RexParseException 
 	 * @throws Exception
 	 * 			  -If theRPC has a label that does not refer to a ProblemIF.
 	 */
 
-	public void addRequiredProblem(RequiredProblemConstraintIF theRPC) throws Exception
+	public void addRequiredProblem(RequiredProblemConstraintIF theRPC) throws RexParseException
 	{
 		String requiredLabel = theRPC.label();
 		ProblemIF requiredProblem = (ProblemIF) this.master.elementWithLabel(requiredLabel);
 		
 		if (requiredProblem == null)
-		{
-			System.err.println("The label " + requiredLabel +
-					   " does not have an associated problem.");
-			throw new Exception();
-		}
+			throw new RexParseException("The label " + requiredLabel +
+										" does not have an associated problem.");
 
 		Integer identifier = (Integer) this.identifiers.get(requiredProblem);
 
