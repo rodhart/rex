@@ -4,6 +4,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
+import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FixedAnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
@@ -187,6 +188,7 @@ public class UEFCommandHandlerTest
 
 		BlockIF block = handler.processBlock();
 		assertEquals("name of block", block.label());
+		assertEquals("processBlockTestFile.tex", block.source().filename());
 		assertEquals(1, block.source().startLine());
 		assertEquals(7, block.source().lastLine());
 		assertEquals(1, block.source().startColumn());
@@ -194,6 +196,29 @@ public class UEFCommandHandlerTest
 		assertEquals(
 				"\\begin{block}{name of block}\n\\ref{somefig}\n\\begin{verbatim} some }{{} \\end{verbatim}\n\n\\verb!test this verb!\n\n\\end{block}",
 				block.source().text());
+	}
+
+	@Test
+	public void processFigureTest() throws Exception
+	{
+		UEFParser parser = new UEFParser();
+
+		//Open the file to parse.
+		File file = new File("." + File.separator + "examples" + File.separator + "processFigureTestFile.tex");
+		parser.parseForAllCommands(file);
+
+		//get a reference to the handler to allow direct calls to the process methods of the handler
+		UEFCommandHandler handler = parser.getUEFCommandHandler();
+		FigureIF figure = handler.processFigure();
+		assertEquals("fig:example topic", figure.label());
+		assertEquals("processFigureTestFile.tex", figure.source().filename());
+		assertEquals(2, figure.source().startLine());
+		assertEquals(8, figure.source().lastLine());
+		assertEquals(1, figure.source().startColumn());
+		assertEquals(13, figure.source().lastColumn());
+		assertEquals(
+				"\\begin{figure}[placement h]\n  \\begin{center}\n      \\includegraphics[scale=0.50]{binary_tree.png}\n      \\caption{Example Figure \\ref{some reference}}\n      \\label{fig:example topic}\n   \\end{center}\n\\end{figure}",
+				figure.source().text());
 	}
 
 	/**
