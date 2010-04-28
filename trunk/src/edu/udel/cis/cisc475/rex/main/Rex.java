@@ -10,6 +10,7 @@ import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.ecfparser.IF.EcfParserFactoryIF;
 import edu.udel.cis.cisc475.rex.ecfparser.IF.EcfParserIF;
 import edu.udel.cis.cisc475.rex.ecfparser.impl.EcfParserFactory;
+import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorFactoryIF;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
@@ -25,7 +26,7 @@ import edu.udel.cis.cisc475.rex.uefparser.impl.UEFParserFactory;
 
 public class Rex {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws RexUnsatisfiableException, Exception {
 
 		int numArgs = args.length;
 		long seed = 1;
