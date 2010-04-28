@@ -12,6 +12,7 @@ import edu.udel.cis.cisc475.rex.random.impl.RandomizerFactory;
 /**
  * Junit tests for Random module
  * @author cardona
+ * @author jsong
  *
  */
 public class RandomTest {
@@ -103,14 +104,6 @@ public class RandomTest {
 		}
 	}//end of method
 
-	@Test(expected=Exception.class)
-	//test if number of objects to pick is <1
-	public void testChooseB1() throws Exception {
-		seed = 4236;
-		numToPick = 0;
-		R1 = RF.newRandomizer(seed);
-		b = R1.choose (numToPick, a);
-	}//end of method
 
 	@Test(expected=Exception.class)
 	//test if number of objects to pick is <1
