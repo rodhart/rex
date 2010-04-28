@@ -378,6 +378,12 @@ public class UEFParserTest
 	{
 		UEFParser parser = new UEFParser();
 
+		//make sure the internal UEFCharHandler was constructed correctly.
+		assertNotNull(parser.getUEFCharHandler());
+
+		//make sure the internal UEFCommandHandler was constructed correctly.
+		assertNotNull(parser.getUEFCommandHandler());
+
 		//Open the file to parse.
 		File file = new File("." + File.separator + "examples" + File.separator + "exam.tex");
 		ExamIF exam = parser.parse(file);
