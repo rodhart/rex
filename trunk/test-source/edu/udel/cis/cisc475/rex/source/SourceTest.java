@@ -313,7 +313,7 @@ public class SourceTest {
 	
 	
 	
-	@Test(expected=NullPointerException.class)
+	@Test(expected=IOException.class)
 	public void testNullPrintWriter() throws IOException {
 		String filename = "moo";
 		
