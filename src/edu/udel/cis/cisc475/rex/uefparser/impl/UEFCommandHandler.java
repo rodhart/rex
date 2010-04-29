@@ -103,6 +103,11 @@ class UEFCommandHandler {
 		return null;
 	}
 
+	/**
+	 * Checks whether the argument contains 'fixed'
+	 * @param argument the argument to check.
+	 * @return true or false depending on whether the argument contains 'fixed'.
+	 */
 	private boolean isFixed(String argument) {
 
 		if (argument != null) {
@@ -112,6 +117,11 @@ class UEFCommandHandler {
 		}
 	}
 
+	/**
+	 * Checks whether the argument contains 'correct'. Returns true if so else false.
+	 * @param argument the argument to check.
+	 * @return true or false depending on whether the argument contains 'correct'.
+	 */
 	private boolean isCorrect(String argument) {
 		if (argument != null) {
 			return argument.contains("correct");
@@ -120,8 +130,7 @@ class UEFCommandHandler {
 	}
 
 	/**
-	 * Process an \answer command. Increments the answer index. Adds the new
-	 * answer to the answers list.
+	 * Process an \answer command.
 	 */
 	AnswerIF processAnswer(int index) throws RexParseException, EOFException {
 		UEFCommand command = uefCommandQueue.poll();
@@ -193,7 +202,7 @@ class UEFCommandHandler {
 	}
 
 	/**
-	 * Process a \begin{answers} command.
+	 * Process the answers environment and command within.
 	 */
 	AnswerIF[] processAnswers() throws RexParseException, EOFException {
 		// pop off the /begin{answers} command
@@ -246,7 +255,7 @@ class UEFCommandHandler {
 	}
 
 	/**
-	 * Process a \begin{block} command.
+	 * Process a block environment.
 	 */
 	BlockIF processBlock() throws RexParseException, EOFException {
 		UEFCommand command = uefCommandQueue.poll();
@@ -327,7 +336,7 @@ class UEFCommandHandler {
 	}
 
 	/**
-	 * Process a \begin{document} command.
+	 * Process the document environment.
 	 */
 	ExamIF processDocument() throws RexParseException, EOFException {
 		// pull /begin{document} off the queue
@@ -413,7 +422,7 @@ class UEFCommandHandler {
 	}
 
 	/**
-	 * Process a \begin{figure} command.
+	 * Process the figure environment.
 	 */
 	FigureIF processFigure() throws RexParseException, EOFException {
 		UEFCommand command = uefCommandQueue.poll();
@@ -499,9 +508,7 @@ class UEFCommandHandler {
 	}
 
 	/**
-	 * Process a \begin{problem} command. Creates a new answer list for all
-	 * answers in the problem. Resets the index for the answers in the problem.
-	 * Pushes the problem state.
+	 * Process the problem environment and commands found within.
 	 */
 	ProblemIF processProblem() throws RexParseException, EOFException {
 		// pull this command off the stack
