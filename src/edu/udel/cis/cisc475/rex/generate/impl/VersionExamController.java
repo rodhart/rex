@@ -93,8 +93,11 @@ public class VersionExamController
 		AnswerIF[] afterRandomization;
 		int j = 0;
 		
+		//theConstraint.getClass().getSimpleName().equals("GroupConstraint")
+		
+		
 		for (int i = 0; i < theAnswers.length; i++)
-			if (!(theAnswers[i].getClass().isInstance(FixedAnswerIF.class)))
+			if (!(theAnswers[i].getClass().getSimpleName().equals("FixedAnswerIF")))
 				beforeRandomization.add(theAnswers[i]);
 		
 		//Next 6 lines are maybe a fix to the problem we were having.  Certainly there is a better way.
@@ -108,7 +111,7 @@ public class VersionExamController
 		//afterRandomization = (AnswerIF[]) this.theRandomizer.choose(beforeRandomization.size(), beforeRandomization.toArray());
 		
 		for (int i = 0; i < theAnswers.length; i++)
-			if (!(theAnswers[i].getClass().isInstance(FixedAnswerIF.class)))
+			if (!(theAnswers[i].getClass().getSimpleName().equals("FixedAnswerIF")))
 			{
 				theAnswers[i] = afterRandomization[j];
 				j++;
