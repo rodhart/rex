@@ -699,7 +699,7 @@ class UEFCommandHandler {
 				if (!isExamDocumentclass) {
 					throw new RexException(
 							uefCommandQueue.peek().getType()
-									+ " found when the documentclass is net set to exam!");
+									+ " found when the documentclass is not of type 'exam'!");
 				}
 
 				// retrieve the preamble
