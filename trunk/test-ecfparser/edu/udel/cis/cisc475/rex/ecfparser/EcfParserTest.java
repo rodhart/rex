@@ -7,6 +7,7 @@ import org.junit.Before;
 import junit.framework.TestCase;
 
 import java.util.TreeSet;
+import java.io.File;
 
 import edu.udel.cis.cisc475.rex.ecfparser.impl.EcfParser;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
@@ -56,10 +57,11 @@ public class EcfParserTest {
   }
 
   /**
-  * First test using text from the requirements document.
+  * First test using text from the requirements document; Using both 
+	* 	inline string and equivalent file.
   */
   @Test
-  public void test() throws RexUnsatisfiableException {
+  public void positiveTest() throws RexUnsatisfiableException {
     String reqDocExample = "include 5 problems on \"Finite State Automata\" with difficulty in [0,20)\n" +
     "  at 3 points;\n" +
     "include 5 problems on \"ssort\" with difficulty in [20,\\infty) at 2 points;\n" +
@@ -81,8 +83,14 @@ public class EcfParserTest {
 		// set ending block
 		realConfig.setFinalBlock("block:GoodbyeMessage");
 
-		// add group constraints
+		// add version strings
+		try{
+			realConfig.setVersionStrings(new String[]{"1/21/2010","Jan.\\ 21, 2010","21-jan-2010","JAN.\\ 21 2010"});
+		} catch (Exception e) {
+			System.err.println("This shouldn't be happening. "+e.getMessage());
+		}
 
+		// add group constraints
 		realConfig.addGroupConstraint(
 				"Finite State Automata",
 				intervalFactory.interval(true, 0.0, false, 20.0),
@@ -140,19 +148,39 @@ public class EcfParserTest {
 				sourceFactory.newSource("fakefile.ecf")
 		);
 
-    EcfParser parser = new EcfParser(5);
 
-		ConfigIF config;
-    try {
-			config = parser.parseString(reqDocExample);
-			assertTrue(configEquality(config, realConfig));
-		} catch (Exception e) {
-			System.out.println("something went wrong");
-			assertTrue(false);
+
+    EcfParser parser = new EcfParser(4);
+
+		// run the test on the string first
+		{
+			ConfigIF config;
+			try {
+				config = parser.parseString(reqDocExample);
+				assertTrue(configEquality(config, realConfig));
+			} catch (Exception e) {
+				System.out.println("something went wrong");
+				assertTrue(false);
+			}
+		}
+
+		// now test the file version
+		{
+			ConfigIF config;
+			File file = new File("."+File.separator+"examples"+File.separator+"positiveConfigTest.ecf");
+			try {
+				config = parser.parse(file);
+				assertTrue(configEquality(config, realConfig));
+			} catch(Exception e) {
+				System.err.println("You shouldn't see this");
+				assertTrue(false);
+			}
+
 		}
 
   }
 
+	// helper functions!-------------------------------------------------- 
 	private boolean intervalEquality(IntervalIF a, IntervalIF b) {
 		if(
 				a.low().doubleValue() == b.low().doubleValue() &&
@@ -218,7 +246,7 @@ public class EcfParserTest {
 		// check pdf option
 //		if(a.pdfOption() != b.pdfOption()) { return false; }
 
-//		if(!versionsEquality(a.versionStrings(), b.versionStrings())) { return false; }
+		if(!versionsEquality(a.versionStrings(), b.versionStrings())) { return false; }
 
 		// make sure the constraints collections are the same size
 		if(a.constraints().size() != b.constraints().size()) { return false; }

@@ -7,6 +7,9 @@ import edu.udel.cis.cisc475.rex.ecfparser.impl.parser.EcfAntlrParser;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
 import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
+import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
+import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
+import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.err.RexParseException;
@@ -55,14 +58,21 @@ public class EcfParser implements EcfParserIF {
     EcfAntlrLexer lexer = new EcfAntlrLexer(stream);
     CommonTokenStream tokens = new CommonTokenStream(lexer);
     EcfAntlrParser g = new EcfAntlrParser(tokens);
+
     
     try {
       g.ecf(config, filename);
     } catch (EcfParserHackException e) {
-			//throw e.releaseTheRex();
-			throw new RexUnsatisfiableException(e.releaseTheRex().getMessage());
+			throw new RexUnsatisfiableException(e.getMessage());
     } catch (RecognitionException e) {
-			throw new RexParseException(e.getMessage(), null);
+			// create a source obect to stick into the new exception
+			SourceFactoryIF sourceFactory = new SourceFactory();
+			SourceIF errorSource = sourceFactory.newSource(filename);
+			errorSource.setStartLine(e.line);
+			errorSource.setStartColumn(e.charPositionInLine);
+			errorSource.addText(e.token.getText());
+			
+			throw new RexParseException(e.getMessage(), errorSource);
     }
     
     return config;
