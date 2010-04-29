@@ -1,0 +1,14 @@
+include "5" problems on "Finite State Automata" with difficulty in [0,20)
+  at 3 points;
+include 5 problems on "ssort" with difficulty in [20,\infty) at 2 points;
+include 3 problems on "arithmetic" with difficulty in [0,10] at 1 points;
+include 3 problems on "arithmetic" with difficulty in (-\infty,\infty) at 3 points;
+
+# the following problems will be included in their corresponding
+# sections on any generated exam
+includeall prob:arithmetic:prime, prob:arithmetic:composite, prob:misc:hat,
+  prob:misc:complexity at 5 points;
+
+append block:GoodbyeMessage; # this block will be added at end
+
+versions are "1/21/2010", "Jan.\ 21, 2010", "21-jan-2010", "JAN.\ 21 2010";

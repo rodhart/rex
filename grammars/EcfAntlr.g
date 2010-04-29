@@ -27,6 +27,7 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
+import edu.udel.cis.cisc475.rex.err.RexParseException;
 import java.util.LinkedList;
 import java.lang.Double;
 import java.lang.Integer;
@@ -46,7 +47,7 @@ import java.lang.Integer;
 //------------------
 // parser
 //------------------
-ecf[ConfigIF configuration, String filename]
+ecf [ConfigIF configuration, String filename]
     :   {config = (ConfigIF)$configuration; filename = $filename;}
         statement* EOF!
     ;
@@ -77,6 +78,9 @@ include
 interval returns [IntervalIF i]
 	:	l=leftBound COMMA r=rightBound
 	    {
+					if($l.value.compareTo($r.value) > 0) {
+						throw new EcfParserHackException("lower bound greater than upper bound", $text, input);
+					}
 	        $i = intervalFactory.interval($l.strict, $l.value, $r.strict, $r.value);
 	    }
 	;
@@ -102,7 +106,7 @@ rightBound returns [boolean strict, Double value]
 
 // includeall statement
 includeall
-	:	{
+	:		{
 	        LinkedList<String> labels = new LinkedList<String>();
 	    }
 	    INCLUDEALL (COMMA? LABEL {labels.add($LABEL.text);})+
@@ -129,6 +133,7 @@ versions
 	        config.setVersionStrings(versions.toArray(new String[0]));
 	    }
 	;
+	catch[RexParseException e] { throw new EcfParserHackException(e.getMessage(), $text, input); }
 
 numInt returns [int value]
     :   INT {$value = Integer.valueOf($INT.text);}
