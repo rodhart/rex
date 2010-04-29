@@ -25,7 +25,7 @@ public class Source implements SourceIF {
 
 	public static String newline = System.getProperty("line.separator");
 
-	//private vars
+	//private variables
 	private String fileName;
 	private String Text;	
 	private int startline;
@@ -40,7 +40,7 @@ public class Source implements SourceIF {
 	 * @param filename The name of a file
 	 */
 	public Source(String filename) {
-		//init private vars
+		//initialize private variables
 		startline = startcolumn = lastline = lastcolumn = 0;	
 		Text = ""; 
 		fileName = filename;	
@@ -155,9 +155,10 @@ public class Source implements SourceIF {
 	 * @param out PrintWriter object to output to
 	 */
 	public void write(PrintWriter out) throws IOException {
+		// Throw an IOException if out is null
 		if(out == null)
 			throw new IOException("Null PrintWriter");
-		
+		// Output the entire body of Text to out
 		out.printf("%s\n", myText.toString());
 	} 
 

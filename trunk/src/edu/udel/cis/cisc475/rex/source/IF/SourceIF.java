@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * Interface for Source class
+ * Interface for Source class, outlining publicly accessible functions 
+ * from the class.
  * 
  * @author cardona
  * @author jsong
