@@ -2,6 +2,7 @@ package edu.udel.cis.cisc475.rex.config.IF;
 
 import java.util.Collection;
 
+import edu.udel.cis.cisc475.rex.err.RexParseException;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
@@ -55,8 +56,9 @@ public interface ConfigIF {
 	/**
 	 * sets the version strings for exam version differentiation
 	 * @param names - the list of version strings.
+	 * @throws RexParseException 
 	 */
-	void setVersionStrings(String[] names);
+	void setVersionStrings(String[] names) throws RexParseException;
 
 	/**
 	 * Sets the final block

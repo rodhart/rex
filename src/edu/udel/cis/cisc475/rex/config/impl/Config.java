@@ -6,6 +6,7 @@ import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
+import edu.udel.cis.cisc475.rex.err.RexParseException;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
@@ -116,8 +117,21 @@ public class Config implements ConfigIF {
 	/**
 	 * sets the version strings for exam version differentiation
 	 * @param names - the list of version strings.
+	 * @throws RexParseException 
 	 */
-	public void setVersionStrings(String[] names) {
+	public void setVersionStrings(String[] names) throws RexParseException {
+		if(names.length < numVersions)
+			throw new RexParseException("Not as many version strings as there are requested versions", null);
+
+		for(int i = 0; i < names.length-1; i++){
+			for(int j = i+1; j < names.length; j++){
+				if(names[i] == names[j]){
+					throw new RexParseException("Cannot have duplicate version strings", null);
+				}
+					
+			}
+		}
+		
 		this.versionStrings = names;
 	}
 
