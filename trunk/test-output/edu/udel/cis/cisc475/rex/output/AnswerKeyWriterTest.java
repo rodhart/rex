@@ -36,7 +36,7 @@ public class AnswerKeyWriterTest {
 	
 	//test to see what is actually writer to output
 	@Test
-	public void test_answer_key_writer() {
+	public void testAnswerKeyWriter() {
 		//declare a pointer to an interface and
 		//create an object of the interface type
 		AnswerKeyFactoryIF AKF = new AnswerKeyFactory(); 
@@ -99,13 +99,14 @@ public class AnswerKeyWriterTest {
 		Calendar now = Calendar.getInstance(zone);
 		Date day = new Date(now.getTimeInMillis());
 		// here is the text that we were expecting
-		String testString = "Answer Key for UEF " + "<UEF filename> " + "ECF" +
-		" <ECF filename> " + "generated on " + day.toString() + newline + 
+		String testString = "Answer Key for C++ and you " + "version" +
+		" version string name " + "generated on " + day.toString() + newline + 
 		"Total points: " + "<integer>" + newline + 
 		"1. [B]" + newline + 
 		"2. [A, C]" + newline + 
 		"3. [B]" + newline;	
-		 
+		 System.out.println(testString);
+		 System.out.println(contents.toString());
 		assertTrue(testString.equals(contents.toString()));
 	}
 

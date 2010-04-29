@@ -46,8 +46,8 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 		Date day = new Date(now.getTimeInMillis());
 		
 		// <UEF filename>, <ECF filename>, and <integer> are placeholders for now
-		out.print("Answer Key for UEF " + "<UEF filename> " + "ECF" +
-				" <ECF filename> " + "generated on " + day.toString() + newline);
+		out.print("Answer Key for " + K.examName() + " version " +
+				K.version() + " generated on " + day.toString() + newline);
 		out.print("Total points: " + "<integer>" + newline);
 		/*		out.printf("Exam version :   %s\n", K.version() ); 
 		out.printf("Exam Name :      %s\n", K.examName() );
