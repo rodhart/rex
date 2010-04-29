@@ -35,6 +35,7 @@ import java.lang.Integer;
 
 // these will be used throughout the parser
 @members {
+	private String filename;
 	private ConfigIF config;
 	private IntervalFactoryIF intervalFactory = new IntervalFactory();
 	private SourceFactoryIF sourceFactory = new SourceFactory();
@@ -45,8 +46,8 @@ import java.lang.Integer;
 //------------------
 // parser
 //------------------
-ecf[ConfigIF configuration]
-    :   {config = (ConfigIF)$configuration;}
+ecf[ConfigIF configuration, String filename]
+    :   {config = (ConfigIF)$configuration; filename = $filename;}
         statement* EOF!
     ;
 
@@ -62,8 +63,13 @@ include
 		WITH DIFFICULTY IN interval
 		AT p=numInt POINTS
 		SEMI
-		{   SourceIF funsauce = sourceFactory.newSource("TODO");
-		    config.addGroupConstraint($topic.text, $interval.i, $n.value, $p.value, funsauce);
+		{   SourceIF mySource = sourceFactory.newSource(filename);
+		    mySource.setStartLine($INCLUDE.line);
+		    mySource.setStartColumn($INCLUDE.pos);
+		    mySource.setLastLine($SEMI.line);
+		    mySource.setLastColumn($SEMI.pos);
+		    mySource.addText($text);
+		    config.addGroupConstraint($topic.text, $interval.i, $n.value, $p.value, mySource);
 		}
 	;
 
@@ -103,14 +109,14 @@ includeall
 	    AT numInt POINTS SEMI
 	    {
 	        for (String l : labels)
-	            config.addRequiredProblemConstraint(l, $numInt.value, sourceFactory.newSource("TODO"));
+	            config.addRequiredProblemConstraint(l, $numInt.value, sourceFactory.newSource(filename));
 	    }
 	;
 
 
 // append statement
 append
-	:	APPEND STRING SEMI {config.setFinalBlock($STRING.text);}
+	:	APPEND LABEL SEMI {config.setFinalBlock($LABEL.text);}
 	;
 
 // versions statement
