@@ -290,8 +290,9 @@ public class UEFCommandHandlerTest
 
 		//Convert the problem list to an array
 		ProblemIF problems[] = elementCollection.toArray(new ProblemIF[0]);
+		assertEquals(1, problems.length);
 		assertNotNull(problems);
-		
+
 		//get the only problem
 		ProblemIF problem = problems[0];
 		assertNotNull(problem);
@@ -320,7 +321,7 @@ public class UEFCommandHandlerTest
 		assertEquals(21, answer[1].source().lastColumn());
 		assertEquals("\\answer answer 2", answer[1].source().text());
 		assertFalse(answer[1] instanceof FixedAnswerIF);
-		
+
 		//test the problems third answer
 		assertEquals(false, answer[2].isCorrect());
 		assertEquals("exam.tex", answer[2].source().filename());
@@ -377,16 +378,38 @@ public class UEFCommandHandlerTest
 
 		//check for problems requiring the following block
 		//We'd check the correctness of the blocks, but their order is random. :'-(
-		block = (BlockIF)exam.elementWithLabel("logical");
+		block = (BlockIF) exam.elementWithLabel("logical");
 		elementCollection = exam.elementsUsingElement(block);
 		assertEquals(3, elementCollection.size());
 
 		//check for problems requiring the following block
 		//We'd check the correctness of the blocks, but their order is random. :'-(
-		block = (BlockIF)exam.elementWithLabel("matrix matlab");
+		block = (BlockIF) exam.elementWithLabel("matrix matlab");
 		elementCollection = exam.elementsUsingElement(block);
 		assertEquals(4, elementCollection.size());
 
+
+		//test problems with topic 'function call'
+		elementCollection = exam.elementsWithTopic("function call");
+		problems = elementCollection.toArray(new ProblemIF[0]);
+		assertEquals(2, problems.length);
+		ProblemIF problem2;
+		if (problems[0].difficulty() == 5.0)
+		{
+			problem = problems[0];
+			problem2 = problems[1];
+		}
+		else
+		{
+			problem = problems[1];
+			problem2 = problems[0];
+		}
+		assertEquals(
+				"Consider the function f:\n  \\begin{verbatim}\n    function [] = f(x)\n    output = 7;\n    end\n  \\end{verbatim}\n  What will be in x after the command:\n  \\begin{verbatim}>> x = f(3);\\end{verbatim}\n%:type function call", problem.
+				question().text());
+		assertEquals(
+				"Consider the function f:\n  \\begin{verbatim}\n    function answer = f(a)\n    answer = a+2;\n    end\n  \\end{verbatim}\n  What will be in x after the command:\n  \\begin{verbatim}>> x = f(4);\n  \\end{verbatim}\n%:type function call", problem2.
+				question().text());
 
 		//assertEquals("Which expression tests whether\n  variable x is between (but not the same as) the values 5 and 10.\n%:type  logical", problems[2].question().text());
 
