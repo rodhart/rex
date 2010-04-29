@@ -1,7 +1,6 @@
 package edu.udel.cis.cisc475.rex.output;
 
 import static org.junit.Assert.assertEquals;
-
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
@@ -11,10 +10,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.impl.Answer;
@@ -33,26 +30,11 @@ import edu.udel.cis.cisc475.rex.source.impl.Source;
  * @author justin
  */
 public class ExamWriterTest {
-	
 	ExamFactoryIF examFactory;
 	OutputFactoryIF examWriterFactory;
 	SourceFactoryIF sourceFactory;
 	
-	@Before
-	public void setUp() {
-		//examFactory = new ExamFactory();
-	    //sourceFactory = new SourceFactory();
-	    //examWriterFactory = new OutputFactory();
-	}
-	
-    @Test
-    public void testExamWriterNull() {
-		//ExamIF e = examFactory.newGeneratedExam();
-		//ExamWriterIF ew = examWriterFactory.newExamWriter(e);
-		//assertNotNull(ew);	
-	}
-
-    
+   
     
     
     
@@ -552,7 +534,20 @@ public class ExamWriterTest {
 		//testString that was stored in a final matter
 		assertEquals(testData.compareTo(testString), 0);
     }
+
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /* tested block output if block is multiple lines
+     */
 	@Test
 	public void testPrintBlockIF2() throws IOException {
 		Exam e = new Exam(true);	
@@ -592,8 +587,7 @@ public class ExamWriterTest {
 		while((line = input.readLine()) != null){
 			testData.append(line);
 			testData.append("\n");
-		}
-		
+			}
 		testString += "\n";
 
 		//checks if the saved testData is the same as the 
