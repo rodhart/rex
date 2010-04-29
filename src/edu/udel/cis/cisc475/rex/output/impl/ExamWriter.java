@@ -108,7 +108,8 @@ public class ExamWriter implements ExamWriterIF {
 			E.finalBlock().source().write(out);
 			out.flush();
 		}
-		out.print("\\end{document}");
+		out.println("\\end{document}");
+		out.flush();
 		
 	}// end of write(PrintWriter out)
 

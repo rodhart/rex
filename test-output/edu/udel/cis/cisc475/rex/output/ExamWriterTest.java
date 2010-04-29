@@ -43,7 +43,7 @@ public class ExamWriterTest {
     
     
     
-    
+/*    
     @Test
     public void testPrintBlockIF() throws IOException {
     	Exam e = new Exam(true);	
@@ -549,10 +549,6 @@ public class ExamWriterTest {
     
     
     
-    
-    
-    /* tested block output if block is multiple lines
-     */
 	@Test
 	public void testPrintBlockIF2() throws IOException {
 		Exam e = new Exam(true);	
@@ -599,4 +595,101 @@ public class ExamWriterTest {
 		//testString that was stored in a block
 		assertEquals(testData.toString().compareTo(testString), 0);
 	}    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
+
+
+
+    /* tested block output if block is multiple lines
+     */
+	@Test
+	public void testPrintBlockIF12() throws IOException {
+		Exam e = new Exam(true);	
+    	String testString = "inside the block";
+    	
+    	String testString2 = "\\documentclass{exam}" + "\n" +
+    	"\\begin{document}" + "\n" +    	
+    	"\\begin{block}" + "\n" +
+    	"inside the block" + "\n" +
+    	"\\end{block}" + "\n" +
+    	"\\end{document}" + "\n";
+
+		//adds the block element   
+		Source testSource = new Source("test file");
+		testSource.addText(testString);
+		Block blockTest = new Block("test topic", testSource );
+		e.addElement(blockTest);
+
+		//creates an exam writer
+		ExamWriter ew = new ExamWriter(e);
+		String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test.txt";
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new FileWriter(filename));
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+
+		//the examWriter writes out to the printwriter
+		try {
+			ew.write(pw);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		File aFile = new File(filename);
+		BufferedReader input = new BufferedReader(new FileReader(aFile));
+		String line = "";
+		StringBuffer testData = new StringBuffer();
+		while((line = input.readLine()) != null){
+			testData.append(line);
+			testData.append("\n");
+			}
+		testString2 += "\n";
+		System.out.println(testData);
+
+		//checks if the saved testData is the same as the 
+		//testString that was stored in a block
+		assertEquals(testData.toString().compareTo(testString2), 0);
+	}    
+
 }//end of class
