@@ -3,12 +3,9 @@ package edu.udel.cis.cisc475.rex.generate;
 
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Random;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -17,42 +14,17 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
-import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
-import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
-import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
-import edu.udel.cis.cisc475.rex.config.generatestubs.ConfigFactoryStub;
-import edu.udel.cis.cisc475.rex.config.impl.Config;
-import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
-import edu.udel.cis.cisc475.rex.config.impl.Constraint;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
-import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
-import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
-import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
-import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
-import edu.udel.cis.cisc475.rex.exam.generatestubs.ExamFactoryStub;
-import edu.udel.cis.cisc475.rex.exam.impl.Answer;
-import edu.udel.cis.cisc475.rex.exam.impl.ExamElement;
-import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorFactoryIF;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
 import edu.udel.cis.cisc475.rex.generate.impl.GeneratorFactory;
-import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
-import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
-import edu.udel.cis.cisc475.rex.interval.generatestubs.IntervalFactoryStub;
-import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
-import edu.udel.cis.cisc475.rex.key.Keys;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyFactoryIF;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
-import edu.udel.cis.cisc475.rex.key.generatestubs.AnswerKeyFactoryStub;
 import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
-import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
-import edu.udel.cis.cisc475.rex.random.impl.Randomizer;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
-import edu.udel.cis.cisc475.rex.source.generatestubs.SourceFactoryStub;
 import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 
 public class GeneratorTest {
