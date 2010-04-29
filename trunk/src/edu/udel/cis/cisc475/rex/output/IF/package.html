@@ -15,16 +15,16 @@ xmlns="http://www.w3.org/TR/REC-html40">
  <o:DocumentProperties>
   <o:Author>Ian Burns</o:Author>
   <o:LastAuthor>Ian Burns</o:LastAuthor>
-  <o:Revision>6</o:Revision>
-  <o:TotalTime>82</o:TotalTime>
-  <o:Created>2010-04-28T22:14:00Z</o:Created>
-  <o:LastSaved>2010-04-29T01:38:00Z</o:LastSaved>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>2</o:TotalTime>
+  <o:Created>2010-04-29T01:41:00Z</o:Created>
+  <o:LastSaved>2010-04-29T01:43:00Z</o:LastSaved>
   <o:Pages>1</o:Pages>
-  <o:Words>45</o:Words>
-  <o:Characters>263</o:Characters>
+  <o:Words>47</o:Words>
+  <o:Characters>268</o:Characters>
   <o:Lines>2</o:Lines>
   <o:Paragraphs>1</o:Paragraphs>
-  <o:CharactersWithSpaces>307</o:CharactersWithSpaces>
+  <o:CharactersWithSpaces>314</o:CharactersWithSpaces>
   <o:Version>12.00</o:Version>
  </o:DocumentProperties>
 </xml><![endif]-->
@@ -371,11 +371,6 @@ h2
 p
 	{mso-style-noshow:yes;
 	mso-style-priority:99;
-	mso-margin-top-alt:auto;
-	margin-right:0in;
-	mso-margin-bottom-alt:auto;
-	margin-left:0in;
-	mso-pagination:widow-orphan;
 	font-size:12.0pt;
 	font-family:"Times New Roman","serif";
 	mso-fareast-font-family:"Times New Roman";
@@ -442,7 +437,7 @@ div.Section1
 	font-family:"Times New Roman","serif";}
 </style>
 <![endif]--><!--[if gte mso 9]><xml>
- <o:shapedefaults v:ext="edit" spidmax="5122"/>
+ <o:shapedefaults v:ext="edit" spidmax="2050"/>
 </xml><![endif]--><!--[if gte mso 9]><xml>
  <o:shapelayout v:ext="edit">
   <o:idmap v:ext="edit" data="1"/>
@@ -453,19 +448,17 @@ div.Section1
 
 <div class=Section1>
 
-<p class=MsoNormal><span class=GramE><span style='mso-fareast-font-family:"Times New Roman"'>Implements
-<span class=SpellE>key.IF</span> to create an answer key for a given exam.</span></span><span
-style='mso-fareast-font-family:"Times New Roman"'> <span class=GramE>Stores the
-version, exam name, and date, as well as the correct answer for each
-corresponding question.</span> <br style='mso-special-character:line-break'>
-<![if !supportLineBreakNewLine]><br style='mso-special-character:line-break'>
-<![endif]><o:p></o:p></span></p>
+<p class=MsoNormal><span class=GramE><span style='mso-fareast-font-family:"Times New Roman"'>Provides
+an interface to create classes that are responsible for writing generated exams
+and answer keys.</span></span><span style='mso-fareast-font-family:"Times New Roman"'>
+Contains classes in order to create an output factory, and new exam writers and
+answer key writers.<o:p></o:p></span></p>
 
-<h2><span style='mso-fareast-font-family:"Times New Roman"'>Details<o:p></o:p></span></h2>
+<p>For more information please see the corresponding classes and methods.</p>
 
-<p>This package stores the answers as a collection of strings. The user can use
-<span class=SpellE><span class=GramE>addProblem</span></span><span class=GramE>(</span>)
-to store more answers into the collection. </p>
+<p class=MsoNormal><span style='mso-fareast-font-family:"Times New Roman"'>@see
+<span class=SpellE>ExamIF</span> @see <span class=SpellE>configIF</span> @see <span
+class=SpellE>keyIF</span> <o:p></o:p></span></p>
 
 </div>
 
