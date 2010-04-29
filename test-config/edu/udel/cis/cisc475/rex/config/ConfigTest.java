@@ -17,6 +17,7 @@ import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
 import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
+import edu.udel.cis.cisc475.rex.err.RexParseException;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
@@ -152,9 +153,10 @@ public class ConfigTest {
 	
 	/**
 	 * tests the exam version strings setting and getting 
+	 * @throws RexParseException 
 	 */
 	@Test
-	public void testVersionStrings() {
+	public void testVersionStrings() throws RexParseException {
 		ConfigIF C = configFactory.newConfig(false, -123);
 		String versions[] = {"test1", "test2", "test3"};
 		C.setVersionStrings(versions);
