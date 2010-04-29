@@ -96,7 +96,7 @@ public class ExamWriter implements ExamWriterIF {
 					tempProblem.answers()[index].source().write(out);
 				}// end of for loop
 				out.println("\\end{answers}");
-				out.println("\\end{problem");
+				out.println("\\end{problem}");
 			}// endo of if(temp instanceof Problem)
 			out.flush();
 		}// endo of for loop (int i=0; i< E.elements().toArray().length; i++)
