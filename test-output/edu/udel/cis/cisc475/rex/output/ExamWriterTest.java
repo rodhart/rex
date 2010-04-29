@@ -1,44 +1,24 @@
 package edu.udel.cis.cisc475.rex.output;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertEquals;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import org.junit.Before;
 import org.junit.Test;
-
-import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
-import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
-import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
-import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
-import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
-import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.impl.Answer;
 import edu.udel.cis.cisc475.rex.exam.impl.Block;
 import edu.udel.cis.cisc475.rex.exam.impl.Exam;
-import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.exam.impl.Figure;
-import edu.udel.cis.cisc475.rex.exam.impl.Problem;
-import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
-import edu.udel.cis.cisc475.rex.interval.impl.IntervalFactory;
-import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
 import edu.udel.cis.cisc475.rex.output.IF.OutputFactoryIF;
 import edu.udel.cis.cisc475.rex.output.impl.ExamWriter;
-import edu.udel.cis.cisc475.rex.output.impl.OutputFactory;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
-import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 import edu.udel.cis.cisc475.rex.source.impl.Source;
-import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 
 /**
  * Junit Testing for ExamWriter
@@ -65,6 +45,16 @@ public class ExamWriterTest {
 		//ExamWriterIF ew = examWriterFactory.newExamWriter(e);
 		//assertNotNull(ew);	
 	}
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     @Test
     public void testPrintBlockIF() throws IOException {
@@ -119,6 +109,11 @@ public class ExamWriterTest {
 		assertEquals(testData.compareTo(testString), 0);
     }
     
+    
+    
+    
+    
+    
     @Test
     public void testPrintFigureIF() throws IOException {
     	Exam e = new Exam(true);	
@@ -171,6 +166,16 @@ public class ExamWriterTest {
 		//testString that was stored in a figure
 		assertEquals(testData.compareTo(testString), 0);
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     @Test
     public void testPrintProblem() throws IOException {
@@ -253,6 +258,18 @@ public class ExamWriterTest {
 	 	assertEquals(ans2Data.compareTo("this is the answer 2"), 0);
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     @Test
     public void testPrintProblemWithBlock(){
     	Exam e = new Exam(true);	
@@ -334,6 +351,17 @@ public class ExamWriterTest {
 	 	assertEquals(ans2Data.compareTo("this is the answer 2"), 0);
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     @Test
     public void testFrontMatter(){
     	Exam e = new Exam(true);	
@@ -385,6 +413,18 @@ public class ExamWriterTest {
 		//testString that was stored the front matter
 		assertEquals(testData.compareTo(testString), 0);
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     @Test
     public void testPreamble(){
@@ -439,6 +479,20 @@ public class ExamWriterTest {
     
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     @Test 
     public void testFinalBlock(){
     	Exam e = new Exam(true);	
@@ -491,11 +545,5 @@ public class ExamWriterTest {
 		//checks if the saved testData is the same as the 
 		//testString that was stored in a final matter
 		assertEquals(testData.compareTo(testString), 0);
-    
-
-    }
-    
-    
-    
-    
-}
+        }
+}//end of class
