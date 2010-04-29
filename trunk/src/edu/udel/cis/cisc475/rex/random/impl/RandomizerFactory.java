@@ -4,8 +4,7 @@ import edu.udel.cis.cisc475.rex.random.IF.RandomizerFactoryIF;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
 
 /**	
- * this class is a factory which creates a new instance of 
- * a random object chooser
+ * This class implements RandomizerFactory and is used to create a new instance of Randomizer.
  * 
  *   @author cardona
  * 

@@ -1,14 +1,8 @@
 package edu.udel.cis.cisc475.rex.random.IF;
 
-import edu.udel.cis.cisc475.rex.err.RexException;
-
 /**
- * class creates an instance of a random object chooser
- * when called it first creates the seed randomizer
- * then when given a set of objects and a certain number to choose
- * will return the chosen objects
- * the choosing of these objects will be repeatable if given the
- * same seed value
+ * Interface for Randomizer class, outlining accessible functions 
+ * from the class.
  * 
  * @author cardona
  * @author jsong
