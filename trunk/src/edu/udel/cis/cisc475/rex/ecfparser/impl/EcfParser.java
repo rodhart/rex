@@ -72,6 +72,7 @@ public class EcfParser implements EcfParserIF {
 			errorSource.setStartColumn(e.charPositionInLine);
 			errorSource.addText(e.token.getText());
 			
+			System.err.println("this isnt happening :[");
 			throw new RexParseException(e.getMessage(), errorSource);
     }
     

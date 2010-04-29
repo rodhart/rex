@@ -8,6 +8,7 @@ import junit.framework.TestCase;
 
 import java.util.TreeSet;
 import java.io.File;
+import java.io.IOException;
 
 import edu.udel.cis.cisc475.rex.ecfparser.impl.EcfParser;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
@@ -56,10 +57,30 @@ public class EcfParserTest {
     sourceFactory = new SourceFactory();
   }
 
+	/**
+	 * Negative test to try catching a RexParseException thrown by the parser.
+	 */
+	// TODO: figure out where the exceptions are going inside the parser.
+/*	@Test(expected = RexParseException.class)
+	public void negativeParseErrorTest() throws RexParseException {
+		ConfigIF config;
+		File file = new File("."+File.separator+"examples"+File.separator+"negativeParseErrorConfigTest.ecf");
+		EcfParser parser = new EcfParser(4);
+
+		try{
+			parser.parse(file);
+		} catch(IOException e) {
+			fail("Something happened when reading the file. Sorry.");
+		} catch(RexUnsatisfiableException e) {
+			fail("Something went wrong. Check your test file.");
+		}
+	}*/
+
+		
   /**
-  * First test using text from the requirements document; Using both 
-	* 	inline string and equivalent file.
-  */
+		* Test using text from the requirements document; Using both 
+		* 	inline string and equivalent file.
+		*/
   @Test
   public void positiveTest() throws RexUnsatisfiableException {
     String reqDocExample = "include 5 problems on \"Finite State Automata\" with difficulty in [0,20)\n" +
