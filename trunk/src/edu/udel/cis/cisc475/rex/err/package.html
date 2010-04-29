@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<title>edu.udel.cis.cisc475.rex.generate.impl package</title>
+</head>
+<body bgcolor="white">
+
+The err module defines the three type of Exceptions specific to Rex. These
+Exceptions represent problems with the input UEF and/or ECF file, and are
+out of Rex's control.
+
+<h2>Details</h2>
+
+A RexException is a general Exception that serves as a base for the other two
+type of Rex specific Exceptions. A RexParseException represents bad input to
+either the UEF or ECF file; a typo, mismatched label, or null reference would
+fall under this category. A RexUnsatisfiableException is thrown when a particular
+constraint cannot be satisfied, either because not enough problems satisfy the
+constraint, or certain constraints preclude other constraints from being satisfied.
+
+@see RexException
+@see RexParseException
+@see RexUnsatisfiableException
+
+</body>
+</html>

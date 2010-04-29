@@ -215,7 +215,7 @@ public class VersionExamController
 				this.mec.getOverlaps(theTO, theGCC);
 				superset.addAll(theGCC.getSet());
 				
-				while (!superset.isEmpty())
+				while (!superset.isEmpty() && problemsAdded < theGCC.getConstraintValue())
 				{
 					randomProblem = (ProblemIF) (this.theRandomizer.choose(1, superset.toArray()))[0];
 					identifier = (Integer) this.mec.getIdentifiers().get(randomProblem);

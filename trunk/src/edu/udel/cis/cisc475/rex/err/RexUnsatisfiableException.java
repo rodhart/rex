@@ -6,6 +6,11 @@ public class RexUnsatisfiableException extends RexException {
 
 	/**
 	 * @author Zach Hine
+	 * 
+	 * A Rex Exception signifying that a constraint cannot
+	 * be fulfilled. In addition to a String, a Source can be
+	 * taken as input to better pinpoint the unsatisfiable
+	 * constraint.
 	 */
 
 	private static final long serialVersionUID = 1L;
