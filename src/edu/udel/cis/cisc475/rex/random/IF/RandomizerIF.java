@@ -35,5 +35,5 @@ public interface RandomizerIF {
 	 * @return an array of type T
 	 * @throws Exception 
 	 */
-	<T> T[] chooseT(int numItems, T[] items);
+//	<T> T[] chooseT(int numItems, T[] items);
 }// end of interface

@@ -96,7 +96,7 @@ public class Randomizer implements RandomizerIF {
 	 * @param items  the type T array to choose from
 	 * @return an array of chosen objects
 	 */
-public	<T> T[] chooseT(int numItems, T[] items){	
+//public	<T> T[] chooseT(int numItems, T[] items){	
 /*
 	int index;
 	//holds the original list
@@ -136,8 +136,8 @@ public	<T> T[] chooseT(int numItems, T[] items){
 	//returns the shuffled list as an array
 	*/
 //	return shuffledItems.toArray();
-	return items;	
-	}//end of public Object[] choose(int numItems, Object[] items) {
+//	return items;	
+//	}//end of public Object[] choose(int numItems, Object[] items) {
 	
 }//end of class 
 

@@ -633,7 +633,5 @@ public void testPrintBlockIF15() throws IOException {
 	assertEquals(testData.toString().compareTo(testString2), 0);
 }    
 
-
-
 }//end of class
 
