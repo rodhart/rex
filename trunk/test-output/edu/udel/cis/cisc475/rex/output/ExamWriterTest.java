@@ -56,7 +56,7 @@ public class ExamWriterTest {
     			"\\end{document}";
 		
     	//adds the block element   
-		Source testSource = new Source("test file");
+		Source testSource = new Source("test file2");
     	testSource.addText(testString);
 		Block blockTest = new Block("test topic", testSource );
 		e.addElement(blockTest);
