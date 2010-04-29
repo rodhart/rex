@@ -1,14 +1,20 @@
 package edu.udel.cis.cisc475.rex.output;
 
 import static org.junit.Assert.assertEquals;
+
+import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.impl.Answer;
@@ -545,5 +551,53 @@ public class ExamWriterTest {
 		//checks if the saved testData is the same as the 
 		//testString that was stored in a final matter
 		assertEquals(testData.compareTo(testString), 0);
-        }
+    }
+    
+	@Test
+	public void testPrintBlockIF2() throws IOException {
+		Exam e = new Exam(true);	
+		String testString = "\\being{verbatim}" + "\n" + 
+		"%Description: " + "\n" + 
+		"%Tests the circleArea function that takes a radius and returns an area." + "\n" +
+		"%Example (circleArea): " + "\n";
+
+		//adds the block element   
+		Source testSource = new Source("test file");
+		testSource.addText(testString);
+		Block blockTest = new Block("test topic", testSource );
+		e.addElement(blockTest);
+
+		//creates an exam writer
+		ExamWriter ew = new ExamWriter(e);
+		String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test.txt";
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new FileWriter(filename));
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+
+		//the examWriter writes out to the printwriter
+		try {
+			ew.write(pw);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		File aFile = new File(filename);
+		BufferedReader input = new BufferedReader(new FileReader(aFile));
+		String line = "";
+		StringBuffer testData = new StringBuffer();
+		while((line = input.readLine()) != null){
+			testData.append(line);
+			testData.append("\n");
+		}
+		
+		testString += "\n";
+
+		//checks if the saved testData is the same as the 
+		//testString that was stored in a block
+		assertEquals(testData.toString().compareTo(testString), 0);
+	}    
 }//end of class
