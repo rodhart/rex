@@ -144,8 +144,19 @@ class UEFCommandHandler {
 
 		if (peekedCommand == null) {
 			// should always be either endAnswers or answer command
+
+			SourceIF execptionSource = sourceFactory.newSource(uefCharHandler
+					.getFileName(), uefCharHandler.getLineNumber(command
+					.getStartPosition()), uefCharHandler
+					.getColumnNumber(command.getStartPosition()),
+					uefCharHandler.getLineNumber(command.getEndPosition()),
+					uefCharHandler.getColumnNumber(command.getEndPosition()));
+
+			execptionSource.addText(uefCharHandler.getContent(command
+					.getStartPosition(), command.getEndPosition()));
+
 			throw new RexParseException(
-					"No \\end{answer} after \\begin{answer}.", null);
+					"No \\end{answer} after \\begin{answer}.", execptionSource);
 		}
 
 		// set the end of the source to the position before
@@ -211,8 +222,23 @@ class UEFCommandHandler {
 				break;
 			}
 			default: {
+				SourceIF execptionSource = sourceFactory.newSource(
+						uefCharHandler.getFileName(), uefCharHandler
+								.getLineNumber(uefCommandQueue.peek()
+										.getStartPosition()), uefCharHandler
+								.getColumnNumber(uefCommandQueue.peek()
+										.getStartPosition()), uefCharHandler
+								.getLineNumber(uefCommandQueue.peek()
+										.getEndPosition()), uefCharHandler
+								.getColumnNumber(uefCommandQueue.peek()
+										.getEndPosition()));
+
+				execptionSource.addText(uefCharHandler.getContent(
+						uefCommandQueue.peek().getStartPosition(),
+						uefCommandQueue.peek().getEndPosition()));
+
 				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found within answers environment!", null);
+						+ " found within answers environment!", execptionSource);
 			}
 			}
 		}
@@ -254,8 +280,18 @@ class UEFCommandHandler {
 				break;
 			}
 			default: {
+				SourceIF execptionSource = sourceFactory.newSource(
+						uefCharHandler.getFileName(), uefCharHandler
+								.getLineNumber(startSource), uefCharHandler
+								.getColumnNumber(startSource), uefCharHandler
+								.getLineNumber(endSource), uefCharHandler
+								.getColumnNumber(endSource));
+
+				execptionSource.addText(uefCharHandler.getContent(startSource,
+						endSource));
+
 				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found within block environment!", null);
+						+ " found within block environment!", execptionSource);
 			}
 			}
 		}
@@ -350,11 +386,28 @@ class UEFCommandHandler {
 				return exam;
 			}
 			default: {
+				SourceIF execptionSource = sourceFactory.newSource(
+						uefCharHandler.getFileName(), uefCharHandler
+								.getLineNumber(uefCommandQueue.peek()
+										.getStartPosition()), uefCharHandler
+								.getColumnNumber(uefCommandQueue.peek()
+										.getStartPosition()), uefCharHandler
+								.getLineNumber(uefCommandQueue.peek()
+										.getEndPosition()), uefCharHandler
+								.getColumnNumber(uefCommandQueue.peek()
+										.getEndPosition()));
+
+				execptionSource.addText(uefCharHandler.getContent(
+						uefCommandQueue.peek().getStartPosition(),
+						uefCommandQueue.peek().getEndPosition()));
+
 				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found within document environment!", null);
+						+ " found within document environment!",
+						execptionSource);
 			}
 			}
 		}
+
 		throw new RexParseException(
 				"End of file reached before \\end{document} found!", null);
 	}
@@ -398,8 +451,18 @@ class UEFCommandHandler {
 				break;
 			}
 			default: {
+				SourceIF execptionSource = sourceFactory.newSource(
+						uefCharHandler.getFileName(), uefCharHandler
+								.getLineNumber(startSource), uefCharHandler
+								.getColumnNumber(startSource), uefCharHandler
+								.getLineNumber(endSource), uefCharHandler
+								.getColumnNumber(endSource));
+
+				execptionSource.addText(uefCharHandler.getContent(startSource,
+						endSource));
+
 				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found within figure environment!", null);
+						+ " found within figure environment!", execptionSource);
 			}
 			}
 		}
@@ -508,9 +571,19 @@ class UEFCommandHandler {
 				// get answers for the problem
 				answers = processAnswers();
 				if (answers == null) {
+					SourceIF execptionSource = sourceFactory.newSource(
+							uefCharHandler.getFileName(), uefCharHandler
+									.getLineNumber(startSource), uefCharHandler
+									.getColumnNumber(startSource),
+							uefCharHandler.getLineNumber(endSource),
+							uefCharHandler.getColumnNumber(endSource));
+
+					execptionSource.addText(uefCharHandler.getContent(
+							startSource, endSource));
+
 					throw new RexParseException(
 							"No answers found within a problem environment.",
-							null);
+							execptionSource);
 				}
 				break;
 			}
@@ -529,8 +602,18 @@ class UEFCommandHandler {
 				break;
 			}
 			default: {
+				SourceIF execptionSource = sourceFactory.newSource(
+						uefCharHandler.getFileName(), uefCharHandler
+								.getLineNumber(startSource), uefCharHandler
+								.getColumnNumber(startSource), uefCharHandler
+								.getLineNumber(endSource), uefCharHandler
+								.getColumnNumber(endSource));
+
+				execptionSource.addText(uefCharHandler.getContent(startSource,
+						endSource));
+
 				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found within problem environment!", null);
+						+ " found within problem environment!", execptionSource);
 			}
 			}
 		}
@@ -670,12 +753,43 @@ class UEFCommandHandler {
 				break;
 			}
 			default: {
+				SourceIF execptionSource = sourceFactory.newSource(
+						uefCharHandler.getFileName(), uefCharHandler
+								.getLineNumber(uefCommandQueue.peek()
+										.getStartPosition()), uefCharHandler
+								.getColumnNumber(uefCommandQueue.peek()
+										.getStartPosition()), uefCharHandler
+								.getLineNumber(uefCommandQueue.peek()
+										.getEndPosition()), uefCharHandler
+								.getColumnNumber(uefCommandQueue.peek()
+										.getEndPosition()));
+
+				execptionSource.addText(uefCharHandler.getContent(
+						uefCommandQueue.peek().getStartPosition(),
+						uefCommandQueue.peek().getEndPosition()));
+
 				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found outside of document environment!", null);
+						+ " found outside of document environment!",
+						execptionSource);
 			}
 			}
 		}
+		SourceIF execptionSource = sourceFactory.newSource(
+				uefCharHandler.getFileName(), uefCharHandler
+						.getLineNumber(uefCommandQueue.peek()
+								.getStartPosition()), uefCharHandler
+						.getColumnNumber(uefCommandQueue.peek()
+								.getStartPosition()), uefCharHandler
+						.getLineNumber(uefCommandQueue.peek()
+								.getEndPosition()), uefCharHandler
+						.getColumnNumber(uefCommandQueue.peek()
+								.getEndPosition()));
+
+		execptionSource.addText(uefCharHandler.getContent(
+				uefCommandQueue.peek().getStartPosition(),
+				uefCommandQueue.peek().getEndPosition()));
+		
 		throw new RexParseException(
-				"End of document before \begin{document} found!", null);
+				"End of document before \begin{document} found!", execptionSource);
 	}
 }
