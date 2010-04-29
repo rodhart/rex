@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<title>edu.udel.cis.cisc475.rex.generate.impl package</title>
+</head>
+<body bgcolor="white">
+
+The Generator module is responsible for generating randomized exams, as
+specified by a master exam and a set of constraints in a configuration.
+
+<h2>Details</h2>
+
+The module makes extensive use of several other modules in order to create
+exams that are subsets of the master exam. Once finished, Generator will
+add to each randomized exam elements in a specific order, in an attempt
+to keep problems of the same topic together, problems referring to the same
+block together, and problems referring to the same figure together.
+Seven container classes aid in the organization of information flowing
+through the module.
+
+@see GeneratorIF
+@see GeneratorFactoryIF
+
+</body>
+</html>
