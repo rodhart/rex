@@ -23,7 +23,8 @@ public class ExamWriter implements ExamWriterIF {
 	/**
 	 * Default constructor
 	 * 
-	 * @param exam an exam object with a preamble, front matter, and problems
+	 * @param exam
+	 *            an exam object with a preamble, front matter, and problems
 	 */
 	public ExamWriter(ExamIF exam) {
 		this.E = exam;
@@ -32,22 +33,31 @@ public class ExamWriter implements ExamWriterIF {
 	/**
 	 * Loops through each exam element and writes it to the PrintWriter object.
 	 * 
-	 * @param out any writer used to output data
+	 * @param out
+	 *            any writer used to output data
 	 * @throws IOException 
 	 *  
 	 */
 	public void write(PrintWriter out) throws IOException {
+		//header info
+		if(E.isMaster())
+			out.println("\\documentclass[master]{exam}");
+		else
+			out.println("\\documentclass{exam}");
+		
 		// output preamble if it exists
 		if(E.preamble()!=null){
 			E.preamble().write(out);
 			out.flush();
-			}
+		}
+		
+		out.println("\\begin{document}");
 		
 		//prints the front matter if it exists
 		if(E.frontMatter()!=null){
 			E.frontMatter().write(out);
 			out.flush();
-			}
+		}
 		
 		// output problems with respective answers
 		for (int i = 0; i < E.elements().toArray().length; i++) {
@@ -56,28 +66,40 @@ public class ExamWriter implements ExamWriterIF {
 			// the following checks what type the current element is
 			// and prints accordingly
 			if (temp instanceof BlockIF) {
+				//casts element type to a BlockIF type
 				BlockIF tempBlockIF = (BlockIF) temp;
+				//prints the block
+				System.out.println("\\begin{block}");
 				tempBlockIF.source().write(out);
+				System.out.println("\\end{block}");
 			} else if (temp instanceof FigureIF) {
+				//casts the element type to a figureIF type
 				FigureIF tempFigureIF = (FigureIF) temp;
+				//makes a new page so the questions and figures fall on the same page
+				out.println("\\newpage");
+				//prints the figure
+				out.println("\\begin{figure}");
 				tempFigureIF.source().write(out);
+				out.println("\\label{fig:" + tempFigureIF.label() + "}");
+				out.println("\\end{figure}");
 			} else if (temp instanceof ProblemIF) {
+				//casts the element type to a problemIF type
 				ProblemIF tempProblem = (ProblemIF) temp;
 				
-				// if there is a required block, print it
-				if (tempProblem.requiredBlock() != null)
-					tempProblem.requiredBlock().source().write(out);
-
 				//prints the question
+				out.println("\\begin{problem}{" + tempProblem.topic() + "}{" + tempProblem.difficulty()+"}");
 				tempProblem.question().write(out);
 				
 				// prints all the answers
+				out.println("\\begin{answers}");
 				for (int index = 0; index < tempProblem.answers().length; index++) {
 					tempProblem.answers()[index].source().write(out);
 				}// end of for loop
-			}//end of if(temp instanceof Problem)
+				out.println("\\end{answers}");
+				out.println("\\end{problem");
+			}// endo of if(temp instanceof Problem)
 			out.flush();
-		}//end of for loop (int i=0; i< E.elements().toArray().length; i++)
+		}// endo of for loop (int i=0; i< E.elements().toArray().length; i++)
 
 		
 		
@@ -86,6 +108,7 @@ public class ExamWriter implements ExamWriterIF {
 			E.finalBlock().source().write(out);
 			out.flush();
 		}
+		out.print("//end{document}");
 		
 	}// end of write(PrintWriter out)
 
