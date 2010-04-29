@@ -41,14 +41,14 @@ public class EcfParser implements EcfParserIF {
   }
 
   public ConfigIF parse(File file) throws IOException, RexUnsatisfiableException, RexParseException {
-    return this.genericInputParse(new ANTLRFileStream(file.toString()));
+    return this.genericInputParse(new ANTLRFileStream(file.toString()), file.toString());
   }
   
   public ConfigIF parseString(String ecfString) throws RexUnsatisfiableException, RexParseException {
-    return this.genericInputParse(new ANTLRStringStream(ecfString));
+    return this.genericInputParse(new ANTLRStringStream(ecfString), "passedAsString");
   }
   
-  public ConfigIF genericInputParse(CharStream stream) throws RexUnsatisfiableException, RexParseException {
+  public ConfigIF genericInputParse(CharStream stream, String filename) throws RexUnsatisfiableException, RexParseException {
     ConfigFactoryIF configFactory = new ConfigFactory();
     ConfigIF config = configFactory.newConfig(pdfOption, numGeneratedExams);
 
@@ -57,7 +57,7 @@ public class EcfParser implements EcfParserIF {
     EcfAntlrParser g = new EcfAntlrParser(tokens);
     
     try {
-      g.ecf(config);
+      g.ecf(config, filename);
     } catch (EcfParserHackException e) {
 			//throw e.releaseTheRex();
 			throw new RexUnsatisfiableException(e.releaseTheRex().getMessage());
