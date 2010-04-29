@@ -447,6 +447,22 @@ class UEFCommandHandler {
 		String topic = command.getArgument(0);
 		String difficulty = command.getArgument(1);
 
+		// List of all references in the problem
+		List<String> refs = new ArrayList<String>();
+
+		// get required block
+		String block = null;
+		String optionalArgument = command.getOptionalArgument();
+		if (optionalArgument != null) {
+			String split[] = optionalArgument.split("=");
+
+			if (split.length == 2) {
+				if (split[0].equals("require")) {
+					refs.add(split[1]);
+				}
+			}
+		}
+
 		// String to be filled with the source content
 		String content;
 
@@ -470,9 +486,6 @@ class UEFCommandHandler {
 		// Array to old answers in.
 		AnswerIF answers[] = null;
 
-		// List of all references in the problem
-		List<String> refs = new ArrayList<String>();
-
 		boolean done = false;
 
 		while (!uefCommandQueue.isEmpty() && !done) {
@@ -493,7 +506,8 @@ class UEFCommandHandler {
 				answers = processAnswers();
 				if (answers == null) {
 					throw new RexParseException(
-							"No answers found within a problem environment.", null);
+							"No answers found within a problem environment.",
+							null);
 				}
 				break;
 			}
@@ -534,7 +548,6 @@ class UEFCommandHandler {
 		problem.setDifficulty(Double.valueOf(difficulty));
 
 		// Add references from answers
-
 		for (int i = 0; i < this.answerReferences.size(); i++) {
 			refs.add(this.answerReferences.get(i));
 		}
