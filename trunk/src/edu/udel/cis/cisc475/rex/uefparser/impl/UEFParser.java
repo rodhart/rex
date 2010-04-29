@@ -524,9 +524,9 @@ public class UEFParser implements UEFParserIF
 	 * 
 	 * @param file
 	 *            the file handler for the uef file.
-	 * @return ExamIF of the uef file.
-	 * @throws RexException
-	 * @throws IOException
+	 * @return ExamIF representation of the UE file.
+	 * @throws RexException if a parsing error occurs.
+	 * @throws IOException if the file cannot be open or read.
 	 */
 	public ExamIF parse(File file) throws RexException, IOException
 	{
