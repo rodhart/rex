@@ -209,7 +209,7 @@ public class Exam implements ExamIF {
 				((Problem) user).setRequiredBlock((BlockIF) usee);
 				
 				if ( ((BlockIF) usee).topic() == null || 
-						((BlockIF) usee).topic() == ((ProblemIF) user).topic()){
+						((BlockIF) usee).topic().equals(((ProblemIF) user).topic())){
 					((Block) usee).setTopic( ((ProblemIF) user).topic());
 				} else {
 					throw new RexException("Cannot change a blocks topic once it is set!");
