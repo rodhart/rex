@@ -4,13 +4,15 @@ import edu.udel.cis.cisc475.rex.err.RexException;
 import edu.udel.cis.cisc475.rex.err.RexParseException;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FixedAnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
-import java.io.EOFException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -181,12 +183,12 @@ public class UEFCommandHandlerTest
 		assertEquals("label 1", problem.label());
 
 		//test the correctness of getting the problem's SourceIF
+		assertEquals("processProblemTestFile.tex", problem.question().filename());
 		assertEquals(2, problem.question().startLine());
 		assertEquals(4, problem.question().lastLine());
 		assertEquals(2, problem.question().startColumn());
 		assertEquals(10, problem.question().lastColumn());
-		assertEquals("Here is the problem question?\\ref{fig1}\n\\label{   label 1   }\nYes here.", problem.
-				question().text());
+		assertEquals("Here is the problem question?\\ref{fig1}\n\\label{   label 1   }\nYes here.", problem.question().text());
 	}
 
 	@Test
@@ -245,7 +247,7 @@ public class UEFCommandHandlerTest
 	 * The likely scenerio is that the needed resource file isn't being found for some reason.
 	 */
 	@Test
-	public void process() throws RexParseException, RexException, IOException
+	public void processTest() throws RexParseException, RexException, IOException
 	{
 		UEFParser parser = new UEFParser();
 
@@ -267,12 +269,111 @@ public class UEFCommandHandlerTest
 
 		assertTrue(exam.isMaster());
 
-		Collection<ProblemIF> problemCollection = exam.problems();
-		ProblemIF problem[] = problemCollection.toArray(new ProblemIF[0]);
-
+		//Test retrieving a figure using it's label
 		FigureIF figure = (FigureIF) exam.elementWithLabel("fig:example topic");
 
+		//check the correctness of the figure
 		assertEquals("fig:example topic", figure.label());
+		assertEquals("exam.tex", figure.source().filename());
+		assertEquals(19, figure.source().startLine());
+		assertEquals(25, figure.source().lastLine());
+		assertEquals(1, figure.source().startColumn());
+		assertEquals(13, figure.source().lastColumn());
+		assertEquals(
+				"\\begin{figure}[placement h]\n  \\begin{center}\n      \\includegraphics[scale=0.50]{binary_tree.png}\n      \\caption{Example Figure}\n      \\label{fig:example topic}\n   \\end{center}\n\\end{figure}", figure.
+				source().text());
+
+
+
+		//Get the problem requiring the figure
+		Collection<ExamElementIF> elementCollection = exam.elementsUsingElement(figure);
+
+		//Convert the problem list to an array
+		ProblemIF problems[] = elementCollection.toArray(new ProblemIF[0]);
+		assertNotNull(problems);
+		
+		//get the only problem
+		ProblemIF problem = problems[0];
+		assertNotNull(problem);
+
+		//get the answer list
+		AnswerIF answer[] = problem.answers();
+		assertNotNull(answer);
+
+		//test the problems first answer
+		assertEquals(true, answer[0].isCorrect());
+		assertEquals("exam.tex", answer[0].source().filename());
+		assertEquals(33, answer[0].source().startLine());
+		assertEquals(33, answer[0].source().lastLine());
+		assertEquals(5, answer[0].source().startColumn());
+		assertEquals(38, answer[0].source().lastColumn());
+		assertEquals("\\answer[correct] correct answer 1",
+					 answer[0].source().text());
+		assertFalse(answer[0] instanceof FixedAnswerIF);
+
+		//test the problems second answer
+		assertEquals(false, answer[1].isCorrect());
+		assertEquals("exam.tex", answer[1].source().filename());
+		assertEquals(34, answer[1].source().startLine());
+		assertEquals(34, answer[1].source().lastLine());
+		assertEquals(5, answer[1].source().startColumn());
+		assertEquals(21, answer[1].source().lastColumn());
+		assertEquals("\\answer answer 2", answer[1].source().text());
+		assertFalse(answer[1] instanceof FixedAnswerIF);
+		
+		//test the problems third answer
+		assertEquals(false, answer[2].isCorrect());
+		assertEquals("exam.tex", answer[2].source().filename());
+		assertEquals(35, answer[2].source().startLine());
+		assertEquals(35, answer[2].source().lastLine());
+		assertEquals(5, answer[2].source().startColumn());
+		assertEquals(34, answer[2].source().lastColumn());
+		assertEquals("\\answer[fixed] fixed answer 3", answer[2].source().text());
+		assertTrue(answer[2] instanceof FixedAnswerIF);
+
+		//test the problems fourth answer
+		assertEquals(true, answer[3].isCorrect());
+		assertEquals("exam.tex", answer[3].source().filename());
+		assertEquals(36, answer[3].source().startLine());
+		assertEquals(36, answer[3].source().lastLine());
+		assertEquals(5, answer[3].source().startColumn());
+		assertEquals(50, answer[3].source().lastColumn());
+		assertEquals("\\answer[correct,fixed] correct fixed answer 4", answer[3].source().text());
+		assertTrue(answer[3] instanceof FixedAnswerIF);
+
+		//assume rest of problems are correct.
+
+		//test the problems topic
+		assertEquals("example topic", problem.topic());
+
+		//test difficulty
+		assertEquals(15.0, problem.difficulty(), 0.0);
+
+		//test label correctness
+		assertEquals(null, problem.label());
+
+		//test the correctness of getting the problem's SourceIF
+		assertEquals("exam.tex", problem.question().filename());
+		assertEquals(30, problem.question().startLine());
+		assertEquals(31, problem.question().lastLine());
+		assertEquals(3, problem.question().startColumn());
+		assertEquals(26, problem.question().lastColumn());
+		assertEquals("This is a problem\n  \\ref{fig:example topic}", problem.question().text());
+
+
+		//retrieve the required block and test it.
+		BlockIF block = problem.requiredBlock();
+
+		assertNotNull(block);
+		assertEquals("example topic", block.label());
+		assertEquals("exam.tex", block.source().filename());
+		assertEquals(14, block.source().startLine());
+		assertEquals(16, block.source().lastLine());
+		assertEquals(1, block.source().startColumn());
+		assertEquals(12, block.source().lastColumn());
+		assertEquals(
+				"\\begin{block}{example topic}\n  This is an example of a block\n\\end{block}",
+				block.source().text());
 
 		//ExamFactoryIF examFactory = new ExamFactory();
 		//SourceFactoryIF sourceFactory = newSource
