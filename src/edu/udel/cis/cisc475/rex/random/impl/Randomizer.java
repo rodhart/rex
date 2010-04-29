@@ -6,12 +6,11 @@ import java.util.Random;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
 
 /**
- * class creates an instance of a random object chooser
- * when called it first creates the seed randomizer
- * then when given a set of objects and a certain number to choose
- * will return the chosen objects
- * the choosing of these objects will be repeatable if given the
- * same seed value
+ * This class creates an instance of a random object chooser.  It creates
+ * a seeded random number generator and is given a number of elements to pick,
+ * along with a range of elements to pick from. It returns the chosen objects.
+ * 
+ * This class will yield repeatable results given a repeated seed.
  * 
  * @author justin
  * @author cardona
@@ -19,14 +18,7 @@ import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
  */
 public class Randomizer implements RandomizerIF {
 
-	// note to self
-	// this constructor is public, so we are not forced into using
-	//the factory
-	//if we put the factory call inside the class then
-	//we could make the default constructor private which would
-	//force the use of the factory
-
-	//private vars
+	// Private variables
 	private Random randnum;
 
 	/**
@@ -37,7 +29,7 @@ public class Randomizer implements RandomizerIF {
 	public	Randomizer (long seed){
 		randnum = new Random();
 		randnum.setSeed(seed);
-	}// end of constructor
+	}// End of constructor
 
 
 
@@ -53,9 +45,9 @@ public class Randomizer implements RandomizerIF {
 	public Object[] choose(int numItems, Object[] items) {
 
 		int index;
-		//holds the original list
+		// Holds the original list
 		ArrayList itemsArray = new ArrayList();
-		//holds the shuffled list
+		// Holds the shuffled list
 		ArrayList shuffledItems  = new ArrayList();
 
 		// If numItems == 0, return an empty array
@@ -64,7 +56,7 @@ public class Randomizer implements RandomizerIF {
 			return emptyArray;
 		}
 		
-		//adds all the items to the arraylist
+		// Adds all the items to the arraylist
 		for(int i=0; i< items.length; i++){
 			itemsArray.add(items[i]);	
 		}
@@ -78,17 +70,17 @@ public class Randomizer implements RandomizerIF {
 		
 		
 		while(shuffledItems.size()!=numItems ){
-			//gets a random number in the array's range
+			// Gets a random number in the array's range
 			index = randnum.nextInt(itemsArray.size());
-			//adds that item to the shuffled list
+			// Adds that item to the shuffled list
 			shuffledItems.add(itemsArray.get(index));
-			//removes that item from the items array
+			// Removes that item from the items array
 			itemsArray.remove(index);
 		}
 
 		index = 0;
 		
-		//returns the shuffled list as an array
+		// Returns the shuffled list as an array
 		return shuffledItems.toArray();
 	}//end of public Object[] choose(int numItems, Object[] items) {
 
