@@ -163,4 +163,28 @@ public class ConfigTest {
 		Assert.assertArrayEquals(versions, C.versionStrings());
 	}
 	
+	/**
+	 * tests the exceptions thrown by the Config class 
+	 * @throws RexParseException 
+	 */
+	@Test
+	public void testExceptions() {
+		try{
+			ConfigIF C = configFactory.newConfig(false, 5);
+			String versions[] = {"test1", "test2", "test3"};
+			C.setVersionStrings(versions);
+		}
+		catch(RexParseException e){
+			assertEquals("Not as many version strings as there are requested versions", e.getMessage());
+		}
+		
+		try{
+			ConfigIF C = configFactory.newConfig(false, 2);
+			String versions[] = {"test1", "test2", "test2"};
+			C.setVersionStrings(versions);
+		}
+		catch(RexParseException e){
+			assertEquals("Cannot have duplicate version strings", e.getMessage());
+		}
+	}
 }

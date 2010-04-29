@@ -117,16 +117,10 @@ public class IntervalTest {
 	 * the desired incorrect input.
 	 * @throws RexUnsatisfiableException
 	 */
-	@Test
+	@Test (expected=RuntimeException.class)
 	public void testExceptions() {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
-		
-		try{
-			intervalFactory.interval(true, 10.0, false, 5.0);
-		}
-		catch (RuntimeException e){
-			assertEquals("The operation you have requested is unsatisfiable.", e.getMessage());
-		}
+		intervalFactory.interval(true, 10.0, false, 5.0);
 	}
 
 
