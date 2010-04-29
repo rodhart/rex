@@ -13,6 +13,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -377,17 +378,63 @@ public class UEFCommandHandlerTest
 				block.source().text());
 
 		//check for problems requiring the following block
-		//We'd check the correctness of the blocks, but their order is random. :'-(
+		//We'd check the correctness of all the problems, but their order is random. :'-(
 		block = (BlockIF) exam.elementWithLabel("logical");
 		elementCollection = exam.elementsUsingElement(block);
-		assertEquals(3, elementCollection.size());
+		problems = elementCollection.toArray(new ProblemIF[0]);
+		assertEquals(3, problems.length);
+		if (problems[0].difficulty() == 8.0)
+		{
+			assertEquals("In MATLAB the value 1 is true, and true is:\n%:type logical", problems[0].question().text());
+		}
+		else if (problems[1].difficulty() == 8.0)
+		{
+			assertEquals("In MATLAB the value 1 is true, and true is:\n%:type logical", problems[1].question().text());
+		}
+		else if (problems[2].difficulty() == 8.0)
+		{
+			assertEquals("In MATLAB the value 1 is true, and true is:\n%:type logical", problems[1].question().text());
+		}
+		else
+		{
+			fail("No matching difficulty found for problem.");
+		}
 
 		//check for problems requiring the following block
-		//We'd check the correctness of the blocks, but their order is random. :'-(
+		//We'd check the correctness of all the problems, but their order is random. :'-(
 		block = (BlockIF) exam.elementWithLabel("matrix matlab");
 		elementCollection = exam.elementsUsingElement(block);
-		assertEquals(4, elementCollection.size());
+		problems = elementCollection.toArray(new ProblemIF[0]);
+		assertEquals(4, problems.length);
 
+		if (problems[0].difficulty() == 4.0)
+		{
+			assertEquals(
+					"Which of the following will extract \\texttt{[5 6 7]} from the matrix m\n  shown?\\\\\n\\texttt{>> m = [3 4 5 6 7 8];\n}\n%\\myans{A}{B}{E}", problems[0].
+					question().text());
+		}
+		else if (problems[1].difficulty() == 4.0)
+		{
+			assertEquals(
+					"Which of the following will extract \\texttt{[5 6 7]} from the matrix m\n  shown?\\\\\n\\texttt{>> m = [3 4 5 6 7 8];\n}\n%\\myans{A}{B}{E}", problems[1].
+					question().text());
+		}
+		else if (problems[2].difficulty() == 4.0)
+		{
+			assertEquals(
+					"Which of the following will extract \\texttt{[5 6 7]} from the matrix m\n  shown?\\\\\n\\texttt{>> m = [3 4 5 6 7 8];\n}\n%\\myans{A}{B}{E}", problems[2].
+					question().text());
+		}
+		else if (problems[3].difficulty() == 4.0)
+		{
+			assertEquals(
+					"Which of the following will extract \\texttt{[5 6 7]} from the matrix m\n  shown?\\\\\n\\texttt{>> m = [3 4 5 6 7 8];\n}\n%\\myans{A}{B}{E}", problems[3].
+					question().text());
+		}
+		else
+		{
+			fail("No matching difficulty found for problem.");
+		}
 
 		//test problems with topic 'function call'
 		elementCollection = exam.elementsWithTopic("function call");
