@@ -4,9 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
 import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
-import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
+import edu.udel.cis.cisc475.rex.config.impl.GroupConstraint;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
@@ -28,7 +27,7 @@ public class GroupConstraintTest {
 	@Test
 	public void testDifficultyInterval() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
@@ -36,7 +35,7 @@ public class GroupConstraintTest {
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		GroupConstraintIF GroupConstraint = configFactory.newGroupConstraint(I, 10, 20, "testing", S);
+		GroupConstraintIF GroupConstraint = new GroupConstraint(I, 10, 20, "testing", S);
 		
 		IntervalIF J = GroupConstraint.difficultyInterval();
 		
@@ -52,7 +51,7 @@ public class GroupConstraintTest {
 	@Test
 	public void testDifficultyInterval2() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		IntervalIF I = intervalFactory.interval(true, 50.5, false, 100.2);
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
@@ -60,7 +59,7 @@ public class GroupConstraintTest {
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		GroupConstraintIF GroupConstraint = configFactory.newGroupConstraint(I, 10, 20, "testing", S);
+		GroupConstraintIF GroupConstraint = new GroupConstraint(I, 10, 20, "testing", S);
 		
 		IntervalIF J = GroupConstraint.difficultyInterval();
 		
@@ -76,7 +75,7 @@ public class GroupConstraintTest {
 	@Test
 	public void testNumProblems() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
@@ -84,7 +83,7 @@ public class GroupConstraintTest {
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		GroupConstraintIF GroupConstraint = configFactory.newGroupConstraint(I, 10, 20, "testing", S);
+		GroupConstraintIF GroupConstraint = new GroupConstraint(I, 10, 20, "testing", S);
 		
 		assertEquals(GroupConstraint.numProblems(), 10);
 	
@@ -96,7 +95,7 @@ public class GroupConstraintTest {
 	@Test
 	public void testNumProblems2() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
@@ -104,7 +103,7 @@ public class GroupConstraintTest {
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		GroupConstraintIF GroupConstraint = configFactory.newGroupConstraint(I, 5555, 20, "testing", S);
+		GroupConstraintIF GroupConstraint = new GroupConstraint(I, 5555, 20, "testing", S);
 		
 		assertEquals(GroupConstraint.numProblems(), 5555);
 	
@@ -116,7 +115,7 @@ public class GroupConstraintTest {
 	@Test
 	public void testSource() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
@@ -124,7 +123,7 @@ public class GroupConstraintTest {
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		GroupConstraintIF GroupConstraint = configFactory.newGroupConstraint(I, 10, 20, "testing", S);
+		GroupConstraintIF GroupConstraint = new GroupConstraint(I, 10, 20, "testing", S);
 		
 		SourceIF F = GroupConstraint.source();
 		
@@ -138,7 +137,7 @@ public class GroupConstraintTest {
 	@Test
 	public void testSource2() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText2.txt";
@@ -147,7 +146,7 @@ public class GroupConstraintTest {
 		
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		GroupConstraintIF GroupConstraint = configFactory.newGroupConstraint(I, 10, 20, "testing", S);
+		GroupConstraintIF GroupConstraint = new GroupConstraint(I, 10, 20, "testing", S);
 		
 		SourceIF F = GroupConstraint.source();
 		
@@ -161,7 +160,7 @@ public class GroupConstraintTest {
 	@Test
 	public void testPoints() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
@@ -169,7 +168,7 @@ public class GroupConstraintTest {
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		GroupConstraintIF GroupConstraint = configFactory.newGroupConstraint(I, 10, 20, "testing", S);
+		GroupConstraintIF GroupConstraint = new GroupConstraint(I, 10, 20, "testing", S);
 		
 		assertEquals(GroupConstraint.points(), 20);
 	
@@ -181,7 +180,7 @@ public class GroupConstraintTest {
 	@Test
 	public void testPoints2() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
@@ -189,7 +188,7 @@ public class GroupConstraintTest {
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		GroupConstraintIF GroupConstraint = configFactory.newGroupConstraint(I, 10, 20222, "testing", S);
+		GroupConstraintIF GroupConstraint = new GroupConstraint(I, 10, 20222, "testing", S);
 		
 		assertEquals(GroupConstraint.points(), 20222);
 	
@@ -201,7 +200,7 @@ public class GroupConstraintTest {
 	@Test
 	public void testTopic() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
@@ -209,7 +208,7 @@ public class GroupConstraintTest {
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		GroupConstraintIF GroupConstraint = configFactory.newGroupConstraint(I, 10, 20, "testing", S);
+		GroupConstraintIF GroupConstraint =new GroupConstraint(I, 10, 20, "testing", S);
 		
 		assertEquals(GroupConstraint.topic(), "testing");
 	
@@ -221,7 +220,7 @@ public class GroupConstraintTest {
 	@Test
 	public void testTopic2() throws RexUnsatisfiableException {
 		IntervalFactoryIF intervalFactory = new IntervalFactory();
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
@@ -229,47 +228,9 @@ public class GroupConstraintTest {
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		GroupConstraintIF GroupConstraint = configFactory.newGroupConstraint(I, 10, 20, "-8test33ing2", S);
+		GroupConstraintIF GroupConstraint = new GroupConstraint(I, 10, 20, "-8test33ing2", S);
 		
 		assertEquals(GroupConstraint.topic(), "-8test33ing2");
 	
-	}
-	
-	/**
-	 * Tests that the factory method throws the correct exceptions given
-	 * the desired incorrect input.
-	 * @throws RexUnsatisfiableException
-	 */
-	@Test
-	public void testExceptions() throws RexUnsatisfiableException {
-		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
-		
-		SourceFactoryIF sourceFactory = new SourceFactory();
-		SourceIF S = sourceFactory.newSource(filename);
-		
-		IntervalFactoryIF intervalFactory = new IntervalFactory();
-		IntervalIF I = intervalFactory.interval(false, 5.0, true, 10.0);
-		
-		ConfigFactoryIF configFactory = new ConfigFactory();
-		try{
-			configFactory.newGroupConstraint(null, 10, 20, "-8test33ing2", S);
-		}
-		catch(Exception e){
-			assertEquals("argument 'difficulty' cannot be null", e.getMessage());
-		}
-		
-		try{
-			configFactory.newGroupConstraint(I, 10, 20, null, S);
-		}
-		catch(Exception e){
-			assertEquals("argument 'topic' cannot be null", e.getMessage());
-		}
-		
-		try{
-			configFactory.newGroupConstraint(I, 10, 20, "-8test33ing2", null);
-		}
-		catch(Exception e){
-			assertEquals("argument 'source' cannot be null", e.getMessage());
-		}
 	}
 }

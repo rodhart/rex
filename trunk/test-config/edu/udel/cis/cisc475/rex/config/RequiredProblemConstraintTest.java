@@ -3,9 +3,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
-import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
+import edu.udel.cis.cisc475.rex.config.impl.RequiredProblemConstraint;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
@@ -25,11 +24,11 @@ public class RequiredProblemConstraintTest {
 	public void testLabel() {
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		RequiredProblemConstraintIF RequiredProblemConstraint = configFactory.newRequiredProblemConstraint("testing", 10, S);
+		RequiredProblemConstraintIF RequiredProblemConstraint = new RequiredProblemConstraint("testing", 10, S);
 		
 		assertEquals(RequiredProblemConstraint.label(), "testing");
 	
@@ -42,11 +41,11 @@ public class RequiredProblemConstraintTest {
 	public void testLabel2() {
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		RequiredProblemConstraintIF RequiredProblemConstraint = configFactory.newRequiredProblemConstraint("32423testing000", 10, S);
+		RequiredProblemConstraintIF RequiredProblemConstraint = new RequiredProblemConstraint("32423testing000", 10, S);
 		
 		assertEquals(RequiredProblemConstraint.label(), "32423testing000");
 	
@@ -59,11 +58,11 @@ public class RequiredProblemConstraintTest {
 	public void testPoints() {
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		RequiredProblemConstraintIF RequiredProblemConstraint = configFactory.newRequiredProblemConstraint("32423testing000", 10, S);
+		RequiredProblemConstraintIF RequiredProblemConstraint = new RequiredProblemConstraint("32423testing000", 10, S);
 		
 		assertEquals(RequiredProblemConstraint.points(), 10);
 	
@@ -76,11 +75,11 @@ public class RequiredProblemConstraintTest {
 	public void testPoints2() {
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		RequiredProblemConstraintIF RequiredProblemConstraint = configFactory.newRequiredProblemConstraint("32423testing000", 999310, S);
+		RequiredProblemConstraintIF RequiredProblemConstraint = new RequiredProblemConstraint("32423testing000", 999310, S);
 		
 		assertEquals(RequiredProblemConstraint.points(), 999310);
 	
@@ -93,11 +92,11 @@ public class RequiredProblemConstraintTest {
 	public void testSource() {
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		RequiredProblemConstraintIF RequiredProblemConstraint = configFactory.newRequiredProblemConstraint("32423testing000", 999310, S);
+		RequiredProblemConstraintIF RequiredProblemConstraint = new RequiredProblemConstraint("32423testing000", 999310, S);
 		
 		SourceIF F	= RequiredProblemConstraint.source();
 		
@@ -112,11 +111,11 @@ public class RequiredProblemConstraintTest {
 	public void testSource2() {
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText2.txt";
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		RequiredProblemConstraintIF RequiredProblemConstraint = configFactory.newRequiredProblemConstraint("32423testing000", 999310, S);
+		RequiredProblemConstraintIF RequiredProblemConstraint = new RequiredProblemConstraint("32423testing000", 999310, S);
 		
 		SourceIF F	= RequiredProblemConstraint.source();
 		
@@ -136,16 +135,16 @@ public class RequiredProblemConstraintTest {
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		try{
-			configFactory.newRequiredProblemConstraint(null, 999310, S);
+			new RequiredProblemConstraint(null, 999310, S);
 		}
 		catch(Exception e){
 			assertEquals("argument 'label' cannot be null", e.getMessage());
 		}
 		
 		try{
-			configFactory.newRequiredProblemConstraint("32423testing000", 999310, null);
+			new RequiredProblemConstraint("32423testing000", 999310, null);
 		}
 		catch(Exception e){
 			assertEquals("argument 'source' cannot be null", e.getMessage());
