@@ -241,6 +241,36 @@ public class UEFCommandHandlerTest
 				figure.source().text());
 	}
 
+	@Test
+	public void negativeTest() throws RexParseException, RexException, IOException
+	{
+		UEFParser parser = new UEFParser();
+
+		//Open the file to parse.
+		File file = new File("." + File.separator + "examples" + File.separator + "exam.tex");
+		parser.parseForAllCommands(file);
+
+		//get a reference to the handler to allow direct calls to the process methods of the handler
+		UEFCommandHandler handler = parser.getUEFCommandHandler();
+
+		try
+		{
+			handler.processDocument();
+		}
+		catch (RexParseException e)
+		{
+			assertTrue(true);
+		}
+		try
+		{
+			handler.processAnswers();
+		}
+		catch (RexParseException e)
+		{
+			assertTrue(true);
+		}
+	}
+
 	/**
 	 * Tests that process() returns a correct ExamIF after reading in a valid UEF file.
 	 *
@@ -393,7 +423,7 @@ public class UEFCommandHandlerTest
 		}
 		else if (problems[2].difficulty() == 8.0)
 		{
-			assertEquals("In MATLAB the value 1 is true, and true is:\n%:type logical", problems[1].question().text());
+			assertEquals("In MATLAB the value 1 is true, and true is:\n%:type logical", problems[2].question().text());
 		}
 		else
 		{
@@ -457,16 +487,5 @@ public class UEFCommandHandlerTest
 		assertEquals(
 				"Consider the function f:\n  \\begin{verbatim}\n    function answer = f(a)\n    answer = a+2;\n    end\n  \\end{verbatim}\n  What will be in x after the command:\n  \\begin{verbatim}>> x = f(4);\n  \\end{verbatim}\n%:type function call", problem2.
 				question().text());
-
-		//assertEquals("Which expression tests whether\n  variable x is between (but not the same as) the values 5 and 10.\n%:type  logical", problems[2].question().text());
-
-		//ExamFactoryIF examFactory = new ExamFactory();
-		//SourceFactoryIF sourceFactory = newSource
-
-		//SourceIF source =
-
-		//AnswerIF answer1 = new ExamFactory().newAnswer(true, null);
-
-		//assertEquals(15,problem[0].difficulty(),0);
 	}
 }
