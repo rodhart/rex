@@ -6,6 +6,10 @@ public class RexParseException extends RexException {
 
 	/**
 	 * @author Zach Hine
+	 * 
+	 * A Rex Exception signifying faulty input to Rex. In addition
+	 * to a String, can take a Source (to more accurately pinpoint
+	 * the bad input).
 	 */
 
 	private static final long serialVersionUID = 1L;

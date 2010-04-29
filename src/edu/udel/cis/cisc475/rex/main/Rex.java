@@ -25,6 +25,14 @@ import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserFactoryIF;
 import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserIF;
 import edu.udel.cis.cisc475.rex.uefparser.impl.UEFParserFactory;
 
+/**
+ * @author Keith McLoughlin
+ *
+ * Main class of Rex program; takes and parses input given
+ * on the command line. Tailors the use of the program to the user's
+ * specified request (see printUsage() below).
+ */
+
 public class Rex {
 
 	public static void main(String[] args) throws IOException {
@@ -152,9 +160,11 @@ public class Rex {
 		/*
 		 
 		 */
-		for (i = 0; i < numExams; i++) {
-
-		}
+		//This looks out of date; commenting out for now. -Greg
+		
+//		for (i = 0; i < numExams; i++) {
+//
+//		}
 		/*
 		 * Set up output files and file streams
 		 */
