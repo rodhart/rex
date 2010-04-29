@@ -47,7 +47,13 @@ public class ExamWriterTest {
     @Test
     public void testPrintBlockIF() throws IOException {
     	Exam e = new Exam(true);	
-    	String testString = "test string";
+    	String testString = "test string";    	
+    	String testString2 = "\\documentclass[master]{exam}\n" +
+    			"\\begin{document}\n" +
+    			"\\begin{block}\n" +
+    			"test string\n" +
+    			"\\end{block}\n" +
+    			"\\end{document}";
 		
     	//adds the block element   
 		Source testSource = new Source("test file");
@@ -84,17 +90,16 @@ public class ExamWriterTest {
 		}
     	DataInputStream dataInput = new DataInputStream(fileInput);
     	
-    	String testData = "";
-    	try {
-			testData = dataInput.readLine();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+    	String line = "";
+		StringBuffer testData = new StringBuffer();
+		while((line = dataInput.readLine()) != null){
+			testData.append(line);
+			testData.append("\n");
+			}
     	
 		//checks if the saved testData is the same as the 
 		//testString that was stored in a block
-		assertEquals(testData.compareTo(testString), 0);
+		assertEquals(testData.toString().compareTo(testString2), 0);
     }
     
     
