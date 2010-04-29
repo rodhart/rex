@@ -3,9 +3,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import edu.udel.cis.cisc475.rex.config.IF.ConfigFactoryIF;
 import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
-import edu.udel.cis.cisc475.rex.config.impl.ConfigFactory;
+import edu.udel.cis.cisc475.rex.config.impl.Constraint;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
@@ -25,11 +24,11 @@ public class ConstraintTest {
 	public void testSource() {
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText.txt";
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		ConstraintIF Constraint = configFactory.newConstraint(S);
+		ConstraintIF Constraint = new Constraint(S);
 		
 		SourceIF F	= Constraint.source();
 		
@@ -44,11 +43,11 @@ public class ConstraintTest {
 	public void testSource2() {
 		
 		String filename = "./trunk/test-config/edu/udel/cis/cisc475/rex/config/ExampleText2.txt";
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		SourceFactoryIF sourceFactory = new SourceFactory();
 		SourceIF S = sourceFactory.newSource(filename);
 		
-		ConstraintIF Constraint = configFactory.newConstraint(S);
+		ConstraintIF Constraint = new Constraint(S);
 		
 		SourceIF F	= Constraint.source();
 		
@@ -63,9 +62,9 @@ public class ConstraintTest {
 	 */
 	@Test
 	public void testExceptions() {
-		ConfigFactoryIF configFactory = new ConfigFactory();
+		
 		try{
-			configFactory.newConstraint(null);
+			
 		}
 		catch(Exception e){
 			assertEquals("argument 'label' cannot be null", e.getMessage());
