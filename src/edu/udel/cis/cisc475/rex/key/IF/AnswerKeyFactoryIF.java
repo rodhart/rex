@@ -10,7 +10,7 @@ package edu.udel.cis.cisc475.rex.key.IF;
 public interface AnswerKeyFactoryIF {
 
 	/**
-	 * constructor initiallizes the answer key
+	 * constructor initializes the answer key
 	 * and sets all the initial variable
 	 * there are no answers loaded at this time
 	 * so the collection is initialized but is empty
