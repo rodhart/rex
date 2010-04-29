@@ -75,6 +75,11 @@ class UEFCharHandler {
 		this.fileName = file.getName();
 	}
 
+	/**
+	 * Checks whether we are at a whitespace.
+	 * @return True if we are at a white space. False otherwise.
+	 * @throws EOFException if we are at or past the end o the file.
+	 */
 	boolean isWhiteSpace() throws EOFException {
 
 		if (position < fileContents.length()) {
@@ -90,6 +95,11 @@ class UEFCharHandler {
 		}
 	}
 
+	/**
+	 * Checks whether we are at a line break.
+	 * @return True if we are at a line break. False otherwise.
+	 * @throws EOFException if we are at or past the end of the file.
+	 */
 	boolean isLineBreak() throws EOFException {
 		if (position < fileContents.length()) {
 			char ch = fileContents.charAt(position);
@@ -135,6 +145,10 @@ class UEFCharHandler {
 		}
 	}
 
+	/**
+	 * Checks whether we are at the end of the file. Returns true if we are and false otherwise.
+	 * @return true if we are at the end of the file. False otherwise.
+	 */
 	boolean eof() {
 		if (position < fileContents.length()) {
 			return false;
