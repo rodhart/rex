@@ -69,9 +69,9 @@ public class ExamWriter implements ExamWriterIF {
 				//casts element type to a BlockIF type
 				BlockIF tempBlockIF = (BlockIF) temp;
 				//prints the block
-				System.out.println("\\begin{block}");
+				out.println("\\begin{block}");
 				tempBlockIF.source().write(out);
-				System.out.println("\\end{block}");
+				out.println("\\end{block}");
 			} else if (temp instanceof FigureIF) {
 				//casts the element type to a figureIF type
 				FigureIF tempFigureIF = (FigureIF) temp;
@@ -108,7 +108,7 @@ public class ExamWriter implements ExamWriterIF {
 			E.finalBlock().source().write(out);
 			out.flush();
 		}
-		out.print("//end{document}");
+		out.print("\\end{document}");
 		
 	}// end of write(PrintWriter out)
 
