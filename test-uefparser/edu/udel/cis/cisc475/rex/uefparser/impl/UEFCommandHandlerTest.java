@@ -375,6 +375,21 @@ public class UEFCommandHandlerTest
 				"\\begin{block}{example topic}\n  This is an example of a block\n\\end{block}",
 				block.source().text());
 
+		//check for problems requiring the following block
+		//We'd check the correctness of the blocks, but their order is random. :'-(
+		block = (BlockIF)exam.elementWithLabel("logical");
+		elementCollection = exam.elementsUsingElement(block);
+		assertEquals(3, elementCollection.size());
+
+		//check for problems requiring the following block
+		//We'd check the correctness of the blocks, but their order is random. :'-(
+		block = (BlockIF)exam.elementWithLabel("matrix matlab");
+		elementCollection = exam.elementsUsingElement(block);
+		assertEquals(4, elementCollection.size());
+
+
+		//assertEquals("Which expression tests whether\n  variable x is between (but not the same as) the values 5 and 10.\n%:type  logical", problems[2].question().text());
+
 		//ExamFactoryIF examFactory = new ExamFactory();
 		//SourceFactoryIF sourceFactory = newSource
 
