@@ -33,23 +33,7 @@ public class ExamWriterTest {
 	ExamFactoryIF examFactory;
 	OutputFactoryIF examWriterFactory;
 	SourceFactoryIF sourceFactory;
-	
-   
-    
-    
-    
-    
-    
-    
-    
-    
 /*    
-    
-    
-    
-    
-    
-    
     @Test
     public void testPrintFigureIF() throws IOException {
     	Exam e = new Exam(true);	
@@ -507,14 +491,13 @@ public class ExamWriterTest {
 
 
 /* tested block output if block is multiple lines
- * and test preamble
+ * and test figure
+ * and is master is false
  */
 @Test
 public void testPrintBlockIF13() throws IOException {
 	Exam e = new Exam(false);	
-	String testString = "inside the block";
 	String testString3 = "inside the figure";
-	
 	String testString2 = "\\documentclass{exam}" + "\n" +
 	"\\begin{document}" + "\n" +    	
 	"\\newpage" + "\n" +
@@ -522,25 +505,11 @@ public void testPrintBlockIF13() throws IOException {
 	"inside the figure" + "\n" +
 	"\\label{fig:" + "test topic" + "}" + "\n" +
 	"\\end{figure}" + "\n" +
-	"\\begin{block}" + "\n" +
-	"inside the block" + "\n" +
-	"\\end{block}" + "\n" +
-
-	
 	"\\end{document}" + "\n";
-	
-
-	
 	
 	//adds the figure element   
 	Source testSource2 = new Source("test file");
 	testSource2.addText(testString3);
-
-	Source testSource = new Source("test file");
-	testSource.addText(testString);
-	Block blockTest = new Block("test topic", testSource );
-	e.addElement(blockTest);
-
 	Figure figureTest = new Figure("test topic", testSource2 );
 	e.addElement(figureTest);
 
@@ -570,14 +539,101 @@ public void testPrintBlockIF13() throws IOException {
 		testData.append(line);
 		testData.append("\n");
 		}
-	System.out.println(testData);
-
-	System.out.println(testString2);
-
+//	System.out.println(testData);
+//	System.out.println(testString2);
 	//checks if the saved testData is the same as the 
 	//testString that was stored in a block
 	assertEquals(testData.toString().compareTo(testString2), 0);
 }    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* tested problem output if multiple lines
+ * and is master is false
+ */
+@Test
+public void testPrintBlockIF15() throws IOException {
+	Exam e = new Exam(false);	
+	String testString = "inside the problem";
+	
+	String testString2 = "\\documentclass{exam}" + "\n" +
+	"\\begin{document}" + "\n" +    	
+	"\\begin{problem}{topic}{0.0}" + "\n" + "\n" +
+	"\\begin{answers}" + "\n" +
+	"this is the answer 1" + "\n" +
+	"this is the answer 2" + "\n" +
+	"\\end{answers}" + "\n" +
+	"\\end{problem}" + "\n" +
+	"\\end{document}" + "\n";
+	
+	//adds the block element   
+	Source testSource = new Source("test file");
+//	testSource.addText(testString);
+
+	//creates an answer array
+	Source ans1Source = new Source("ans1");
+	ans1Source.addText("this is the answer 1");
+	Answer ans1 = new Answer(true,ans1Source);
+	Source ans2Source = new Source("ans2");
+	ans2Source.addText("this is the answer 2");
+	Answer ans2 = new Answer(true,ans2Source);
+	Answer[] answerArray = {ans1, ans2};
+	ProblemIF problemTest = new ProblemStub("topic", "label" ,testSource, answerArray);
+	e.addElement(problemTest);
+	
+	//creates an exam writer
+	ExamWriter ew = new ExamWriter(e);
+	String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test.txt";
+	PrintWriter pw = null;
+	try {
+		pw = new PrintWriter(new FileWriter(filename));
+	} catch (IOException e2) {
+		// TODO Auto-generated catch block
+		e2.printStackTrace();
+	}
+	//the examWriter writes out to the printwriter
+	try {
+		ew.write(pw);
+	} catch (IOException e2) {
+		// TODO Auto-generated catch block
+		e2.printStackTrace();
+	}
+	File aFile = new File(filename);
+	BufferedReader input = new BufferedReader(new FileReader(aFile));
+	String line = "";
+	StringBuffer testData = new StringBuffer();
+	while((line = input.readLine()) != null){
+		testData.append(line);
+		testData.append("\n");
+		}
+	System.out.println(testData);
+	System.out.println(testString2);
+	//checks if the saved testData is the same as the 
+	//testString that was stored in a block
+	assertEquals(testData.toString().compareTo(testString2), 0);
+}    
+
+
 
 }//end of class
 
