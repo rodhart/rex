@@ -10,6 +10,7 @@ import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.ecfparser.IF.EcfParserFactoryIF;
 import edu.udel.cis.cisc475.rex.ecfparser.IF.EcfParserIF;
 import edu.udel.cis.cisc475.rex.ecfparser.impl.EcfParserFactory;
+import edu.udel.cis.cisc475.rex.err.RexException;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorFactoryIF;
@@ -26,7 +27,7 @@ import edu.udel.cis.cisc475.rex.uefparser.impl.UEFParserFactory;
 
 public class Rex {
 
-	public static void main(String[] args) throws RexUnsatisfiableException, Exception {
+	public static void main(String[] args) throws IOException {
 
 		int numArgs = args.length;
 		long seed = 1;
@@ -37,11 +38,13 @@ public class Rex {
 		/*
 		 * Test Usage
 		 */
-		if (numArgs < 3) {
+		System.out.println("args = " + numArgs);
+		if (numArgs < 2) {
 			printUsage();
+			System.out.println("NOT ENOUGH ARGS! "+ numArgs);
 			System.exit(-1);
 		}
-		int i = 1;
+		int i = 0;
 		/*
 		 * Parse command line
 		 */
@@ -63,6 +66,7 @@ public class Rex {
 			/*
 			 * Test for -pdf option and set boolean pdfOpt
 			 */
+			
 			else if (!pdfOpt && args[i].equals("-pdf")) {
 				pdfOpt = true;
 				i++;
@@ -73,20 +77,17 @@ public class Rex {
 			else {
 				System.err.println(args[i] + " is not a valid option!");
 				printUsage();
+
+				System.out.println("opts loop");
 				System.exit(-1);
 			}
 		}
 		/*
 		 * Make sure the UEF input file is a .tex file
 		 */
-		if (args[numArgs - 2].contains(".tex")) {
+		
 			uef = new File(args[numArgs - 2]);
-		} else {
-			System.err.println(args[numArgs - 2] + " does not appear to"
-					+ "be a valid .tex file!");
-			printUsage();
-			System.exit(-1);
-		}
+		
 		/*
 		 * Make sure the ECF input file is a .ecf file
 		 */
@@ -104,22 +105,42 @@ public class Rex {
 		 */
 		EcfParserFactoryIF theEcfParserFactory = new EcfParserFactory();
 		EcfParserIF theEcfParser = theEcfParserFactory.newParser(numExams);
-		ConfigIF theConfig = theEcfParser.parse(ecf);
+		ConfigIF theConfig = null;
+		try{
+		theConfig = theEcfParser.parse(ecf);
+	}
+	catch(Exception e){
+		e.printStackTrace();
+		System.exit(3);
+	}
 		/*
 		 * Create an UefParserFactory Get a new parser Parse the UEF to get
 		 * theMaster
 		 */
 		UEFParserFactoryIF theUefParserFactory = new UEFParserFactory();
 		UEFParserIF theUefParser = theUefParserFactory.newUEFParser();
-		ExamIF theMaster = theUefParser.parse(uef);
+		ExamIF theMaster = null;
+		try{
+			theMaster = theUefParser.parse(uef);
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				System.exit(3);
+			}
 		/*
 		 * Create the GeneratorFactory Create the Generator
 		 */
+		GeneratorIF theGenerator = null;
 		GeneratorFactoryIF theGeneratorFactory = new GeneratorFactory();
-
-		GeneratorIF theGenerator = theGeneratorFactory.newGenerator(theMaster,
+		try{
+		theGenerator = theGeneratorFactory.newGenerator(theMaster,
 				theConfig);
-
+		}
+		catch(RexException e){
+			e.printStackTrace();
+			System.exit(1);
+			
+		}
 		// TODO Write an appropriate error.
 
 		/*
@@ -156,7 +177,7 @@ public class Rex {
 			/*
 			 * Fill the containers with the generated material
 			 */
-
+			
 			theExams[i] = theGenerator.getGeneratedExam(i);
 			theAnswerKeys[i] = theGenerator.getAnswerKey(i);
 
@@ -176,7 +197,8 @@ public class Rex {
 			} catch (Exception e) {
 				System.err.println("Error creating "
 						+ theLatexFiles[i].getAbsolutePath());
-				e.printStackTrace();
+				e.toString();
+				System.exit(4);
 			}
 			/*
 			 * create the key(i).txt file on the file system
@@ -187,7 +209,8 @@ public class Rex {
 			} catch (Exception e) {
 				System.err.println("Error creating "
 						+ theKeyFiles[i].getAbsolutePath());
-				e.printStackTrace();
+				e.toString();
+				System.exit(4);
 			}
 			/*
 			 * Create the PrintWriters from the newly created files
@@ -221,14 +244,19 @@ public class Rex {
 			theLatexWriters[i].close();
 			theKeyWriters[i].close();
 		}
-
+		if(pdfOpt){
+			//call pdflatex on each exam
+			//for(int j = 0; j < numExams; j++){}
+			
+			
+		}
 		printCompletionMessage(pdfOpt);
 	}
 
 	private static void printUsage() {
 
 		System.err
-				.println("Usage: rex [options] <UEF filename> <ECF filename>");
+				.println("Usage: java -jar REX.jar [options] <UEF filename> <ECF filename>");
 		System.err.println("Options: ");
 		System.err.println("    -n numExams : int numExams declares"
 				+ " number of exams");
