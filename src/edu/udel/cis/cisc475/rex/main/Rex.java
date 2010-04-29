@@ -35,7 +35,12 @@ import edu.udel.cis.cisc475.rex.uefparser.impl.UEFParserFactory;
 
 public class Rex {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException
+	{
+		process(args);
+	}
+	
+	protected static int process(String[] args) throws IOException {
 
 		int numArgs = args.length;
 		long seed = 1;
@@ -50,7 +55,7 @@ public class Rex {
 		if (numArgs < 2) {
 			printUsage();
 			System.out.println("NOT ENOUGH ARGS! "+ numArgs);
-			System.exit(-1);
+			return -1;
 		}
 		int i = 0;
 		/*
@@ -87,26 +92,17 @@ public class Rex {
 				printUsage();
 
 				System.out.println("opts loop");
-				System.exit(-1);
+				return -1;
 			}
 		}
-		/*
-		 * Make sure the UEF input file is a .tex file
-		 */
+	
 		
 			uef = new File(args[numArgs - 2]);
 		
-		/*
-		 * Make sure the ECF input file is a .ecf file
-		 */
-		if (args[numArgs - 1].contains(".ecf")) {
+		
 			ecf = new File(args[numArgs - 1]);
-		} else {
-			System.err.println(args[numArgs - 2] + " does not appear to"
-					+ "be a valid .ecf file!");
-			printUsage();
-			System.exit(-1);
-		}
+		
+	
 		/*
 		 * Create an EcfParserFactory Get a new parser Parse the ECF to get
 		 * theConfig
@@ -119,7 +115,7 @@ public class Rex {
 	}
 	catch(Exception e){
 		e.printStackTrace();
-		System.exit(3);
+		return 3;
 	}
 		/*
 		 * Create an UefParserFactory Get a new parser Parse the UEF to get
@@ -133,7 +129,7 @@ public class Rex {
 			}
 			catch(Exception e){
 				e.printStackTrace();
-				System.exit(3);
+				return 3;
 			}
 		/*
 		 * Create the GeneratorFactory Create the Generator
@@ -146,7 +142,7 @@ public class Rex {
 		}
 		catch(RexException e){
 			e.printStackTrace();
-			System.exit(1);
+			return 1;
 			
 		}
 		// TODO Write an appropriate error.
@@ -208,7 +204,7 @@ public class Rex {
 				System.err.println("Error creating "
 						+ theLatexFiles[i].getAbsolutePath());
 				e.toString();
-				System.exit(4);
+				return 4;
 			}
 			/*
 			 * create the key(i).txt file on the file system
@@ -220,7 +216,7 @@ public class Rex {
 				System.err.println("Error creating "
 						+ theKeyFiles[i].getAbsolutePath());
 				e.toString();
-				System.exit(4);
+				return 4;
 			}
 			/*
 			 * Create the PrintWriters from the newly created files
@@ -261,6 +257,7 @@ public class Rex {
 			
 		}
 		printCompletionMessage(pdfOpt);
+		return 0;
 	}
 
 	private static void printUsage() {
