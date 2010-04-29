@@ -451,13 +451,16 @@ class UEFCommandHandler {
 		List<String> refs = new ArrayList<String>();
 
 		// get required block
-		String block = null;
 		String optionalArgument = command.getOptionalArgument();
 		if (optionalArgument != null) {
 			String split[] = optionalArgument.split("=");
 
 			if (split.length == 2) {
 				if (split[0].equals("require")) {
+					// check for typoed requires
+					refs.add(split[1]);
+				} else if (split[0].equals("requires")) {
+					// check for correct requires
 					refs.add(split[1]);
 				}
 			}
