@@ -275,4 +275,6 @@ public class GeneratorTest {
 		
 		GeneratorIF generator1 = generatorFactory.newGenerator(master1, config1);
 	}
+	
+	//public void test
 }
