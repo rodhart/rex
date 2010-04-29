@@ -4,7 +4,9 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /**
- * A class implementing the factory method for Source
+ * A class implementing the factory method for SourceFactoryIF and is
+ * used to create an instance of SourceFactory.  Allows for the instantiation 
+ * of a SourceIF object.
  * 
  * @author jsong
  *

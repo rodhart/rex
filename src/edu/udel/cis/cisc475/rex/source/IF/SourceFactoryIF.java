@@ -1,7 +1,7 @@
 package edu.udel.cis.cisc475.rex.source.IF;
 
 /**
- * Interface for SourceFactory class
+ * Factory class for creating objects of type SourceIF
  * 
  * @author cardona
  *
