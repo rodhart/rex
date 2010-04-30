@@ -401,7 +401,7 @@ class UEFCommandHandler
 		int startSource = command.getStartPosition();
 		int endSource = 0;
 
-		//process until either the queue is empty or we hit an endAnswers command.
+		//process until either the queue is empty or we hit an endBlock command.
 		while (!uefCommandQueue.isEmpty())
 		{
 			//check the command type.
@@ -673,6 +673,8 @@ class UEFCommandHandler
 				}
 				case endFigure:
 				{
+					//found the endFigure command.
+
 					// use the end of the endFigure command as the end source.
 					endSource = uefCommandQueue.peek().getEndPosition();
 
@@ -756,24 +758,37 @@ class UEFCommandHandler
 
 	/**
 	 * Process the problem environment and commands found within.
+	 * This includes processing of answer environments, /label commands, and /ref commands.
+	 *
+	 * @return A ProblemIF representation of the problem environment.
+	 *
+	 * @throws RexParseException if there is problem with the correctness of the file.
+	 *
+	 * @throws EOFException if we are somehow out of bounds when reading the underlying file
+	 * to fill out the SourceIF. This should NEVER occur.
 	 */
 	ProblemIF processProblem() throws RexParseException, EOFException
 	{
-		// pull this command off the stack
+		// pop this command off the queue.
 		UEFCommand command = uefCommandQueue.poll();
 
+		//get the topic.
 		String topic = command.getArgument(0);
+
+		//get the difficulty.
 		String difficulty = command.getArgument(1);
 
-		// List of all references in the problem
+		// List of all references found within this problem environment.
 		List<String> refs = new ArrayList<String>();
 
 		// get required block
 		String optionalArgument = command.getOptionalArgument();
 		if (optionalArgument != null)
 		{
+			//split the argument by the equals found within.
 			String split[] = optionalArgument.split("=");
 
+			//make sure it was of correct length.
 			if (split.length == 2)
 			{
 				if (split[0].equals("require"))
@@ -794,6 +809,7 @@ class UEFCommandHandler
 
 		// Variables to hold the beginning and end of the source
 		int startSource = command.getEndPosition();// use the end of this
+		int endSource = 0;
 
 		// Ignore whitespaces and lines at the beginning of the question,
 		// because latex
@@ -804,119 +820,163 @@ class UEFCommandHandler
 			startSource++;
 		}
 
-		// command
-		int endSource = 0;
-
+		// The possible problem label.
 		String label = null;
 
-		// Array to old answers in.
+		// Array to hold answers in.
 		AnswerIF answers[] = null;
 
-		boolean done = false;
-
-		while (!uefCommandQueue.isEmpty() && !done)
+		//process until either the queue is empty or we hit an endProblem command.
+		while (!uefCommandQueue.isEmpty())
 		{
+			//check the command type.
 			switch (uefCommandQueue.peek().getType())
 			{
 				case beginAnswers:
 				{
-					// use the beginning of the other command as the end source
+					//found the beginAnswers command.
+
+					// use the beginning of the other command as the end source.
 					endSource = uefCommandQueue.peek().getStartPosition();
 
-					// Ignore whitespaces and lines at the end of question,
-					// because
-					// latex
-					// does.
+					// Ignore whitespaces and lines at the end of question because latex does.
 					while (uefCharHandler.read(endSource - 1) == '\n' || uefCharHandler.read(endSource - 1) == ' ' || uefCharHandler.read(
 							endSource - 1) == '\t')
 					{
 						endSource--;
 					}
-					// get answers for the problem
+
+					// get answers for the problem.
 					answers = processAnswers();
+
+					//make sure answers were actually found.
 					if (answers == null)
 					{
-						SourceIF execptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
+						//No answers were found...
+
+						//Fill out the source.
+						SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
 								startSource), uefCharHandler.getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.
 								getColumnNumber(endSource));
 
-						execptionSource.addText(uefCharHandler.getContent(startSource, endSource));
+						//add the file text to the source.
+						exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
 
-						throw new RexParseException("No answers found within a problem environment.", execptionSource);
+						//return the exception.
+						throw new RexParseException("No answers found within a problem environment.", exceptionSource);
 					}
+
+					//continue.
 					break;
 				}
 				case label:
 				{
+					//found the label command.
+
+					//get the label for the command.
 					label = processLabel();
 					break;
 				}
 				case ref:
 				{
+					//found the ref command.
+
+					//add the reference to our local list of refences to later
+					//declareUses relationships for.
 					refs.add(processRef());
 					break;
 				}
 				case endProblem:
 				{
-					done = true;
-					// poll the /end{problem command off the queue
+					//found the endProblem command.
+
+					// pop the /end{problem command off the queue
 					uefCommandQueue.poll();
-					break;
+
+					// get the file content from beginning of '/begin{block}'
+					// to the end of '/end{block}'.
+					content = uefCharHandler.getContent(startSource, endSource);
+
+					// Create the source object
+					SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
+					source.setStartLine(uefCharHandler.getLineNumber(startSource));
+					source.setLastLine(uefCharHandler.getLineNumber(endSource));
+					source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
+					source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
+					source.addText(content);
+
+					//create the problem.
+					ProblemIF problem = examFactory.newProblem(topic, label, source, answers);
+
+					//add the difficulty.
+					problem.setDifficulty(Double.valueOf(difficulty));
+
+					// Add references that were found within the answers environment.
+					for (int i = 0; i < this.answerReferences.size(); i++)
+					{
+						refs.add(this.answerReferences.get(i));
+					}
+
+					//clear the list answer references.
+					this.answerReferences.clear();
+
+					//Add each reference found within this block to our list of references
+					//to later declareUses relationships for.
+					//Since our ProblemIF object is created, we can add to the global list.
+					if (refs.size() != 0)
+					{
+						Iterator<String> i = refs.iterator();
+						while (i.hasNext())
+						{
+							String r = i.next();
+							if (this.references.containsKey(r))
+							{
+								this.references.get(r).add(problem);
+							}
+							else
+							{
+								List<ExamElementIF> list = new ArrayList<ExamElementIF>();
+								list.add(problem);
+								this.references.put(r, list);
+							}
+						}
+					}
+
+					//return our problem.
+					return problem;
 				}
 				default:
 				{
-					SourceIF execptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
+					//Fill out the source.
+					SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
 							startSource), uefCharHandler.getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.
 							getColumnNumber(endSource));
 
-					execptionSource.addText(uefCharHandler.getContent(startSource, endSource));
+					//add the file text to the source.
+					exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
 
-					throw new RexParseException(uefCommandQueue.peek().getType() + " found within problem environment!", execptionSource);
+					//return the exception.
+					throw new RexParseException(uefCommandQueue.peek().getType() + " found within problem environment!", exceptionSource);
 				}
 			}
 		}
-		// get the file content from beginning of '/begin{block}'
-		// to the end of '/end{block}'.
-		content = uefCharHandler.getContent(startSource, endSource);
 
-		// Create the source object
-		SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
-		source.setStartLine(uefCharHandler.getLineNumber(startSource));
-		source.setLastLine(uefCharHandler.getLineNumber(endSource));
-		source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
-		source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
-		source.addText(content);
+		//file ended without endProblem being found.
 
-		ProblemIF problem = examFactory.newProblem(topic, label, source, answers);
-		problem.setDifficulty(Double.valueOf(difficulty));
+		//set the end source to the end of the \begin{figure} command.
+		endSource = command.getEndPosition();
 
-		// Add references from answers
-		for (int i = 0; i < this.answerReferences.size(); i++)
-		{
-			refs.add(this.answerReferences.get(i));
-		}
+		//Fill out the source.
+		SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
+				startSource), uefCharHandler.getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.
+				getColumnNumber(endSource));
 
-		this.answerReferences.clear();
+		//add the file text to the source.
+		exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
 
-		if (refs.size() != 0)
-		{
-			Iterator<String> i = refs.iterator();
-			while (i.hasNext())
-			{
-				String r = i.next();
-				if (this.references.containsKey(r))
-				{
-					this.references.get(r).add(problem);
-				}
-				else
-				{
-					List<ExamElementIF> list = new ArrayList<ExamElementIF>();
-					list.add(problem);
-					this.references.put(r, list);
-				}
-			}
-		}
-		return problem;
+		//return the exception.
+		throw new RexParseException("\\begin{problem} without matching \\end{problem}!", exceptionSource);
+
 	}
 
 	/**
