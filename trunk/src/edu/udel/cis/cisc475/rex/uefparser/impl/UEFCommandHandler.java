@@ -374,7 +374,7 @@ class UEFCommandHandler
 
 	/**
 	 * Process a block environment.
-	 * This includes processing of /ref commands and /answer commands.
+	 * This includes processing of /ref commands.
 	 *
 	 * @return A BlockIF representation of the block environment.
 	 *
@@ -466,7 +466,7 @@ class UEFCommandHandler
 				}
 				default:
 				{
-					//Reached a command that shouldn't be found within a answers environment.
+					//Reached a command that shouldn't be found within a block environment.
 
 					//Fill out the source.
 					SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
@@ -501,22 +501,31 @@ class UEFCommandHandler
 
 	/**
 	 * Process the document environment.
+	 * This includes processing of block, figure, and problem environments.
+	 *
+	 * @return An ExamIF representation of the commands and environments found within.
+	 *
+	 * @throws RexParseException if there is problem with the correctness of the file.
+	 *
+	 * @throws EOFException if we are somehow out of bounds when reading the underlying file
+	 * to fill out the SourceIF. This should NEVER occur.
 	 */
 	ExamIF processDocument() throws RexParseException, EOFException
 	{
-		// pull /begin{document} off the queue
+		// pop /begin{document} off the queue.
 		UEFCommand command = uefCommandQueue.poll();
 
-		// create the ExamIF
+		// create the ExamIF.
 		ExamIF exam = examFactory.newMasterExam();
 
-		// get the frontal matter
+		//Make sure the queue isn't empty before attempting to get the frontal matter.
 		if (!uefCommandQueue.isEmpty())
 		{
-			// get the start and end positions of the frontal matter
+			// get the start and end positions of the frontal matter.
 			int startOfFrontalMatter = command.getEndPosition();
 			int endOfFrontalMatter = uefCommandQueue.peek().getStartPosition();
 
+			//get the frontmatter content from the underlying file.
 			String content = uefCharHandler.getContent(startOfFrontalMatter, endOfFrontalMatter);
 
 			// Create the source object for frontal matter
@@ -527,54 +536,86 @@ class UEFCommandHandler
 			source.setLastColumn(uefCharHandler.getColumnNumber(endOfFrontalMatter));
 			source.addText(content);
 
-			// System.out.println(content);
-
 			// set the frontal matter
 			exam.setFrontMatter(source);
 		}
 
-		// process commands within the document environment
+		//process until either the queue is empty or we hit an endDocument command.
 		while (!uefCommandQueue.isEmpty())
 		{
+			//check the command type.
 			switch (uefCommandQueue.peek().getType())
 			{
 				case beginBlock:
 				{
+					//found the beginBlock command.
+
+					//process the block environment and add it to the exam.
 					exam.addElement(processBlock());
 					break;
 				}
 				case beginFigure:
 				{
+					//found the beginFigure command.
+
+					//process the figure environment and add it to the exam.
 					exam.addElement(processFigure());
 					break;
 				}
 				case beginProblem:
 				{
+					//found the beginProblem command.
+
+					//process the problem environment and add it to the exam.
 					exam.addElement(processProblem());
 					break;
 				}
 				case endDocument:
 				{
-					// pull /end{document} off the queue.
+					// pop /end{document} off the queue.
 					uefCommandQueue.poll();
+
+					//return our ExamIF.
 					return exam;
 				}
 				default:
 				{
-					SourceIF execptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(uefCommandQueue.
+					//Reached a command that shouldn't be found within a document environment.
+
+					//Fill out the source.
+					SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(uefCommandQueue.
 							peek().getStartPosition()), uefCharHandler.getColumnNumber(uefCommandQueue.peek().getStartPosition()), uefCharHandler.
 							getLineNumber(uefCommandQueue.peek().getEndPosition()), uefCharHandler.getColumnNumber(uefCommandQueue.peek().
 							getEndPosition()));
 
-					execptionSource.addText(uefCharHandler.getContent(uefCommandQueue.peek().getStartPosition(), uefCommandQueue.peek().
+					//add the file text to the source.
+					exceptionSource.addText(uefCharHandler.getContent(uefCommandQueue.peek().getStartPosition(), uefCommandQueue.peek().
 							getEndPosition()));
 
-					throw new RexParseException(uefCommandQueue.peek().getType() + " found within document environment!", execptionSource);
+					//return the exception.
+					throw new RexParseException(uefCommandQueue.peek().getType() + " found within document environment!", exceptionSource);
 				}
 			}
 		}
 
-		throw new RexParseException("End of file reached before \\end{document} found!", null);
+		//file ended without endDocument being found.
+
+		//set the start source to beginning of the \begin{document} command.
+		int startSource = command.getStartPosition();
+
+		//set the end source to the end of the \begin{document} command.
+		int endSource = command.getEndPosition();
+
+		//Fill out the source.
+		SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
+				startSource), uefCharHandler.getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.
+				getColumnNumber(endSource));
+
+		//add the file text to the source.
+		exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
+
+		//return the exception.
+		throw new RexParseException("\\begin{document} without matching \\end{document}!", exceptionSource);
 	}
 
 	/**
