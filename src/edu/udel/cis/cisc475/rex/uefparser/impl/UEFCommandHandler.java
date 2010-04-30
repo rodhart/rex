@@ -301,16 +301,6 @@ class UEFCommandHandler
 			//check the command type.
 			switch (uefCommandQueue.peek().getType())
 			{
-				case endAnswers:
-				{
-					//found endAnswers command.
-
-					// pop the /end{answers} command off the queue
-					uefCommandQueue.poll();
-
-					//return the list of AnswerIF and FixedAnswerIF as an array.
-					return answersList.toArray(new AnswerIF[0]);
-				}
 				case answer:
 				{
 					//found answer command.
@@ -331,6 +321,16 @@ class UEFCommandHandler
 					// get every answer. :-(
 					this.answerReferences.add(processRef());
 					break;
+				}
+				case endAnswers:
+				{
+					//found endAnswers command.
+
+					// pop the /end{answers} command off the queue
+					uefCommandQueue.poll();
+
+					//return the list of AnswerIF and FixedAnswerIF as an array.
+					return answersList.toArray(new AnswerIF[0]);
 				}
 				default:
 				{
@@ -407,6 +407,13 @@ class UEFCommandHandler
 			//check the command type.
 			switch (uefCommandQueue.peek().getType())
 			{
+				case ref:
+				{
+					//add the reference to our local list of refences to later
+					//declareUses relationships for.
+					refs.add(processRef());
+					break;
+				}
 				case endBlock:
 				{
 					//found the endBlock command.
@@ -434,7 +441,7 @@ class UEFCommandHandler
 
 					//Add each reference found within this block to our list of references
 					//to later declareUses relationships for.
-					//Since our BlockIF object is created, we can add global list.
+					//Since our BlockIF object is created, we can add to the global list.
 					if (refs.size() != 0)
 					{
 						Iterator<String> i = refs.iterator();
@@ -456,13 +463,6 @@ class UEFCommandHandler
 
 					//return our block object now.
 					return block;
-				}
-				case ref:
-				{
-					//add the reference to our local list of refences to later
-					//declareUses relationships for.
-					refs.add(processRef());
-					break;
 				}
 				default:
 				{
@@ -572,6 +572,8 @@ class UEFCommandHandler
 				}
 				case endDocument:
 				{
+					//found the endDocument command.
+
 					// pop /end{document} off the queue.
 					uefCommandQueue.poll();
 
@@ -620,6 +622,14 @@ class UEFCommandHandler
 
 	/**
 	 * Process the figure environment.
+	 * This includes processing of /ref commands and /label commands.
+	 *
+	 * @return A FigureIF representation of the figure environment.
+	 *
+	 * @throws RexParseException if there is problem with the correctness of the file.
+	 *
+	 * @throws EOFException if we are somehow out of bounds when reading the underlying file
+	 * to fill out the SourceIF. This should NEVER occur.
 	 */
 	FigureIF processFigure() throws RexParseException, EOFException
 	{
@@ -628,87 +638,120 @@ class UEFCommandHandler
 		// String to be filled with the source content
 		String content;
 
-		// List of references by this figure
+		// List of references found within this this figure environment.
 		List<String> refs = new ArrayList<String>();
 
 		// Variables to hold the beginning and end of the source
 		int startSource = command.getStartPosition();
 		int endSource = 0;
 
+		//label for this figure.
 		String label = null;
 
-		boolean done = false;
-
-		while (!uefCommandQueue.isEmpty() && !done)
+		//process until either the queue is empty or we hit an endFigure command.
+		while (!uefCommandQueue.isEmpty())
 		{
+			//check the command type.
 			switch (uefCommandQueue.peek().getType())
 			{
 				case label:
 				{
+					//found the label command.
+
+					//get the label.
 					label = processLabel();
 					break;
 				}
 				case ref:
 				{
+					//found the ref command.
+
+					//add the reference to our local list of refences to later
+					//declareUses relationships for.
 					refs.add(processRef());
 					break;
 				}
 				case endFigure:
 				{
-					// use the end of the other command as the end source
+					// use the end of the endFigure command as the end source.
 					endSource = uefCommandQueue.peek().getEndPosition();
-					// pull /end{figure} off the queue.
+
+					// pop /end{figure} off the queue.
 					uefCommandQueue.poll();
-					done = true;
-					break;
+
+					// get the file content from beginning of '/begin{figure}'
+					// to the end of '/end{figure}'.
+					content = uefCharHandler.getContent(startSource, endSource);
+
+					// Create the source object.
+					SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
+					source.setStartLine(uefCharHandler.getLineNumber(startSource));
+					source.setLastLine(uefCharHandler.getLineNumber(endSource));
+					source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
+					source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
+					source.addText(content);
+
+					//create the figure object.
+					FigureIF figure = examFactory.newFigure(label, source);
+
+					//Add each reference found within this block to our list of references
+					//to later declareUses relationships for.
+					//Since our FigureIF object is created, we can add to the global list.
+					if (refs.size() != 0)
+					{
+						Iterator<String> i = refs.iterator();
+						while (i.hasNext())
+						{
+							String r = i.next();
+							if (this.references.containsKey(r))
+							{
+								this.references.get(r).add(figure);
+							}
+							else
+							{
+								List<ExamElementIF> list = new ArrayList<ExamElementIF>();
+								list.add(figure);
+								this.references.put(r, list);
+							}
+						}
+					}
+
+					//return our FigureIF.
+					return figure;
 				}
 				default:
 				{
-					SourceIF execptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
+					//Reached a command that shouldn't be found within a figure environment.
+
+					//Fill out the source.
+					SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
 							startSource), uefCharHandler.getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.
 							getColumnNumber(endSource));
 
-					execptionSource.addText(uefCharHandler.getContent(startSource, endSource));
+					//add the file text to the source.
+					exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
 
-					throw new RexParseException(uefCommandQueue.peek().getType() + " found within figure environment!", execptionSource);
+					//return the exception.
+					throw new RexParseException(uefCommandQueue.peek().getType() + " found within figure environment!", exceptionSource);
 				}
 			}
 		}
 
-		// get the file content from beginning of '/begin{figure}'
-		// to the end of '/end{figure}'.
-		content = uefCharHandler.getContent(startSource, endSource);
+		//file ended without endDocument being found.
 
-		// Create the source object
-		SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
-		source.setStartLine(uefCharHandler.getLineNumber(startSource));
-		source.setLastLine(uefCharHandler.getLineNumber(endSource));
-		source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
-		source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
-		source.addText(content);
+		//set the end source to the end of the \begin{figure} command.
+		endSource = command.getEndPosition();
 
-		FigureIF figure = examFactory.newFigure(label, source);
+		//Fill out the source.
+		SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
+				startSource), uefCharHandler.getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.
+				getColumnNumber(endSource));
 
-		if (refs.size() != 0)
-		{
-			Iterator<String> i = refs.iterator();
-			while (i.hasNext())
-			{
-				String r = i.next();
-				if (this.references.containsKey(r))
-				{
-					this.references.get(r).add(figure);
-				}
-				else
-				{
-					List<ExamElementIF> list = new ArrayList<ExamElementIF>();
-					list.add(figure);
-					this.references.put(r, list);
-				}
-			}
-		}
+		//add the file text to the source.
+		exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
 
-		return figure;
+		//return the exception.
+		throw new RexParseException("\\begin{figure} without matching \\end{figure}!", exceptionSource);
 	}
 
 	/**
