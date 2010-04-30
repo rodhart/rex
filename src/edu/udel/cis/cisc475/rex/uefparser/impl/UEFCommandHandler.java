@@ -287,7 +287,7 @@ class UEFCommandHandler
 	AnswerIF[] processAnswers() throws RexParseException, EOFException
 	{
 		// pop off the /begin{answers} command
-		uefCommandQueue.poll();
+		UEFCommand command = uefCommandQueue.poll();
 
 		//set the answer index. Needed, because fixed answers must occur in a certain spot.
 		int index = 0;
@@ -295,11 +295,8 @@ class UEFCommandHandler
 		//create a list of answers to add the answers we process to.
 		List<AnswerIF> answersList = new ArrayList<AnswerIF>();
 
-		//boolean to keep track of whether we hit endAnswers or not.
-		boolean done = false;
-
 		//process until either the queue is empty or we hit an endAnswers command.
-		while (!uefCommandQueue.isEmpty() && !done)
+		while (!uefCommandQueue.isEmpty())
 		{
 			//check the command type.
 			switch (uefCommandQueue.peek().getType())
@@ -308,12 +305,11 @@ class UEFCommandHandler
 				{
 					//found endAnswers command.
 
-					//set that we are done so we don't process anymore.
-					done = true;
-
 					// pop the /end{answers} command off the queue
 					uefCommandQueue.poll();
-					break;
+
+					//return the list of AnswerIF and FixedAnswerIF as an array.
+					return answersList.toArray(new AnswerIF[0]);
 				}
 				case answer:
 				{
@@ -356,11 +352,24 @@ class UEFCommandHandler
 			}
 		}
 
-		//either no more commands in the queue or endAnswer reached.
-		//A valid latex file will never end here.
+		//file ended without endBlock being found.
 
-		//return the list of AnswerIF and FixedAnswerIF as an array.
-		return answersList.toArray(new AnswerIF[0]);
+		//set the start source to beginning of the \begin{answers} command.
+		int startSource = command.getStartPosition();
+
+		//set the end source to the end of the \begin{answers} command.
+		int endSource = command.getEndPosition();
+
+		//Fill out the source.
+		SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
+				startSource), uefCharHandler.getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.
+				getColumnNumber(endSource));
+
+		//add the file text to the source.
+		exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
+
+		//return the exception.
+		throw new RexParseException("\\begin{answers} without matching \\end{answers}!", exceptionSource);
 	}
 
 	/**
@@ -392,11 +401,8 @@ class UEFCommandHandler
 		int startSource = command.getStartPosition();
 		int endSource = 0;
 
-		//boolean to keep track of whether we hit endAnswers or not.
-		boolean done = false;
-
 		//process until either the queue is empty or we hit an endAnswers command.
-		while (!uefCommandQueue.isEmpty() && !done)
+		while (!uefCommandQueue.isEmpty())
 		{
 			//check the command type.
 			switch (uefCommandQueue.peek().getType())
@@ -404,9 +410,6 @@ class UEFCommandHandler
 				case endBlock:
 				{
 					//found the endBlock command.
-
-					//set that we are done so we don't process anymore.
-					done = true;
 
 					// pop the /end{problem command off the queue
 					UEFCommand nextCommand = uefCommandQueue.poll();
@@ -478,7 +481,7 @@ class UEFCommandHandler
 				}
 			}
 		}
-		
+
 		//file ended without endBlock being found.
 
 		//set the end source to the end of the \begin{block} command.
