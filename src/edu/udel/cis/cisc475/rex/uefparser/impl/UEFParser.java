@@ -21,11 +21,14 @@ public class UEFParser implements UEFParserIF
 {
 
 	/**
-	 * Underlying file handler to move through and read the file.
+	 * Underlying file handler to move through and read the file. Even after
+	 * processing we need this object, because we use it to get the information
+	 * needed for SourceIF objects.
 	 */
 	private UEFCharHandler uefCharHandler;
 	/**
-	 * Instance of the class that handles processing all read in commands.
+	 * Instance of the class that handles processing all read in commands after
+	 * they are processed from the underlying file.
 	 */
 	private UEFCommandHandler uefCommandHandler;
 
@@ -39,8 +42,13 @@ public class UEFParser implements UEFParserIF
 	 */
 	public UEFParser()
 	{
+		// create the underlying file handler.
 		uefCharHandler = new UEFCharHandler();
+
+		// create the underlying command processor.
 		uefCommandHandler = new UEFCommandHandler(uefCharHandler);
+
+		// This class will itself handle parsing the file ahead of time.
 	}
 
 	/**
@@ -51,6 +59,7 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCharHandler getUEFCharHandler()
 	{
+		// return the internal file handler.
 		return uefCharHandler;
 	}
 
@@ -62,6 +71,7 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCommandHandler getUEFCommandHandler()
 	{
+		// return the internal command queue processor.
 		return uefCommandHandler;
 	}
 
@@ -70,12 +80,14 @@ public class UEFParser implements UEFParserIF
 	 * 
 	 * @param file
 	 *            The file to read from.
+	 * 
 	 * @throws IOException
 	 *             If there is an issue reading the file.
 	 * 
 	 */
 	void openFile(File file) throws IOException
 	{
+		// have the underlying file handler open the file for us.
 		uefCharHandler.openFile(file);
 	}
 
@@ -95,65 +107,85 @@ public class UEFParser implements UEFParserIF
 	 */
 	String parseForArgument() throws RexParseException
 	{
+		// store the current position in case we need to reset our position.
 		int position = uefCharHandler.getPosition();
+
+		// try-catch in case we reach EOF- which is normal behavior,
+		// so we return null.
 		try
 		{
-			// Read until the first argument
+			// Read until the first argument begins.
 			while (uefCharHandler.read() != '{')
 			{
-				// Handle comments.
+				// Handle comments: ignore them.
 				if (uefCharHandler.read() == '%')
 				{
-					while (!uefCharHandler.isLineBreak())
+					// move forward until a line break.
+					do
 					{
 						uefCharHandler.move();
-					}
+					} while (!uefCharHandler.isLineBreak());
+
+					// move one more time after hitting a line break.
 					uefCharHandler.move();
 				}
+				// handle finding optional argument: parse past it.
 				else if (uefCharHandler.read() == '[')
 				{
+					// call parse for optional argument.
 					parseForOptionalArgument();
 				}
-				// Handle finding linebreaks or whitespaces.
+				// Handle finding linebreaks or whitespaces: move foward.
 				else if (uefCharHandler.isWhiteSpace())
 				{
+					// move foward one.
 					uefCharHandler.move();
 				}
-				// Handle everything else
+				// Handle everything else: a-z, A-Z, other special characters.
 				else
 				{
 					// reset the position back since there are no arguments
-					// before another command
+					// before another command.
 					uefCharHandler.setPosition(position);
 					return null;
 				}
 			}
 		}
-		catch (EOFException ex)
+		catch (EOFException e)
 		{
 			// no argument left in the file. So return null.
 			uefCharHandler.setPosition(position);
 			return null;
 		}
+
+		// If we've gotten this far, we have found the beginning of an argument.
+		// we have to get the actual argument now.
+
+		// try-catch in case we reach EOF- which we should never reach
+		// after starting an argument.
 		try
 		{
-			// Read until the end of the first argument
 			uefCharHandler.move();
-
 			StringBuffer argument = new StringBuffer();
+
+			// Read until the end of the first argument
 			while (uefCharHandler.read() != '}')
 			{
+				// append each character of the argument.
 				argument.append(uefCharHandler.read());
 				uefCharHandler.move();
 			}
+
+			// move the file one character past the argument terminator.
 			uefCharHandler.move();
+
+			// return the argument after trimming it.
 			return argument.toString().trim();
 		}
 		catch (EOFException e)
 		{
-			// unexpected end of file after an argument began
-			throw new RexParseException(
-					"Unexpected EOF when parsing for an argument.", null);
+			// unexpected end of file after an argument began.
+			throw new RexParseException("Unexpected EOF when parsing for an argument.", null);
 		}
 	}
 
@@ -173,30 +205,39 @@ public class UEFParser implements UEFParserIF
 	 */
 	String parseForOptionalArgument() throws RexParseException
 	{
+		// store the current position in case we need to reset our position.
+
+		// try-catch in case we reach EOF- which is normal behavior,
+		// so we return null.
 		int position = uefCharHandler.getPosition();
 		try
 		{
+			// Read until the first argument begins.
 			while (uefCharHandler.read() != '[')
 			{
-				// Handle comments.
+				// Handle comments: ignore them.
 				if (uefCharHandler.read() == '%')
 				{
-					while (!uefCharHandler.isLineBreak())
+					// move forward until a line break.
+					do
 					{
 						uefCharHandler.move();
-					}
+					} while (!uefCharHandler.isLineBreak());
+
+					// move one more time after hitting a linebreak.
 					uefCharHandler.move();
 				}
-				// Handle finding linebreaks or whitespaces.
+				// Handle finding linebreaks or whitespaces: move foward.
 				else if (uefCharHandler.isWhiteSpace())
 				{
+					// move foward one.
 					uefCharHandler.move();
 				}
-				// Handle everything else
+				// Handle everything else: a-z, A-Z, other special characters.
 				else
 				{
 					// reset the position back since there are no arguments
-					// before another command
+					// before another command.
 					uefCharHandler.setPosition(position);
 					return null;
 				}
@@ -209,32 +250,43 @@ public class UEFParser implements UEFParserIF
 			return null;
 		}
 
+		// If we've gotten this far, we have found the beginning of an optional
+		// argument.
+		// we have to get the actual argument now.
+
+		// try-catch in case we reach EOF- which we should never reach
+		// after starting an optional argument.
 		try
 		{
-			// Read until the end of the first argument
 			uefCharHandler.move();
-
 			StringBuffer argument = new StringBuffer();
+
+			// Read until the end of the first argument
 			while (uefCharHandler.read() != ']')
 			{
+				// append each character of the argument.
 				argument.append(uefCharHandler.read());
 				uefCharHandler.move();
 			}
-			// Move past the last argument delimiter and return the arguments
+
+			// move the file one character past the argument terminator.
 			uefCharHandler.move();
+
+			// return the argument after trimming it.
 			return argument.toString().trim();
 		}
-		catch (EOFException ex)
+		catch (EOFException e)
 		{
 			// unexpected end of file after an optional argument began
-			throw new RexParseException(
-					"Unexpected EOF when parsing for an optional argument.", null);
+			throw new RexParseException("Unexpected EOF when parsing for an optional argument.", null);
 		}
 	}
 
 	/**
 	 * Starting at the current position reads until a command and then gets the
-	 * command. And then returns it as a UEFCommand.
+	 * command. And then returns it as a UEFCommand. Underlying file position is
+	 * set to the character following the last argument. Or if no arguments
+	 * occur then character after the command ends.
 	 * 
 	 * @return the current command as a UEFCommand or null if there are no more
 	 *         commands.
@@ -311,10 +363,7 @@ public class UEFParser implements UEFParserIF
 							{
 								// EOL should not be reached before a matching
 								// delimiter
-								throw new RexParseException(
-										"Verb delimiter '"
-										+ delimiter
-										+ "' not matched in file by end of line.", null);
+								throw new RexParseException("Verb delimiter '" + delimiter + "' not matched in file by end of line.", null);
 							}
 							uefCharHandler.move();
 						}
@@ -349,8 +398,7 @@ public class UEFParser implements UEFParserIF
 							{
 								// starting at the current position no match was
 								// found within the file
-								throw new EOFException(
-										"\\begin{verbatim} without matching \\end{verbatim}");
+								throw new EOFException("\\begin{verbatim} without matching \\end{verbatim}");
 							}
 						}
 						// Handle \begin{answers}
@@ -487,8 +535,7 @@ public class UEFParser implements UEFParserIF
 			}
 			catch (EOFException e)
 			{
-				throw new RexParseException(
-						"Unexpected end of file when parsing for command.", null);
+				throw new RexParseException("Unexpected end of file when parsing for command.", null);
 			}
 		}
 		return null;
@@ -525,8 +572,10 @@ public class UEFParser implements UEFParserIF
 	 * @param file
 	 *            the file handler for the uef file.
 	 * @return ExamIF representation of the UE file.
-	 * @throws RexException if a parsing error occurs.
-	 * @throws IOException if the file cannot be open or read.
+	 * @throws RexException
+	 *             if a parsing error occurs.
+	 * @throws IOException
+	 *             if the file cannot be open or read.
 	 */
 	public ExamIF parse(File file) throws RexException, IOException
 	{
