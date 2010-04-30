@@ -1,3 +1,6 @@
+/**
+ * Test Suite of UEFCommandHandler
+ */
 package edu.udel.cis.cisc475.rex.uefparser.impl;
 
 import edu.udel.cis.cisc475.rex.err.RexException;
