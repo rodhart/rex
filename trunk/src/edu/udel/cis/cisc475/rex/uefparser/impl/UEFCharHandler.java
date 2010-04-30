@@ -118,6 +118,36 @@ class UEFCharHandler
 	}
 
 	/**
+	 * Checks whether the current position in the file is a letter.
+	 *
+	 * @return True if we are at a letter. False otherwise.
+	 * @throws EOFException if we are at or past the end of the file.
+	 */
+	boolean isLetter() throws EOFException
+	{
+		//make sure we are not at the end of the file.
+		if (position < fileContents.length())
+		{
+			char ch = fileContents.charAt(position);
+			if (Character.isLetter(ch))
+			{
+				//at a letter.
+				return true;
+			}
+			else
+			{
+				//not at letter.
+				return false;
+			}
+		}
+		else
+		{
+			//at end of file so throw an exception.
+			throw new EOFException();
+		}
+	}
+
+	/**
 	 * Checks whether the current position in the file is a line break.
 	 *
 	 * @return True if we are at a line break. False otherwise.
@@ -355,7 +385,6 @@ class UEFCharHandler
 	 * @return a Matcher consisting of information about the matching text or null
 	 * if no matching text was found.
 	 */
-
 	Matcher regex(String pattern)
 	{
 		//compile the pattern.

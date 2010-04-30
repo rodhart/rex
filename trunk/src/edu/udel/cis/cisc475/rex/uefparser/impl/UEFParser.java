@@ -339,45 +339,45 @@ public class UEFParser implements UEFParserIF
 					continue;
 				}
 			}
-			catch (EOFException ex)
+			catch (EOFException e)
 			{
 				// EOF reached during comment. And that's okay.
 				return null;
 			}
 
-			// Not OKAY to reach EOF below this
+			// Not OKAY to reach EOF below this, because we will be parsing commands.
 			try
 			{
-				// check for a command
+				// check for a command.
 				if (uefCharHandler.read() == '\\')
 				{
-					// not OK to reach EOF within this if(); unless in the case
-					// of optional argument. Which is handled by the
-					// parseForOptionalArgument() method anyway.nN
+					//matched a command.
 
+					//get the start of the command.
 					int commandStart = uefCharHandler.getPosition();
+
 					// move forward in the file.
 					uefCharHandler.move();
 
-					// Handle actual double backslash escape character: \\
+					// Handle double backslash escape character: \\
 					if (uefCharHandler.read() == '\\')
 					{
+						//escape character, so move foward.
 						uefCharHandler.move();
 						continue;
 					}
 
-					// Grab each letter in the command while there are letters
-					// remember only letters are valid for command names
-					StringBuffer commandBuffer = new StringBuffer();
-					while (Character.isLetter(uefCharHandler.read()))
+					// move until no more letters.
+					while (uefCharHandler.isLetter())
 					{
-						commandBuffer = commandBuffer.append(uefCharHandler.read());
 						uefCharHandler.move();
 					}
-					String commandString = commandBuffer.toString();
+
+					//get the command name
+					String commandString = uefCharHandler.getContent(commandStart, uefCharHandler.getPosition());
 
 					// Handle \verb
-					if (commandString.equals("verb"))
+					if (commandString.equals("\\verb"))
 					{
 						char delimiter = uefCharHandler.read();
 						uefCharHandler.move();
@@ -394,7 +394,7 @@ public class UEFParser implements UEFParserIF
 						continue;
 					}
 					// Handle \answer
-					else if (commandString.equals("answer"))
+					else if (commandString.equals("\\answer"))
 					{
 						String optionalArgument = parseForOptionalArgument();
 						UEFCommand command = new UEFCommand(Types.answer, commandStart, uefCharHandler.getPosition());
@@ -402,7 +402,7 @@ public class UEFParser implements UEFParserIF
 						return command;
 					}
 					// Handle \documentclass
-					else if (commandString.equals("documentclass"))
+					else if (commandString.equals("\\documentclass"))
 					{
 						String master = parseForOptionalArgument();
 						String documentclass = parseForArgument();
@@ -412,7 +412,7 @@ public class UEFParser implements UEFParserIF
 						return command;
 					}
 					// Handle \label
-					else if (commandString.equals("label"))
+					else if (commandString.equals("\\label"))
 					{
 						String label = parseForArgument();
 						UEFCommand command = new UEFCommand(Types.label, commandStart, uefCharHandler.getPosition());
@@ -420,7 +420,7 @@ public class UEFParser implements UEFParserIF
 						return command;
 					}
 					// Handle \ref
-					else if (commandString.equals("ref"))
+					else if (commandString.equals("\\ref"))
 					{
 						String label = parseForArgument();
 						UEFCommand command = new UEFCommand(Types.ref, commandStart, uefCharHandler.getPosition());
@@ -428,7 +428,7 @@ public class UEFParser implements UEFParserIF
 						return command;
 					}
 					// Handle \begin{} command
-					else if (commandString.equals("begin"))
+					else if (commandString.equals("\\begin"))
 					{
 						String environment = parseForArgument();
 
@@ -489,7 +489,7 @@ public class UEFParser implements UEFParserIF
 						}
 					}
 					// Handle \end{}
-					else if (commandString.equals("end"))
+					else if (commandString.equals("\\end"))
 					{
 						String environment = parseForArgument();
 						// Handle \end{answers}
