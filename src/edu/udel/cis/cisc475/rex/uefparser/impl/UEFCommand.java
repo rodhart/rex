@@ -46,20 +46,6 @@ class UEFCommand
 	}
 
 	/**
-	 * The simple constructor for creating a Command.
-	 * Creates a list to store arguments.
-	 */
-	UEFCommand()
-	{
-		//create a list for the arguments.
-		this.Arguments = new ArrayList<String>();
-		this.type = null;
-		this.startPosition = -1;
-		this.endPosition = -1;
-		this.optionalArgument = null;
-	}
-
-	/**
 	 * A constructor for creating a Command.
 	 * Creates a list to store arguments.
 	 * And allows the type, startPosition,
@@ -83,26 +69,6 @@ class UEFCommand
 	{
 		//set the type of command.
 		this.type = type;
-	}
-
-	/**
-	 * Sets the start position.
-	 * @param position the position to set.
-	 */
-	void setStartPosition(int position)
-	{
-		//set the start position.
-		this.startPosition = position;
-	}
-
-	/**
-	 * Sets the end position.
-	 * @param position the position to set.
-	 */
-	void setEndPosition(int position)
-	{
-		//set the end position.
-		this.endPosition = position;
 	}
 
 	/**
