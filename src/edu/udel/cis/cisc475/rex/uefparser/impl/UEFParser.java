@@ -4,6 +4,7 @@ import edu.udel.cis.cisc475.rex.err.RexException;
 import edu.udel.cis.cisc475.rex.err.RexParseException;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserIF;
+import edu.udel.cis.cisc475.rex.uefparser.impl.UEFCommand.Types;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.File;
@@ -124,7 +125,8 @@ public class UEFParser implements UEFParserIF
 					do
 					{
 						uefCharHandler.move();
-					} while (!uefCharHandler.isLineBreak());
+					}
+					while (!uefCharHandler.isLineBreak());
 
 					// move one more time after hitting a line break.
 					uefCharHandler.move();
@@ -222,7 +224,8 @@ public class UEFParser implements UEFParserIF
 					do
 					{
 						uefCharHandler.move();
-					} while (!uefCharHandler.isLineBreak());
+					}
+					while (!uefCharHandler.isLineBreak());
 
 					// move one more time after hitting a linebreak.
 					uefCharHandler.move();
@@ -299,7 +302,6 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCommand parseForCommand() throws RexParseException
 	{
-		UEFCommand uefCommand = new UEFCommand();
 		while (!uefCharHandler.eof())
 		{
 			try
@@ -373,11 +375,9 @@ public class UEFParser implements UEFParserIF
 					else if (commandString.equals("answer"))
 					{
 						String optionalArgument = parseForOptionalArgument();
-						uefCommand.setType(UEFCommand.Types.answer);
-						uefCommand.setStartPosition(commandStart);
-						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.setOptionalArgument(optionalArgument);
-						return uefCommand;
+						UEFCommand command = new UEFCommand(Types.answer, commandStart, uefCharHandler.getPosition());
+						command.setOptionalArgument(optionalArgument);
+						return command;
 					}
 					// Handle \begin{}
 					else if (commandString.equals("begin"))
@@ -405,37 +405,29 @@ public class UEFParser implements UEFParserIF
 						else if (environment.equals("answers"))
 						{
 							String optionalArgument = parseForOptionalArgument();
-							uefCommand.setType(UEFCommand.Types.beginAnswers);
-							uefCommand.setStartPosition(commandStart);
-							uefCommand.setEndPosition(uefCharHandler.getPosition());
-							uefCommand.setOptionalArgument(optionalArgument);
-							return uefCommand;
+							UEFCommand command = new UEFCommand(Types.beginAnswers, commandStart, uefCharHandler.getPosition());
+							command.setOptionalArgument(optionalArgument);
+							return command;
 						}
 						// Handle \begin{block}
 						else if (environment.equals("block"))
 						{
 							String name = parseForArgument();
-							uefCommand.setType(UEFCommand.Types.beginBlock);
-							uefCommand.setStartPosition(commandStart);
-							uefCommand.setEndPosition(uefCharHandler.getPosition());
-							uefCommand.addArgument(name);
-							return uefCommand;
+							UEFCommand command = new UEFCommand(Types.beginBlock, commandStart, uefCharHandler.getPosition());
+							command.addArgument(name);
+							return command;
 						}
 						// Handle \begin{document}
 						else if (environment.equals("document"))
 						{
-							uefCommand.setType(UEFCommand.Types.beginDocument);
-							uefCommand.setStartPosition(commandStart);
-							uefCommand.setEndPosition(uefCharHandler.getPosition());
-							return uefCommand;
+							UEFCommand command = new UEFCommand(Types.beginDocument, commandStart, uefCharHandler.getPosition());
+							return command;
 						}
 						// Handle \begin{figure}
 						else if (environment.equals("figure"))
 						{
-							uefCommand.setType(UEFCommand.Types.beginFigure);
-							uefCommand.setStartPosition(commandStart);
-							uefCommand.setEndPosition(uefCharHandler.getPosition());
-							return uefCommand;
+							UEFCommand command = new UEFCommand(Types.beginFigure, commandStart, uefCharHandler.getPosition());
+							return command;
 						}
 						// Handle \begin{problem}
 						else if (environment.equals("problem"))
@@ -443,26 +435,22 @@ public class UEFParser implements UEFParserIF
 							String optionalArgument = parseForOptionalArgument();
 							String topic = parseForArgument();
 							String difficulty = parseForArgument();
-							uefCommand.setType(UEFCommand.Types.beginProblem);
-							uefCommand.setStartPosition(commandStart);
-							uefCommand.setEndPosition(uefCharHandler.getPosition());
-							uefCommand.setOptionalArgument(optionalArgument);
-							uefCommand.addArgument(topic);
-							uefCommand.addArgument(difficulty);
-							return uefCommand;
+							UEFCommand command = new UEFCommand(Types.beginProblem, commandStart, uefCharHandler.getPosition());
+							command.setOptionalArgument(optionalArgument);
+							command.addArgument(topic);
+							command.addArgument(difficulty);
+							return command;
 						}
 					}
 					// Handle \documentclass
 					else if (commandString.equals("documentclass"))
 					{
 						String master = parseForOptionalArgument();
-						String cls = parseForArgument();
-						uefCommand.setType(UEFCommand.Types.documentclass);
-						uefCommand.setStartPosition(commandStart);
-						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.setOptionalArgument(master);
-						uefCommand.addArgument(cls);
-						return uefCommand;
+						String documentclass = parseForArgument();
+						UEFCommand command = new UEFCommand(Types.documentclass, commandStart, uefCharHandler.getPosition());
+						command.setOptionalArgument(master);
+						command.addArgument(documentclass);
+						return command;
 					}
 					// Handle \end{}
 					else if (commandString.equals("end"))
@@ -471,64 +459,49 @@ public class UEFParser implements UEFParserIF
 						// Handle \end{answers}
 						if (environment.equals("answers"))
 						{
-							uefCommand.setType(UEFCommand.Types.endAnswers);
-							uefCommand.setStartPosition(commandStart);
-							uefCommand.setEndPosition(uefCharHandler.getPosition());
-
-							return uefCommand;
+							UEFCommand command = new UEFCommand(Types.endAnswers, commandStart, uefCharHandler.getPosition());
+							return command;
 						}
 						// Handle \end{block}
 						else if (environment.equals("block"))
 						{
-							uefCommand.setType(UEFCommand.Types.endBlock);
-							uefCommand.setStartPosition(commandStart);
-							uefCommand.setEndPosition(uefCharHandler.getPosition());
-							return uefCommand;
+							UEFCommand command = new UEFCommand(Types.endBlock, commandStart, uefCharHandler.getPosition());
+							return command;
 						}
 						// Handle \end{document}
 						else if (environment.equals("document"))
 						{
-							uefCommand.setType(UEFCommand.Types.endDocument);
-							uefCommand.setStartPosition(commandStart);
-							uefCommand.setEndPosition(uefCharHandler.getPosition());
-							return uefCommand;
+							UEFCommand command = new UEFCommand(Types.endDocument, commandStart, uefCharHandler.getPosition());
+							return command;
 						}
 						// Handle \end{figure}
 						else if (environment.equals("figure"))
 						{
-							uefCommand.setType(UEFCommand.Types.endFigure);
-							uefCommand.setStartPosition(commandStart);
-							uefCommand.setEndPosition(uefCharHandler.getPosition());
-							return uefCommand;
+							UEFCommand command = new UEFCommand(Types.endFigure, commandStart, uefCharHandler.getPosition());
+							return command;
 						}
 						// Handle \end{problem}
 						else if (environment.equals("problem"))
 						{
-							uefCommand.setType(UEFCommand.Types.endProblem);
-							uefCommand.setStartPosition(commandStart);
-							uefCommand.setEndPosition(uefCharHandler.getPosition());
-							return uefCommand;
+							UEFCommand command = new UEFCommand(Types.endProblem, commandStart, uefCharHandler.getPosition());
+							return command;
 						}
 					}
 					// Handle \label
 					else if (commandString.equals("label"))
 					{
 						String label = parseForArgument();
-						uefCommand.setType(UEFCommand.Types.label);
-						uefCommand.setStartPosition(commandStart);
-						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.addArgument(label);
-						return uefCommand;
+						UEFCommand command = new UEFCommand(Types.label, commandStart, uefCharHandler.getPosition());
+						command.addArgument(label);
+						return command;
 					}
 					// Handle \ref
 					else if (commandString.equals("ref"))
 					{
 						String label = parseForArgument();
-						uefCommand.setType(UEFCommand.Types.ref);
-						uefCommand.setStartPosition(commandStart);
-						uefCommand.setEndPosition(uefCharHandler.getPosition());
-						uefCommand.addArgument(label);
-						return uefCommand;
+						UEFCommand command = new UEFCommand(Types.ref, commandStart, uefCharHandler.getPosition());
+						command.addArgument(label);
+						return command;
 					}
 				}
 				uefCharHandler.move();
