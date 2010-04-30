@@ -885,7 +885,7 @@ public class UEFParser implements UEFParserIF
 	}
 
 	/**
-	 * Parses UEF file and generate ExamIF from it.
+	 * Parses UEF file and generates an ExamIF from it.
 	 * 
 	 * @param file
 	 *            the file handler for the uef file.
