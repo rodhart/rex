@@ -351,9 +351,15 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCommand createAnswerCommand(int start) throws RexParseException
 	{
+		//get the optional argument.
+		//In this case, should only be 'correct' or 'fixed' or 'correct,fixed' or 'fixed,correct'.
 		String optionalArgument = parseForOptionalArgument();
+
+		//create the command and add arguments.
 		UEFCommand command = new UEFCommand(Types.answer, start, uefCharHandler.getPosition());
 		command.setOptionalArgument(optionalArgument);
+
+		//return the created command.
 		return command;
 	}
 
@@ -368,11 +374,18 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCommand createDocumentclassCommand(int start) throws RexParseException
 	{
+		//get whether this is a r exam file.
 		String master = parseForOptionalArgument();
+
+		//get the documentclass type.
 		String documentclass = parseForArgument();
+
+		//create the command and add arguments.
 		UEFCommand command = new UEFCommand(Types.documentclass, start, uefCharHandler.getPosition());
 		command.setOptionalArgument(master);
 		command.addArgument(documentclass);
+
+		//return the created command.
 		return command;
 	}
 
@@ -387,9 +400,14 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCommand createLabelCommand(int start) throws RexParseException
 	{
+		//get the label id.
 		String label = parseForArgument();
+
+		//create the command and add arguments.
 		UEFCommand command = new UEFCommand(Types.label, start, uefCharHandler.getPosition());
 		command.addArgument(label);
+
+		//return the created command.
 		return command;
 	}
 
@@ -404,9 +422,14 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCommand createRefCommand(int start) throws RexParseException
 	{
+		//get the label id.
 		String label = parseForArgument();
+
+		//create the command and add arguments.
 		UEFCommand command = new UEFCommand(Types.ref, start, uefCharHandler.getPosition());
 		command.addArgument(label);
+
+		//return the created command.
 		return command;
 	}
 
@@ -421,9 +444,10 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCommand createBeginAnswersCommand(int start) throws RexParseException
 	{
-		String optionalArgument = parseForOptionalArgument();
+		//create the command.
 		UEFCommand command = new UEFCommand(Types.beginAnswers, start, uefCharHandler.getPosition());
-		command.setOptionalArgument(optionalArgument);
+
+		//return the created command.
 		return command;
 	}
 
@@ -438,9 +462,14 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCommand createBeginBlockCommand(int start) throws RexParseException
 	{
+		//get the name of the block.
 		String name = parseForArgument();
+
+		//create the command and add arguments.
 		UEFCommand command = new UEFCommand(Types.beginBlock, start, uefCharHandler.getPosition());
 		command.addArgument(name);
+
+		//return the created command.
 		return command;
 	}
 
@@ -455,7 +484,10 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCommand createBeginDocumentCommand(int start) throws RexParseException
 	{
+		//create the command.
 		UEFCommand command = new UEFCommand(Types.beginDocument, start, uefCharHandler.getPosition());
+
+		//return the created command.
 		return command;
 	}
 
@@ -470,7 +502,10 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCommand createBeginFigureCommand(int start) throws RexParseException
 	{
+		//create the command.
 		UEFCommand command = new UEFCommand(Types.beginFigure, start, uefCharHandler.getPosition());
+
+		//return the created command.
 		return command;
 	}
 
@@ -485,13 +520,23 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCommand createBeginProblemCommand(int start) throws RexParseException
 	{
+		//get the optional argument.
+		//Should only be 'requires=somelabelid'.
 		String optionalArgument = parseForOptionalArgument();
+
+		//get the topic.
 		String topic = parseForArgument();
+
+		//get the difficulty.
 		String difficulty = parseForArgument();
+
+		//create the command and add arguments.
 		UEFCommand command = new UEFCommand(Types.beginProblem, start, uefCharHandler.getPosition());
 		command.setOptionalArgument(optionalArgument);
 		command.addArgument(topic);
 		command.addArgument(difficulty);
+
+		//return the created command.
 		return command;
 	}
 
@@ -506,7 +551,10 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCommand createEndAnswersCommand(int start) throws RexParseException
 	{
+		//create the command.
 		UEFCommand command = new UEFCommand(Types.endAnswers, start, uefCharHandler.getPosition());
+
+		//return the created command.
 		return command;
 	}
 
@@ -521,7 +569,10 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCommand createEndBlockCommand(int start) throws RexParseException
 	{
+		//create the command.
 		UEFCommand command = new UEFCommand(Types.endBlock, start, uefCharHandler.getPosition());
+
+		//return the created command.
 		return command;
 	}
 
@@ -536,6 +587,7 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCommand createEndDocumentCommand(int start) throws RexParseException
 	{
+		//create the command.
 		UEFCommand command = new UEFCommand(Types.endDocument, start, uefCharHandler.getPosition());
 		return command;
 	}
@@ -551,7 +603,10 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCommand createEndFigureCommand(int start) throws RexParseException
 	{
+		//create the command.
 		UEFCommand command = new UEFCommand(Types.endFigure, start, uefCharHandler.getPosition());
+
+		//return the created command.
 		return command;
 	}
 
@@ -566,7 +621,10 @@ public class UEFParser implements UEFParserIF
 	 */
 	UEFCommand createEndProblemCommand(int start) throws RexParseException
 	{
+		//create the command.
 		UEFCommand command = new UEFCommand(Types.endProblem, start, uefCharHandler.getPosition());
+
+		//return the created command.
 		return command;
 	}
 
@@ -638,107 +696,115 @@ public class UEFParser implements UEFParserIF
 					//get the command name.
 					String command = uefCharHandler.getContent(commandStart, uefCharHandler.getPosition());
 
-					// Handle \verb
+					//handle the supported commands below.
 					if (command.equals("\\verb"))
 					{
+						//move past the verb.
 						parsePastVerb();
 						continue;
 					}
-					// Handle \answer
 					else if (command.equals("\\answer"))
 					{
+						//parse and return an answer command.
 						return createAnswerCommand(commandStart);
 					}
-					// Handle \documentclass
 					else if (command.equals("\\documentclass"))
 					{
+						//parse and return an document command.
 						return createDocumentclassCommand(commandStart);
 					}
-					// Handle \label
 					else if (command.equals("\\label"))
 					{
+						//parse and return an label command.
 						return createLabelCommand(commandStart);
 					}
-					// Handle \ref
 					else if (command.equals("\\ref"))
 					{
+						//parse and return an ref command.
 						return createRefCommand(commandStart);
 					}
-					// Handle \begin{} command
 					else if (command.equals("\\begin"))
 					{
+						//get the environment argument of the begin command.
 						String environment = parseForArgument();
 
-						// Handle \begin{verbatim}
+						//handle the supported environments below.
 						if (environment.equals("verbatim"))
 						{
+							//move past the verbatim environment.
 							parsePastVerbatim();
 							continue;
 						}
-						// Handle \begin{answers}
 						else if (environment.equals("answers"))
 						{
+							//parse and return an beginAnswers command.
 							return createBeginAnswersCommand(commandStart);
 						}
-						// Handle \begin{block}
 						else if (environment.equals("block"))
 						{
+							//parse and return an beginBlock command.
 							return createBeginBlockCommand(commandStart);
 						}
-						// Handle \begin{document}
 						else if (environment.equals("document"))
 						{
+							//parse and return an beginDocument command.
 							return createBeginDocumentCommand(commandStart);
 						}
-						// Handle \begin{figure}
 						else if (environment.equals("figure"))
 						{
+							//parse and return an beginFigure command.
 							return createBeginFigureCommand(commandStart);
 						}
-						// Handle \begin{problem}
 						else if (environment.equals("problem"))
 						{
+							//parse and return an beginProblem command.
 							return createBeginProblemCommand(commandStart);
 						}
 					}
-					// Handle \end{}
 					else if (command.equals("\\end"))
 					{
+						//get the environment argument of the end command.
 						String environment = parseForArgument();
-						// Handle \end{answers}
+
 						if (environment.equals("answers"))
 						{
+							//parse and return an endAnswers command.
 							return createEndAnswersCommand(commandStart);
 						}
-						// Handle \end{block}
 						else if (environment.equals("block"))
 						{
+							//parse and return an endBlock command.
 							return createEndBlockCommand(commandStart);
 						}
-						// Handle \end{document}
 						else if (environment.equals("document"))
 						{
+							//parse and return an endDocument command.
 							return createEndDocumentCommand(commandStart);
 						}
-						// Handle \end{figure}
 						else if (environment.equals("figure"))
 						{
+							//parse and return an endFigure command.
 							return createEndFigureCommand(commandStart);
 						}
-						// Handle \end{problem}
 						else if (environment.equals("problem"))
 						{
+							//parse and return an endProblem command.
 							return createEndProblemCommand(commandStart);
 						}
 					}
 				}
+
+				//no command found, so move to next character in file.
 				uefCharHandler.move();
 			}
 			catch (EOFException e)
 			{
+				//hit EOF when parsing for a command or in the middle of parsing a command.
 				throw new RexParseException("Unexpected end of file when parsing for command.", null);
 			}
 		}
+
+		//reached EOF and no commands were found so return null.
 		return null;
 	}
 
