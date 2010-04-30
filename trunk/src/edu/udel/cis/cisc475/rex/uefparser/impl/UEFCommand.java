@@ -62,16 +62,6 @@ class UEFCommand
 	}
 
 	/**
-	 * Sets the type of command.
-	 * @param type the type of command to set.
-	 */
-	void setType(Types type)
-	{
-		//set the type of command.
-		this.type = type;
-	}
-
-	/**
 	 * Sets the optional argument.
 	 * @param optionalArgument the optional argument to set.
 	 */
@@ -93,7 +83,7 @@ class UEFCommand
 
 	/**
 	 * Returns the type of command.
-	 * @return the type of the command or null if the type hasn't been set.
+	 * @return the type of the command.
 	 *
 	 * @see Types
 	 */
@@ -105,7 +95,7 @@ class UEFCommand
 
 	/**
 	 * Gets the start position of the command.
-	 * @return the start position. or -1 if it hasn't been set.
+	 * @return the start position.
 	 */
 	int getStartPosition()
 	{
@@ -115,7 +105,7 @@ class UEFCommand
 
 	/**
 	 * Gets the end position of the command.
-	 * @return the end position or -1 if it hasn't been set.
+	 * @return the end position.
 	 */
 	int getEndPosition()
 	{
@@ -125,21 +115,12 @@ class UEFCommand
 
 	/**
 	 * Gets the size of the command.
-	 * @return the size or -1 if either start or end position is not positive.
+	 * @return the size.
 	 */
 	int getSize()
 	{
-		//make sure command positions are positive before calculating size.
-		if (this.endPosition > -1 && this.startPosition > -1)
-		{
-			//return the size of the command based upon the start and end position.
-			return this.endPosition - this.startPosition;
-		}
-		else
-		{
-			//command positions aren't positive so return -1.
-			return -1;
-		}
+		//return the size of the command based upon the start and end position.
+		return this.endPosition - this.startPosition;
 	}
 
 	/**
