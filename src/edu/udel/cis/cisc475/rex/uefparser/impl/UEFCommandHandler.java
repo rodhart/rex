@@ -26,7 +26,10 @@ import edu.udel.cis.cisc475.rex.uefparser.impl.UEFCommand.Types;
 
 /**
  * This class handles the processing of commands after they are parsed from a
- * file.
+ * file. It contains an internal queue of all commands that the parser fills.
+ * Internally, the class attempts to hierarchically handle commands. For
+ * example, the processDocument() method will handle the processProblem(),
+ * processBlock(), and processFigure() commands.
  * 
  * @author Aaron Myles Landwehr
  * @author Ahmed El-hassany
@@ -39,8 +42,9 @@ class UEFCommandHandler
 	 */
 	private Queue<UEFCommand> uefCommandQueue;
 	/**
-	 * Underlying file that was read from. Simply used to retrieve text from
-	 * lines in the case that errors occur.
+	 * Underlying file that was read from. Used to retrieve text from
+	 * lines in the case that errors occur and used to fill out SourceIF
+	 * objects needed by the ExamIF module.
 	 */
 	private UEFCharHandler uefCharHandler;
 	/**
@@ -74,6 +78,7 @@ class UEFCommandHandler
 	 */
 	UEFCommandHandler(UEFCharHandler uefCharHandler)
 	{
+		//initialize object fields.
 		this.uefCharHandler = uefCharHandler;
 		this.uefCommandQueue = new LinkedList<UEFCommand>();
 		this.sourceFactory = new SourceFactory();
@@ -86,45 +91,63 @@ class UEFCommandHandler
 	 * Adds a command into the command queue.
 	 * 
 	 * @param uefCommand
-	 *            the command to add.
+	 *            the command to add to the queue.
 	 */
 	void add(UEFCommand uefCommand)
 	{
-		uefCommandQueue.add(uefCommand);
+		//add the internal command to the queue.
+		this.uefCommandQueue.add(uefCommand);
 	}
 
+	/**
+	 * Finds the next command that matches a command found in the passed in array
+	 * and returns that command.
+	 * @param types an array of commands to match.
+	 * @return the command in the queue that was matched or null if no commands were matched.
+	 */
 	private UEFCommand findMatchingCommand(Types types[])
 	{
+		//Iterate through all command until a matchin command is found.
 		for (Iterator<UEFCommand> iter = uefCommandQueue.iterator(); iter.hasNext();)
 		{
+			//get the command located at the current iterator.
 			UEFCommand peekedCommand = iter.next();
+
+			//for each command we need to check in the array.
 			for (int i = 0; i < types.length; i++)
 			{
+				//check the current command in the queue with a piece of the array.
 				if (peekedCommand.getType() == types[i])
 				{
+					//matched command so return it.
 					return peekedCommand;
 				}
 			}
 		}
+
+		//no matched commands of the types in the array so return null.
 		return null;
 	}
 
 	/**
-	 * Checks whether the argument contains 'fixed'
+	 * Checks whether the argument contains the String: 'fixed'.
 	 * 
 	 * @param argument
 	 *            the argument to check.
-	 * @return true or false depending on whether the argument contains 'fixed'.
+	 * @return Return true or false depending on whether the argument contains 'fixed'.
+	 * Return false if the argument is null.
 	 */
 	private boolean isFixed(String argument)
 	{
-
+		//make sure the argument isn't null before checking.
 		if (argument != null)
 		{
+			//check the argument and return the result.
 			return argument.contains("fixed");
 		}
 		else
 		{
+			//false if the argument is null.
 			return false;
 		}
 	}
@@ -136,51 +159,80 @@ class UEFCommandHandler
 	 * @param argument
 	 *            the argument to check.
 	 * @return true or false depending on whether the argument contains
-	 *         'correct'.
+	 *         'correct'. Return false if the argument is null.
 	 */
 	private boolean isCorrect(String argument)
 	{
+		//make sure the argument isn't null before checking.
 		if (argument != null)
 		{
+			//check the argument and return the result.
 			return argument.contains("correct");
 		}
-		return false;
+		else
+		{
+			//false if the argument is null.
+			return false;
+		}
 	}
 
 	/**
 	 * Process an \answer command.
+
+	 * @param index index to add in the case that this answer happens to be a fixed answer.
+	 *
+	 * @return a AnswerIF or FixedAnswerIF representation of the processed answer.
+	 *
+	 * @throws RexParseException if there is problem with the correctness of the file.
+	 *
+	 * @throws EOFException if we are somehow out of bounds when reading the underlying file
+	 * to fill out the SourceIF. This should NEVER occur.
 	 */
 	AnswerIF processAnswer(int index) throws RexParseException, EOFException
 	{
+		//grab the /answer command from the queue.
 		UEFCommand command = uefCommandQueue.poll();
 
+		//get the optional argument
 		String optionalArgument = command.getOptionalArgument();
+
+		//get whether this is a fixed answer.
 		boolean fixed = isFixed(optionalArgument);
+
+		//get whether this is a correct answer.
 		boolean correct = isCorrect(optionalArgument);
 
-		// String to be filled with the source content
+		// String to be filled with the source content.
 		String content;
 
-		// Variables to hold the beginning and end of the source
+		// Variables to hold the beginning and end of the source.
 		int startSource = command.getStartPosition();
 		int endSource;
 
+		// fill out array so we can peek for answer and endAnswer commands.
+		// This is how we tell where this current answer ends.
 		Types type[] = new Types[2];
 		type[0] = Types.answer;
 		type[1] = Types.endAnswers;
+
+		//do the actual peeking.
 		UEFCommand peekedCommand = findMatchingCommand(type);
 
+		//We should always find either /answer or /end{answer}. Something is wrong with the file if we do not.
 		if (peekedCommand == null)
 		{
 			// should always be either endAnswers or answer command
 
-			SourceIF execptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(command.
+			//create the source object.
+			SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(command.
 					getStartPosition()), uefCharHandler.getColumnNumber(command.getStartPosition()), uefCharHandler.getLineNumber(command.
 					getEndPosition()), uefCharHandler.getColumnNumber(command.getEndPosition()));
 
-			execptionSource.addText(uefCharHandler.getContent(command.getStartPosition(), command.getEndPosition()));
+			//add the source text to the object.
+			exceptionSource.addText(uefCharHandler.getContent(command.getStartPosition(), command.getEndPosition()));
 
-			throw new RexParseException("No \\end{answer} after \\begin{answer}.", execptionSource);
+			//throw the exception.
+			throw new RexParseException("No \\end{answer} after \\begin{answer}.", exceptionSource);
 		}
 
 		// set the end of the source to the position before
@@ -188,7 +240,7 @@ class UEFCommandHandler
 		endSource = peekedCommand.getStartPosition();
 
 		// Ignore whitespaces and lines at the end of answers, because latex
-		// does.
+		// does. This is for the SourceIF object.
 		while (uefCharHandler.read(endSource - 1) == '\n' || uefCharHandler.read(endSource - 1) == ' ' || uefCharHandler.read(endSource - 1)
 																										  == '\t')
 		{
@@ -196,10 +248,10 @@ class UEFCommandHandler
 		}
 
 		// get the file content from beginning of '/answer'
-		// to beginning of next command .
+		// to beginning of next command.
 		content = uefCharHandler.getContent(startSource, endSource);
 
-		// Create the source object
+		// Create the source object.
 		SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
 		source.setStartLine(uefCharHandler.getLineNumber(startSource));
 		source.setLastLine(uefCharHandler.getLineNumber(endSource));
@@ -207,155 +259,241 @@ class UEFCommandHandler
 		source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
 		source.addText(content);
 
+		//check whether this is a fixed answer or not.
 		if (!fixed)
 		{
-			// System.out.println(content);
+			//return the answer.
 			return examFactory.newAnswer(correct, source);
 		}
 		else
 		{
-			// System.out.println(content);
+			//return the answer.
 			return examFactory.newFixedAnswer(correct, index, source);
 		}
 	}
 
 	/**
 	 * Process the answers environment and command within.
+	 * This includes processing of /ref commands and /answer commands.
+	 *
+	 * @return an array of processed AnswerIF that may be
+	 * either AnswerIF or FixedAnswerIF.
+	 *
+	 * @throws RexParseException if there is problem with the correctness of the file.
+	 *
+	 * @throws EOFException if we are somehow out of bounds when reading the underlying file
+	 * to fill out the SourceIF. This should NEVER occur.
 	 */
 	AnswerIF[] processAnswers() throws RexParseException, EOFException
 	{
 		// pop off the /begin{answers} command
 		uefCommandQueue.poll();
+
+		//set the answer index. Needed, because fixed answers must occur in a certain spot.
 		int index = 0;
+
+		//create a list of answers to add the answers we process to.
 		List<AnswerIF> answersList = new ArrayList<AnswerIF>();
 
+		//boolean to keep track of whether we hit endAnswers or not.
 		boolean done = false;
 
+		//process until either the queue is empty or we hit an endAnswers command.
 		while (!uefCommandQueue.isEmpty() && !done)
 		{
+			//check the command type.
 			switch (uefCommandQueue.peek().getType())
 			{
 				case endAnswers:
 				{
+					//found endAnswers command.
+
+					//set that we are done so we don't process anymore.
 					done = true;
-					// poll the /end{answers} command off the queue
+
+					// pop the /end{answers} command off the queue
 					uefCommandQueue.poll();
 					break;
 				}
 				case answer:
 				{
+					//found answer command.
+
+					//process the answer command and add it to the list.
 					answersList.add(processAnswer(index));
+
+					//increment the index for fixed answers.
 					index++;
 					break;
 				}
 				case ref:
 				{
+					//add the reference to list of references so we can
+					// later add USES relations for. We need to add these
+					// answer references for the particular problem we are
+					// creating. But, it can't be created until after we
+					// get every answer. :-(
 					this.answerReferences.add(processRef());
-					// uefCommandQueue.poll();
 					break;
 				}
 				default:
 				{
-					SourceIF execptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(uefCommandQueue.
+					//Reached a command that shouldn't be found within a answers environment.
+
+					//Fill out the source.
+					SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(uefCommandQueue.
 							peek().getStartPosition()), uefCharHandler.getColumnNumber(uefCommandQueue.peek().getStartPosition()), uefCharHandler.
 							getLineNumber(uefCommandQueue.peek().getEndPosition()), uefCharHandler.getColumnNumber(uefCommandQueue.peek().
 							getEndPosition()));
 
-					execptionSource.addText(uefCharHandler.getContent(uefCommandQueue.peek().getStartPosition(), uefCommandQueue.peek().
+					//add the file text to the source.
+					exceptionSource.addText(uefCharHandler.getContent(uefCommandQueue.peek().getStartPosition(), uefCommandQueue.peek().
 							getEndPosition()));
 
-					throw new RexParseException(uefCommandQueue.peek().getType() + " found within answers environment!", execptionSource);
+					//return the exception.
+					throw new RexParseException(uefCommandQueue.peek().getType() + " found within answers environment!", exceptionSource);
 				}
 			}
 		}
+
+		//either no more commands in the queue or endAnswer reached.
+		//A valid latex file will never end here.
+
+		//return the list of AnswerIF and FixedAnswerIF as an array.
 		return answersList.toArray(new AnswerIF[0]);
 	}
 
 	/**
 	 * Process a block environment.
+	 * This includes processing of /ref commands and /answer commands.
+	 *
+	 * @return A BlockIF representation of the block environment.
+	 *
+	 * @throws RexParseException if there is problem with the correctness of the file.
+	 *
+	 * @throws EOFException if we are somehow out of bounds when reading the underlying file
+	 * to fill out the SourceIF. This should NEVER occur.
 	 */
 	BlockIF processBlock() throws RexParseException, EOFException
 	{
+		// pop off the /begin{block} command
 		UEFCommand command = uefCommandQueue.poll();
 
+		//get the name of the block.
 		String name = command.getArgument(0);
 
-		// String to be filled with the source content
+		// String to be filled with the source content.
 		String content;
 
-		// List of references inside the block
+		// List of references inside the block.
 		List<String> refs = new ArrayList<String>();
 
 		// Variables to hold the beginning and end of the source
 		int startSource = command.getStartPosition();
 		int endSource = 0;
 
+		//boolean to keep track of whether we hit endAnswers or not.
 		boolean done = false;
 
+		//process until either the queue is empty or we hit an endAnswers command.
 		while (!uefCommandQueue.isEmpty() && !done)
 		{
+			//check the command type.
 			switch (uefCommandQueue.peek().getType())
 			{
 				case endBlock:
 				{
+					//found the endBlock command.
+
+					//set that we are done so we don't process anymore.
 					done = true;
 
-					// poll the /end{problem command off the queue
+					// pop the /end{problem command off the queue
 					UEFCommand nextCommand = uefCommandQueue.poll();
+
+					//set the end of the block position, for the SourceIF.
 					endSource = nextCommand.getEndPosition();
-					break;
+
+					// get the file content from beginning of '/begin{block}'
+					// to the end of '/end{block}'.
+					content = uefCharHandler.getContent(startSource, endSource);
+
+					// Create the source object for the block environment.
+					SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
+					source.setStartLine(uefCharHandler.getLineNumber(startSource));
+					source.setLastLine(uefCharHandler.getLineNumber(endSource));
+					source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
+					source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
+					source.addText(content);
+
+					//create the actual block object.
+					BlockIF block = examFactory.newBlock(name, source);
+
+					//Add each reference found within this block to our list of references
+					//to later declareUses relationships for.
+					//Since our BlockIF object is created, we can add global list.
+					if (refs.size() != 0)
+					{
+						Iterator<String> i = refs.iterator();
+						while (i.hasNext())
+						{
+							String r = i.next();
+							if (this.references.containsKey(r))
+							{
+								this.references.get(r).add(block);
+							}
+							else
+							{
+								List<ExamElementIF> list = new ArrayList<ExamElementIF>();
+								list.add(block);
+								this.references.put(r, list);
+							}
+						}
+					}
+
+					//return our block object now.
+					return block;
 				}
 				case ref:
 				{
+					//add the reference to our local list of refences to later
+					//declareUses relationships for.
 					refs.add(processRef());
 					break;
 				}
 				default:
 				{
-					SourceIF execptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
+					//Reached a command that shouldn't be found within a answers environment.
+
+					//Fill out the source.
+					SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
 							startSource), uefCharHandler.getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.
 							getColumnNumber(endSource));
 
-					execptionSource.addText(uefCharHandler.getContent(startSource, endSource));
+					//add the file text to the source.
+					exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
 
-					throw new RexParseException(uefCommandQueue.peek().getType() + " found within block environment!", execptionSource);
+					//return the exception.
+					throw new RexParseException(uefCommandQueue.peek().getType() + " found within block environment!", exceptionSource);
 				}
 			}
 		}
+		
+		//file ended without endBlock being found.
 
-		// get the file content from beginning of '/begin{block}'
-		// to the end of '/end{block}'.
-		content = uefCharHandler.getContent(startSource, endSource);
+		//set the end source to the end of the \begin{block} command.
+		endSource = command.getEndPosition();
 
-		// Create the source object
-		SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
-		source.setStartLine(uefCharHandler.getLineNumber(startSource));
-		source.setLastLine(uefCharHandler.getLineNumber(endSource));
-		source.setStartColumn(uefCharHandler.getColumnNumber(startSource));
-		source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
-		source.addText(content);
+		//Fill out the source.
+		SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
+				startSource), uefCharHandler.getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.
+				getColumnNumber(endSource));
 
-		BlockIF block = examFactory.newBlock(name, source);
+		//add the file text to the source.
+		exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
 
-		if (refs.size() != 0)
-		{
-			Iterator<String> i = refs.iterator();
-			while (i.hasNext())
-			{
-				String r = i.next();
-				if (this.references.containsKey(r))
-				{
-					this.references.get(r).add(block);
-				}
-				else
-				{
-					List<ExamElementIF> list = new ArrayList<ExamElementIF>();
-					list.add(block);
-					this.references.put(r, list);
-				}
-			}
-		}
-		return block;
+		//return the exception.
+		throw new RexParseException("\\begin{block} without matching \\end{block}!", exceptionSource);
 	}
 
 	/**
