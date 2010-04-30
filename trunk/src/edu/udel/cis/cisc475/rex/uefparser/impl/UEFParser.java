@@ -93,13 +93,34 @@ public class UEFParser implements UEFParserIF
 	}
 
 	/**
-	 * Positions the underlying uefCharHandler to the starting character
-	 * at the line following the current line.
+	 * Starting from the current position, repositions the underlying
+	 * UEFCharHandler to the character directly after 'ch'.
 	 *
-	 * @throws EOFException if an EOF occurs before a new line occurs or
-	 * if a line break is the last character in the file.
+	 * @param ch the character to match.
+	 *
+	 * @throws EOFException if an EOF occurs before ch is matched.
 	 */
-	void parseToNewline() throws EOFException
+	void parseUntilCharacter(char ch) throws EOFException
+	{
+		// Read until the end of the first argument
+		while (uefCharHandler.read() != ch)
+		{
+			//move forward one character.
+			uefCharHandler.move();
+		}
+
+		// move one more time after finding ch.
+		uefCharHandler.move();
+	}
+
+	/**
+	 * Starting from the current position, repositions the underlying
+	 * UEFCharHandler to the starting character at the line
+	 * following the current line.
+	 *
+	 * @throws EOFException if an EOF occurs before a new line occurs.
+	 */
+	void parseUntilNewline() throws EOFException
 	{
 		// move forward until a line break.
 		do
@@ -142,7 +163,7 @@ public class UEFParser implements UEFParserIF
 				if (uefCharHandler.read() == '%')
 				{
 					//go to next line.
-					parseToNewline();
+					parseUntilNewline();
 				}
 				// handle finding optional argument: parse past it.
 				else if (uefCharHandler.read() == '[')
@@ -180,19 +201,17 @@ public class UEFParser implements UEFParserIF
 		// after starting an argument.
 		try
 		{
+			// move the file one character past the starter brace.
 			uefCharHandler.move();
-			StringBuffer argument = new StringBuffer();
+
+			// get the start position.
+			int argumentStart = uefCharHandler.getPosition();
 
 			// Read until the end of the first argument
-			while (uefCharHandler.read() != '}')
-			{
-				// append each character of the argument.
-				argument.append(uefCharHandler.read());
-				uefCharHandler.move();
-			}
+			parseUntilCharacter('}');
 
-			// move the file one character past the argument terminator.
-			uefCharHandler.move();
+			// get the argument.
+			String argument = uefCharHandler.getContent(argumentStart, uefCharHandler.getPosition() - 1);
 
 			// return the argument after trimming it.
 			return argument.toString().trim();
@@ -234,7 +253,7 @@ public class UEFParser implements UEFParserIF
 				if (uefCharHandler.read() == '%')
 				{
 					//go to next line.
-					parseToNewline();
+					parseUntilNewline();
 				}
 				// Handle finding linebreaks or whitespaces: move foward.
 				else if (uefCharHandler.isWhiteSpace())
@@ -267,19 +286,17 @@ public class UEFParser implements UEFParserIF
 		// after starting an optional argument.
 		try
 		{
+			// move the file one character past the starter brace.
 			uefCharHandler.move();
-			StringBuffer argument = new StringBuffer();
+
+			// get the start position.
+			int argumentStart = uefCharHandler.getPosition();
 
 			// Read until the end of the first argument
-			while (uefCharHandler.read() != ']')
-			{
-				// append each character of the argument.
-				argument.append(uefCharHandler.read());
-				uefCharHandler.move();
-			}
+			parseUntilCharacter(']');
 
-			// move the file one character past the argument terminator.
-			uefCharHandler.move();
+			// get the argument.
+			String argument = uefCharHandler.getContent(argumentStart, uefCharHandler.getPosition() - 1);
 
 			// return the argument after trimming it.
 			return argument.toString().trim();
@@ -318,7 +335,7 @@ public class UEFParser implements UEFParserIF
 				if (uefCharHandler.read() == '%')
 				{
 					//go to next line.
-					parseToNewline();
+					parseUntilNewline();
 					continue;
 				}
 			}
