@@ -95,17 +95,19 @@ public class UEFParser implements UEFParserIF
 	/**
 	 * Starting from the current position, repositions the underlying
 	 * UEFCharHandler to the character directly after 'ch'.
-	 *
-	 * @param ch the character to match.
-	 *
-	 * @throws EOFException if an EOF occurs before ch is matched.
+	 * 
+	 * @param ch
+	 *            the character to match.
+	 * 
+	 * @throws EOFException
+	 *             if an EOF occurs before ch is matched.
 	 */
 	void parsePastCharacter(char ch) throws EOFException
 	{
 		// Read until the end of the first argument
 		while (uefCharHandler.read() != ch)
 		{
-			//move forward one character.
+			// move forward one character.
 			uefCharHandler.move();
 		}
 
@@ -115,10 +117,11 @@ public class UEFParser implements UEFParserIF
 
 	/**
 	 * Starting from the current position, repositions the underlying
-	 * UEFCharHandler to the starting character at the line
-	 * following the current line.
-	 *
-	 * @throws EOFException if an EOF occurs before a new line occurs.
+	 * UEFCharHandler to the starting character at the line following the
+	 * current line.
+	 * 
+	 * @throws EOFException
+	 *             if an EOF occurs before a new line occurs.
 	 */
 	void parsePastNewline() throws EOFException
 	{
@@ -194,7 +197,7 @@ public class UEFParser implements UEFParserIF
 				// Handle comments: ignore them.
 				if (uefCharHandler.read() == '%')
 				{
-					//go to next line.
+					// go to next line.
 					parsePastNewline();
 				}
 				// handle finding optional argument: parse past it.
@@ -284,7 +287,7 @@ public class UEFParser implements UEFParserIF
 				// Handle comments: ignore them.
 				if (uefCharHandler.read() == '%')
 				{
-					//go to next line.
+					// go to next line.
 					parsePastNewline();
 				}
 				// Handle finding linebreaks or whitespaces: move foward.
@@ -341,290 +344,333 @@ public class UEFParser implements UEFParserIF
 	}
 
 	/**
-	 * creates a answer UEFCommand object. Sets the start position to 'start' and parses for arguments.
-	 * Internally repositions the file to the character following the command.
-	 *
-	 * @param start the start of the command.
+	 * creates a answer UEFCommand object. Sets the start position to 'start'
+	 * and parses for arguments. Internally repositions the file to the
+	 * character following the command.
+	 * 
+	 * @param start
+	 *            the start of the command.
 	 * @return the answer UEFCommand object.
-	 *
-	 * @throws RexParseException if there is a problem during parsing.
+	 * 
+	 * @throws RexParseException
+	 *             if there is a problem during parsing.
 	 */
 	UEFCommand createAnswerCommand(int start) throws RexParseException
 	{
-		//get the optional argument.
-		//In this case, should only be 'correct' or 'fixed' or 'correct,fixed' or 'fixed,correct'.
+		// get the optional argument.
+		// In this case, should only be 'correct' or 'fixed' or 'correct,fixed'
+		// or 'fixed,correct'.
 		String optionalArgument = parseForOptionalArgument();
 
-		//create the command and add arguments.
+		// create the command and add arguments.
 		UEFCommand command = new UEFCommand(Types.answer, start, uefCharHandler.getPosition());
 		command.setOptionalArgument(optionalArgument);
 
-		//return the created command.
+		// return the created command.
 		return command;
 	}
 
 	/**
-	 * creates a documentclass UEFCommand object. Sets the start position to 'start' and parses for arguments.
-	 * Internally repositions the file to the character following the command.
-	 *
-	 * @param start the start of the command.
+	 * creates a documentclass UEFCommand object. Sets the start position to
+	 * 'start' and parses for arguments. Internally repositions the file to the
+	 * character following the command.
+	 * 
+	 * @param start
+	 *            the start of the command.
 	 * @return the documentclass UEFCommand object.
-	 *
-	 * @throws RexParseException if there is a problem during parsing.
+	 * 
+	 * @throws RexParseException
+	 *             if there is a problem during parsing.
 	 */
 	UEFCommand createDocumentclassCommand(int start) throws RexParseException
 	{
-		//get whether this is a r exam file.
+		// get whether this is a r exam file.
 		String master = parseForOptionalArgument();
 
-		//get the documentclass type.
+		// get the documentclass type.
 		String documentclass = parseForArgument();
 
-		//create the command and add arguments.
+		// create the command and add arguments.
 		UEFCommand command = new UEFCommand(Types.documentclass, start, uefCharHandler.getPosition());
 		command.setOptionalArgument(master);
 		command.addArgument(documentclass);
 
-		//return the created command.
+		// return the created command.
 		return command;
 	}
 
 	/**
-	 * creates a label UEFCommand object. Sets the start position to 'start' and parses for arguments.
-	 * Internally repositions the file to the character following the command.
-	 *
-	 * @param start the start of the command.
+	 * creates a label UEFCommand object. Sets the start position to 'start' and
+	 * parses for arguments. Internally repositions the file to the character
+	 * following the command.
+	 * 
+	 * @param start
+	 *            the start of the command.
 	 * @return the label UEFCommand object.
-	 *
-	 * @throws RexParseException if there is a problem during parsing.
+	 * 
+	 * @throws RexParseException
+	 *             if there is a problem during parsing.
 	 */
 	UEFCommand createLabelCommand(int start) throws RexParseException
 	{
-		//get the label id.
+		// get the label id.
 		String label = parseForArgument();
 
-		//create the command and add arguments.
+		// create the command and add arguments.
 		UEFCommand command = new UEFCommand(Types.label, start, uefCharHandler.getPosition());
 		command.addArgument(label);
 
-		//return the created command.
+		// return the created command.
 		return command;
 	}
 
 	/**
-	 * creates a ref UEFCommand object. Sets the start position to 'start' and parses for arguments.
-	 * Internally repositions the file to the character following the command.
-	 *
-	 * @param start the start of the command.
+	 * creates a ref UEFCommand object. Sets the start position to 'start' and
+	 * parses for arguments. Internally repositions the file to the character
+	 * following the command.
+	 * 
+	 * @param start
+	 *            the start of the command.
 	 * @return the ref UEFCommand object.
-	 *
-	 * @throws RexParseException if there is a problem during parsing.
+	 * 
+	 * @throws RexParseException
+	 *             if there is a problem during parsing.
 	 */
 	UEFCommand createRefCommand(int start) throws RexParseException
 	{
-		//get the label id.
+		// get the label id.
 		String label = parseForArgument();
 
-		//create the command and add arguments.
+		// create the command and add arguments.
 		UEFCommand command = new UEFCommand(Types.ref, start, uefCharHandler.getPosition());
 		command.addArgument(label);
 
-		//return the created command.
+		// return the created command.
 		return command;
 	}
 
 	/**
-	 * creates a beginAnswers UEFCommand object. Sets the start position to 'start' and parses for arguments.
-	 * Internally repositions the file to the character following the command.
-	 *
-	 * @param start the start of the command.
+	 * creates a beginAnswers UEFCommand object. Sets the start position to
+	 * 'start' and parses for arguments. Internally repositions the file to the
+	 * character following the command.
+	 * 
+	 * @param start
+	 *            the start of the command.
 	 * @return the beginAnswers UEFCommand object.
-	 *
-	 * @throws RexParseException if there is a problem during parsing.
+	 * 
+	 * @throws RexParseException
+	 *             if there is a problem during parsing.
 	 */
 	UEFCommand createBeginAnswersCommand(int start) throws RexParseException
 	{
-		//create the command.
+		// create the command.
 		UEFCommand command = new UEFCommand(Types.beginAnswers, start, uefCharHandler.getPosition());
 
-		//return the created command.
+		// return the created command.
 		return command;
 	}
 
 	/**
-	 * creates a beginBlock UEFCommand object. Sets the start position to 'start' and parses for arguments.
-	 * Internally repositions the file to the character following the command.
-	 *
-	 * @param start the start of the command.
+	 * creates a beginBlock UEFCommand object. Sets the start position to
+	 * 'start' and parses for arguments. Internally repositions the file to the
+	 * character following the command.
+	 * 
+	 * @param start
+	 *            the start of the command.
 	 * @return the beginBlock UEFCommand object.
-	 *
-	 * @throws RexParseException if there is a problem during parsing.
+	 * 
+	 * @throws RexParseException
+	 *             if there is a problem during parsing.
 	 */
 	UEFCommand createBeginBlockCommand(int start) throws RexParseException
 	{
-		//get the name of the block.
+		// get the name of the block.
 		String name = parseForArgument();
 
-		//create the command and add arguments.
+		// create the command and add arguments.
 		UEFCommand command = new UEFCommand(Types.beginBlock, start, uefCharHandler.getPosition());
 		command.addArgument(name);
 
-		//return the created command.
+		// return the created command.
 		return command;
 	}
 
 	/**
-	 * creates a beginDocument UEFCommand object. Sets the start position to 'start' and parses for arguments.
-	 * Internally repositions the file to the character following the command.
-	 *
-	 * @param start the start of the command.
+	 * creates a beginDocument UEFCommand object. Sets the start position to
+	 * 'start' and parses for arguments. Internally repositions the file to the
+	 * character following the command.
+	 * 
+	 * @param start
+	 *            the start of the command.
 	 * @return the beginDocument UEFCommand object.
-	 *
-	 * @throws RexParseException if there is a problem during parsing.
+	 * 
+	 * @throws RexParseException
+	 *             if there is a problem during parsing.
 	 */
 	UEFCommand createBeginDocumentCommand(int start) throws RexParseException
 	{
-		//create the command.
+		// create the command.
 		UEFCommand command = new UEFCommand(Types.beginDocument, start, uefCharHandler.getPosition());
 
-		//return the created command.
+		// return the created command.
 		return command;
 	}
 
 	/**
-	 * creates a beginFigure UEFCommand object. Sets the start position to 'start' and parses for arguments.
-	 * Internally repositions the file to the character following the command.
-	 *
-	 * @param start the start of the command.
+	 * creates a beginFigure UEFCommand object. Sets the start position to
+	 * 'start' and parses for arguments. Internally repositions the file to the
+	 * character following the command.
+	 * 
+	 * @param start
+	 *            the start of the command.
 	 * @return the beginFigure UEFCommand object.
-	 *
-	 * @throws RexParseException if there is a problem during parsing.
+	 * 
+	 * @throws RexParseException
+	 *             if there is a problem during parsing.
 	 */
 	UEFCommand createBeginFigureCommand(int start) throws RexParseException
 	{
-		//create the command.
+		// create the command.
 		UEFCommand command = new UEFCommand(Types.beginFigure, start, uefCharHandler.getPosition());
 
-		//return the created command.
+		// return the created command.
 		return command;
 	}
 
 	/**
-	 * creates a beginProblem UEFCommand object. Sets the start position to 'start' and parses for arguments.
-	 * Internally repositions the file to the character following the command.
-	 *
-	 * @param start the start of the command.
+	 * creates a beginProblem UEFCommand object. Sets the start position to
+	 * 'start' and parses for arguments. Internally repositions the file to the
+	 * character following the command.
+	 * 
+	 * @param start
+	 *            the start of the command.
 	 * @return the beginProblem UEFCommand object.
-	 *
-	 * @throws RexParseException if there is a problem during parsing.
+	 * 
+	 * @throws RexParseException
+	 *             if there is a problem during parsing.
 	 */
 	UEFCommand createBeginProblemCommand(int start) throws RexParseException
 	{
-		//get the optional argument.
-		//Should only be 'requires=somelabelid'.
+		// get the optional argument.
+		// Should only be 'requires=somelabelid'.
 		String optionalArgument = parseForOptionalArgument();
 
-		//get the topic.
+		// get the topic.
 		String topic = parseForArgument();
 
-		//get the difficulty.
+		// get the difficulty.
 		String difficulty = parseForArgument();
 
-		//create the command and add arguments.
+		// create the command and add arguments.
 		UEFCommand command = new UEFCommand(Types.beginProblem, start, uefCharHandler.getPosition());
 		command.setOptionalArgument(optionalArgument);
 		command.addArgument(topic);
 		command.addArgument(difficulty);
 
-		//return the created command.
+		// return the created command.
 		return command;
 	}
 
 	/**
-	 * creates a endAnswers UEFCommand object. Sets the start position to 'start' and parses for arguments.
-	 * Internally repositions the file to the character following the command.
-	 *
-	 * @param start the start of the command.
+	 * creates a endAnswers UEFCommand object. Sets the start position to
+	 * 'start' and parses for arguments. Internally repositions the file to the
+	 * character following the command.
+	 * 
+	 * @param start
+	 *            the start of the command.
 	 * @return the endAnswers UEFCommand object.
-	 *
-	 * @throws RexParseException if there is a problem during parsing.
+	 * 
+	 * @throws RexParseException
+	 *             if there is a problem during parsing.
 	 */
 	UEFCommand createEndAnswersCommand(int start) throws RexParseException
 	{
-		//create the command.
+		// create the command.
 		UEFCommand command = new UEFCommand(Types.endAnswers, start, uefCharHandler.getPosition());
 
-		//return the created command.
+		// return the created command.
 		return command;
 	}
 
 	/**
-	 * creates a endBlockUEFCommand object. Sets the start position to 'start' and parses for arguments.
-	 * Internally repositions the file to the character following the command.
-	 *
-	 * @param start the start of the command.
+	 * creates a endBlockUEFCommand object. Sets the start position to 'start'
+	 * and parses for arguments. Internally repositions the file to the
+	 * character following the command.
+	 * 
+	 * @param start
+	 *            the start of the command.
 	 * @return the endBlock UEFCommand object.
-	 *
-	 * @throws RexParseException if there is a problem during parsing.
+	 * 
+	 * @throws RexParseException
+	 *             if there is a problem during parsing.
 	 */
 	UEFCommand createEndBlockCommand(int start) throws RexParseException
 	{
-		//create the command.
+		// create the command.
 		UEFCommand command = new UEFCommand(Types.endBlock, start, uefCharHandler.getPosition());
 
-		//return the created command.
+		// return the created command.
 		return command;
 	}
 
 	/**
-	 * creates a endDocument UEFCommand object. Sets the start position to 'start' and parses for arguments.
-	 * Internally repositions the file to the character following the command.
-	 *
-	 * @param start the start of the command.
+	 * creates a endDocument UEFCommand object. Sets the start position to
+	 * 'start' and parses for arguments. Internally repositions the file to the
+	 * character following the command.
+	 * 
+	 * @param start
+	 *            the start of the command.
 	 * @return the endDocument UEFCommand object.
-	 *
-	 * @throws RexParseException if there is a problem during parsing.
+	 * 
+	 * @throws RexParseException
+	 *             if there is a problem during parsing.
 	 */
 	UEFCommand createEndDocumentCommand(int start) throws RexParseException
 	{
-		//create the command.
+		// create the command.
 		UEFCommand command = new UEFCommand(Types.endDocument, start, uefCharHandler.getPosition());
 		return command;
 	}
 
 	/**
-	 * creates a endFigure UEFCommand object. Sets the start position to 'start' and parses for arguments.
-	 * Internally repositions the file to the character following the command.
-	 *
-	 * @param start the start of the command.
+	 * creates a endFigure UEFCommand object. Sets the start position to 'start'
+	 * and parses for arguments. Internally repositions the file to the
+	 * character following the command.
+	 * 
+	 * @param start
+	 *            the start of the command.
 	 * @return the endFigure UEFCommand object.
-	 *
-	 * @throws RexParseException if there is a problem during parsing.
+	 * 
+	 * @throws RexParseException
+	 *             if there is a problem during parsing.
 	 */
 	UEFCommand createEndFigureCommand(int start) throws RexParseException
 	{
-		//create the command.
+		// create the command.
 		UEFCommand command = new UEFCommand(Types.endFigure, start, uefCharHandler.getPosition());
 
-		//return the created command.
+		// return the created command.
 		return command;
 	}
 
 	/**
-	 * creates a endProblem UEFCommand object. Sets the start position to 'start' and parses for arguments.
-	 * Internally repositions the file to the character following the command.
-	 *
-	 * @param start the start of the command.
+	 * creates a endProblem UEFCommand object. Sets the start position to
+	 * 'start' and parses for arguments. Internally repositions the file to the
+	 * character following the command.
+	 * 
+	 * @param start
+	 *            the start of the command.
 	 * @return the endProblem UEFCommand object.
-	 *
-	 * @throws RexParseException if there is a problem during parsing.
+	 * 
+	 * @throws RexParseException
+	 *             if there is a problem during parsing.
 	 */
 	UEFCommand createEndProblemCommand(int start) throws RexParseException
 	{
-		//create the command.
+		// create the command.
 		UEFCommand command = new UEFCommand(Types.endProblem, start, uefCharHandler.getPosition());
 
-		//return the created command.
+		// return the created command.
 		return command;
 	}
 
@@ -637,24 +683,21 @@ public class UEFParser implements UEFParserIF
 	 * @return the current command as a UEFCommand or null if there are no more
 	 *         commands.
 	 * 
-	 * @throws EOLException
-	 *             if an unexpected EOL occurs.
-	 * 
-	 * @throws EOFException
-	 *             if an unexpected EOF occurs.
+	 * @throws RexParseException
+	 *             if there is a problem during parsing.
 	 */
 	UEFCommand parseForCommand() throws RexParseException
 	{
-		//Check for end of file before reading each character.
+		// Check for end of file before reading each character.
 		while (!uefCharHandler.eof())
 		{
-			//Try-catch in case file ends within a comment.
+			// Try-catch in case file ends within a comment.
 			try
 			{
 				// Handle comments: ignore them.
 				if (uefCharHandler.read() == '%')
 				{
-					//go to next line.
+					// go to next line.
 					parsePastNewline();
 					continue;
 				}
@@ -665,15 +708,16 @@ public class UEFParser implements UEFParserIF
 				return null;
 			}
 
-			// Not OKAY to reach EOF below this, because we will be parsing commands.
+			// Not OKAY to reach EOF below this, because we will be parsing
+			// commands.
 			try
 			{
 				// check for a command.
 				if (uefCharHandler.read() == '\\')
 				{
-					//matched a command.
+					// matched a command.
 
-					//get the start of the command.
+					// get the start of the command.
 					int commandStart = uefCharHandler.getPosition();
 
 					// move forward in the file.
@@ -682,7 +726,7 @@ public class UEFParser implements UEFParserIF
 					// Handle double backslash escape character: \\
 					if (uefCharHandler.read() == '\\')
 					{
-						//escape character, so move foward.
+						// escape character, so move foward.
 						uefCharHandler.move();
 						continue;
 					}
@@ -693,142 +737,149 @@ public class UEFParser implements UEFParserIF
 						uefCharHandler.move();
 					}
 
-					//get the command name.
+					// get the command name.
 					String command = uefCharHandler.getContent(commandStart, uefCharHandler.getPosition());
 
-					//handle the supported commands below.
+					// handle the supported commands below.
 					if (command.equals("\\verb"))
 					{
-						//move past the verb.
+						// move past the verb.
 						parsePastVerb();
 						continue;
 					}
 					else if (command.equals("\\answer"))
 					{
-						//parse and return an answer command.
+						// parse and return an answer command.
 						return createAnswerCommand(commandStart);
 					}
 					else if (command.equals("\\documentclass"))
 					{
-						//parse and return an document command.
+						// parse and return an document command.
 						return createDocumentclassCommand(commandStart);
 					}
 					else if (command.equals("\\label"))
 					{
-						//parse and return an label command.
+						// parse and return an label command.
 						return createLabelCommand(commandStart);
 					}
 					else if (command.equals("\\ref"))
 					{
-						//parse and return an ref command.
+						// parse and return an ref command.
 						return createRefCommand(commandStart);
 					}
 					else if (command.equals("\\begin"))
 					{
-						//get the environment argument of the begin command.
+						// get the environment argument of the begin command.
 						String environment = parseForArgument();
 
-						//handle the supported environments below.
+						// handle the supported environments below.
 						if (environment.equals("verbatim"))
 						{
-							//move past the verbatim environment.
+							// move past the verbatim environment.
 							parsePastVerbatim();
 							continue;
 						}
 						else if (environment.equals("answers"))
 						{
-							//parse and return an beginAnswers command.
+							// parse and return an beginAnswers command.
 							return createBeginAnswersCommand(commandStart);
 						}
 						else if (environment.equals("block"))
 						{
-							//parse and return an beginBlock command.
+							// parse and return an beginBlock command.
 							return createBeginBlockCommand(commandStart);
 						}
 						else if (environment.equals("document"))
 						{
-							//parse and return an beginDocument command.
+							// parse and return an beginDocument command.
 							return createBeginDocumentCommand(commandStart);
 						}
 						else if (environment.equals("figure"))
 						{
-							//parse and return an beginFigure command.
+							// parse and return an beginFigure command.
 							return createBeginFigureCommand(commandStart);
 						}
 						else if (environment.equals("problem"))
 						{
-							//parse and return an beginProblem command.
+							// parse and return an beginProblem command.
 							return createBeginProblemCommand(commandStart);
 						}
 					}
 					else if (command.equals("\\end"))
 					{
-						//get the environment argument of the end command.
+						// get the environment argument of the end command.
 						String environment = parseForArgument();
 
 						if (environment.equals("answers"))
 						{
-							//parse and return an endAnswers command.
+							// parse and return an endAnswers command.
 							return createEndAnswersCommand(commandStart);
 						}
 						else if (environment.equals("block"))
 						{
-							//parse and return an endBlock command.
+							// parse and return an endBlock command.
 							return createEndBlockCommand(commandStart);
 						}
 						else if (environment.equals("document"))
 						{
-							//parse and return an endDocument command.
+							// parse and return an endDocument command.
 							return createEndDocumentCommand(commandStart);
 						}
 						else if (environment.equals("figure"))
 						{
-							//parse and return an endFigure command.
+							// parse and return an endFigure command.
 							return createEndFigureCommand(commandStart);
 						}
 						else if (environment.equals("problem"))
 						{
-							//parse and return an endProblem command.
+							// parse and return an endProblem command.
 							return createEndProblemCommand(commandStart);
 						}
 					}
 				}
 
-				//no command found, so move to next character in file.
+				// no command found, so move to next character in file.
 				uefCharHandler.move();
 			}
 			catch (EOFException e)
 			{
-				//hit EOF when parsing for a command or in the middle of parsing a command.
+				// hit EOF when parsing for a command or in the middle of
+				// parsing a command.
 				throw new RexParseException("Unexpected end of file when parsing for command.", null);
 			}
 		}
 
-		//reached EOF and no commands were found so return null.
+		// reached EOF and no commands were found so return null.
 		return null;
 	}
 
 	/**
 	 * Parses for all commands in file and adds them to internal command queue.
-	 * They are ready to be processed after the call finishes.
+	 * They are ready to be processed by the underlying CommandHandler after the
+	 * call finishes.
 	 * 
 	 * @param file
-	 *            the file handler for the uef file.
+	 *            the underlying file to open and parse.
 	 * 
-	 * @throws EOLException
-	 *             if an unexpected EOL occurs.
-	 * @throws EOFException
-	 *             if an unexpected EOF occurs.
+	 * @throws RexParseException
+	 *             if there is a problem during parsing.
+	 * 
 	 * @throws IOException
 	 *             If an I/O problem occurs.
 	 */
 	void parseForAllCommands(File file) throws RexParseException, IOException
 	{
+		// open the file to parse.
 		this.openFile(file);
+
+		// parse each command.
 		UEFCommand uefCommand = parseForCommand();
 		while (uefCommand != null)
 		{
+			// add the command to the queue.
 			uefCommandHandler.add(uefCommand);
+
+			// get the next command.
 			uefCommand = parseForCommand();
 		}
 	}
@@ -840,24 +891,16 @@ public class UEFParser implements UEFParserIF
 	 *            the file handler for the uef file.
 	 * @return ExamIF representation of the UE file.
 	 * @throws RexException
-	 *             if a parsing error occurs.
+	 *             if some kind of parsing error occurs.
 	 * @throws IOException
 	 *             if the file cannot be open or read.
 	 */
 	public ExamIF parse(File file) throws RexException, IOException
 	{
-		// catch any IO problem while opening the file
-		this.openFile(file);
-		UEFCommand uefCommand = parseForCommand();
-		while (uefCommand != null)
-		{
-			uefCommandHandler.add(uefCommand);
-			uefCommand = parseForCommand();
-		}
-		// completely parse the file
+		// completely parse the file.
 		parseForAllCommands(file);
 
-		// process the queue
+		// process the queue and return the generated ExamIF.
 		return uefCommandHandler.process();
 	}
 }
