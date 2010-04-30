@@ -31,7 +31,8 @@ import edu.udel.cis.cisc475.rex.uefparser.impl.UEFCommand.Types;
  * @author Aaron Myles Landwehr
  * @author Ahmed El-hassany
  */
-class UEFCommandHandler {
+class UEFCommandHandler
+{
 
 	/**
 	 * Queue of all commands from the file.
@@ -71,7 +72,8 @@ class UEFCommandHandler {
 	 * @param uefCharHandler
 	 *            the underlying UEFCharHandler.
 	 */
-	UEFCommandHandler(UEFCharHandler uefCharHandler) {
+	UEFCommandHandler(UEFCharHandler uefCharHandler)
+	{
 		this.uefCharHandler = uefCharHandler;
 		this.uefCommandQueue = new LinkedList<UEFCommand>();
 		this.sourceFactory = new SourceFactory();
@@ -86,16 +88,20 @@ class UEFCommandHandler {
 	 * @param uefCommand
 	 *            the command to add.
 	 */
-	void add(UEFCommand uefCommand) {
+	void add(UEFCommand uefCommand)
+	{
 		uefCommandQueue.add(uefCommand);
 	}
 
-	private UEFCommand findMatchingCommand(Types types[]) {
-		for (Iterator<UEFCommand> iter = uefCommandQueue.iterator(); iter
-				.hasNext();) {
+	private UEFCommand findMatchingCommand(Types types[])
+	{
+		for (Iterator<UEFCommand> iter = uefCommandQueue.iterator(); iter.hasNext();)
+		{
 			UEFCommand peekedCommand = iter.next();
-			for (int i = 0; i < types.length; i++) {
-				if (peekedCommand.getType() == types[i]) {
+			for (int i = 0; i < types.length; i++)
+			{
+				if (peekedCommand.getType() == types[i])
+				{
 					return peekedCommand;
 				}
 			}
@@ -105,25 +111,37 @@ class UEFCommandHandler {
 
 	/**
 	 * Checks whether the argument contains 'fixed'
-	 * @param argument the argument to check.
+	 * 
+	 * @param argument
+	 *            the argument to check.
 	 * @return true or false depending on whether the argument contains 'fixed'.
 	 */
-	private boolean isFixed(String argument) {
+	private boolean isFixed(String argument)
+	{
 
-		if (argument != null) {
+		if (argument != null)
+		{
 			return argument.contains("fixed");
-		} else {
+		}
+		else
+		{
 			return false;
 		}
 	}
 
 	/**
-	 * Checks whether the argument contains 'correct'. Returns true if so else false.
-	 * @param argument the argument to check.
-	 * @return true or false depending on whether the argument contains 'correct'.
+	 * Checks whether the argument contains 'correct'. Returns true if so else
+	 * false.
+	 * 
+	 * @param argument
+	 *            the argument to check.
+	 * @return true or false depending on whether the argument contains
+	 *         'correct'.
 	 */
-	private boolean isCorrect(String argument) {
-		if (argument != null) {
+	private boolean isCorrect(String argument)
+	{
+		if (argument != null)
+		{
 			return argument.contains("correct");
 		}
 		return false;
@@ -132,7 +150,8 @@ class UEFCommandHandler {
 	/**
 	 * Process an \answer command.
 	 */
-	AnswerIF processAnswer(int index) throws RexParseException, EOFException {
+	AnswerIF processAnswer(int index) throws RexParseException, EOFException
+	{
 		UEFCommand command = uefCommandQueue.poll();
 
 		String optionalArgument = command.getOptionalArgument();
@@ -151,21 +170,17 @@ class UEFCommandHandler {
 		type[1] = Types.endAnswers;
 		UEFCommand peekedCommand = findMatchingCommand(type);
 
-		if (peekedCommand == null) {
+		if (peekedCommand == null)
+		{
 			// should always be either endAnswers or answer command
 
-			SourceIF execptionSource = sourceFactory.newSource(uefCharHandler
-					.getFileName(), uefCharHandler.getLineNumber(command
-					.getStartPosition()), uefCharHandler
-					.getColumnNumber(command.getStartPosition()),
-					uefCharHandler.getLineNumber(command.getEndPosition()),
-					uefCharHandler.getColumnNumber(command.getEndPosition()));
+			SourceIF execptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(command.
+					getStartPosition()), uefCharHandler.getColumnNumber(command.getStartPosition()), uefCharHandler.getLineNumber(command.
+					getEndPosition()), uefCharHandler.getColumnNumber(command.getEndPosition()));
 
-			execptionSource.addText(uefCharHandler.getContent(command
-					.getStartPosition(), command.getEndPosition()));
+			execptionSource.addText(uefCharHandler.getContent(command.getStartPosition(), command.getEndPosition()));
 
-			throw new RexParseException(
-					"No \\end{answer} after \\begin{answer}.", execptionSource);
+			throw new RexParseException("No \\end{answer} after \\begin{answer}.", execptionSource);
 		}
 
 		// set the end of the source to the position before
@@ -174,9 +189,9 @@ class UEFCommandHandler {
 
 		// Ignore whitespaces and lines at the end of answers, because latex
 		// does.
-		while (uefCharHandler.read(endSource - 1) == '\n'
-				|| uefCharHandler.read(endSource - 1) == ' '
-				|| uefCharHandler.read(endSource - 1) == '\t') {
+		while (uefCharHandler.read(endSource - 1) == '\n' || uefCharHandler.read(endSource - 1) == ' ' || uefCharHandler.read(endSource - 1)
+																										  == '\t')
+		{
 			endSource--;
 		}
 
@@ -192,10 +207,13 @@ class UEFCommandHandler {
 		source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
 		source.addText(content);
 
-		if (!fixed) {
+		if (!fixed)
+		{
 			// System.out.println(content);
 			return examFactory.newAnswer(correct, source);
-		} else {
+		}
+		else
+		{
 			// System.out.println(content);
 			return examFactory.newFixedAnswer(correct, index, source);
 		}
@@ -204,7 +222,8 @@ class UEFCommandHandler {
 	/**
 	 * Process the answers environment and command within.
 	 */
-	AnswerIF[] processAnswers() throws RexParseException, EOFException {
+	AnswerIF[] processAnswers() throws RexParseException, EOFException
+	{
 		// pop off the /begin{answers} command
 		uefCommandQueue.poll();
 		int index = 0;
@@ -212,43 +231,41 @@ class UEFCommandHandler {
 
 		boolean done = false;
 
-		while (!uefCommandQueue.isEmpty() && !done) {
-			switch (uefCommandQueue.peek().getType()) {
-			case endAnswers: {
-				done = true;
-				// poll the /end{answers} command off the queue
-				uefCommandQueue.poll();
-				break;
-			}
-			case answer: {
-				answersList.add(processAnswer(index));
-				index++;
-				break;
-			}
-			case ref: {
-				this.answerReferences.add(processRef());
-				// uefCommandQueue.poll();
-				break;
-			}
-			default: {
-				SourceIF execptionSource = sourceFactory.newSource(
-						uefCharHandler.getFileName(), uefCharHandler
-								.getLineNumber(uefCommandQueue.peek()
-										.getStartPosition()), uefCharHandler
-								.getColumnNumber(uefCommandQueue.peek()
-										.getStartPosition()), uefCharHandler
-								.getLineNumber(uefCommandQueue.peek()
-										.getEndPosition()), uefCharHandler
-								.getColumnNumber(uefCommandQueue.peek()
-										.getEndPosition()));
+		while (!uefCommandQueue.isEmpty() && !done)
+		{
+			switch (uefCommandQueue.peek().getType())
+			{
+				case endAnswers:
+				{
+					done = true;
+					// poll the /end{answers} command off the queue
+					uefCommandQueue.poll();
+					break;
+				}
+				case answer:
+				{
+					answersList.add(processAnswer(index));
+					index++;
+					break;
+				}
+				case ref:
+				{
+					this.answerReferences.add(processRef());
+					// uefCommandQueue.poll();
+					break;
+				}
+				default:
+				{
+					SourceIF execptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(uefCommandQueue.
+							peek().getStartPosition()), uefCharHandler.getColumnNumber(uefCommandQueue.peek().getStartPosition()), uefCharHandler.
+							getLineNumber(uefCommandQueue.peek().getEndPosition()), uefCharHandler.getColumnNumber(uefCommandQueue.peek().
+							getEndPosition()));
 
-				execptionSource.addText(uefCharHandler.getContent(
-						uefCommandQueue.peek().getStartPosition(),
-						uefCommandQueue.peek().getEndPosition()));
+					execptionSource.addText(uefCharHandler.getContent(uefCommandQueue.peek().getStartPosition(), uefCommandQueue.peek().
+							getEndPosition()));
 
-				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found within answers environment!", execptionSource);
-			}
+					throw new RexParseException(uefCommandQueue.peek().getType() + " found within answers environment!", execptionSource);
+				}
 			}
 		}
 		return answersList.toArray(new AnswerIF[0]);
@@ -257,7 +274,8 @@ class UEFCommandHandler {
 	/**
 	 * Process a block environment.
 	 */
-	BlockIF processBlock() throws RexParseException, EOFException {
+	BlockIF processBlock() throws RexParseException, EOFException
+	{
 		UEFCommand command = uefCommandQueue.poll();
 
 		String name = command.getArgument(0);
@@ -274,34 +292,34 @@ class UEFCommandHandler {
 
 		boolean done = false;
 
-		while (!uefCommandQueue.isEmpty() && !done) {
-			switch (uefCommandQueue.peek().getType()) {
-			case endBlock: {
-				done = true;
+		while (!uefCommandQueue.isEmpty() && !done)
+		{
+			switch (uefCommandQueue.peek().getType())
+			{
+				case endBlock:
+				{
+					done = true;
 
-				// poll the /end{problem command off the queue
-				UEFCommand nextCommand = uefCommandQueue.poll();
-				endSource = nextCommand.getEndPosition();
-				break;
-			}
-			case ref: {
-				refs.add(processRef());
-				break;
-			}
-			default: {
-				SourceIF execptionSource = sourceFactory.newSource(
-						uefCharHandler.getFileName(), uefCharHandler
-								.getLineNumber(startSource), uefCharHandler
-								.getColumnNumber(startSource), uefCharHandler
-								.getLineNumber(endSource), uefCharHandler
-								.getColumnNumber(endSource));
+					// poll the /end{problem command off the queue
+					UEFCommand nextCommand = uefCommandQueue.poll();
+					endSource = nextCommand.getEndPosition();
+					break;
+				}
+				case ref:
+				{
+					refs.add(processRef());
+					break;
+				}
+				default:
+				{
+					SourceIF execptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
+							startSource), uefCharHandler.getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.
+							getColumnNumber(endSource));
 
-				execptionSource.addText(uefCharHandler.getContent(startSource,
-						endSource));
+					execptionSource.addText(uefCharHandler.getContent(startSource, endSource));
 
-				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found within block environment!", execptionSource);
-			}
+					throw new RexParseException(uefCommandQueue.peek().getType() + " found within block environment!", execptionSource);
+				}
 			}
 		}
 
@@ -319,13 +337,18 @@ class UEFCommandHandler {
 
 		BlockIF block = examFactory.newBlock(name, source);
 
-		if (refs.size() != 0) {
+		if (refs.size() != 0)
+		{
 			Iterator<String> i = refs.iterator();
-			while (i.hasNext()) {
+			while (i.hasNext())
+			{
 				String r = i.next();
-				if (this.references.containsKey(r)) {
+				if (this.references.containsKey(r))
+				{
 					this.references.get(r).add(block);
-				} else {
+				}
+				else
+				{
 					List<ExamElementIF> list = new ArrayList<ExamElementIF>();
 					list.add(block);
 					this.references.put(r, list);
@@ -338,7 +361,8 @@ class UEFCommandHandler {
 	/**
 	 * Process the document environment.
 	 */
-	ExamIF processDocument() throws RexParseException, EOFException {
+	ExamIF processDocument() throws RexParseException, EOFException
+	{
 		// pull /begin{document} off the queue
 		UEFCommand command = uefCommandQueue.poll();
 
@@ -346,26 +370,20 @@ class UEFCommandHandler {
 		ExamIF exam = examFactory.newMasterExam();
 
 		// get the frontal matter
-		if (!uefCommandQueue.isEmpty()) {
+		if (!uefCommandQueue.isEmpty())
+		{
 			// get the start and end positions of the frontal matter
 			int startOfFrontalMatter = command.getEndPosition();
 			int endOfFrontalMatter = uefCommandQueue.peek().getStartPosition();
 
-			String content = uefCharHandler.getContent(startOfFrontalMatter,
-					endOfFrontalMatter);
+			String content = uefCharHandler.getContent(startOfFrontalMatter, endOfFrontalMatter);
 
 			// Create the source object for frontal matter
-			SourceIF source = sourceFactory.newSource(uefCharHandler
-					.getFileName());
-			source.setStartLine(uefCharHandler
-					.getLineNumber(startOfFrontalMatter));
-			source
-					.setLastLine(uefCharHandler
-							.getLineNumber(endOfFrontalMatter));
-			source.setStartColumn(uefCharHandler
-					.getColumnNumber(startOfFrontalMatter));
-			source.setLastColumn(uefCharHandler
-					.getColumnNumber(endOfFrontalMatter));
+			SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
+			source.setStartLine(uefCharHandler.getLineNumber(startOfFrontalMatter));
+			source.setLastLine(uefCharHandler.getLineNumber(endOfFrontalMatter));
+			source.setStartColumn(uefCharHandler.getColumnNumber(startOfFrontalMatter));
+			source.setLastColumn(uefCharHandler.getColumnNumber(endOfFrontalMatter));
 			source.addText(content);
 
 			// System.out.println(content);
@@ -375,56 +393,54 @@ class UEFCommandHandler {
 		}
 
 		// process commands within the document environment
-		while (!uefCommandQueue.isEmpty()) {
-			switch (uefCommandQueue.peek().getType()) {
-			case beginBlock: {
-				exam.addElement(processBlock());
-				break;
-			}
-			case beginFigure: {
-				exam.addElement(processFigure());
-				break;
-			}
-			case beginProblem: {
-				exam.addElement(processProblem());
-				break;
-			}
-			case endDocument: {
-				// pull /end{document} off the queue.
-				uefCommandQueue.poll();
-				return exam;
-			}
-			default: {
-				SourceIF execptionSource = sourceFactory.newSource(
-						uefCharHandler.getFileName(), uefCharHandler
-								.getLineNumber(uefCommandQueue.peek()
-										.getStartPosition()), uefCharHandler
-								.getColumnNumber(uefCommandQueue.peek()
-										.getStartPosition()), uefCharHandler
-								.getLineNumber(uefCommandQueue.peek()
-										.getEndPosition()), uefCharHandler
-								.getColumnNumber(uefCommandQueue.peek()
-										.getEndPosition()));
+		while (!uefCommandQueue.isEmpty())
+		{
+			switch (uefCommandQueue.peek().getType())
+			{
+				case beginBlock:
+				{
+					exam.addElement(processBlock());
+					break;
+				}
+				case beginFigure:
+				{
+					exam.addElement(processFigure());
+					break;
+				}
+				case beginProblem:
+				{
+					exam.addElement(processProblem());
+					break;
+				}
+				case endDocument:
+				{
+					// pull /end{document} off the queue.
+					uefCommandQueue.poll();
+					return exam;
+				}
+				default:
+				{
+					SourceIF execptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(uefCommandQueue.
+							peek().getStartPosition()), uefCharHandler.getColumnNumber(uefCommandQueue.peek().getStartPosition()), uefCharHandler.
+							getLineNumber(uefCommandQueue.peek().getEndPosition()), uefCharHandler.getColumnNumber(uefCommandQueue.peek().
+							getEndPosition()));
 
-				execptionSource.addText(uefCharHandler.getContent(
-						uefCommandQueue.peek().getStartPosition(),
-						uefCommandQueue.peek().getEndPosition()));
+					execptionSource.addText(uefCharHandler.getContent(uefCommandQueue.peek().getStartPosition(), uefCommandQueue.peek().
+							getEndPosition()));
 
-				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found within document environment!",
-						execptionSource);
-			}
+					throw new RexParseException(uefCommandQueue.peek().getType() + " found within document environment!", execptionSource);
+				}
 			}
 		}
 
-		throw new RexParseException(
-				"End of file reached before \\end{document} found!", null);
+		throw new RexParseException("End of file reached before \\end{document} found!", null);
 	}
 
 	/**
 	 * Process the figure environment.
 	 */
-	FigureIF processFigure() throws RexParseException, EOFException {
+	FigureIF processFigure() throws RexParseException, EOFException
+	{
 		UEFCommand command = uefCommandQueue.poll();
 
 		// String to be filled with the source content
@@ -441,38 +457,39 @@ class UEFCommandHandler {
 
 		boolean done = false;
 
-		while (!uefCommandQueue.isEmpty() && !done) {
-			switch (uefCommandQueue.peek().getType()) {
-			case label: {
-				label = processLabel();
-				break;
-			}
-			case ref: {
-				refs.add(processRef());
-				break;
-			}
-			case endFigure: {
-				// use the end of the other command as the end source
-				endSource = uefCommandQueue.peek().getEndPosition();
-				// pull /end{figure} off the queue.
-				uefCommandQueue.poll();
-				done = true;
-				break;
-			}
-			default: {
-				SourceIF execptionSource = sourceFactory.newSource(
-						uefCharHandler.getFileName(), uefCharHandler
-								.getLineNumber(startSource), uefCharHandler
-								.getColumnNumber(startSource), uefCharHandler
-								.getLineNumber(endSource), uefCharHandler
-								.getColumnNumber(endSource));
+		while (!uefCommandQueue.isEmpty() && !done)
+		{
+			switch (uefCommandQueue.peek().getType())
+			{
+				case label:
+				{
+					label = processLabel();
+					break;
+				}
+				case ref:
+				{
+					refs.add(processRef());
+					break;
+				}
+				case endFigure:
+				{
+					// use the end of the other command as the end source
+					endSource = uefCommandQueue.peek().getEndPosition();
+					// pull /end{figure} off the queue.
+					uefCommandQueue.poll();
+					done = true;
+					break;
+				}
+				default:
+				{
+					SourceIF execptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
+							startSource), uefCharHandler.getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.
+							getColumnNumber(endSource));
 
-				execptionSource.addText(uefCharHandler.getContent(startSource,
-						endSource));
+					execptionSource.addText(uefCharHandler.getContent(startSource, endSource));
 
-				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found within figure environment!", execptionSource);
-			}
+					throw new RexParseException(uefCommandQueue.peek().getType() + " found within figure environment!", execptionSource);
+				}
 			}
 		}
 
@@ -490,13 +507,18 @@ class UEFCommandHandler {
 
 		FigureIF figure = examFactory.newFigure(label, source);
 
-		if (refs.size() != 0) {
+		if (refs.size() != 0)
+		{
 			Iterator<String> i = refs.iterator();
-			while (i.hasNext()) {
+			while (i.hasNext())
+			{
 				String r = i.next();
-				if (this.references.containsKey(r)) {
+				if (this.references.containsKey(r))
+				{
 					this.references.get(r).add(figure);
-				} else {
+				}
+				else
+				{
 					List<ExamElementIF> list = new ArrayList<ExamElementIF>();
 					list.add(figure);
 					this.references.put(r, list);
@@ -510,7 +532,8 @@ class UEFCommandHandler {
 	/**
 	 * Process the problem environment and commands found within.
 	 */
-	ProblemIF processProblem() throws RexParseException, EOFException {
+	ProblemIF processProblem() throws RexParseException, EOFException
+	{
 		// pull this command off the stack
 		UEFCommand command = uefCommandQueue.poll();
 
@@ -522,14 +545,19 @@ class UEFCommandHandler {
 
 		// get required block
 		String optionalArgument = command.getOptionalArgument();
-		if (optionalArgument != null) {
+		if (optionalArgument != null)
+		{
 			String split[] = optionalArgument.split("=");
 
-			if (split.length == 2) {
-				if (split[0].equals("require")) {
+			if (split.length == 2)
+			{
+				if (split[0].equals("require"))
+				{
 					// check for typoed requires
 					refs.add(split[1]);
-				} else if (split[0].equals("requires")) {
+				}
+				else if (split[0].equals("requires"))
+				{
 					// check for correct requires
 					refs.add(split[1]);
 				}
@@ -545,9 +573,9 @@ class UEFCommandHandler {
 		// Ignore whitespaces and lines at the beginning of the question,
 		// because latex
 		// does.
-		while (uefCharHandler.read(startSource) == '\n'
-				|| uefCharHandler.read(startSource) == ' '
-				|| uefCharHandler.read(startSource) == '\t') {
+		while (uefCharHandler.read(startSource) == '\n' || uefCharHandler.read(startSource) == ' ' || uefCharHandler.read(startSource)
+																									  == '\t')
+		{
 			startSource++;
 		}
 
@@ -561,67 +589,65 @@ class UEFCommandHandler {
 
 		boolean done = false;
 
-		while (!uefCommandQueue.isEmpty() && !done) {
-			switch (uefCommandQueue.peek().getType()) {
-			case beginAnswers: {
-				// use the beginning of the other command as the end source
-				endSource = uefCommandQueue.peek().getStartPosition();
+		while (!uefCommandQueue.isEmpty() && !done)
+		{
+			switch (uefCommandQueue.peek().getType())
+			{
+				case beginAnswers:
+				{
+					// use the beginning of the other command as the end source
+					endSource = uefCommandQueue.peek().getStartPosition();
 
-				// Ignore whitespaces and lines at the end of question, because
-				// latex
-				// does.
-				while (uefCharHandler.read(endSource - 1) == '\n'
-						|| uefCharHandler.read(endSource - 1) == ' '
-						|| uefCharHandler.read(endSource - 1) == '\t') {
-					endSource--;
+					// Ignore whitespaces and lines at the end of question,
+					// because
+					// latex
+					// does.
+					while (uefCharHandler.read(endSource - 1) == '\n' || uefCharHandler.read(endSource - 1) == ' ' || uefCharHandler.read(
+							endSource - 1) == '\t')
+					{
+						endSource--;
+					}
+					// get answers for the problem
+					answers = processAnswers();
+					if (answers == null)
+					{
+						SourceIF execptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
+								startSource), uefCharHandler.getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.
+								getColumnNumber(endSource));
+
+						execptionSource.addText(uefCharHandler.getContent(startSource, endSource));
+
+						throw new RexParseException("No answers found within a problem environment.", execptionSource);
+					}
+					break;
 				}
-				// get answers for the problem
-				answers = processAnswers();
-				if (answers == null) {
-					SourceIF execptionSource = sourceFactory.newSource(
-							uefCharHandler.getFileName(), uefCharHandler
-									.getLineNumber(startSource), uefCharHandler
-									.getColumnNumber(startSource),
-							uefCharHandler.getLineNumber(endSource),
-							uefCharHandler.getColumnNumber(endSource));
-
-					execptionSource.addText(uefCharHandler.getContent(
-							startSource, endSource));
-
-					throw new RexParseException(
-							"No answers found within a problem environment.",
-							execptionSource);
+				case label:
+				{
+					label = processLabel();
+					break;
 				}
-				break;
-			}
-			case label: {
-				label = processLabel();
-				break;
-			}
-			case ref: {
-				refs.add(processRef());
-				break;
-			}
-			case endProblem: {
-				done = true;
-				// poll the /end{problem command off the queue
-				uefCommandQueue.poll();
-				break;
-			}
-			default: {
-				SourceIF execptionSource = sourceFactory.newSource(
-						uefCharHandler.getFileName(), uefCharHandler
-								.getLineNumber(startSource), uefCharHandler
-								.getColumnNumber(startSource), uefCharHandler
-								.getLineNumber(endSource), uefCharHandler
-								.getColumnNumber(endSource));
+				case ref:
+				{
+					refs.add(processRef());
+					break;
+				}
+				case endProblem:
+				{
+					done = true;
+					// poll the /end{problem command off the queue
+					uefCommandQueue.poll();
+					break;
+				}
+				default:
+				{
+					SourceIF execptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
+							startSource), uefCharHandler.getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.
+							getColumnNumber(endSource));
 
-				execptionSource.addText(uefCharHandler.getContent(startSource,
-						endSource));
+					execptionSource.addText(uefCharHandler.getContent(startSource, endSource));
 
-				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found within problem environment!", execptionSource);
-			}
+					throw new RexParseException(uefCommandQueue.peek().getType() + " found within problem environment!", execptionSource);
+				}
 			}
 		}
 		// get the file content from beginning of '/begin{block}'
@@ -636,24 +662,29 @@ class UEFCommandHandler {
 		source.setLastColumn(uefCharHandler.getColumnNumber(endSource));
 		source.addText(content);
 
-		ProblemIF problem = examFactory.newProblem(topic, label, source,
-				answers);
+		ProblemIF problem = examFactory.newProblem(topic, label, source, answers);
 		problem.setDifficulty(Double.valueOf(difficulty));
 
 		// Add references from answers
-		for (int i = 0; i < this.answerReferences.size(); i++) {
+		for (int i = 0; i < this.answerReferences.size(); i++)
+		{
 			refs.add(this.answerReferences.get(i));
 		}
 
 		this.answerReferences.clear();
 
-		if (refs.size() != 0) {
+		if (refs.size() != 0)
+		{
 			Iterator<String> i = refs.iterator();
-			while (i.hasNext()) {
+			while (i.hasNext())
+			{
 				String r = i.next();
-				if (this.references.containsKey(r)) {
+				if (this.references.containsKey(r))
+				{
 					this.references.get(r).add(problem);
-				} else {
+				}
+				else
+				{
 					List<ExamElementIF> list = new ArrayList<ExamElementIF>();
 					list.add(problem);
 					this.references.put(r, list);
@@ -666,12 +697,16 @@ class UEFCommandHandler {
 	/**
 	 * Process a \documentclass{} command.
 	 */
-	boolean processDocumentclass() {
+	boolean processDocumentclass()
+	{
 		UEFCommand command = uefCommandQueue.poll();
 		String classType = command.getArgument(0);
-		if (classType.equals("exam")) {
+		if (classType.equals("exam"))
+		{
 			return true;
-		} else {
+		}
+		else
+		{
 			return false;
 		}
 	}
@@ -679,7 +714,8 @@ class UEFCommandHandler {
 	/**
 	 * Process a \label command.
 	 */
-	String processLabel() {
+	String processLabel()
+	{
 		UEFCommand command = uefCommandQueue.poll();
 		return command.getArgument(0);
 	}
@@ -687,7 +723,8 @@ class UEFCommandHandler {
 	/**
 	 * Process a \ref command.
 	 */
-	String processRef() {
+	String processRef()
+	{
 		UEFCommand command = uefCommandQueue.poll();
 		return command.getArgument(0);
 	}
@@ -696,107 +733,94 @@ class UEFCommandHandler {
 	 * Starts the processing of all commands in the command queue. Should be
 	 * called by another class.
 	 */
-	ExamIF process() throws RexParseException, RexException, EOFException {
+	ExamIF process() throws RexParseException, RexException, EOFException
+	{
 		boolean isExamDocumentclass = false;
 		int startOfPreamble = 0;
 		int endOfPreamble = 0;
-		while (!uefCommandQueue.isEmpty()) {
-			switch (uefCommandQueue.peek().getType()) {
-			case beginDocument: {
-				if (!isExamDocumentclass) {
-					throw new RexException(
-							uefCommandQueue.peek().getType()
-									+ " found when the documentclass is not of type 'exam'!");
-				}
+		while (!uefCommandQueue.isEmpty())
+		{
+			switch (uefCommandQueue.peek().getType())
+			{
+				case beginDocument:
+				{
+					if (!isExamDocumentclass)
+					{
+						throw new RexException(uefCommandQueue.peek().getType() + " found when the documentclass is not of type 'exam'!");
+					}
 
-				// retrieve the preamble
-				endOfPreamble = uefCommandQueue.peek().getStartPosition();
-				String content = uefCharHandler.getContent(startOfPreamble,
-						endOfPreamble);
+					// retrieve the preamble
+					endOfPreamble = uefCommandQueue.peek().getStartPosition();
+					String content = uefCharHandler.getContent(startOfPreamble, endOfPreamble);
 
-				// process to make an ExamIF
-				ExamIF exam = processDocument();
+					// process to make an ExamIF
+					ExamIF exam = processDocument();
 
-				// Create the source object for preamble
-				SourceIF source = sourceFactory.newSource(uefCharHandler
-						.getFileName());
-				source.setStartLine(uefCharHandler
-						.getLineNumber(startOfPreamble));
-				source.setLastLine(uefCharHandler.getLineNumber(endOfPreamble));
-				source.setStartColumn(uefCharHandler
-						.getColumnNumber(startOfPreamble));
-				source.setLastColumn(uefCharHandler
-						.getColumnNumber(endOfPreamble));
-				source.addText(content);
+					// Create the source object for preamble
+					SourceIF source = sourceFactory.newSource(uefCharHandler.getFileName());
+					source.setStartLine(uefCharHandler.getLineNumber(startOfPreamble));
+					source.setLastLine(uefCharHandler.getLineNumber(endOfPreamble));
+					source.setStartColumn(uefCharHandler.getColumnNumber(startOfPreamble));
+					source.setLastColumn(uefCharHandler.getColumnNumber(endOfPreamble));
+					source.addText(content);
 
-				// set the preamble
-				exam.setPreamble(source);
+					// set the preamble
+					exam.setPreamble(source);
 
-				// setting uses relationships
-				Iterator<String> i = this.references.keySet().iterator();
-				while (i.hasNext()) {
-					String label = i.next();
-					List<ExamElementIF> e = this.references.get(label);
-					ExamElementIF usedElement = null;
+					// setting uses relationships
+					Iterator<String> i = this.references.keySet().iterator();
+					while (i.hasNext())
+					{
+						String label = i.next();
+						List<ExamElementIF> e = this.references.get(label);
+						ExamElementIF usedElement = null;
 
-					usedElement = exam.elementWithLabel(label);
+						usedElement = exam.elementWithLabel(label);
 
-					if (usedElement == null) {
-						throw new RexParseException("Element with label "
-								+ label + " not found within file.", null);
-					} else {
-						for (int j = 0; j < e.size(); j++) {
-							exam.declareUse(e.get(j), usedElement);
+						if (usedElement == null)
+						{
+							throw new RexParseException("Element with label " + label + " not found within file.", null);
+						}
+						else
+						{
+							for (int j = 0; j < e.size(); j++)
+							{
+								exam.declareUse(e.get(j), usedElement);
+							}
 						}
 					}
+
+					// return the ExamIF
+					return exam;
 				}
+				case documentclass:
+				{
+					startOfPreamble = uefCommandQueue.peek().getEndPosition();
+					isExamDocumentclass = processDocumentclass();
+					break;
+				}
+				default:
+				{
+					SourceIF execptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(uefCommandQueue.
+							peek().getStartPosition()), uefCharHandler.getColumnNumber(uefCommandQueue.peek().getStartPosition()), uefCharHandler.
+							getLineNumber(uefCommandQueue.peek().getEndPosition()), uefCharHandler.getColumnNumber(uefCommandQueue.peek().
+							getEndPosition()));
 
-				// return the ExamIF
-				return exam;
-			}
-			case documentclass: {
-				startOfPreamble = uefCommandQueue.peek().getEndPosition();
-				isExamDocumentclass = processDocumentclass();
-				break;
-			}
-			default: {
-				SourceIF execptionSource = sourceFactory.newSource(
-						uefCharHandler.getFileName(), uefCharHandler
-								.getLineNumber(uefCommandQueue.peek()
-										.getStartPosition()), uefCharHandler
-								.getColumnNumber(uefCommandQueue.peek()
-										.getStartPosition()), uefCharHandler
-								.getLineNumber(uefCommandQueue.peek()
-										.getEndPosition()), uefCharHandler
-								.getColumnNumber(uefCommandQueue.peek()
-										.getEndPosition()));
+					execptionSource.addText(uefCharHandler.getContent(uefCommandQueue.peek().getStartPosition(), uefCommandQueue.peek().
+							getEndPosition()));
 
-				execptionSource.addText(uefCharHandler.getContent(
-						uefCommandQueue.peek().getStartPosition(),
-						uefCommandQueue.peek().getEndPosition()));
-
-				throw new RexParseException(uefCommandQueue.peek().getType()
-						+ " found outside of document environment!",
-						execptionSource);
-			}
+					throw new RexParseException(uefCommandQueue.peek().getType() + " found outside of document environment!",
+												execptionSource);
+				}
 			}
 		}
-		SourceIF execptionSource = sourceFactory.newSource(
-				uefCharHandler.getFileName(), uefCharHandler
-						.getLineNumber(uefCommandQueue.peek()
-								.getStartPosition()), uefCharHandler
-						.getColumnNumber(uefCommandQueue.peek()
-								.getStartPosition()), uefCharHandler
-						.getLineNumber(uefCommandQueue.peek()
-								.getEndPosition()), uefCharHandler
-						.getColumnNumber(uefCommandQueue.peek()
-								.getEndPosition()));
+		SourceIF execptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(uefCommandQueue.peek().
+				getStartPosition()), uefCharHandler.getColumnNumber(uefCommandQueue.peek().getStartPosition()), uefCharHandler.getLineNumber(uefCommandQueue.
+				peek().getEndPosition()), uefCharHandler.getColumnNumber(uefCommandQueue.peek().getEndPosition()));
 
-		execptionSource.addText(uefCharHandler.getContent(
-				uefCommandQueue.peek().getStartPosition(),
-				uefCommandQueue.peek().getEndPosition()));
-		
-		throw new RexParseException(
-				"End of document before \begin{document} found!", execptionSource);
+		execptionSource.addText(
+				uefCharHandler.getContent(uefCommandQueue.peek().getStartPosition(), uefCommandQueue.peek().getEndPosition()));
+
+		throw new RexParseException("End of document before \begin{document} found!", execptionSource);
 	}
 }
