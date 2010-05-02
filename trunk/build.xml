@@ -109,6 +109,7 @@
 	<manifest file="${manifest-file}">
                 <attribute name="Built-By" value="${user.name}"/>
                 <attribute name="Main-Class" value="${main-class}"/>
+				<attribute name="Class-Path" value="lib/antlr-3.2.jar lib/antlr3-task.jar lib/junit-4.8.1.jar lib/antlr-runtime-3.2.jar"/>
 	</manifest>
 
 
