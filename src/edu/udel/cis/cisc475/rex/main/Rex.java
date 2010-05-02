@@ -141,6 +141,7 @@ public class Rex {
 				theConfig);
 		}
 		catch(RexException e){
+			e.toString();
 			e.printStackTrace();
 			return 1;
 			
