@@ -33,16 +33,6 @@ public class ExamWriterTest {
 	ExamFactoryIF examFactory;
 	OutputFactoryIF examWriterFactory;
 	SourceFactoryIF sourceFactory;
-	
-   
-    
-    
-    
-    
-    
-    
-    
-    
     
     @Test
     public void testPrintBlockIF() throws IOException {
@@ -63,8 +53,16 @@ public class ExamWriterTest {
     	
 		//creates an exam writer
     	ExamWriter ew = new ExamWriter(e);
-    	String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
-		PrintWriter pw = null;
+    	String dirName = "./trunk/test-output/edu/udel/cis/cisc475/rex/output";
+    	File theDir = new File(dirName);
+    	String filename = "";
+    	if (theDir.exists()) {
+    		filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+    	} else { // assume only trunk was checked out -- fix this to add
+				 // another check & throw exception if everything is messed up!
+    		filename = "./test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+    	}
+    	PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(new FileWriter(filename));
 		} catch (IOException e2) {
@@ -129,8 +127,17 @@ public class ExamWriterTest {
     	
 		//creates an exam writer
     	ExamWriter ew = new ExamWriter(e);
-    	String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
-		PrintWriter pw = null;
+    	String dirName = "./trunk/test-output/edu/udel/cis/cisc475/rex/output";
+    	File theDir = new File(dirName);
+    	String filename = "";
+    	if (theDir.exists()) {
+    		filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+    	} else { // assume only trunk was checked out -- fix this to add
+				 // another check & throw exception if everything is messed up!
+    		filename = "./test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+    	}
+    	
+    	PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(new FileWriter(filename));
 		} catch (IOException e2) {
@@ -168,17 +175,6 @@ public class ExamWriterTest {
 		//testString that was stored in a block
 		assertEquals(testData.toString().compareTo(testString2), 0);
         }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
       
     @Test
     public void testFrontMatter(){
@@ -197,8 +193,16 @@ public class ExamWriterTest {
     	
 		//creates an exam writer
     	ExamWriter ew = new ExamWriter(e);
-    	String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
-		PrintWriter pw = null;
+    	String dirName = "./trunk/test-output/edu/udel/cis/cisc475/rex/output";
+    	File theDir = new File(dirName);
+    	String filename = "";
+    	if (theDir.exists()) {
+    		filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+    	} else { // assume only trunk was checked out -- fix this to add
+				 // another check & throw exception if everything is messed up!
+    		filename = "./test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+    	}		
+    	PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(new FileWriter(filename));
 		} catch (IOException e2) {
@@ -240,18 +244,6 @@ public class ExamWriterTest {
 		//testString that was stored in a block
 		assertEquals(testData.toString().compareTo(testString2), 0);
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     @Test
     public void testPreamble(){
@@ -272,8 +264,17 @@ public class ExamWriterTest {
     	
 		//creates an exam writer
     	ExamWriter ew = new ExamWriter(e);
-    	String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
-		PrintWriter pw = null;
+    	String dirName = "./trunk/test-output/edu/udel/cis/cisc475/rex/output";
+    	File theDir = new File(dirName);
+    	String filename = "";
+    	if (theDir.exists()) {
+    		filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+    	} else { // assume only trunk was checked out -- fix this to add
+				 // another check & throw exception if everything is messed up!
+    		filename = "./test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+    	}
+    	
+    	PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(new FileWriter(filename));
 		} catch (IOException e2) {
@@ -316,20 +317,6 @@ public class ExamWriterTest {
 		assertEquals(testData.toString().compareTo(testString2), 0);
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     @Test 
     public void testFinalBlock(){
     	
@@ -349,8 +336,17 @@ public class ExamWriterTest {
 		
 		//creates an exam writer
     	ExamWriter ew = new ExamWriter(e);
-    	String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
-		PrintWriter pw = null;
+    	String dirName = "./trunk/test-output/edu/udel/cis/cisc475/rex/output";
+    	File theDir = new File(dirName);
+    	String filename = "";
+    	if (theDir.exists()) {
+    		filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+    	} else { // assume only trunk was checked out -- fix this to add
+				 // another check & throw exception if everything is messed up!
+    		filename = "./test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+    	}
+    	
+    	PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(new FileWriter(filename));
 		} catch (IOException e2) {
@@ -393,14 +389,6 @@ public class ExamWriterTest {
 		assertEquals(testData.toString().compareTo(testString2), 0);
        }
 
-    
-    
-    
-    
-    
-    
-    
-    
     /* tested block output if block is multiple lines
      * and is master is false
      */
@@ -424,7 +412,16 @@ public class ExamWriterTest {
 
 		//creates an exam writer
 		ExamWriter ew = new ExamWriter(e);
-		String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test.txt";
+    	String dirName = "./trunk/test-output/edu/udel/cis/cisc475/rex/output";
+    	File theDir = new File(dirName);
+    	String filename = "";
+    	if (theDir.exists()) {
+    		filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+    	} else { // assume only trunk was checked out -- fix this to add
+				 // another check & throw exception if everything is messed up!
+    		filename = "./test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+    	}
+    	
 		PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(new FileWriter(filename));
@@ -457,13 +454,6 @@ public class ExamWriterTest {
 		assertEquals(testData.toString().compareTo(testString2), 0);
 	}    
 
-
-
-
-
-
-
-
 /* tested block output if block is multiple lines
  * and test figure
  * and is master is false
@@ -489,7 +479,16 @@ public void testPrintBlockIF13() throws IOException {
 
 	//creates an exam writer
 	ExamWriter ew = new ExamWriter(e);
-	String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test.txt";
+	String dirName = "./trunk/test-output/edu/udel/cis/cisc475/rex/output";
+	File theDir = new File(dirName);
+	String filename = "";
+	if (theDir.exists()) {
+		filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+	} else { // assume only trunk was checked out -- fix this to add
+			 // another check & throw exception if everything is messed up!
+		filename = "./test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+	}
+	
 	PrintWriter pw = null;
 	try {
 		pw = new PrintWriter(new FileWriter(filename));
@@ -519,28 +518,6 @@ public void testPrintBlockIF13() throws IOException {
 	//testString that was stored in a block
 	assertEquals(testData.toString().compareTo(testString2), 0);
 }    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* tested problem output if multiple lines
  * and is master is false
@@ -577,7 +554,16 @@ public void testPrintBlockIF15() throws IOException {
 	
 	//creates an exam writer
 	ExamWriter ew = new ExamWriter(e);
-	String filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test.txt";
+	String dirName = "./trunk/test-output/edu/udel/cis/cisc475/rex/output";
+	File theDir = new File(dirName);
+	String filename = "";
+	if (theDir.exists()) {
+		filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+	} else { // assume only trunk was checked out -- fix this to add
+			 // another check & throw exception if everything is messed up!
+		filename = "./test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+	}
+	
 	PrintWriter pw = null;
 	try {
 		pw = new PrintWriter(new FileWriter(filename));
