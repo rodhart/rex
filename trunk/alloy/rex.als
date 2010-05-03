@@ -42,11 +42,12 @@ run show for 6 but exactly 1 GeneratedExam, exactly 2 Problem
 //** Data structures and related facts **
 //*******************************
 
-one sig Generator
+one sig Generator // aka MasterExamController
 {
 	master: one MasterExam,
 	config: one Config,
 	generated: set GeneratedExam
+	//answer keys
 }
 // These facts say that all MasterExams, Configs, and GeneratedExams belong to the Generator.
 fact masterInGenerator {
@@ -131,12 +132,14 @@ sig GroupConstraint extends Constraint {
 	numProblems: one Int,
 	category: one Category,
 	interval: one Interval
+	// source
 }
 
 // A line in the ECF might require several problems, but they break down into individual requests.
 // That's all I model.
 sig RequiredProblemConstraint extends Constraint {
 	problemName: one Label
+	// source
 }
 
 
@@ -408,7 +411,9 @@ assert validReqConstraintInAll { // if there is a valid RequiredProblemConstrain
 
 // if the Constraint is satisfiable from the MasterExam, then there exist satisfying problems in the generated exams
 assert constraintFulfilled {
-// TODO
+
+	
+
 }
 
 // if the constraint is possible to fill, there exists a RexUnsatisfiableException
@@ -427,14 +432,55 @@ assert impossibleConstraintRejected {
 //** beginning of implementing Team 3's approach **
 //*****************************************
 
+/* code above, here in comments for reference
+fact { // all constraints are in the Config
+	all c: Constraint | some conf: Config | c in conf.constraints
+}
+
+
+sig GroupConstraint extends Constraint {
+	numProblems: one Int,
+	category: one Category,
+	interval: one Interval
+	// source
+}
+*/
+
+
+/*
+sig TopicOrganizer {
+	one category: Category,
+	set GroupConstraint
+}
+
+fact {
+	all to: Topic
+}
+
+
+one sig MasterExamController {
+	topicOrganizers: set TopicOrganizer
+}
+
+
+
+
+all gcc: GroupConstraintContainer | 
+*/
+
+assert correctNumProblems {
+	all g: GeneratedExam, p:Problem | #(g.elements in p) = 3
+}
+
+
 /*
 sig SatisfiedContainer {
 	category: one Category,
-	requiredProblems: one ElementList,
+	requiredProblems: one ProblemList,
 	groupConstraints: set ConstraintContainer
 }
 
-sig ConstraintContainer {
+sig GroupConstraintContainer {
 	numProblems: one Int,
 	satisfiedProblems: one ElementList
 }
