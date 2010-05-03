@@ -1,0 +1,72 @@
+\documentclass[master]{exam}
+%preamble here
+
+%real document below this.
+\begin{document}
+	%start front matter
+	
+	
+	
+	%check that verbatim isn't parsed.
+	\begin{verbatim}
+			\begin{problem}{fake verbatim topic}{1}
+				fake verbatim problem.
+				\begin{answers}
+					\answer[correct] fake verbatim answer.
+					\answer fake verbatim answer 2.
+				\end{answers}
+			\end{problem}
+	\end{verbatim}
+	
+	
+	%check that verb isn't parsed.
+	\verb!\begin{problem}{fake verb topic}{1}fake verb problem\begin{answers}\answer fake verb answer\answer[correct] fake verb answer\end{answers}\end{problem}!
+	
+	%end front matter
+	
+	%check argument parsing 
+	\begin{problem}{  real topic 1  }{1}
+		Real problem 1  with 1 difficulty..
+		\begin{answers}
+			\answer real answer.
+			\answer real answer 2.
+			\answer[correct] real correct answer 3.
+			\answer[fixed] real fixed answer 4.
+		\end{answers}
+	\end{problem}
+	
+	\begin{problem}{  real topic 1  }{2}
+		Real problem 2 with 2 difficulty.
+		\begin{answers}
+			\answer real answer. \\ should be on the line following the answer.
+			\answer real answer 2.
+			\answer[correct,fixed] real correct and fixed answer 3.
+			\answer[fixed,correct] real fixed and correct answer 4.
+		\end{answers}
+	\end{problem}
+	
+	\begin{problem}{  real topic 1  }{2}
+		Real problem 3 with 2 difficulty.
+		\begin{answers}
+			\answer real answer. \\ should be on the line following the answer.
+			\answer real answer 2.\begin{verbatim}should be verbatim text. \end{verbatim}
+			\answer[correct,fixed] real correct and fixed answer 3.
+			\answer[fixed,correct] real fixed and correct answer 4.
+		\end{answers}
+	\end{problem}
+	
+	%check to see if block is in exam if this problem isn't chosen.
+	\begin{problem}[requires=test block 1]{real topic 1}{3}
+		Real problem 3 with 3 difficulty.
+		\begin{answers}
+			\answer real answer. \\ should be on the line following the answer.
+			\answer real answer 2.\begin{verbatim}should be verbatim text. \end{verbatim}
+			\answer[correct,fixed] real correct and fixed answer 3.
+			\answer[fixed,correct] real fixed and correct answer 4.
+		\end{answers}
+	\end{problem}
+
+    \begin{block}{test block 1}
+        This is block 1.
+    \end{block}
+\end{document}
