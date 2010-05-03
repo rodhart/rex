@@ -3,7 +3,7 @@ append appendedBlock
 versions are "version 1", "version 2", "version 3"
 
 include 2 problems on "beginning" with difficulty in [0,10] at 1 points;
-include 2 problems on "afterBeginning" with difficulty in [0,10] at 1 points;
+include 1 problems on "afterBeginning" with difficulty in [0,10] at 1 points;
 include 2 problems on "middle" with difficulty in [0,10] at 1 points;
 include 2 problems on "secondToLast" with difficulty in [0,10] at 1 points;
-include 2 problems on "end" with difficulty in [0,10] at 1 points;
+include 1 problems on "end" with difficulty in [0,10] at 1 points;
