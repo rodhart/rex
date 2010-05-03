@@ -58,7 +58,8 @@ Optionally the user can build REX from source if custom changes are made.
 \item Install Ant and a Java 1.6 JDK
 \item Checkout the project source code from the repository
 \begin{verbatim}
-svn co svn+ssh://[user]@cisc475.acad.cis.udel.edu/home/www/repos/cisc475/trunk
+svn co svn+ssh://[user]@cisc475.acad.cis.udel.edu/
+home/www/repos/cisc475/trunk
 \end{verbatim}
 \item Download and extract necessary libraries (Antlr, Corbertura, and JUnit) to
 trunk/lib from the following URI
@@ -143,8 +144,8 @@ in the Exam Configuration File.
     \end{figure}
 
     \begin{block}{Goodbye Message}
-      Did you remember to write your name on the first page?  Did you
-      attempt to answer every question?    Have a good holiday.
+      Did you remember to write your name on the first page?  
+      Did you attempt to answer every question? Have a good holiday.
     \end{block}
 
     \end{document}
@@ -193,20 +194,24 @@ In the UEF file, you can use the \textbackslash{examversion} command to insert t
 \subsection{Example ECF}
 \label{sec:exampleecf}
 \begin{verbatim}
-include 5 problems on "Finite State Automata" with difficulty in [0,20)
-  at 3 points;
-include 5 problems on "ssort" with difficulty in [20,\infty) at 2 points;
-include 3 problems on "arithmetic" with difficulty in [0,10] at 1 points;
-include 3 problems on "arithmetic" with difficulty in (-\infty,\infty) at 3 points;
+include 5 problems on "Finite State Automata" with difficulty 
+  in [0,20) at 3 points;
+include 5 problems on "ssort" with difficulty in [20,\infty) at 
+  2 points;
+include 3 problems on "arithmetic" with difficulty in [0,10] at 
+  1 points;
+include 3 problems on "arithmetic" with difficulty in 
+  (-\infty,\infty) at 3 points;
 
-# the following problems will be included in their corresponding
-# sections on any generated exam
-includeall prob:arithmetic:prime, prob:arithmetic:composite, prob:misc:hat,
-  prob:misc:complexity at 5 points;
+# the following problems will be included in their 
+# corresponding sections on any generated exam
+includeall prob:arithmetic:prime, prob:arithmetic:composite, 
+  prob:misc:hat,prob:misc:complexity at 5 points;
 
 append "Goodbye Message"; # this block will be added at end
 
-versions are "1/21/2010", "Jan.\ 21, 2010", "21-jan-2010", "JAN.\ 21 2010";
+versions are "1/21/2010", "Jan.\ 21, 2010", "21-jan-2010", 
+  "JAN.\ 21 2010";
 \end{verbatim}
 
 \section{Usage}
@@ -216,7 +221,7 @@ Usage: rex [options] <UEF filename> <ECF filename>
 Options: 
     -n numExams : int numExams declares number of exams
     -seed seed : long seed declaresthe seed for randomization
-    -pdf       : sets the pdf option so the .tex files are converted to PDF
+    -pdf       : .tex files are automatically converted to PDF
 \end{verbatim}
 
 \subsection{Synopsis}
