@@ -178,7 +178,7 @@ public class SourceTest {
 	
 	@Test
 	public void testWrite() throws IOException {
-		String fileToCheck = "./trunk/test-source/edu/udel/cis/cisc475/rex/source/test.txt";
+		String fileToCheck = "./trunk/test-source/edu/udel/cis/cisc475/rex/source/";
 		String filename = "";
 		
 		File theDir = new File(fileToCheck);
