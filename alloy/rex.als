@@ -28,13 +28,13 @@ pointing to the same figure.  (We don't want any kind of ExamElement duplicated.
 
 pred show{}
 
-run show for 6 but exactly 1 GeneratedExam, exactly 2 Problem
 
+// for Beta:
+//run show for 6 but exactly 1 GeneratedExam, exactly 2 Problem
 //run show for 4 but exactly 2 RequiredProblemConstraint,  exactly 2 Problem
-
 //check noDuplicatesInGenerated for 5
 
-
+//run show for 5 but exactly 0 GeneratedExam, exactly 3 Problem
 
 
 
@@ -68,8 +68,14 @@ abstract sig Exam {
 	//preamble: one Source,
 	//frontMatter: one Source,
 	elements: one ElementList, // an *ordered* list, see below
+	problems: set Problem, // the problems from the ElementList.  I couldn't check if an ExamElement was
+										// an "instanceof" a Problem
 	finalBlock: lone Block
 }
+fact problemsInExamEqualsProblemsInElementList {
+	all e: Exam, p: Problem | p in e.elements.*rest.element iff p in e.problems
+}
+
 // We do not have different classes for the master and generated exams, but we can always tell
 // the difference.  Therefore I make them subclasses of Exam.
 sig MasterExam extends Exam {}
@@ -149,13 +155,15 @@ sig RequiredProblemConstraint extends Constraint {
 // Therefore I omit here the Boolean values for the range being / not being inclusive.
 // For now they have no real bearing on the model.  I also omit the possibilities of infinity values.
 sig Interval {
-//	low: one Int,
-//	high: one Int
+	low: one Int,
+	high: one Int
 }
 fact {
-	all i: Interval | some u: univ | i in u
+	all i: Interval | some g: GroupConstraint | i in g.interval
 }
-
+fact {
+	all i: Interval | i.low <= i.high
+}
 
 
 
@@ -171,7 +179,7 @@ sig Problem extends ExamElement {
 	//figures: set Figure,
 	//points: lone Int,   // lone because will be null in master exam.
 	// source: one Source,   // not important for model!
-	//difficulty: one Int,   //actually REAL NUMBER, but it doesn't matter for the Alloy model
+	difficulty: one Int,   //actually REAL NUMBER, but it doesn't matter for the Alloy model
 	//answers: set Answer   // May be 0 if not a multiple choice.
 }
 
@@ -223,9 +231,9 @@ fact categoryNotFreeFloating{
 
 // Says that there is a RexUnsatisfiableException iff a RequiredProblemConstraint requests by label
 // a problem that doesn't exist in the MasterExam.
-lone sig RexUnsatisfiableException {}
+lone sig RexRequiredUnsatisfiableException {}
 fact requiredProblemUnsatisfiable {
-	one RexUnsatisfiableException iff some r: RequiredProblemConstraint | all m: MasterExam | r.problemName not in m.elements.*rest.element.label
+	one RexRequiredUnsatisfiableException iff some r: RequiredProblemConstraint | all m: MasterExam | r.problemName not in m.elements.*rest.element.label
 	// old attempt: //some RexUnsatisfiableException iff some r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
 		// TODO: OR there is a group constraint that is unsatisfiable
 }
@@ -428,34 +436,91 @@ assert impossibleConstraintRejected {
 
 
 
-//*****************************************
-//** beginning of implementing Team 3's approach **
-//*****************************************
+//*********************************************************************
+//**implementation of  Team 3's approach without considering overlapping difficulties **
+//*********************************************************************
 
-/* code above, here in comments for reference
-fact { // all constraints are in the Config
-	all c: Constraint | some conf: Config | c in conf.constraints
+
+
+//  As in Java code, returns all problems that satisfy group constraint (category and interval)
+// without yet selecting randomly
+fun allProblemsFromGroupConstraint[m: MasterExam, g: GroupConstraint]: set Problem { 
+	{p: Problem | p in m.problems and p.category = g.category 
+			and p.difficulty >= g.interval.low and p.difficulty <= g.interval.high}
+}
+ 
+
+lone sig RexGroupUnsatisfiableException {}
+// produces an error iff the GroupConstraint requires more problems than are taken from the MasterExam
+// as in the function above
+fact sufficientNumberOfProblemsForGroupConstraint {
+	one RexGroupUnsatisfiableException iff
+	all gc: GroupConstraint, m: MasterExam | gc.numProblems > #allProblemsFromGroupConstraint[m, gc]
 }
 
-
-sig GroupConstraint extends Constraint {
-	numProblems: one Int,
-	category: one Category,
-	interval: one Interval
-	// source
+// for testing:
+fact boundsOnGroupConstraint {
+	all g: GroupConstraint | g.numProblems = 2
 }
+
+///doesn't run, will fix:
+run show  for 8 but exactly 7 Problem, exactly 0 RequiredProblemConstraint,
+		exactly 1 GroupConstraint, exactly 2 Category
+
+
+
+//**************************
+//** scratch space (don't read) **
+//**************************
+
+
+/*	gc.interval
+	gc.numProblems
+	m.problems
+	m.problems.difficulty
 */
 
 
 /*
+lone sig RexGroupUnsatisfiableException {}
+fact groupProblemUnsatisfiable {
+	one RexGroupUnsatisfiableException iff
+		some gc: GroupConstraint | all m: MasterExam | all gc. not some 
+
+
+
+		all g, g': GroupConstraint | some p: Problem | p.difficulty >= g.interval.low or p.difficulty <= g.interval.low
+								and g != g' implies not g.problems in 
+		
+
+ r.problemName not in m.elements.*rest.element.label
+	// old attempt: //some RexUnsatisfiableException iff some r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
+		// TODO: OR there is a group constraint that is unsatisfiable
+}
+//fact forceUnsatisfiableExceptionToExist {
+//	all r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
+//}
+//fact forceUnsatisfiableExceptionNotToExist {
+//	all r: RequiredProblemConstraint | some p: Problem | r.problemName = p.label
+//}
+
+fact {
+	all ge: GeneratedExam, gc: GroupConstraint, p: Problem, m: MasterExam | 
+		
+
+
+
+satisfiableTogether [gc, m] and 
+}
+
+
 sig TopicOrganizer {
 	one category: Category,
 	set GroupConstraint
 }
 
-fact {
-	all to: Topic
-}
+
+
 
 
 one sig MasterExamController {
@@ -464,13 +529,28 @@ one sig MasterExamController {
 
 
 
-
+one 
 all gcc: GroupConstraintContainer | 
 */
 
-assert correctNumProblems {
-	all g: GeneratedExam, p:Problem | #(g.elements in p) = 3
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//assert correctNumProblems {
+//	all g: GeneratedExam,  | #g.problems = 
+//}
 
 
 /*
