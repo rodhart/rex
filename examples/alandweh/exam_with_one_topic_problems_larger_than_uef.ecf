@@ -1,0 +1,6 @@
+include 1 problems on "real topic 1" with difficulty in [1,\infty) at 2 points;
+include 1 problems on "real topic 1" with difficulty in [2,\infty) at 2 points;
+
+append block:GoodbyeMessage; # this block will be added at end
+
+versions are "1/21/2010";
