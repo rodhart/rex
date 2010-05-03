@@ -40,9 +40,7 @@ public class ExamWriterTest {
     	String testString = "test string";    	
     	String testString2 = "\\documentclass[master]{exam}\n" +
     			"\\begin{document}\n" +
-    			"\\begin{block}\n" +
     			"test string\n" +
-    			"\\end{block}\n" +
     			"\\end{document}\n";
 		
     	//adds the block element   
@@ -112,10 +110,8 @@ public class ExamWriterTest {
 		String testString2 = "\\documentclass[master]{exam}\n" +
     			"\\begin{document}\n" +
     			"\\newpage\n" +
-    			"\\begin{figure}\n" +
     			"test string\n" +
     			"\\label{fig:test topic}\n" +
-    			"\\end{figure}\n" +
     			"\\end{document}\n";
 
 		
@@ -399,9 +395,9 @@ public class ExamWriterTest {
     	
     	String testString2 = "\\documentclass{exam}" + "\n" +
     	"\\begin{document}" + "\n" +    	
-    	"\\begin{block}" + "\n" +
+    	//"\\begin{block}" + "\n" +
     	"inside the block" + "\n" +
-    	"\\end{block}" + "\n" +
+    	//"\\end{block}" + "\n" +
     	"\\end{document}" + "\n";
 
 		//adds the block element   
@@ -465,10 +461,10 @@ public void testPrintBlockIF13() throws IOException {
 	String testString2 = "\\documentclass{exam}" + "\n" +
 	"\\begin{document}" + "\n" +    	
 	"\\newpage" + "\n" +
-	"\\begin{figure}" + "\n" +
+	//"\\begin{figure}" + "\n" +
 	"inside the figure" + "\n" +
 	"\\label{fig:" + "test topic" + "}" + "\n" +
-	"\\end{figure}" + "\n" +
+	//"\\end{figure}" + "\n" +
 	"\\end{document}" + "\n";
 	
 	//adds the figure element   
@@ -576,10 +572,6 @@ public void testPrintBlockIF15() throws IOException {
 		ew.write(pw);
 	} catch (IOException e2) {
 		// TODO Auto-generated catch block
-		e2.printStackTrace();
-	} catch (NullPointerException e2){
-		// Not sure what to print out
-		// Junit testing was throwing a fit about not having this
 		e2.printStackTrace();
 	}
 	
