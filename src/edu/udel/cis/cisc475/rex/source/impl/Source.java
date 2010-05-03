@@ -16,9 +16,8 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
  * the values.
  * 
  * @author cardona
- * @author justinjo
+ * @author justin johnson
  * @author jsong
- * @version 1.0, 19 Apr 2010
  *
  */
 public class Source implements SourceIF {
