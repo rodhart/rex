@@ -178,7 +178,17 @@ public class SourceTest {
 	
 	@Test
 	public void testWrite() throws IOException {
-		String filename = "./trunk/test-source/edu/udel/cis/cisc475/rex/source/test.txt";
+		String fileToCheck = "./trunk/test-source/edu/udel/cis/cisc475/rex/source/test.txt";
+		String filename = "";
+		
+		File theDir = new File(fileToCheck);
+		
+		if(theDir.exists()) {
+			filename = "./trunk/test-source/edu/udel/cis/cisc475/rex/source/test.txt";
+		}
+		else {
+			filename = "./test-source/edu/udel/cis/cisc475/rex/source/test.txt";
+		}
 		
 		SourceFactoryIF myFactory = new SourceFactory();
 		SourceIF S = myFactory.newSource(filename);
