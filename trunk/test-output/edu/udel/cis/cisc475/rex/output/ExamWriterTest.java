@@ -591,8 +591,8 @@ public void testPrintBlockIF15() throws IOException {
 		testData.append(line);
 		testData.append("\n");
 		}
-	System.out.println(testData);
-	System.out.println(testString2);
+//	System.out.println(testData);
+//	System.out.println(testString2);
 	//checks if the saved testData is the same as the 
 	//testString that was stored in a block
 	assertEquals(testData.toString().compareTo(testString2), 0);
