@@ -210,12 +210,14 @@ versions are "1/21/2010", "Jan.\ 21, 2010", "21-jan-2010", "JAN.\ 21 2010";
 \end{verbatim}
 
 \section{Usage}
-java -cp REX.jar edu.udel.cis.cisc475.rex.main.Rex 
+\begin{verbatim}
+java -jar REX.jar 
 Usage: rex [options] <UEF filename> <ECF filename>
 Options: 
     -n numExams : int numExams declares number of exams
     -seed seed : long seed declaresthe seed for randomization
-    -pdf       : sets the pdf optionin order to have the exams output in pdf as well as .tex files.
+    -pdf       : sets the pdf option so the .tex files are converted to PDF
+\end{verbatim}
 
 \subsection{Synopsis}
 rex [-n num] [-seed s] [-pdf] UEF-file ECF-file
