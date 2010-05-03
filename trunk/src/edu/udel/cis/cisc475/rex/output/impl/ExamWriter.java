@@ -69,19 +69,15 @@ public class ExamWriter implements ExamWriterIF {
 				//casts element type to a BlockIF type
 				BlockIF tempBlockIF = (BlockIF) temp;
 				//prints the block
-				out.println("\\begin{block}");
 				tempBlockIF.source().write(out);
-				out.println("\\end{block}");
 			} else if (temp instanceof FigureIF) {
 				//casts the element type to a figureIF type
 				FigureIF tempFigureIF = (FigureIF) temp;
 				//makes a new page so the questions and figures fall on the same page
 				out.println("\\newpage");
 				//prints the figure
-				out.println("\\begin{figure}");
 				tempFigureIF.source().write(out);
 				out.println("\\label{fig:" + tempFigureIF.label() + "}");
-				out.println("\\end{figure}");
 			} else if (temp instanceof ProblemIF) {
 				//casts the element type to a problemIF type
 				ProblemIF tempProblem = (ProblemIF) temp;
