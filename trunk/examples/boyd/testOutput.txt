@@ -1,0 +1,25 @@
+System Testing Team: Jeremy Verchick and Haley Boyd
+
+to run test command
+$java -classpath /Developer/Tools/antlr-3.2.jar:bin edu.udel.cis.cisc475.rex.main.Rex rex/examples/boyd/boydUEF.tex rex/examples/boyd/REXtesting/boyd.ecf
+
+The UEF contains 4 problems with the topic "matrix matlab"
+and the ECF is requesting 5 problems with this topic.
+
+The test runs correctly and outputs the correct not satisfiable exception.
+However the error message is confusing and hard to understand. See below.
+
+------------------ Test Run 1 ------------------- 
+args = 2
+Request is not satisfiable.
+The constraint requesting 5 problem(s) from matrix matlab of point value 3 within difficulty -Infinity through Infinity is unsatisfiable.:
+null line 3(0) through 3(85):
+include 5 problems on matrix matlab with difficulty in (-\infty,\infty) at 3 points;
+	at edu.udel.cis.cisc475.rex.generate.impl.GroupConstraintContainer.<init>(GroupConstraintContainer.java:72)
+	at edu.udel.cis.cisc475.rex.generate.impl.TopicOrganizer.addConstraint(TopicOrganizer.java:57)
+	at edu.udel.cis.cisc475.rex.generate.impl.MasterExamController.distributeGroupConstraint(MasterExamController.java:143)
+	at edu.udel.cis.cisc475.rex.generate.impl.Generator.generate(Generator.java:151)
+	at edu.udel.cis.cisc475.rex.generate.impl.Generator.<init>(Generator.java:69)
+	at edu.udel.cis.cisc475.rex.generate.impl.GeneratorFactory.newGenerator(GeneratorFactory.java:14)
+	at edu.udel.cis.cisc475.rex.main.Rex.process(Rex.java:140)
+	at edu.udel.cis.cisc475.rex.main.Rex.main(Rex.java:40)
