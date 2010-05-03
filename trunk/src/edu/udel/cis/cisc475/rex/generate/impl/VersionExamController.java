@@ -388,7 +388,8 @@ public class VersionExamController
 																			 	  theProblemsArray[i].label(), 
 																			 	  theProblemsArray[i].question(), 
 																			 	  randomizeAnswers(theProblemsArray[i]));
-						
+							
+							newProblem.setDifficulty(theProblemsArray[i].difficulty());
 							versionExam.addElement(newProblem);
 							versionAnswerKey.addProblem(correctAnswers(newProblem));
 							problemBlacklist.put(identifier, theProblemsArray[i]);
