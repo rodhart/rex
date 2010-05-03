@@ -10,35 +10,6 @@
 %print header
 \examheader{CISC 106}{UEF Example}{Developed: 2010}
 
-%example of a block
-\begin{block}{example topic}
-  This is an example of a block
-\end{block}
-
-%example figure
-\begin{figure}[placement h]
-  \begin{center}
-      \includegraphics[scale=0.50]{binary_tree.png}
-      \caption{Example Figure}
-      \label{fig:example topic}
-   \end{center}
-\end{figure}
-
-%example of a problem, require block:example topic
-%and fig:example topic
-\begin{problem}[require=example topic]{example topic}{15}
-  This is a problem
-  \ref{fig:example topic}
-  \begin{answers}
-    \answer[correct] correct answer 1
-    \answer answer 2
-    \answer[fixed] fixed answer 3
-    \answer[correct,fixed] correct fixed answer 4
-    \answer answer 5
-    \answer[fixed,correct] fixed correct answer 6
-  \end{answers}
-\end{problem}
-
 \begin{block}{logical}
 The following problems relate to logical situations.
 \end{block}
@@ -69,7 +40,7 @@ The following problems relate to logical situations.
   \end{answers}
 \end{problem}
 
-\begin{problem}[require=logical]{logical}{8} 
+\begin{problem}[requires=logical]{logical}{8} 
   In MATLAB the value 1 is true, and true is:
 %:type logical
   \begin{answers} 
@@ -185,7 +156,7 @@ $\begin{array}{c}3 \\ 5\end{array}$\normalsize?
 \end{problem}
 
 %goodbye message block
-\begin{block}{Goodbye Message}
+\begin{block}{GoodbyeMessage}
   Did you remember to write your name on the first page?  Did you
   attempt to answer every question?    Have a good holiday.
 \end{block}
