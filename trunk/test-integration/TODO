@@ -1,3 +1,10 @@
+#To-Do list for System Testing
+#Format for tests:
+#[Status][Pass/Fail(Ticket#)] Description
+#Status: NEW, PROGRESS, DONE 
+#For DONE, add Pass/Fail
+#For Fail, add ticket number
+
 General:
 NEW Usability (Command line, etc)
 NEW UEF \examversion
