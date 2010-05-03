@@ -81,11 +81,22 @@ public class ExamFactory implements ExamFactoryIF {
 	 * Creates a new instance of ExamIF for use as a output Exam.
 	 * 
 	 * @return new instance of ExamIF
+	 * @deprecated Replaced by {@link #newGeneratedExam(String)}
 	 */
 	public ExamIF newGeneratedExam() {
 		return new Exam(false);
 	}
 
+	/**
+	 * Creates a new instance of ExamIF for use as a output Exam.
+	 * 
+	 * @param version String: represents the version identifier for this exam.
+	 * @return new instance of ExamIF
+	 */
+	public ExamIF newGeneratedExam(String version) {
+		return new Exam(false);
+	}
+	
 	/**
 	 * Creates a new instance ExamIF for use as the master repository.
 	 * 
@@ -113,8 +124,6 @@ public class ExamFactory implements ExamFactoryIF {
 		throw new NullPointerException("The argument question cannot be null");
 		if(answers == null)
 			throw new NullPointerException("The argument answers cannot be null");
-		//if(answers.length == 0)
-		//	throw new IllegalArgumentException("Argument answers cannot be empty");
 		for(int i = 0; i < answers.length; i++)
 			if(answers[i] == null)
 			throw new NullPointerException("The argument answers cannot contain null values");

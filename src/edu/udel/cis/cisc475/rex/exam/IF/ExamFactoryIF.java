@@ -22,9 +22,19 @@ public interface ExamFactoryIF {
 	 * Creates a new instance of ExamIF for use as a output Exam.
 	 * 
 	 * @return new instance of ExamIF
+	 * @deprecated Replaced by {@link #newGeneratedExam(String)}
 	 */
     ExamIF newGeneratedExam();
-        
+
+	/**
+	 * Creates a new instance of ExamIF for use as a output Exam.
+	 * 
+	 * @param version String: represents the version identifier for this exam.
+	 * @return new instance of ExamIF
+	 */
+    ExamIF newGeneratedExam(String version);
+
+    
 	/**
 	 * Creates a new instance of BlockIF.
 	 * 
