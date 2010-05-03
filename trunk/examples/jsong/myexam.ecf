@@ -1,0 +1,10 @@
+# Jack Song, Trevor Kiernan
+
+include 1 problems on "example topic" with difficulty in [1,\infty) at 2 points;
+include 2 problems on "logical" with difficulty in [0,10] at 1 points;
+include 3 problems on "matrix matlab" with difficulty in (-\infty,\infty) at 3 points;
+include 4 problems on "rocket science" with difficulty in [0,10] at 4 points; # this is to check what happens when Rex tries to include a non-existent topic
+
+append block:GoodbyeMessage; # this block will be added at end
+
+versions are "1/21/2010", "Jan.\ 21, 2010", "21-jan-2010", "JAN.\ 21 2010";
