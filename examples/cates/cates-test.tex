@@ -1,0 +1,132 @@
+\documentclass{exam} 
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{comment}
+\usepackage{graphicx}
+
+\begin{document}
+
+\examheader{EASY101}{Example Exam: Show off complicated REQUIRES block stuff}{Derp}
+
+\begin{problem}[requires=secondToLast]{secondToLast}{1}
+This is the $-1$th problem defined. It requires the second to last block. The correct answer is ``derp''.
+	\begin{answers}
+		\answer[correct] derp
+		\answer superderp
+		\answer non-derp
+	\end{answers}
+\end{problem}
+
+\begin{block}{beginning}
+	This \LaTeX figure goes at the beginning.
+	\begin{align} 
+		(a+b)^3 &= (a+b)^2(a+b)\\
+		&=(a^2+2ab+b^2)(a+b)\\
+		&=(a^3+2a^2b+ab^2) + (a^2b+2ab^2+b^3)\\
+		&=a^3+3a^2b+3ab^2+b^3
+	\end{align}
+\end{block}
+
+\begin{block}{afterBeginning}
+	This is the second block defined. It is pretty \textbf{boring}
+\end{block}
+
+\begin{problem}[requires=beginning]{beginning}{1}
+This is the first problem defined. It requires the beginning block. The correct answer is ``derp''.
+	\begin{answers}
+		\answer[correct] derp
+		\answer superderp
+		\answer non-derp
+	\end{answers}
+\end{problem}
+
+\begin{problem}[requires=end]{end}{1}
+This is the second problem defined. It requires the end block. The correct answer is ``derp''.
+	\begin{answers}
+		\answer[correct] derp
+		\answer superderp
+		\answer non-derp
+	\end{answers}
+\end{problem}
+
+
+\begin{problem}[requires=beginning]{beginning}{1}
+This is the third problem defined. It requires the beginning block. The correct answer is ``derp''.
+	\begin{answers}
+		\answer[correct] derp
+		\answer superderp
+		\answer non-derp
+	\end{answers}
+\end{problem}
+
+\begin{block}{middle}
+	This is Malcom in the middle. He doesn't like you. You will probably fail this exam.
+\end{block}
+
+\begin{block}{appendedBlock}
+	FINAL DERP.
+\end{block}
+
+\begin{problem}[requires=middle]{middle}{1}
+This is the fourth problem defined. It requires the middle block. The correct answer is ``derp''.
+	\begin{answers}
+		\answer[correct] derp
+		\answer superderp
+		\answer non-derp
+	\end{answers}
+\end{problem}
+
+\begin{problem}[requires=secondToLast]{secondToLast}{1}
+This is the fifth problem defined. It requires the second to last block. The correct answer is ``derp''.
+	\begin{answers}
+		\answer[correct] derp
+		\answer superderp
+		\answer non-derp
+	\end{answers}
+\end{problem}
+
+\begin{problem}[requires=secondToLast]{secondToLast}{1}
+This is the sixth problem defined. It requires the second to last block. The correct answer is ``derp''.
+	\begin{answers}
+		\answer[correct] derp
+		\answer superderp
+		\answer non-derp
+	\end{answers}
+\end{problem}
+
+\begin{problem}[requires=middle]{middle}{1}
+This is the seventh problem defined. It requires the middle block. The correct answer is ``derp''.
+	\begin{answers}
+		\answer[correct] derp
+		\answer superderp
+		\answer non-derp
+	\end{answers}
+\end{problem}
+
+\begin{block}{secondToLast}
+	This block is second to last. Let's see what happens\dots
+\end{block}
+
+\begin{problem}[requires=afterBeginning]{afterBeginning}{1}
+This is the eighth problem defined. It requires the block after the first one. The correct answer is ``derp''.
+	\begin{answers}
+		\answer[correct] derp
+		\answer superderp
+		\answer non-derp
+	\end{answers}
+\end{problem}
+
+\begin{block}{end}
+	This block is the last one. It is kinda ok.
+\end{block}
+
+\begin{problem}[requires=secondToLast]{secondToLast}{1}
+This is the last problem defined. It requires the second to last block. The correct answer is ``derp''.
+	\begin{answers}
+		\answer[correct] derp
+		\answer superderp
+		\answer non-derp
+	\end{answers}
+\end{problem}
+
+\end{document}
