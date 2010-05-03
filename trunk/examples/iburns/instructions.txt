@@ -1,0 +1,5 @@
+This test should try to request negative 1 problems with the topic "example topic"
+
+The first topic "logical" should print correctly.
+There should either be an error from "example topic" from being less than 0,
+	or the problems should not be printed.
