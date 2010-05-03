@@ -1,0 +1,52 @@
+\documentclass{exam}
+ 
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{comment}
+\usepackage{graphicx}
+
+
+\begin{document}
+
+
+%print header
+\examheader{CISC 106}{UEF Example}{Developed: 2010}
+
+%example of a block
+
+\begin{problem}{logical}{8.0}
+In MATLAB the value 1 is true, and true is:
+%:type logical
+\begin{answers}
+\answer[correct] any value that isn't zero %correct answer
+\answer there are no boolean types in MATLAB
+\answer 1
+\answer[fixed] none of the above %fixed position
+\answer 0
+\end{answers}
+\end{problem}
+\begin{problem}{function call}{15.0}
+Consider the function f:
+  \begin{verbatim}
+    function answer = f(a)
+    answer = a+2;
+    end
+  \end{verbatim}
+  What will be in x after the command:
+  \begin{verbatim}>> x = f(4);
+  \end{verbatim}
+%:type function call
+\begin{answers}
+\answer[fixed] none of these %fixed position
+\answer[fixed] error %fixed position
+\answer[correct] 6 %correct answer
+\answer f(4)
+\answer 4
+\end{answers}
+\end{problem}
+\begin{block}
+\begin{block}{logical}
+The following problems relate to logical situations.
+\end{block}
+\end{block}
+\end{document}
