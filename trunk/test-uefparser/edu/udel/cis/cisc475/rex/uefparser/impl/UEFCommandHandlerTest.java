@@ -43,7 +43,7 @@ public class UEFCommandHandlerTest
 		UEFParser parser = new UEFParser();
 
 		//Open the file to parse.
-		File file = new File("." + File.separator + "examples" + File.separator
+		File file = new File("." + File.separator + "tests" + File.separator
 							 + "processAnswerTestFile.tex");
 		parser.parseForAllCommands(file);
 
@@ -114,7 +114,7 @@ public class UEFCommandHandlerTest
 		UEFParser parser = new UEFParser();
 
 		//Open the file to parse.
-		File file = new File("." + File.separator + "examples" + File.separator
+		File file = new File("." + File.separator + "tests" + File.separator
 							 + "processAnswersTestFile.tex");
 		parser.parseForAllCommands(file);
 
@@ -148,7 +148,7 @@ public class UEFCommandHandlerTest
 		UEFParser parser = new UEFParser();
 
 		//Open the file to parse.
-		File file = new File("." + File.separator + "examples" + File.separator
+		File file = new File("." + File.separator + "tests" + File.separator
 							 + "processProblemTestFile.tex");
 		parser.parseForAllCommands(file);
 
@@ -201,7 +201,7 @@ public class UEFCommandHandlerTest
 		UEFParser parser = new UEFParser();
 
 		//Open the file to parse.
-		File file = new File("." + File.separator + "examples" + File.separator
+		File file = new File("." + File.separator + "tests" + File.separator
 							 + "processBlockTestFile.tex");
 		parser.parseForAllCommands(file);
 
@@ -226,7 +226,7 @@ public class UEFCommandHandlerTest
 		UEFParser parser = new UEFParser();
 
 		//Open the file to parse.
-		File file = new File("." + File.separator + "examples" + File.separator
+		File file = new File("." + File.separator + "tests" + File.separator
 							 + "processFigureTestFile.tex");
 		parser.parseForAllCommands(file);
 

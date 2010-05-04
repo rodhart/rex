@@ -40,7 +40,7 @@ public class UEFCharHandlerTest
 		// create the object.
 		this.uefCharHandler = new UEFCharHandler();
 
-		File file = new File("." + File.separator + "examples" + File.separator + "uefCharHandlerTestFile.txt");
+		File file = new File("." + File.separator + "tests" + File.separator + "uefCharHandlerTestFile.txt");
 		this.uefCharHandler.openFile(file);
 	}
 

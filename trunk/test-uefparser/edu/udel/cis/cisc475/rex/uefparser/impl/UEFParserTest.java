@@ -38,7 +38,7 @@ public class UEFParserTest
 		UEFParser parser = new UEFParser();
 
 		//Open the file to parse.
-		File file = new File("." + File.separator + "examples" + File.separator + "parseForArgumentTestFile.tex");
+		File file = new File("." + File.separator + "tests" + File.separator + "parseForArgumentTestFile.tex");
 		parser.openFile(file);
 
 		String argument1 = parser.parseForArgument();
@@ -92,7 +92,7 @@ public class UEFParserTest
 	@Test
 	public void parseForOptionalArgumentTest() throws Exception
 	{
-		File file = new File("." + File.separator + "examples" + File.separator + "parseForOptionalArgumentTestFile.tex");
+		File file = new File("." + File.separator + "tests" + File.separator + "parseForOptionalArgumentTestFile.tex");
 
 		//Open the file to parse.
 		UEFParser parser = new UEFParser();
@@ -174,7 +174,7 @@ public class UEFParserTest
 		UEFParser parser = new UEFParser();
 
 		//Open the file to parse.
-		File file = new File("." + File.separator + "examples" + File.separator + "parseForCommandTestFile.tex");
+		File file = new File("." + File.separator + "tests" + File.separator + "parseForCommandTestFile.tex");
 		parser.openFile(file);
 
 		//Check \documentclass command
@@ -329,7 +329,7 @@ public class UEFParserTest
 		{
 			UEFParser parser = new UEFParser();
 			//Open the file to parse.
-			File file = new File("." + File.separator + "examples" + File.separator + "negativeVerbTestFile.tex");
+			File file = new File("." + File.separator + "tests" + File.separator + "negativeVerbTestFile.tex");
 			parser.parseForAllCommands(file);
 		}
 		catch (RexParseException e)
@@ -345,7 +345,7 @@ public class UEFParserTest
 		{
 			UEFParser parser = new UEFParser();
 			//Open the file to parse.
-			File file = new File("." + File.separator + "examples" + File.separator + "negativeVerbatimTestFile.tex");
+			File file = new File("." + File.separator + "tests" + File.separator + "negativeVerbatimTestFile.tex");
 			parser.parseForAllCommands(file);
 		}
 		catch (RexParseException e)
@@ -358,7 +358,7 @@ public class UEFParserTest
 	public void negativeCommentTest() throws IOException, RexParseException
 	{
 		UEFParser parser = new UEFParser();
-		File file = new File("." + File.separator + "examples" + File.separator + "negativeCommentTestFile.tex");
+		File file = new File("." + File.separator + "tests" + File.separator + "negativeCommentTestFile.tex");
 		parser.openFile(file);
 		assertNull(parser.parseForCommand());
 	}
