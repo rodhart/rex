@@ -67,18 +67,26 @@ class UEFReferenceHandler
 	 */
 	void mapReferences(ExamElementIF examElement)
 	{
+		//for each unmapped reference
 		Iterator<String> iter = unmappedReferences.iterator();
 		while (iter.hasNext())
 		{
+			//get the reference label.
 			String reference = iter.next();
+
+			//check to see if the referenced label is already in the mapped reference list.
 			if (this.mappedReferences.containsKey(reference))
 			{
+				//if it is in there we just need to add the element to the list at the particular key.
 				this.mappedReferences.get(reference).add(examElement);
 			}
 			else
 			{
+				//if it is not we need to create a new list and add  the element to the list
 				List<ExamElementIF> list = new ArrayList<ExamElementIF>();
 				list.add(examElement);
+
+				//and we need to put the new list to the list of mapped references.
 				this.mappedReferences.put(reference, list);
 			}
 		}
