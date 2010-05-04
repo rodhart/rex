@@ -47,6 +47,7 @@ class UEFCommandHandler
 	 * by the ExamIF module.
 	 */
 	private UEFCharHandler uefCharHandler;
+	private UEFReferenceHandler uefReferenceHandler;
 	/**
 	 * Source factory is only created once at the constructor and used every
 	 * time a source object needs to be created.
@@ -57,17 +58,6 @@ class UEFCommandHandler
 	 * parts of exam needs to be created.
 	 */
 	private ExamFactoryIF examFactory;
-	/**
-	 * Map of all references in the UEF file. The key is the reference name and
-	 * the ExamElement all elements that have that ref
-	 */
-	private Map<String, List<ExamElementIF>> references;
-	/**
-	 * This is special List for references by answers. This List is needed for
-	 * two reasons: 1. AnswerIF doesn't implement ExamElementIF. 2. If an answer
-	 * has a ref then the whole problem uses that element.
-	 */
-	private List<String> answerReferences;
 
 	/**
 	 * Constructor for the class. Takes a reference to the underlying
@@ -81,10 +71,9 @@ class UEFCommandHandler
 		// initialize object fields.
 		this.uefCharHandler = uefCharHandler;
 		this.uefCommandQueue = new LinkedList<UEFCommand>();
+		this.uefReferenceHandler = new UEFReferenceHandler();
 		this.sourceFactory = new SourceFactory();
 		this.examFactory = new ExamFactory();
-		this.references = new HashMap<String, List<ExamElementIF>>();
-		this.answerReferences = new ArrayList<String>();
 	}
 
 	/**
@@ -333,7 +322,7 @@ class UEFCommandHandler
 					// answer references for the particular problem we are
 					// creating. But, it can't be created until after we
 					// get every answer. :-(
-					this.answerReferences.add(processRef());
+					this.uefReferenceHandler.addUnmappedReferences(processRef());
 					break;
 				}
 				case endAnswers:
@@ -409,9 +398,6 @@ class UEFCommandHandler
 		// String to be filled with the source content.
 		String content;
 
-		// List of references inside the block.
-		List<String> refs = new ArrayList<String>();
-
 		// Variables to hold the beginning and end of the source
 		int startSource = command.getStartPosition();
 		int endSource = 0;
@@ -427,7 +413,7 @@ class UEFCommandHandler
 				{
 					// add the reference to our local list of refences to later
 					// declareUses relationships for.
-					refs.add(processRef());
+					this.uefReferenceHandler.addUnmappedReferences(processRef());
 					break;
 				}
 				case endBlock:
@@ -460,24 +446,7 @@ class UEFCommandHandler
 					// to later declareUses relationships for.
 					// Since our BlockIF object is created, we can add to the global
 					// list.
-					if (refs.size() != 0)
-					{
-						Iterator<String> i = refs.iterator();
-						while (i.hasNext())
-						{
-							String r = i.next();
-							if (this.references.containsKey(r))
-							{
-								this.references.get(r).add(block);
-							}
-							else
-							{
-								List<ExamElementIF> list = new ArrayList<ExamElementIF>();
-								list.add(block);
-								this.references.put(r, list);
-							}
-						}
-					}
+					this.uefReferenceHandler.mapReferences(block);
 
 					// return our block object now.
 					return block;
@@ -663,9 +632,6 @@ class UEFCommandHandler
 		// String to be filled with the source content
 		String content;
 
-		// List of references found within this this figure environment.
-		List<String> refs = new ArrayList<String>();
-
 		// Variables to hold the beginning and end of the source
 		int startSource = command.getStartPosition();
 		int endSource = 0;
@@ -694,7 +660,7 @@ class UEFCommandHandler
 
 					// add the reference to our local list of refences to later
 					// declareUses relationships for.
-					refs.add(processRef());
+					this.uefReferenceHandler.addUnmappedReferences(processRef());
 					break;
 				}
 				case endFigure:
@@ -727,24 +693,7 @@ class UEFCommandHandler
 					// to later declareUses relationships for.
 					// Since our FigureIF object is created, we can add to the
 					// global list.
-					if (refs.size() != 0)
-					{
-						Iterator<String> i = refs.iterator();
-						while (i.hasNext())
-						{
-							String r = i.next();
-							if (this.references.containsKey(r))
-							{
-								this.references.get(r).add(figure);
-							}
-							else
-							{
-								List<ExamElementIF> list = new ArrayList<ExamElementIF>();
-								list.add(figure);
-								this.references.put(r, list);
-							}
-						}
-					}
+					this.uefReferenceHandler.mapReferences(figure);
 
 					// return our FigureIF.
 					return figure;
@@ -808,9 +757,6 @@ class UEFCommandHandler
 		// get the difficulty.
 		String difficulty = command.getArgument(1);
 
-		// List of all references found within this problem environment.
-		List<String> refs = new ArrayList<String>();
-
 		// get required block
 		String optionalArgument = command.getOptionalArgument();
 		if (optionalArgument != null)
@@ -824,12 +770,12 @@ class UEFCommandHandler
 				if (split[0].equals("require"))
 				{
 					// check for typoed requires
-					refs.add(split[1]);
+					this.uefReferenceHandler.addUnmappedReferences(split[1]);
 				}
 				else if (split[0].equals("requires"))
 				{
 					// check for correct requires
-					refs.add(split[1]);
+					this.uefReferenceHandler.addUnmappedReferences(split[1]);
 				}
 			}
 		}
@@ -915,7 +861,7 @@ class UEFCommandHandler
 
 					// add the reference to our local list of refences to later
 					// declareUses relationships for.
-					refs.add(processRef());
+					this.uefReferenceHandler.addUnmappedReferences(processRef());
 					break;
 				}
 				case endProblem:
@@ -943,39 +889,12 @@ class UEFCommandHandler
 					// add the difficulty.
 					problem.setDifficulty(Double.valueOf(difficulty));
 
-					// Add references that were found within the answers
-					// environment.
-					for (int i = 0; i < this.answerReferences.size(); i++)
-					{
-						refs.add(this.answerReferences.get(i));
-					}
-
-					// clear the list answer references.
-					this.answerReferences.clear();
-
 					// Add each reference found within this block to our list of
 					// references
 					// to later declareUses relationships for.
 					// Since our ProblemIF object is created, we can add to the
 					// global list.
-					if (refs.size() != 0)
-					{
-						Iterator<String> i = refs.iterator();
-						while (i.hasNext())
-						{
-							String r = i.next();
-							if (this.references.containsKey(r))
-							{
-								this.references.get(r).add(problem);
-							}
-							else
-							{
-								List<ExamElementIF> list = new ArrayList<ExamElementIF>();
-								list.add(problem);
-								this.references.put(r, list);
-							}
-						}
-					}
+					this.uefReferenceHandler.mapReferences(problem);
 
 					// return our problem.
 					return problem;
@@ -1147,27 +1066,7 @@ class UEFCommandHandler
 					exam.setPreamble(source);
 
 					// setting USES relationships finally.
-					Iterator<String> i = this.references.keySet().iterator();
-					while (i.hasNext())
-					{
-						String label = i.next();
-						List<ExamElementIF> e = this.references.get(label);
-						ExamElementIF usedElement = null;
-
-						usedElement = exam.elementWithLabel(label);
-
-						if (usedElement == null)
-						{
-							throw new RexParseException("Element with label " + label + " not found within file.", null);
-						}
-						else
-						{
-							for (int j = 0; j < e.size(); j++)
-							{
-								exam.declareUse(e.get(j), usedElement);
-							}
-						}
-					}
+					this.uefReferenceHandler.declareUses(exam);
 
 					// ... almost done...
 
