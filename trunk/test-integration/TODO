@@ -21,6 +21,7 @@ General:
 
 #For ECF specific issues
 ECF Issues:
+01 DONE FAIL Test if REX handles bad difficulty interval (null pointer exception is not handled)
 
 
 #For UEF specific issues
