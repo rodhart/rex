@@ -131,10 +131,12 @@ public class Generator implements GeneratorIF
 				theRPCs.add((RequiredProblemConstraintIF) theConstraint);
 			*/
 			
-			if (theConstraint.getClass().getSimpleName().equals("GroupConstraint"))
+		//	if (theConstraint.getClass().getSimpleName().equals("GroupConstraint"))
+			if (theConstraint instanceof GroupConstraintIF)
 				theGCs.add((GroupConstraintIF) theConstraint);
 			
-			else if (theConstraint.getClass().getSimpleName().equals("RequiredProblemConstraint"))
+		//	else if (theConstraint.getClass().getSimpleName().equals("RequiredProblemConstraint"))
+			else if (theConstraint instanceof RequiredProblemConstraintIF)
 				theRPCs.add((RequiredProblemConstraintIF) theConstraint);
 			
 			else
