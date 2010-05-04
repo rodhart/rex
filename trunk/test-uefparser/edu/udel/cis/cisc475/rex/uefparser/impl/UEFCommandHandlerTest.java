@@ -491,4 +491,111 @@ public class UEFCommandHandlerTest
 				"Consider the function f:\n  \\begin{verbatim}\n    function answer = f(a)\n    answer = a+2;\n    end\n  \\end{verbatim}\n  What will be in x after the command:\n  \\begin{verbatim}>> x = f(4);\n  \\end{verbatim}\n%:type function call", problem2.
 				question().text());
 	}
+
+	/**
+	 * Tests that references have the correct USES relationships in an ExamIF after reading in a UEF file.
+	 *
+	 * @throws RexParseException
+	 * @throws RexException
+	 * @throws IOException
+	 */
+	@Test
+	public void referenceTest() throws RexParseException, RexException, IOException
+	{
+		UEFParser parser = new UEFParser();
+
+		//Open the file to parse.
+		File file = new File("." + File.separator + "tests" + File.separator + "referenceTestFile.tex");
+		parser.parseForAllCommands(file);
+
+		//get a reference to the handler to allow direct calls to the process methods of the handler
+		UEFCommandHandler handler = parser.getUEFCommandHandler();
+
+		ExamIF exam = handler.process();
+
+		//get the only problem in the exam.
+		Collection<ProblemIF> problemCollection = exam.problemsWithTopic("topic");
+		ProblemIF problem = problemCollection.toArray(new ProblemIF[0])[0];
+
+		//get figures referencing that problem.
+		Collection<FigureIF> figureCollection = problem.referencedFigures();
+		FigureIF figure[] = figureCollection.toArray(new FigureIF[0]);
+
+		//there should be 3 figures.
+		assertEquals(3, figure.length);
+
+		//check each figure to make sure they are correct.
+		boolean foundFig1 = false;
+		boolean foundFig2 = false;
+		boolean foundFig3 = false;
+		for (int n = 0; n < figure.length; n++)
+		{
+			//go through each figure and check them off if they are found.
+			//make sure there are no duplicates.
+			if (figure[n].label().equals("fig1"))
+			{
+				if (foundFig1 == false)
+				{
+					foundFig1 = true;
+					assertTrue(true);
+				}
+				else
+				{
+					fail();
+				}
+			}
+			else if (figure[n].label().equals("fig2"))
+			{
+				if (foundFig2 == false)
+				{
+					foundFig2 = true;
+					assertTrue(true);
+				}
+				else
+				{
+					fail();
+				}
+			}
+			else if (figure[n].label().equals("fig3"))
+			{
+				if (foundFig3 == false)
+				{
+					foundFig3 = true;
+					assertTrue(true);
+				}
+				else
+				{
+					fail();
+				}
+			}
+			else
+			{
+				fail();
+			}
+		}
+
+		//get all the figures in the exam
+		figureCollection = exam.figures();
+		figure = figureCollection.toArray(new FigureIF[0]);
+
+		//check to make sure there are four figures.
+		assertEquals(4, figure.length);
+
+		//find fig4 because we want to make sure fig3 is USING it.
+		for (int n = 0; n < figure.length; n++)
+		{
+			if(figure[n].label().equals("fig4"))
+			{
+				//get the figure from the collection
+				Collection<ExamElementIF> examElementCollection = exam.elementsUsingElement(figure[n]);
+				FigureIF element[] = examElementCollection.toArray(new FigureIF[0]);
+
+				//check to make sure there is only one figure using fig4
+				assertEquals(1,element.length);
+
+				//make sure the figure is fig3.
+				assertEquals("fig3",element[0].label());
+			}
+		}
+	}
 }
