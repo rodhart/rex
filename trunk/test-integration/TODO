@@ -13,9 +13,10 @@ General:
 05 NEW Test if the same exams are generated for the same seed number
 06 NEW Test if REX gives an error if no answer is marked as correct for a specific problem
 07 DONE FAIL(111) Test if blocks for the two requirements:  1. All the problems requiring B will be grouped together in a consecutive sequence. 2. B will occur just before the first such problem in the sequence.
-08 NEW Test the bounds of difficulty on the ECF config file; e.g. if the range is [1,9) it should not include problem of difficulty 9 but it can include problem of difficulty 1
+08 DONE Test the bounds of difficulty on the ECF config file; e.g. if the range is [1,9) it should not include problem of difficulty 9 but it can include problem of difficulty 1
 09 NEW test if the user asked for more exam version on "-n" than the versions on the ECF file on "versions are"
 10 NEW test if the all the required problems by the ECF are satisfiable.
+11 DONE FAIL(112) Test if the output exam has all the required problems by the ECF file
 
 
 #For ECF specific issues
