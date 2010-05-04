@@ -97,7 +97,8 @@ public class VersionExamController
 		
 		
 		for (int i = 0; i < theAnswers.length; i++)
-			if (!(theAnswers[i].getClass().getSimpleName().equals("FixedAnswerIF")))
+		//	if (!(theAnswers[i].getClass().getSimpleName().equals("FixedAnswerIF")))
+			if (!(theAnswers[i] instanceof FixedAnswerIF))
 				beforeRandomization.add(theAnswers[i]);
 		
 		//Next 6 lines are maybe a fix to the problem we were having.  Certainly there is a better way.
@@ -111,7 +112,8 @@ public class VersionExamController
 		//afterRandomization = (AnswerIF[]) this.theRandomizer.choose(beforeRandomization.size(), beforeRandomization.toArray());
 		
 		for (int i = 0; i < theAnswers.length; i++)
-			if (!(theAnswers[i].getClass().getSimpleName().equals("FixedAnswerIF")))
+		//	if (!(theAnswers[i].getClass().getSimpleName().equals("FixedAnswerIF")))
+			if (!(theAnswers[i] instanceof FixedAnswerIF))
 			{
 				theAnswers[i] = afterRandomization[j];
 				j++;
