@@ -61,4 +61,13 @@ public class ExamFactoryStub implements ExamFactoryIF {
 		return null;
 	}
 
+
+
+
+	@Override
+	public ExamIF newGeneratedExam(String version) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
