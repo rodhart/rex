@@ -12,11 +12,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import org.junit.Before;
 import org.junit.Test;
+
+import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.impl.Answer;
 import edu.udel.cis.cisc475.rex.exam.impl.Block;
 import edu.udel.cis.cisc475.rex.exam.impl.Exam;
+import edu.udel.cis.cisc475.rex.exam.impl.ExamElement;
 import edu.udel.cis.cisc475.rex.exam.impl.Figure;
 import edu.udel.cis.cisc475.rex.output.IF.OutputFactoryIF;
 import edu.udel.cis.cisc475.rex.output.impl.ExamWriter;
@@ -594,6 +597,53 @@ public void testPrintBlockIF15() throws IOException {
 	//testString that was stored in a block
 	assertEquals(testData.toString().compareTo(testString2), 0);
 }    
+
+/* tests passing an element with no type specified.
+ * should throw NullPointerException
+ */
+@Test(expected=NullPointerException.class)
+public void testPrintElementNoType() throws IOException {
+	Exam e = new Exam(false);	
+
+	ExamElementIF element = new ExamElement("test");
+	e.addElement(element);
+	
+	//creates an exam writer
+	ExamWriter ew = new ExamWriter(e);
+	String dirName = "./trunk/test-output/edu/udel/cis/cisc475/rex/output";
+	File theDir = new File(dirName);
+	String filename = "";
+	if (theDir.exists()) {
+		filename = "./trunk/test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+	} else { // assume only trunk was checked out -- fix this to add
+			 // another check & throw exception if everything is messed up!
+		filename = "./test-output/edu/udel/cis/cisc475/rex/output/test2.txt";
+	}
+	
+	PrintWriter pw = null;
+	try {
+		pw = new PrintWriter(new FileWriter(filename));
+	} catch (IOException e2) {
+		// TODO Auto-generated catch block
+		e2.printStackTrace();
+	}
+	//the examWriter writes out to the printwriter
+	try {
+		ew.write(pw);
+	} catch (IOException e2) {
+		// TODO Auto-generated catch block
+		e2.printStackTrace();
+	}
+	
+	File aFile = new File(filename);
+	BufferedReader input = new BufferedReader(new FileReader(aFile));
+	String line = "";
+	StringBuffer testData = new StringBuffer();
+	while((line = input.readLine()) != null){
+		testData.append(line);
+		testData.append("\n");
+	}
+}
 
 }//end of class
 
