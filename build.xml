@@ -11,7 +11,7 @@
 	<property name="main-class" value="edu.udel.cis.cisc475.rex.main.Rex" />
 	<property name="64bit" value="-d64" />
 	<!-- this could be made to use antlr-runtime-3.2.jar to make the final jar about 1.6 Mb smaller -->
-	<property name="antlr-runtime" value="${antlr-name}" />
+	<property name="antlr-runtime" value="${antlr3.name}" />
 
 	<!-- Junit: automated unit tester Properties  -->
 	<property name="test.bin.dir" location="${basedir}/bin-test" />
@@ -99,6 +99,7 @@
 		<pathelement location="${src}" />
 		<pathelement location="${junit.name}" />
 		<pathelement location="${antlr3.name}" />
+		<pathelement location="${antlr.name}" />
 	</path>
 
 	<target name="compile" description="Compile all java source files."
@@ -115,7 +116,7 @@
    			<manifest>
      				<attribute name="Built-By" value="${user.name}"/>
               			<attribute name="Main-Class" value="${main-class}"/>
-				<attribute name="Class-Path" value="${lib}/${antlr-runtime}"/>
+				<attribute name="Class-Path" value="${antlr.classpath}"/>
     			</manifest>
   		</jar>
 	</target>
