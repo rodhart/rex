@@ -1,0 +1,21 @@
+
+C:\Users\Josh\workspace\REXX>java -jar REX.jar C:\Users\JR\Desktop\testing\exam.
+tex C:\Users\JR\Desktop\testing\exam.ecf
+args = 2
+line 1:63 no viable alternative at input '-\infty'
+line 1:71 no viable alternative at input '-\infty'
+java.lang.NullPointerException
+        at edu.udel.cis.cisc475.rex.ecfparser.impl.parser.EcfAntlrParser.interva
+l(EcfAntlrParser.java:493)
+        at edu.udel.cis.cisc475.rex.ecfparser.impl.parser.EcfAntlrParser.include
+(EcfAntlrParser.java:396)
+        at edu.udel.cis.cisc475.rex.ecfparser.impl.parser.EcfAntlrParser.stateme
+nt(EcfAntlrParser.java:244)
+        at edu.udel.cis.cisc475.rex.ecfparser.impl.parser.EcfAntlrParser.ecf(Ecf
+AntlrParser.java:147)
+        at edu.udel.cis.cisc475.rex.ecfparser.impl.EcfParser.genericInputParse(E
+cfParser.java:64)
+        at edu.udel.cis.cisc475.rex.ecfparser.impl.EcfParser.parse(EcfParser.jav
+a:47)
+        at edu.udel.cis.cisc475.rex.main.Rex.process(Rex.java:114)
+        at edu.udel.cis.cisc475.rex.main.Rex.main(Rex.java:40)
