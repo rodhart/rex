@@ -4,11 +4,11 @@ import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyFactoryIF;
 import edu.udel.cis.cisc475.rex.key.impl.AnswerKeyFactory;
 
 /**	
- * this class uses a static method used to create the factory which creates 
- * a new instance of an answer key
+ * This class uses a static method used to create the factory which creates 
+ * a new instance of an answer key.
  * 
- * this is an alternate way to do factories with interfaces
- * instead of creating an instance of the factory (saves memory)
+ * This is an alternate way to do factories with interfaces
+ * instead of creating an instance of the factory (this method saves memory).
  *   @author siegel
  *   @author cardona
  * 

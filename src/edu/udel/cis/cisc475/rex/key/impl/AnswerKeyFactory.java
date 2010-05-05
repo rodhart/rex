@@ -4,8 +4,8 @@ import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyFactoryIF;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 
 /**	
- * this class is a factory which creates a new instance of 
- * an answer key
+ * This class is a factory which creates a new instance of 
+ * an answer key.
  * 
  *   @author cardona
  * 

@@ -1,8 +1,8 @@
 package edu.udel.cis.cisc475.rex.key.IF;
 
 /**	
- * this class is a factory which creates a new instance of 
- * an answer key
+ * This class is a factory which creates a new instance of 
+ * an answer key.
  * 
  *   @author cardona
  * 
