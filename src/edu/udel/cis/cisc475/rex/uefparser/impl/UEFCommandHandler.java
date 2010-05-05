@@ -294,6 +294,8 @@ class UEFCommandHandler
 		// create a list of answers to add the answers we process to.
 		List<AnswerIF> answersList = new ArrayList<AnswerIF>();
 
+		boolean foundCorrectAnswer = false;
+
 		// process until either the queue is empty or we hit an endAnswers
 		// command.
 		while (!uefCommandQueue.isEmpty())
@@ -305,8 +307,17 @@ class UEFCommandHandler
 				{
 					// found answer command.
 
-					// process the answer command and add it to the list.
-					answersList.add(processAnswer(index));
+					// process the answer command.
+					AnswerIF answer = processAnswer(index);
+
+					// Check if it is correct, bc we need atleast one correct answer.
+					if (answer.isCorrect())
+					{
+						foundCorrectAnswer = true;
+					}
+
+					// add the answer to the list.
+					answersList.add(answer);
 
 					// increment the index for fixed answers.
 					index++;
@@ -326,8 +337,31 @@ class UEFCommandHandler
 				{
 					// found endAnswers command.
 
-					// pop the /end{answers} command off the queue
-					uefCommandQueue.poll();
+					// pop the /end{answers} command off the queue.
+					UEFCommand endCommand = uefCommandQueue.poll();
+
+					//make sure we found a correct answer within this environment.
+					if (foundCorrectAnswer == false)
+					{
+						//didn't find a correct answer, so we throw an exception.
+
+						// set the start source to beginning of the \begin{answers} command.
+						int startSource = command.getStartPosition();
+
+						// set the end source to the end of the \end{answers} command.
+						int endSource = endCommand.getEndPosition();
+
+						// Fill out the source.
+						SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
+								startSource), uefCharHandler.getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.
+								getColumnNumber(endSource));
+
+						// add the file text to the source.
+						exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
+
+						// return the exception.
+						throw new RexParseException("No correct answer found within answers environment!", exceptionSource);
+					}
 
 					// return the list of AnswerIF and FixedAnswerIF as an array.
 					return answersList.toArray(new AnswerIF[0]);
