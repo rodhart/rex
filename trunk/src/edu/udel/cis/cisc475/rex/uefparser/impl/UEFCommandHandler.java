@@ -888,7 +888,7 @@ class UEFCommandHandler
 					// get answers for the problem.
 					answers = processAnswers();
 
-					// make sure answers were actually found.
+					// make sure answers were actually found within the answers environment.
 					if (answers == null)
 					{
 						// No answers were found...
@@ -945,6 +945,7 @@ class UEFCommandHandler
 					source.addText(content);
 
 					// create the problem.
+					//NOTE: per the requirements, an answers environment doesn't have to be found within a problem environment.
 					ProblemIF problem = examFactory.newProblem(topic, label, source, answers);
 
 					// add the difficulty.
