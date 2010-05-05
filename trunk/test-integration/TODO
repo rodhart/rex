@@ -24,7 +24,7 @@ General:
 #For ECF specific issues
 ECF Issues:
 01 DONE FAIL(113) Test if REX handles bad difficulty interval (null pointer exception is not handled)
-
+02 DONE PASS Test if REX produces an error when given a non-existent topic
 
 #For UEF specific issues
 UEF Issues:
