@@ -10,7 +10,7 @@ General:
 02 NEW UEF \examversion
 03 NEW Randomization of generated exams
 04 NEW Probability of questions
-05 PROGRESS Test if the same exams are generated for the same seed number
+05 DONE FAIL (124) Test if the same exams are generated for the same seed number
 06 DONE FAIL(117) Test if REX gives an error if no answer is marked as correct for a specific problem
 07 DONE FAIL(111) Test if blocks for the two requirements:  1. All the problems requiring B will be grouped together in a consecutive sequence. 2. B will occur just before the first such problem in the sequence.
 08 DONE Test the bounds of difficulty on the ECF config file; e.g. if the range is [1,9) it should not include problem of difficulty 9 but it can include problem of difficulty 1
