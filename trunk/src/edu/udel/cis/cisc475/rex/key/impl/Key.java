@@ -6,17 +6,16 @@ import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 
 /**
  * 
- * class which builds a representation of an answer key
- * store information about the answer key in addition to the
- * indexed answers themselves
- * 
- * these answers can take the form of individual letters or
- * strings of text
- * 
- * additionally, a specific problem can have more than one correct answer
+* Class which builds a representation of an answer key in addition to the
+ * indexed answers themselves.
+ * ~~
+ * These answers can take the form of individual letters or
+ * strings of text.
+ * ~~
+ * Additionally, a specific problem can have more than one correct answer
  * so the representation of a given problem will be an array of answers
- * which most of the time will contain only one element
- * 
+ * (which most of the time will contain only one element).
+  * 
  * @author cardona
  */
 public class Key implements AnswerKeyIF {
