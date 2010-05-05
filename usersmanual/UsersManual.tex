@@ -83,6 +83,19 @@ The Universal Exam File stores all questions, answers, and figures that will be
 included in the exam. REX can take a subsection of these questions as specified
 in the Exam Configuration File. 
 
+A UEF file is made up by a combination of problems, blocks and figures.
+
+\subsection{Frontmatter}
+The Frontmatter is the introduction to the exam, all the content that appears before the first question, block or figure is defined. It is preserved verbatim in the generated exams, and aside from REX commands, any \LaTeX command may appear within the Frontmatter.
+
+\subsection{Problems}
+
+\subsection{Blocks}
+
+\subsection{Figures}
+
+
+
 %Please see Figure \ref{fig:SampleUEF} on page \pageref{fig:SampleUEF} for 
 %an example Universal Exam File.
 
@@ -105,6 +118,8 @@ in the Exam Configuration File.
 % using \begin{verbatim}.
 %\newpage
 %\begin{figure}[H]
+
+\subsection{Sample UEF File}
 \begin{verbatim}
     \documentclass{exam} 
     \usepackage{fullpage}
