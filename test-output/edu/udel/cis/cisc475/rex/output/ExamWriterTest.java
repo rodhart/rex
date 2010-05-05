@@ -39,6 +39,7 @@ public class ExamWriterTest {
     	Exam e = new Exam(true);	
     	String testString = "test string";    	
     	String testString2 = "\\documentclass[master]{exam}\n" +
+    			"\\newcommand{\\examversion}{" + e.version() + "}\n" +
     			"\\begin{document}\n" +
     			"test string\n" +
     			"\\end{document}\n";
@@ -92,22 +93,20 @@ public class ExamWriterTest {
 			testData.append(line);
 			testData.append("\n");
 			}
-    	
+		
 		//checks if the saved testData is the same as the 
 		//testString that was stored in a block
 		assertEquals(testData.toString().compareTo(testString2), 0);
+		
+		
     }
-    
-    
-    
-    
-    
     
     @Test
     public void testPrintFigureIF() throws IOException {
     	Exam e = new Exam(true);	
     	String testString = "test string";
 		String testString2 = "\\documentclass[master]{exam}\n" +
+				"\\newcommand{\\examversion}{" + e.version() + "}\n" +
     			"\\begin{document}\n" +
     			"\\newpage\n" +
     			"test string\n" +
@@ -178,6 +177,7 @@ public class ExamWriterTest {
     	Exam e = new Exam(true);	
     	String testString = "test string";    	
     	String testString2 = "\\documentclass[master]{exam}\n" +
+				"\\newcommand{\\examversion}{" + e.version() + "}\n" +
     			"\\begin{document}\n" +
     			"test string\n" +
     			"\\end{document}\n";
@@ -249,6 +249,7 @@ public class ExamWriterTest {
     	String testString = "test string";    	
     	String testString2 = "\\documentclass[master]{exam}\n" +
     			"test string\n" +
+    			"\\newcommand{\\examversion}{" + e.version() + "}\n" +
     			"\\begin{document}\n" +
     			"\\end{document}\n";
 		
@@ -320,6 +321,7 @@ public class ExamWriterTest {
 		Exam e = new Exam(true);	
     	String testString = "test string";    	
     	String testString2 = "\\documentclass[master]{exam}\n" +
+				"\\newcommand{\\examversion}{" + e.version() + "}\n" +
     			"\\begin{document}\n" +
     			"test string\n" +
     			"\\end{document}\n";
@@ -394,6 +396,7 @@ public class ExamWriterTest {
     	String testString = "inside the block";
     	
     	String testString2 = "\\documentclass{exam}" + "\n" +
+		"\\newcommand{\\examversion}{" + e.version() + "}\n" +
     	"\\begin{document}" + "\n" +    	
     	//"\\begin{block}" + "\n" +
     	"inside the block" + "\n" +
@@ -459,6 +462,7 @@ public void testPrintBlockIF13() throws IOException {
 	Exam e = new Exam(false);	
 	String testString3 = "inside the figure";
 	String testString2 = "\\documentclass{exam}" + "\n" +
+	"\\newcommand{\\examversion}{" + e.version() + "}\n" +
 	"\\begin{document}" + "\n" +    	
 	"\\newpage" + "\n" +
 	//"\\begin{figure}" + "\n" +
@@ -524,6 +528,7 @@ public void testPrintBlockIF15() throws IOException {
 	String testString = "inside the problem";
 	
 	String testString2 = "\\documentclass{exam}" + "\n" +
+	"\\newcommand{\\examversion}{" + e.version() + "}\n" +
 	"\\begin{document}" + "\n" +    	
 	"\\begin{problem}{topic}{0.0}" + "\n" + "\n" +
 	"\\begin{answers}" + "\n" +
