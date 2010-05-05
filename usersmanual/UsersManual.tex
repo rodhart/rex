@@ -90,17 +90,20 @@ a complete Universal Exam File example.
 \subsection{Frontmatter}
 The Frontmatter is the introduction to the exam, all the content that appears before the first question, block or figure is defined. It is preserved verbatim in the generated exams, and aside from REX commands, any \LaTeX command may appear within the Frontmatter.
 
-\subsection{The Problem Environment}
-Each problem is described in a problem environment. These define the set of problems from which REX can draw to create a generated exam. Each problem is associated with the following:
+\subsection{Problems}
+Problems are the heart and soul of a REX-generated exam. REX is built around a desire to select and randomize a set of problems, and Problems located in the UEF is how REX finds them.
 
-\begin{itemize}
-\item required block (optional): a problem environment takes an optional argument giving a required block and is denoted by "[require=block topic]" in the example below. This is a block of text that must be included before the problem.
-\item topic: is expressed as a string and is given as the first argument to the problem environment. Any text that may be used as an argument to a standard latex command can be used. Note: This includes most latex text, including white space, but not verbatim text.
-\item difficulty: this is a floating point number expressed in decimal format and is given as the second argument to the problem environment. For example, 10, 10.0, 10.314, and -2.73 are all acceptable.
-\item ref (optional): a problem may refer to another exam element using the standard latex \verb|\ref| control sequence. Typically problems refer to figures since blocks are referred to by using the optional required block argument.
-\item label (optional): a problem may be given a label using the standard latex \verb|\label| command. The label can be used to refer to the problem from another exam element , or from the ECF.
-\item question: this is the question part of the problem. It is expressed in standard latex. It may include verbatim text. It appears before the answers.
-\item answers (optional): the answers follow the question and are given in an "answers" environment. If the answers environment is used, it must include at least one answer. The maximum number of answers is 26. Each answer is preceded by the control sequence \verb|\answer|. This control sequence takes an optional argument of the following form:
+Problems are defined by a \textbackslash{begin}\{problem\}\{\textcolor{blue}{string topic}\}\{\textcolor{blue}{decimal difficulty}\} command, which takes two mandantory arguments. The first is a topic argument. All problems of the same topic are automatically grouped together, although their order within the topic is random, and the order of the topics itself is also random. Topics are how you choose a problem using a \hyperref[GroupConstraints]{Group Constraint}. The second argument is the difficulty. This is a decimal value, either negative or positive, that is also used by Group Constraints to select and value problems.
+
+The problem definiton consists of everything between the \textbackslash{begin}\{problem\} and the \textbackslash{end}\{problem\}. Inside of there, you can either give the problem a label, or provide the answers for the problem.
+
+\subsubsection{Problem Labels}
+For problems, a label is optional. Labels are used to refer to a specific problem, and so, if you don't want to refer to the problem (Most likely through a \hyperref[RequiredProblemConstraints]{Required Problem Constraint}), it can be safely ommited.
+
+To give a problem a label, you place a \textbackslash{label}\{\textcolor{blue}{string label}\} somewhere inside the problem definition.
+
+\subsubsection{Problem Answers}
+ answers (optional): the answers follow the question and are given in an "answers" environment. If the answers environment is used, it must include at least one answer. The maximum number of answers is 26. Each answer is preceded by the control sequence \verb|\answer|. This control sequence takes an optional argument of the following form:
 \begin{itemize}
 \item \verb|[correct]| : signifying this is the correct answer
 \item \verb|[fixed]|: signifying that this answer must appear in its given position in the answer sequence
@@ -108,9 +111,14 @@ Each problem is described in a problem environment. These define the set of prob
 \end{itemize}
 At least one answer must be labeled as correct and it is OK to have more than one correct answer.
 A problem may leave out the answers environment. This is suitable for a problem which is not a multiple-choice problem. (For example, fill-in-the-blanks, or essay questions.)
-\end{itemize}
 
-Example:
+\subsubsection{Problem References}
+ref (optional): a problem may refer to another exam element using the standard latex \verb|\ref| control sequence. Typically problems refer to figures since blocks are referred to by using the optional required block argument.
+
+\subsubsection{Required Blocks}
+Required block (optional): a problem environment takes an optional argument giving a required block and is denoted by "[require=block topic]" in the example below. This is a block of text that must be included before the problem.
+
+\subsubsection{Example}
 \begin{verbatim}
 \begin{problem}[require=block topic]{Arithmetic}{5}
   \label{prob:arithmetic:prime}
@@ -126,7 +134,8 @@ Example:
 \end{problem}
 \end{verbatim}
 
-\subsection{Block}
+
+\subsection{Blocks}
 A block is any kind of non-floating latex text that is not part of a problem but might still be included in the exam after the front-matter, between the problems, or at the end of the exam after all problems. A typical case is text that is to be shared by several problems or some text at the end of the exam.
 
 A block is inserted in a "block" environment. This takes one argument, which is just a name to give to the block. This name will not occur in the printed exam, it will only be used to refer to the block. The name can be any latex command-compatible text.
