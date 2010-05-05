@@ -1,1 +1,17 @@
 We did not have REX able to run on the machine these tests were developed on, so they are untested.
+
+
+C:\Users\Josh\workspace\REXX>java -jar REX.jar C:\Users\JR\Desktop\gledhill\exam
+.tex C:\Users\JR\Desktop\gledhill\exam.ecf
+args = 2
+A parsing error has occurred.
+Element with label noblock not found within file.:
+
+        at edu.udel.cis.cisc475.rex.uefparser.impl.UEFCommandHandler.process(UEF
+CommandHandler.java:1161)
+        at edu.udel.cis.cisc475.rex.uefparser.impl.UEFParser.parse(UEFParser.jav
+a:904)
+        at edu.udel.cis.cisc475.rex.main.Rex.process(Rex.java:128)
+        at edu.udel.cis.cisc475.rex.main.Rex.main(Rex.java:40)
+        
+Ran by Josh
