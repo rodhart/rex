@@ -5,9 +5,13 @@
 </head>
 <body bgcolor="white">
 
-Implements key.IF to create an answer key for a given exam. Stores the version, exam name, and date, as well as the correct answer for each corresponding question.
+Implements keyIF to create a representation of an answer key for a given exam. Stores the version, exam name, and date, as well as the correct answer for each corresponding question.
 
 <h2>Details</h2>
+The answer key module stores information about the answer key in addition to the indexed answers themselves.
+These answers can take the form of individual letters or strings of text.
+Additionally, a specific problem can have more than one correct answer so the representation
+of a given problem will be an array of answers which most of the time will contain only one element.
 
 This package stores the answers as a collection of strings. The user can use addProblem() to store more answers into the collection. 
 

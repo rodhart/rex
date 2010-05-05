@@ -1,5 +1,0 @@
-Answer Key for UEF <UEF filename> ECF <ECF filename> generated on Wed Apr 28 18:58:54 EDT 2010
-Total points: <integer>
-1. [B]
-2. [A, C]
-3. [B]
