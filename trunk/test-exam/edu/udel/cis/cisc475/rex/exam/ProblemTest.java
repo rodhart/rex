@@ -123,7 +123,7 @@ public class ProblemTest {
 
 	@Test
 	public void testGetRequiredBlock() throws RexException {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 		
 		assertNull(problem.requiredBlock());
 		
@@ -151,7 +151,7 @@ public class ProblemTest {
 	
 	@Test
 	public void testGetReferencedFigures() throws RexException {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 		
 		// I would rather have referenced figures be empty
 		// so as to avoid null pointer exceptions...

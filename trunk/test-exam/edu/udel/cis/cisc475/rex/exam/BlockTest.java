@@ -95,7 +95,7 @@ public class BlockTest {
 	
 	@Test
 	public void testGetTopic() throws RexException {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("testVersion");
 		
 		exam.addElement(block);
 		exam.addElement(problem);
