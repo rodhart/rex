@@ -7,6 +7,12 @@
 
 Provides an interface to create classes that are responsible for writing generated exams and answer keys. Contains classes in order to create an output factory, and new exam writers and answer key writers.
 
+The output class is composed of two classes, AnswerKeyWriter and ExamWriter.  
+The AnswerKeyWriter class outputs a formatted output of the answer key data which corresponds to an exam object
+The ExamWriter class outputs a formatted output of the newly generated exams created in the generator class
+
+The files are written to a PrintWriter specified by the caller.
+
 @see ExamIF
 @see configIF
 @see keyIF
