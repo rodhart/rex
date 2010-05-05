@@ -11,10 +11,14 @@ import edu.udel.cis.cisc475.rex.output.IF.AnswerKeyWriterIF;
 
 
 /**
- * The AnswerKeyWriter class outputs the answer key
- * data which corresponds to an exam object
+ * The AnswerKeyWriter class outputs a formatted output of the answer key data 
+ * which corresponds to an exam object.
+ *
+ * The AnswerKeyWriter will output an answerKey object using a print writer object 
+ * and the public write() function.
  * 
- * The file is written to a PrintWriter specified by the caller
+ * 
+ * There is also consideration for writing a scantron formatted file.
  * 
  * @author cardona
  *
