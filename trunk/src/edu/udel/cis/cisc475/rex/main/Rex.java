@@ -269,9 +269,9 @@ public class Rex {
 		System.err.println("    -n numExams : int numExams declares"
 				+ " number of exams");
 		System.err.println("    -seed seed : long seed declares"
-				+ "the seed for randomization");
+				+ " the seed for randomization");
 		System.err.println("    -pdf       : sets the pdf option"
-				+ "in order to have the exams output in pdf as well"
+				+ " in order to have the exams output in pdf as well"
 				+ " as .tex files.");
 	}
 
