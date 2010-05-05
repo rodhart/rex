@@ -95,6 +95,8 @@ Problems are the heart and soul of a REX-generated exam. REX is built around a d
 
 Problems are defined by a \textbackslash{begin}\{problem\}\{\textcolor{blue}{string topic}\}\{\textcolor{blue}{decimal difficulty}\} command, which takes two mandantory arguments. The first is a topic argument. All problems of the same topic are automatically grouped together, although their order within the topic is random, and the order of the topics itself is also random. Topics are how you choose a problem using a \hyperref[GroupConstraints]{Group Constraint}. The second argument is the difficulty. This is a decimal value, either negative or positive, that is also used by Group Constraints to select and value problems.
 
+The question (That is, prompt) for the problem is the text in the problem definition that is placed before the answers. Like the Frontmatter, the question can contain any \LaTeX command that is not also a REX command.
+
 The problem definiton consists of everything between the \textbackslash{begin}\{problem\} and the \textbackslash{end}\{problem\}. Inside of there, you can either give the problem a label, or provide the answers for the problem.
 
 \subsubsection{Problem Labels}
@@ -103,7 +105,8 @@ For problems, a label is optional. Labels are used to refer to a specific proble
 To give a problem a label, you place a \textbackslash{label}\{\textcolor{blue}{string label}\} somewhere inside the problem definition.
 
 \subsubsection{Problem Answers}
- answers (optional): the answers follow the question and are given in an "answers" environment. If the answers environment is used, it must include at least one answer. The maximum number of answers is 26. Each answer is preceded by the control sequence \verb|\answer|. This control sequence takes an optional argument of the following form:
+%TODO
+answers (optional): the answers follow the question and are given in an "answers" environment. If the answers environment is used, it must include at least one answer. The maximum number of answers is 26. Each answer is preceded by the control sequence \verb|\answer|. This control sequence takes an optional argument of the following form:
 \begin{itemize}
 \item \verb|[correct]| : signifying this is the correct answer
 \item \verb|[fixed]|: signifying that this answer must appear in its given position in the answer sequence
@@ -113,12 +116,14 @@ At least one answer must be labeled as correct and it is OK to have more than on
 A problem may leave out the answers environment. This is suitable for a problem which is not a multiple-choice problem. (For example, fill-in-the-blanks, or essay questions.)
 
 \subsubsection{Problem References}
+%TODO
 ref (optional): a problem may refer to another exam element using the standard latex \verb|\ref| control sequence. Typically problems refer to figures since blocks are referred to by using the optional required block argument.
 
 \subsubsection{Required Blocks}
-Required block (optional): a problem environment takes an optional argument giving a required block and is denoted by "[require=block topic]" in the example below. This is a block of text that must be included before the problem.
+%TODO
+required block (optional): a problem environment takes an optional argument giving a required block and is denoted by "[require=block topic]" in the example below. This is a block of text that must be included before the problem.
 
-\subsubsection{Example}
+\subsubsection{Example Problem}
 \begin{verbatim}
 \begin{problem}[require=block topic]{Arithmetic}{5}
   \label{prob:arithmetic:prime}
