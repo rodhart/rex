@@ -1,5 +1,10 @@
-We did not have REX able to run on the machine these tests were developed on, so they are untested.
+We did not have REX able to run on the machine these tests were 
+developed on, so they are untested.
 
+
+Josh ran the tests because we could not, and we got a parse 
+error as expected.  We had a problem referenced by no block 
+and REX died.  Such a cryptic error message, though.
 
 C:\Users\Josh\workspace\REXX>java -jar REX.jar C:\Users\JR\Desktop\gledhill\exam
 .tex C:\Users\JR\Desktop\gledhill\exam.ecf
