@@ -2,6 +2,7 @@
 	<property file="build.properties" />
 	<property name="src" value="${basedir}/src" />
 	<property name="bin" value="${basedir}/bin" />
+        <property name="lib" value="${basedir}/lib" />
 	<property name="javadoc.dir" value="${basedir}/doc/javadoc" />
 	<property name="rex_bin" value="${bin}/edu/udel/cis/cisc475/rex" />
 	<property name="rex_src" value="${src}/edu/udel/cis/cisc475/rex" />
@@ -9,7 +10,8 @@
 	<property name="jar-path" value="${basedir}/${jar-name}" />
 	<property name="main-class" value="edu.udel.cis.cisc475.rex.main.Rex" />
 	<property name="64bit" value="-d64" />
-	<property name="manifest-file" value="MANIFEST.MF" />
+	<!-- this could be made to use antlr-runtime-3.2.jar to make the final jar about 1.6 Mb smaller -->
+	<property name="antlr-runtime" value="${antlr-name}" />
 
 	<!-- Junit: automated unit tester Properties  -->
 	<property name="test.bin.dir" location="${basedir}/bin-test" />
@@ -106,16 +108,16 @@
 		</javac>
 	</target>
 
-	<manifest file="${manifest-file}">
-                <attribute name="Built-By" value="${user.name}"/>
-                <attribute name="Main-Class" value="${main-class}"/>
-				<attribute name="Class-Path" value="lib/antlr-3.2.jar lib/antlr3-task.jar lib/junit-4.8.1.jar lib/antlr-runtime-3.2.jar"/>
-	</manifest>
-
-
 	<target name="jar" depends="compile" description="Jar all class files into a single file.">
-		<jar destfile="${jar-path}" basedir="${bin}" manifest="${manifest-file}">
-		</jar>
+ 		<jar destfile="${jar-path}">
+			<fileset dir="${bin}" />
+			<fileset file="${antlr-runtime}"/>
+   			<manifest>
+     				<attribute name="Built-By" value="${user.name}"/>
+              			<attribute name="Main-Class" value="${main-class}"/>
+				<attribute name="Class-Path" value="${lib}/${antlr-runtime}"/>
+    			</manifest>
+  		</jar>
 	</target>
 
 	<target name="clean" description="Delete all generated files.">
