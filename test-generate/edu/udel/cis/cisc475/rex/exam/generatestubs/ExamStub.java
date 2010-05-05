@@ -181,4 +181,10 @@ public class ExamStub implements ExamIF {
 		return null;
 	}
 
+	@Override
+	public String version() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

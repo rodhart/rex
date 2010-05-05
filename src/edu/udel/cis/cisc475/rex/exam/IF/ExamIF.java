@@ -50,7 +50,7 @@ public interface ExamIF {
 	 * Returns the element specified by the key i, use elements().iterator() to
 	 * get the key, the order of the elements in ExamIF is specified to be the
 	 * same
-	 *
+	 * 
 	 * @param int key i
 	 */
 	ExamElementIF element(int i);
@@ -62,8 +62,9 @@ public interface ExamIF {
 	Collection<ExamElementIF> elements();
 
 	/**
-	 * Returns the element with a matching label to the argument, there should be only one element
-	 * with the given label specified in the UEF but this is not guaranteed 
+	 * Returns the element with a matching label to the argument, there should
+	 * be only one element with the given label specified in the UEF but this is
+	 * not guaranteed
 	 */
 	ExamElementIF elementWithLabel(String label);
 
@@ -123,7 +124,7 @@ public interface ExamIF {
 	/**
 	 * Adds an element to the exam. Duplicate elements will not be added.
 	 * 
-     * @return the key for the element, or -1 if a duplicate
+	 * @return the key for the element, or -1 if a duplicate
 	 */
 	int addElement(ExamElementIF element);
 
@@ -131,11 +132,21 @@ public interface ExamIF {
 	 * Allow one element to use another element. For example a problem can
 	 * depend on a figure, so the problem will be the user and the figure will
 	 * be the usee. Multiple users can be associated with a usee.
+	 * 
 	 * @param user
 	 *            - one of several elements to depend on the usee
 	 * @param usee
 	 *            - singular element others are connected with
-	 * @throws RexException 
+	 * @throws RexException
 	 */
 	void declareUse(ExamElementIF user, ExamElementIF usee) throws RexException;
+
+	/**
+	 * Get the Version ID string for an exam. The master exam will return
+	 * "master" while a generated exam will return whatever version was set by
+	 * the ExamFactory (as specified in the ECF)
+	 * 
+	 * @return Version ID string
+	 */
+	String version();
 }

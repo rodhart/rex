@@ -29,7 +29,10 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
  */
 public class Exam implements ExamIF {
 
+	
 	private boolean isMaster;
+	
+	private String versionID;
 
 	/**
 	 * Stores all elements (problems, figures, blocks) in one collection
@@ -104,11 +107,21 @@ public class Exam implements ExamIF {
 	private Map<String, HashSet<ProblemIF>> topicToProblems;
 
 	/**
-	 * Default constructor
+	 * Deprecated, do not use
+	 * @param isMaster
+	 * @deprecated
 	 */
 	public Exam(boolean isMaster) {
+		this(isMaster, "null");
+	}
+	
+	/**
+	 * Default constructor
+	 */
+	public Exam(boolean isMaster, String versionID) {
 		super();
 		this.isMaster = isMaster;
+		this.versionID = versionID;
 		this.elements = new LinkedHashMap<Integer, ExamElementIF>();
 		this.figures = new LinkedList<Integer>();
 		this.blocks = new LinkedList<Integer>();
@@ -394,4 +407,14 @@ public class Exam implements ExamIF {
 		return (Collection<String>) topics;
 	}
 
+	/**
+	 * Get the Version ID string for an exam. The master exam will return
+	 * "master" while a generated exam will return whatever version was set by
+	 * the ExamFactory (as specified in the ECF)
+	 * 
+	 * @return Version ID string
+	 */
+	public String version() {
+		return versionID;
+	}
 }
