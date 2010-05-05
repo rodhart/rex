@@ -7,6 +7,16 @@ import java.io.PrintWriter;
  * Interface for Source class, outlining publicly accessible functions 
  * from the class.
  * 
+ * The class that implements this interface will hold a body of text, integer values for startLine, 
+ * startColumn, lastLine, lastColumn, and the file name.  The class
+ * is used to store a body of text and the parameters for the region of
+ * text from the file it is from.
+ * 
+ * The class allows for the building of the body of text via the addText() method.
+ * The other parameters have no bearing on any output and are simply there to hold 
+ * the values.
+ * 
+
  * @author cardona
  * @author jsong
  *

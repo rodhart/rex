@@ -4,7 +4,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 
 /**
- * Factory class for creating objects of type ExamWriterIF and AnswerKeyIF
+ * Factory class for creating objects of type ExamWriterIF and AnswerKeyIF.
  * 
  * @author cardona
  */

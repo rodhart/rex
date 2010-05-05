@@ -5,8 +5,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * The AnswerKeyWriterIF is used to output an answerKey object
- * with a print writer object using the public write() function.
+ * The AnswerKeyWriterIF is an interface.  Implementing this interface will create 
+ * a class used to output an answerKey object using a print writer object 
+ * and the public write() function.
+ * 
+ * The AnswerKeyWriter class outputs a formatted output of the answer key data 
+ * which corresponds to an exam object.
+ * 
  * There is also consideration for writing a scantron formatted file.
  * 
  * @author cardona

@@ -7,8 +7,8 @@ import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
 import edu.udel.cis.cisc475.rex.output.IF.OutputFactoryIF;
 
 /**
- * This class implments OutputFactoryIF and is used to create instances of
- * OutputFactory
+ * This class implements OutputFactoryIF and is used to create instances of
+ * OutputFactory.  The OutputFactory will create objects of type ExamWriterIF and AnswerKeyIF.
  * 
  * @author jsong
  * @author cardona

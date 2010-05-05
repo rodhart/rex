@@ -4,8 +4,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * The ExamWriterIF is used to output a Exam object
- * with a print writer object using the public write() function.
+ * The ExamWriterIF is an interface.  Implementing this interface will create 
+ * a class used to output a Exam object using a print writer object 
+ * and the public write() function.
+ * 
+ * The ExamWriter class outputs a formatted output of the newly generated exams 
+ * created in the generator class.
+ * The files are written to a PrintWriter specified by the caller.
  * 
  * @author cardona
  * @author jsong

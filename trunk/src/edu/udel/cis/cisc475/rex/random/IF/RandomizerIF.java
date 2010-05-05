@@ -3,6 +3,12 @@ package edu.udel.cis.cisc475.rex.random.IF;
 /**
  * Interface for Randomizer class, outlining accessible functions 
  * from the class.
+
+ * This class creates an instance of a random object chooser.  It creates
+ * a seeded random number generator and is given a number of elements to pick,
+ * along with a range of elements to pick from. It returns the chosen objects.
+ * 
+ * This class will yield repeatable results given a repeated seed.
  * 
  * @author cardona
  * @author jsong

@@ -11,9 +11,14 @@ import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.output.IF.ExamWriterIF;
 
 /**
- * The ExamWriter class utilizes a print writer and an precreated Exam class to
- * output parts of the exam class to the print writer.
+ * The ExamWriterIF is used to output a Exam object using a print writer object 
+ * and the public write() function.
  * 
+ * The ExamWriter class outputs a formatted output of the newly generated exams 
+ * created in the generator class.
+ * The files are written to a PrintWriter specified by the caller.
+ * 
+ ** 
  * @author kiernan
  * @author justin
  */
