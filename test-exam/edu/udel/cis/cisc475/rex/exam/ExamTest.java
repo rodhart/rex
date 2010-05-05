@@ -82,7 +82,7 @@ public class ExamTest {
 		ExamIF exam = examFactory.newMasterExam();
 
 		assertTrue(exam.isMaster());
-		exam = examFactory.newGeneratedExam();
+		exam = examFactory.newGeneratedExam("test version");
 		assertFalse(exam.isMaster());
 	}
 
@@ -138,7 +138,7 @@ public class ExamTest {
 
 	@Test
 	public void testGetFinalBlock() {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 
 		SourceIF blockSource = sourceFactory.newSource(testUEFfilename);
 		blockSource.addText("Test Block Source");
@@ -155,7 +155,7 @@ public class ExamTest {
 
 	@Test
 	public void testGetBadFinalBlock() {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 
 		exam.setFinalBlock(null);
 
@@ -164,7 +164,7 @@ public class ExamTest {
 
 	@Test
 	public void testGetNumElements() {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 
 		ProblemIF problem = createTestProblem();
 		FigureIF figure = createTestFigure();
@@ -181,7 +181,7 @@ public class ExamTest {
 
 	@Test
 	public void testDeclareUse() throws RexException{
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 		Collection<ExamElementIF> elements;
 
 		ProblemIF problem = createTestProblem();
@@ -208,7 +208,7 @@ public class ExamTest {
 
 	@Test
 	public void testDeclareUseBad() {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 		Collection<ExamElementIF> elements;
 
 		ProblemIF problem = createTestProblem();
@@ -269,7 +269,7 @@ public class ExamTest {
 
 	@Test
 	public void testGetElement() {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 
 		ProblemIF problem = createTestProblem();
 		FigureIF figure = createTestFigure();
@@ -292,7 +292,7 @@ public class ExamTest {
 
 	@Test
 	public void testGetElements() {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 
 		ProblemIF problem = createTestProblem();
 		FigureIF figure = createTestFigure();
@@ -316,7 +316,7 @@ public class ExamTest {
 
 	@Test
 	public void testGetElementWithLabel() {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 
 		ProblemIF problem = createTestProblem();
 		FigureIF figure = createTestFigure();
@@ -347,7 +347,7 @@ public class ExamTest {
 
 	@Test
 	public void testGetElementsWithTopic() {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 
 		ProblemIF problem1 = createTestProblem();
 		ProblemIF problem2 = createTestProblem();
@@ -380,7 +380,7 @@ public class ExamTest {
 
 	@Test
 	public void testGetElementsUsingElement() throws RexException {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 
 		FigureIF figure = createTestFigure();
 		ProblemIF problem1 = createTestProblem();
@@ -414,7 +414,7 @@ public class ExamTest {
 
 	@Test
 	public void testGetFigures() {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 
 
 		FigureIF figure1 = createTestFigure();
@@ -436,7 +436,7 @@ public class ExamTest {
 
 	@Test
 	public void testGetLabels() {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 
 		ProblemIF problem = createTestProblem();
 		FigureIF figure = createTestFigure();
@@ -460,7 +460,7 @@ public class ExamTest {
 
 	@Test
 	public void testGetTopics() throws RexException {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 
 		ProblemIF problem = createTestProblem();
 		FigureIF figure = createTestFigure();
@@ -490,7 +490,7 @@ public class ExamTest {
 
 	@Test
 	public void testGetProblems() {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 
 		ProblemIF problem1 = createTestProblem();
 		ProblemIF problem2 = createTestProblem();
@@ -511,7 +511,7 @@ public class ExamTest {
 
 	@Test
 	public void testGetProblemsWithTopic() {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 
 		ProblemIF problem1 = createTestProblem();
 		ProblemIF problem2 = createTestProblem();
@@ -538,7 +538,7 @@ public class ExamTest {
 	public void testAddElement() {
 		ExamIF exam = examFactory.newMasterExam();
 
-		exam = examFactory.newGeneratedExam();
+		exam = examFactory.newGeneratedExam("test version");
 
 		ProblemIF problem = createTestProblem();
 		FigureIF figure = createTestFigure();
@@ -568,7 +568,7 @@ public class ExamTest {
 	public void testAddBadElement() {
 		ExamIF exam = examFactory.newMasterExam();
 
-		exam = examFactory.newGeneratedExam();
+		exam = examFactory.newGeneratedExam("test version");
 
 		exam.addElement(null);
 

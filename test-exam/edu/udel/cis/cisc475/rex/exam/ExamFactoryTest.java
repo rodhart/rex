@@ -81,7 +81,7 @@ public class ExamFactoryTest {
 
 	@Test
 	public void testNewGeneratedExam() {
-		ExamIF exam = examFactory.newGeneratedExam();
+		ExamIF exam = examFactory.newGeneratedExam("test version");
 		assertNotNull(exam);
 		assertFalse(exam.isMaster());
 	}
