@@ -101,7 +101,7 @@
 		<pathelement location="${junit.name}" />
 		<pathelement location="${antlr3.name}" />
 		<pathelement location="${antlr.name}" />
-		<pathelement location="antlr-3.2.jar" />
+		<!--<pathelement location="antlr-3.2.jar" />-->
 	</path>
 
 	<target name="compile" description="Compile all java source files."
@@ -113,12 +113,13 @@
 
 	<target name="jar" depends="compile" description="Jar all class files into a single file.">
  		<jar destfile="${jar-path}">
+			<zipgroupfileset dir="${lib}" includes="antlr-3.2.jar" />
 			<fileset dir="${bin}" />
-			<fileset file="${antlr-runtime}"/>
+			<!-- <fileset file="${antlr-runtime}"/> -->
    			<manifest>
      				<attribute name="Built-By" value="${user.name}"/>
               			<attribute name="Main-Class" value="${main-class}"/>
-				<attribute name="Class-Path" value="antlr-3.2.jar"/>
+				<!--<attribute name="Class-Path" value="antlr-3.2.jar"/>-->
     			</manifest>
   		</jar>
 	</target>
