@@ -6,7 +6,7 @@
 #For Fail, add ticket number
 
 General:
-01 DONE FAIL (126) Usability (Command line, etc)
+01 DONE FAIL (125) Usability (Command line, etc)
 02 NEW UEF \examversion
 03 NEW Randomization of generated exams
 04 NEW Probability of questions
