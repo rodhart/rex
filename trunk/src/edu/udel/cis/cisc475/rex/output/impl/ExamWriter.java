@@ -51,6 +51,7 @@ public class ExamWriter implements ExamWriterIF {
 			out.flush();
 		}
 		
+		out.println("\\newcommand{\\examversion}{" + E.version() + "}");
 		out.println("\\begin{document}");
 		
 		//prints the front matter if it exists
