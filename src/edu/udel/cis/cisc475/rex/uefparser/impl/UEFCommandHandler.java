@@ -1161,6 +1161,6 @@ class UEFCommandHandler
 
 		// return the exception. There is no source, because we never even found
 		// a document environment.
-		throw new RexParseException("End of document before \begin{document} found!", null);
+		throw new RexParseException("End of document before \\begin{document} found!", null);
 	}
 }
