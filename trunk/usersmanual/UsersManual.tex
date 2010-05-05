@@ -95,7 +95,7 @@ Problems are the heart and soul of a REX-generated exam. REX is built around a d
 
 Problems are defined by a \textbackslash{begin}[\textcolor{blue}{string required}]\{problem\}\{\textcolor{blue}{string topic}\}\{\textcolor{blue}{decimal difficulty}\} command, which takes two mandatory arguments. The first is a topic argument. All problems of the same topic are automatically grouped together, although their order within the topic is random, and the order of the topics itself is also random. Topics are how you choose a problem using a \hyperref[GroupConstraints]{Group Constraint}. The second argument is the difficulty. This is a decimal value, either negative or positive, that is also used by Group Constraints to select and value problems.
 
-The optional argument for Problems, \textcolor{blue}{string required}, is a string for the label of a block or figure that is required by the problem. This will ensure that the referred block or figure will always precede the problem.
+The optional argument for Problems, \textcolor{blue}{string required}, is a string for the label of a block that is required by the problem. This will ensure that the referred block will always precede the problem.
 
 The question (That is, prompt) for the problem is the text in the problem definition that is placed before the answers. Like the Frontmatter, the question can contain any \LaTeX command that is not also a REX command.
 
@@ -116,8 +116,7 @@ If we wish to mark an answer as both correct and fixed, we would place them both
 At least one answer must be labeled as correct, but it is acceptable to have more than one correct answer.
 
 \subsubsection{Problem References}
-%TODO
-ref (optional): a problem may refer to another exam element using the standard latex \verb|\ref| control sequence. Typically problems refer to figures since blocks are referred to by using the optional required block argument.
+A reference is similar to the required argument in the Problem definition. It is of the form \textbackslash{ref}\{\textcolor{blue}{string label}\}. This is most commonly used to refer to figures, as the required argument is used to refer to blocks. Like the required argument, the \textcolor{blue}{string label} points to the label of the figure you'd like to refer to, and all figures refered to this way will be placed before the problem in the output exam.
 
 \subsubsection{Example Problem}
 \begin{verbatim}
