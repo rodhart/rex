@@ -6,7 +6,7 @@
 #For Fail, add ticket number
 
 General:
-01 PROGRESS Usability (Command line, etc)
+01 NEW Usability (Command line, etc)
 02 NEW UEF \examversion
 03 NEW Randomization of generated exams
 04 NEW Probability of questions
@@ -18,6 +18,7 @@ General:
 10 DONE PASS test if the all the required problems by the ECF are satisfiable.
 11 DONE FAIL(112) Test if the output exam has all the required problems by the ECF file
 12 DONE PASS Test for big exam for the run time requirements.
+13 DONE FAIL (123) Test for error when ecf is empty.
 
 
 #For ECF specific issues
