@@ -119,9 +119,9 @@ public class ExamFactory implements ExamFactoryIF {
 	 */
 	public ProblemIF newProblem(String topic, String label, SourceIF question, AnswerIF[] answers) {
 		if(topic == null) 
-				throw new NullPointerException("The argument topic cannot be null");
+			throw new NullPointerException("The argument topic cannot be null");
 		if(question == null)   
-		throw new NullPointerException("The argument question cannot be null");
+			throw new NullPointerException("The argument question cannot be null");
 		if(answers == null)
 			throw new NullPointerException("The argument answers cannot be null");
 		for(int i = 0; i < answers.length; i++)
