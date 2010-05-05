@@ -11,7 +11,7 @@ General:
 03 NEW Randomization of generated exams
 04 NEW Probability of questions
 05 NEW Test if the same exams are generated for the same seed number
-06 PROGRESS Test if REX gives an error if no answer is marked as correct for a specific problem
+06 DONE FAIL(117) Test if REX gives an error if no answer is marked as correct for a specific problem
 07 DONE FAIL(111) Test if blocks for the two requirements:  1. All the problems requiring B will be grouped together in a consecutive sequence. 2. B will occur just before the first such problem in the sequence.
 08 DONE Test the bounds of difficulty on the ECF config file; e.g. if the range is [1,9) it should not include problem of difficulty 9 but it can include problem of difficulty 1
 09 DONE FAIL (114) test if the user asked for more exam version on "-n" than the versions on the ECF file on "versions are"
