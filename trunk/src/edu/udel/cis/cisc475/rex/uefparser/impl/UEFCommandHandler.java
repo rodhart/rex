@@ -294,6 +294,7 @@ class UEFCommandHandler
 		// create a list of answers to add the answers we process to.
 		List<AnswerIF> answersList = new ArrayList<AnswerIF>();
 
+		//boolean to make sure atleast one answer is correct.
 		boolean foundCorrectAnswer = false;
 
 		// process until either the queue is empty or we hit an endAnswers
@@ -833,6 +834,9 @@ class UEFCommandHandler
 		// Array to hold answers in.
 		AnswerIF answers[] = null;
 
+		//boolean to make sure we only ever find one answers environment within a problem.
+		boolean foundAnswerEnvironment = false;
+
 		// process until either the queue is empty or we hit an endProblem
 		// command.
 		while (!uefCommandQueue.isEmpty())
@@ -843,6 +847,32 @@ class UEFCommandHandler
 				case beginAnswers:
 				{
 					// found the beginAnswers command.
+
+					// make sure we didn't previously process an answers environment.
+					if (foundAnswerEnvironment == true)
+					{
+						// previously found an answers environment, so throw an exception.
+
+						// Set the start source to beginning of the second \begin{answers} command.
+						startSource = uefCommandQueue.peek().getStartPosition();
+
+						// set the end source to the end of the \begin{answers} command.
+						endSource = uefCommandQueue.peek().getEndPosition();
+
+						// Fill out the source.
+						SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(
+								startSource), uefCharHandler.getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.
+								getColumnNumber(endSource));
+
+						// add the file text to the source.
+						exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
+
+						// return the exception.
+						throw new RexParseException("More than one answers environment found within a problem environment!", exceptionSource);
+					}
+
+					//set the answers environment true, bc we found one.
+					foundAnswerEnvironment = true;
 
 					// use the beginning of the other command as the end source.
 					endSource = uefCommandQueue.peek().getStartPosition();
