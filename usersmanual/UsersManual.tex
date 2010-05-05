@@ -138,16 +138,11 @@ A reference is similar to the required argument in the Problem definition. It is
 \subsection{Blocks}
 A block is any kind of non-floating latex text that is not part of a problem but might still be included in the exam after the front-matter, between the problems, or at the end of the exam after all problems. A typical case is text that is to be shared by several problems or some text at the end of the exam.
 
-A block is inserted in a "block" environment. This takes one argument, which is just a name to give to the block. This name will not occur in the printed exam, it will only be used to refer to the block. The name can be any latex command-compatible text.
+A block is inserted in a ``block'' environment. This takes one argument, which is just a name to give to the block. This name will not occur in the printed exam, it will only be used to refer to the block. The name can be any latex command-compatible text.
 
 \subsection{Figures}
-
-%\subsection{Latex Format}
-%\subsection{Front Matter}
-%\subsection{Problem}
-%\subsection{Answer}
-%\subsection{Figure}
-%\subsection{Block}
+%TODO
+These are floating environments expressed in the usual latex way, using the figure environment. They can be labeled in the usual latex way. A problem refers to a figure if a \textbackslash{ref} to the figure's label occurs anywhere in that problem's environment. If at least one problem referring to a figure A is included in a generated exam, the figure will also be included automatically. Every attempt will be made to include the figure before any of its associated problems, and, if possible, on the same page as the associated problems.
 
 % How do we add color to this to make it easier
 % to read? -Haley
@@ -335,7 +330,7 @@ will require at least 10 satisfactory questions.
 \item Ahmed El-Hassany - elhassa
 \item Anthony Platt - aplatt
 \item Burke Cates - cates
-\item Fran "Da Man" Fitzpatrick - fitzpatr
+\item Fran ``Da Man'' Fitzpatrick - fitzpatr
 \item Greg Simons - simons
 \item Haley Boyd - boyd
 \item Ian Burns - iburns
