@@ -1,9 +1,13 @@
 package edu.udel.cis.cisc475.rex.main;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Date;
 
@@ -36,24 +40,27 @@ import edu.udel.cis.cisc475.rex.uefparser.impl.UEFParserFactory;
 
 public class Rex {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args){
 		int retVal;
 		retVal = process(args);
 		switch(retVal){
 			case -1: break;
 			case 1: System.err.println("There was an error in generating the exams!");break;
 			case 2: System.err.println("File Not Found Error!");break;
-			case 3: System.err.println("There was an error parsing the ECF file!");break;
-			case 4: System.err.println("There was an error parsing the UEF file!");break;
-			case 5: System.err.println("There was an error creating an exam file!");break;
-			case 6: System.err.println("There was an error creating a key file!");break;
+			case 3: System.err.println("There was an error parsing the ECF file !");break;
+			case 4: System.err.println("There was an error parsing the UEF file !");break;
+			case 5: System.err.println("There was an error creating an exam file !");break;
+			case 6: System.err.println("There was an error creating a key file !");break;
+			case 7: System.err.println("There was an error while calling pdflatex !");break;
 		}
 	}
 
-	protected static int process(String[] args) throws IOException {
+	protected static int process(String[] args) {
 
 		int numArgs = args.length;
-		long seed = 1;
+		Date date = new Date();
+		long fileStamp = date.getTime();
+		long seed = fileStamp;
 		boolean pdfOpt = false;
 		int numExams = 1;
 		File ecf = null;
@@ -179,8 +186,7 @@ public class Rex {
 		 * Get an exam and key Create the actual files Initiate the PrintWriters
 		 * Use the output module to fill the files
 		 */
-		Date date = new Date();
-		long fileStamp = date.getTime();
+		
 		for (i = 0; i < numExams; i++) {
 			/*
 			 * Fill the containers with the generated material
@@ -242,8 +248,13 @@ public class Rex {
 			/*
 			 * Write the Exams and answer keys to their proper files
 			 */
-
-			theExamWriters[i].write(theLatexWriters[i]);
+			try{
+				theExamWriters[i].write(theLatexWriters[i]);
+			}
+			catch(IOException e){
+				System.err.println("IOException while writing"+
+						" the exam files.");
+			}
 			theAnswerKeyWriters[i].write(theKeyWriters[i]);
 			/*
 			 * Close the output streams
@@ -253,10 +264,41 @@ public class Rex {
 		}
 		if (pdfOpt) {
 			// call pdflatex on each exam
-			
-			//for(int j = 0; j < numExams; j++){
-				//Runtime.getRuntime().exec("pdflatex "+theLatexFiles[i].getName());
-			//}
+			String line;
+			OutputStream stdin = null;
+			InputStream stdout = null;
+			InputStream stderr = null;
+			for(int j = 0; j < numExams; j++){
+				try {
+				Process p = null;
+				
+					p = Runtime.getRuntime().exec(
+							"pdflatex "+theLatexFiles[i].getName());
+				
+				
+				stdin = p.getOutputStream();
+				stdout = p.getInputStream();
+				stderr = p.getErrorStream();
+				// clean up if any output in stdout
+			      BufferedReader brCleanUp = 
+			        new BufferedReader (new InputStreamReader (stdout));
+			      while ((line = brCleanUp.readLine ()) != null) {
+			        //System.out.println ("[Stdout] " + line);
+			      }
+			      brCleanUp.close();
+			      
+			      // clean up if any output in stderr
+			      brCleanUp = 
+			        new BufferedReader (new InputStreamReader (stderr));
+			      while ((line = brCleanUp.readLine ()) != null) {
+			        //System.out.println ("[Stderr] " + line);
+			      }
+			      brCleanUp.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+					return 7;
+				}
+			}
 
 		}
 		printCompletionMessage(pdfOpt, fileStamp);
