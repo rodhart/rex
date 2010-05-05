@@ -94,7 +94,7 @@ public class ExamFactory implements ExamFactoryIF {
 	 * @return new instance of ExamIF
 	 */
 	public ExamIF newGeneratedExam(String version) {
-		return new Exam(false);
+		return new Exam(false, version);
 	}
 	
 	/**
@@ -103,7 +103,7 @@ public class ExamFactory implements ExamFactoryIF {
 	 * @return new master instance of ExamIF
 	 */
 	public ExamIF newMasterExam() {
-		return new Exam(true);
+		return new Exam(true, "master");
 	}
 
 	/**
