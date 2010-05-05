@@ -17,7 +17,7 @@ General:
 09 DONE FAIL (114) test if the user asked for more exam version on "-n" than the versions on the ECF file on "versions are"
 10 NEW test if the all the required problems by the ECF are satisfiable.
 11 DONE FAIL(112) Test if the output exam has all the required problems by the ECF file
-12 DONE Test for big exam for the run time requirements.
+12 DONE PASS Test for big exam for the run time requirements.
 
 
 #For ECF specific issues
