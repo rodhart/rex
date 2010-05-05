@@ -1,0 +1,11 @@
+args = 2
+A parsing error has occurred.
+The label label6 does not have an associated problem.:
+null line 0(0) through 0(0):
+
+	at edu.udel.cis.cisc475.rex.generate.impl.MasterExamController.addRequiredProblem(MasterExamController.java:112)
+	at edu.udel.cis.cisc475.rex.generate.impl.Generator.generate(Generator.java:147)
+	at edu.udel.cis.cisc475.rex.generate.impl.Generator.<init>(Generator.java:65)
+	at edu.udel.cis.cisc475.rex.generate.impl.GeneratorFactory.newGenerator(GeneratorFactory.java:14)
+	at edu.udel.cis.cisc475.rex.main.Rex.process(Rex.java:140)
+	at edu.udel.cis.cisc475.rex.main.Rex.main(Rex.java:40)
