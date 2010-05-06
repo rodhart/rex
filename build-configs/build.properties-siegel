@@ -2,3 +2,4 @@ junit.name=/tools/junit4.4/junit-4.4.jar
 cobertura.lib.dir=/tools/cobertura-1.9.3
 antlr3-task.name=/tools/antlr/antlr3-task.jar
 antlr3.name=/tools/antlr/antlr-3.2.jar
+antlr3.runtime=/tools/antlr/antlr-runtime-3.2.jar
