@@ -93,7 +93,7 @@ The Frontmatter is the introduction to the exam, all the content that appears be
 \subsection{Problems}
 Problems are the heart and soul of a REX-generated exam. REX is built around a desire to select and randomize a set of problems, and Problems located in the UEF is how REX finds them.
 
-Problems are defined by a \textbackslash{begin}[\textcolor{blue}{string required}]\{problem\}\{\textcolor{blue}{string topic}\}\{\textcolor{blue}{decimal difficulty}\} command, which takes two mandatory arguments. The first is a topic argument. All problems of the same topic are automatically grouped together, although their order within the topic is random, and the order of the topics itself is also random. Topics are how you choose a problem using a \hyperref[GroupConstraints]{Group Constraint}. The second argument is the difficulty. This is a decimal value, either negative or positive, that is also used by Group Constraints to select and value problems.
+Problems are defined by a \textbackslash{begin}[\textcolor{blue}{string required}]\{problem\}\{\textcolor{blue}{string topic}\}\\*\{\textcolor{blue}{decimal difficulty}\} command, which takes two mandatory arguments. The first is a topic argument. All problems of the same topic are automatically grouped together, although their order within the topic is random, and the order of the topics itself is also random. Topics are how you choose a problem using a \hyperref[GroupConstraints]{Group Constraint}. The second argument is the difficulty. This is a decimal value, either negative or positive, that is also used by Group Constraints to select and value problems.
 
 The optional argument for Problems, \textcolor{blue}{string required}, is a string for the label of a block that is required by the problem. This will ensure that the referred block will always precede the problem.
 
@@ -138,11 +138,11 @@ A reference is similar to the required argument in the Problem definition. It is
 \subsection{Blocks}
 A block is any kind of non-floating latex text that is not part of a problem but might still be included in the exam after the front-matter, between the problems, or at the end of the exam after all problems. A typical case is text that is to be shared by several problems or some text at the end of the exam.
 
-A block is inserted in a ``block'' environment. This takes one argument, which is just a name to give to the block. This name will not occur in the printed exam, it will only be used to refer to the block. The name can be any latex command-compatible text.
+A block is inserted in a ``block'' environment. This takes one argument, which is just the label to give to the block. That is, it can be defined by \textbackslash{begin}\{block\}\{\textcolor{blue}{string label}\}.
 
 \subsection{Figures}
 %TODO
-These are floating environments expressed in the usual latex way, using the figure environment. They can be labeled in the usual latex way. A problem refers to a figure if a \textbackslash{ref} to the figure's label occurs anywhere in that problem's environment. If at least one problem referring to a figure A is included in a generated exam, the figure will also be included automatically. Every attempt will be made to include the figure before any of its associated problems, and, if possible, on the same page as the associated problems.
+These are floating environments expressed in the usual \LaTeX way, using the figure environment. They can be labeled in the same way you would label a problem. A problem refers to a figure if a \textbackslash{ref} to the figure's label occurs anywhere in that problem's environment. If at least one problem referring to a figure A is included in a generated exam, the figure will also be included automatically. Every attempt will be made to include the figure before any of its associated problems, and, if possible, on the same page as the associated problems.
 
 % How do we add color to this to make it easier
 % to read? -Haley
@@ -217,14 +217,14 @@ There are four defined commands for the ECF file.
 
 \subsection{Group Constraints}
 A group constraint is a command of the form \texttt{include \textcolor{blue}{int count}
-problems on \textcolor{blue}{string topic} with difficulty in \textcolor{blue}{interval\footnote{An interval is a pair of decimals separated by two periods, in between a pair of braces or parenthesis. A brace on an end indicates that edge is inclusive, and a parenthesis that the edge is exclusive. For example, \texttt{[3..5)} would be the range from 3 to 5, including 3 but not including 5.} difficulty} at \textcolor{blue}{int points} points;}.
+problems on "\textcolor{blue}{string topic}" with difficulty in \textcolor{blue}{interval\footnote{An interval is a pair of decimals separated by two periods, in between a pair of braces or parenthesis. A brace on an end indicates that edge is inclusive, and a parenthesis that the edge is exclusive. For example, \texttt{[3..5)} would be the range from 3 to 5, including 3 but not including 5.} difficulty} at \textcolor{blue}{int points} points;}.
 
 The command will choose \textcolor{blue}{count} problems from \textcolor{blue}{topic} that fall in the \textcolor{blue}{difficulty} range, and assigns all of them \textcolor{blue}{points} points.
 
 For overlapping constraints, REX will attempt find the largest set of questions that resolves all constraints. That is, if there exist two identical constraints for 5 problems each, REX will attempt to find 10 questions total. If REX cannot accomplish this, the request will result in an \hyperref[RexUnsatisfiableException]{RexUnsatisfiableException}. 
 
 \subsection{Required Problem Constraints}
-A required problem constraint is a command of the form \texttt{includeall \textcolor{blue}{string label} at \textcolor{blue}{int points} points;}.
+A required problem constraint is a command of the form \texttt{includeall "\textcolor{blue}{string label}" at \textcolor{blue}{int points} points;}.
 
 This will ensure the the question with the \textcolor{blue}{label} given is included in every
 generated exam, and will be given \textcolor{blue}{points} points. 
@@ -232,12 +232,12 @@ generated exam, and will be given \textcolor{blue}{points} points.
 Multiple \textcolor{blue}{label}'s can be given in one command by separating them by commas. This will have the same effect as if each label was given on its own line.
 
 \subsection{Append Text}
-An append text command is a command of the form \texttt{append \textcolor{blue}{string label};}
+An append text command is a command of the form \texttt{append "\textcolor{blue}{string label}";}
 
 This will take the text contained in the block with the given \textcolor{blue}{label}, and append it to the end of the exam.
 
 \subsection{Version Definition}
-A version definition of a command of the form \texttt{versions are \textcolor{blue}{string versions};}
+A version definition of a command of the form \texttt{versions are "\textcolor{blue}{string versions}";}
 
 \textcolor{blue}{Versions} are a list of strings, separated by commas, used to distinguish the different exams generated. Each generated exam will use one item in the list, and so there must be at least as many items as there will be exams generated. 
 
