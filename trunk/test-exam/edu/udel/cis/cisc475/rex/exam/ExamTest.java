@@ -288,6 +288,14 @@ public class ExamTest {
 		element = exam.element(0);
 
 		assertEquals(problem, element);
+		
+		element = exam.element(1);
+		
+		assertEquals(figure, element);
+		
+		element = exam.element(2);
+		
+		assertEquals(block, element);
 	}
 
 	@Test
