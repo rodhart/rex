@@ -122,7 +122,7 @@ public class MasterExamController
 		}
 
 		else
-			throw new RexParseException("The problem \"" + requiredProblem.question() +
+			throw new RexParseException("The problem \"" + requiredProblem.question().text() +
 										"\" is referenced by two RequiredProblemConstraints.", theRPC.source());
 	}
 
@@ -166,10 +166,11 @@ public class MasterExamController
 //				
 //				Iterator<ProblemIF> problemIterator = theGCC.getSet().iterator();
 //				
+//				int i = 0;
+//
 //				while (problemIterator.hasNext())
 //				{
 //					ProblemIF theProblem = problemIterator.next();
-//					int i = 0;
 //					
 //					System.out.println("Problem " + i + " is " + theProblem.question().text());
 //					i++;
