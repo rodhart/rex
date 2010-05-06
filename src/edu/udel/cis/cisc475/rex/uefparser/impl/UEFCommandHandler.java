@@ -434,6 +434,25 @@ class UEFCommandHandler
 		int startSource = command.getStartPosition();
 		int endSource = 0;
 
+		//make sure the name argument is there for the block.
+		if (name == null)
+		{
+			//name argument missing so throw error.
+
+			// set the end source to the end of the \begin{block} command.
+			endSource = command.getEndPosition();
+
+			// Fill out the source.
+			SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(startSource), uefCharHandler.
+					getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.getColumnNumber(endSource));
+
+			// add the file text to the source.
+			exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
+
+			// return the exception.
+			throw new RexParseException("\\begin{block} missing name argument!", exceptionSource);
+		}
+
 		// process until either the queue is empty or we hit an endBlock
 		// command.
 		while (!uefCommandQueue.isEmpty())
@@ -786,8 +805,52 @@ class UEFCommandHandler
 		// get the topic.
 		String topic = command.getArgument(0);
 
+		//make sure the topic argument exists.
+		if (topic == null)
+		{
+			//topic argument is missing.
+
+			//set the start source to beginning of \begin{problem}
+			int startSource = command.getStartPosition();
+
+			// set the end source to the end of \begin{problem}
+			int endSource = command.getEndPosition();
+
+			// Fill out the source.
+			SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(startSource), uefCharHandler.
+					getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.getColumnNumber(endSource));
+
+			// add the file text to the source.
+			exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
+
+			// return the exception.
+			throw new RexParseException("\\problem command missing it's topic argument!", exceptionSource);
+		}
+
 		// get the difficulty.
 		String difficulty = command.getArgument(1);
+
+		//make sure difficulty argument exists.
+		if (difficulty == null)
+		{
+			//difficulty argument missing.
+
+			//set the start source to beginning of \begin{problem}
+			int startSource = command.getStartPosition();
+
+			// set the end source to the end of \begin{problem}
+			int endSource = command.getEndPosition();
+
+			// Fill out the source.
+			SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(startSource), uefCharHandler.
+					getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.getColumnNumber(endSource));
+
+			// add the file text to the source.
+			exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
+
+			// return the exception.
+			throw new RexParseException("\\problem command missing it's difficulty argument!", exceptionSource);
+		}
 
 		// get required block
 		String optionalArgument = command.getOptionalArgument();
@@ -1002,14 +1065,43 @@ class UEFCommandHandler
 	 * type and returns true if it is.
 	 * 
 	 * @return true if documentclass is of type exam. False otherwise.
+	 *
+	 * @throws RexParseException
+	 *             if there is a problem with the correctness of the file.
+	 *
+	 * @throws EOFException
+	 *             if we are somehow out of bounds when reading the underlying
+	 *             file to fill out the SourceIF. This should NEVER occur.
 	 */
-	boolean processDocumentclass()
+	boolean processDocumentclass() throws RexParseException, EOFException
 	{
 		// pop the command off the queue.
 		UEFCommand command = uefCommandQueue.poll();
 
 		// get the documentclass type.
 		String classType = command.getArgument(0);
+
+		//make sure the class argument was there for the \documentclass{} command.
+		if (classType == null)
+		{
+			//class argument missing.
+
+			//set the start source to beginning of \documentclass{}
+			int startSource = command.getStartPosition();
+
+			// set the end source to the end of \documentclass{}
+			int endSource = command.getEndPosition();
+
+			// Fill out the source.
+			SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(startSource), uefCharHandler.
+					getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.getColumnNumber(endSource));
+
+			// add the file text to the source.
+			exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
+
+			// return the exception.
+			throw new RexParseException("\\documentclass command missing it's argument!", exceptionSource);
+		}
 
 		// check it's type.
 		if (classType.equals("exam"))
@@ -1028,28 +1120,92 @@ class UEFCommandHandler
 	 * Process a \label command. Simply returns a String with the label name.
 	 * 
 	 * @return the label name as a String.
+	 *
+	 * @throws RexParseException
+	 *             if there is a problem with the correctness of the file.
+	 *
+	 * @throws EOFException
+	 *             if we are somehow out of bounds when reading the underlying
+	 *             file to fill out the SourceIF. This should NEVER occur.
 	 */
-	String processLabel()
+	String processLabel() throws RexParseException, EOFException
 	{
 		// pop the command off the queue.
 		UEFCommand command = uefCommandQueue.poll();
 
-		// return the name.
-		return command.getArgument(0);
+		//get the argument with the label name.
+		String label = command.getArgument(0);
+
+		//make sure the label argument was found.
+		if (label == null)
+		{
+			//the /label label argument is missing.
+
+			//set the start source to beginning of \label{}
+			int startSource = command.getStartPosition();
+
+			// set the end source to the end of \label{}
+			int endSource = command.getEndPosition();
+
+			// Fill out the source.
+			SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(startSource), uefCharHandler.
+					getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.getColumnNumber(endSource));
+
+			// add the file text to the source.
+			exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
+
+			// return the exception.
+			throw new RexParseException("\\label command missing it's argument!", exceptionSource);
+		}
+
+		// return the label name.
+		return label;
 	}
 
 	/**
 	 * Process a \ref command. Simply returns a String with the reference name.
 	 * 
 	 * @return the reference name as a String.
+	 *
+	 * @throws RexParseException
+	 *             if there is a problem with the correctness of the file.
+	 *
+	 * @throws EOFException
+	 *             if we are somehow out of bounds when reading the underlying
+	 *             file to fill out the SourceIF. This should NEVER occur.
 	 */
-	String processRef()
+	String processRef() throws RexParseException, EOFException
 	{
 		// pop the command off the queue.
 		UEFCommand command = uefCommandQueue.poll();
 
-		// return the name.
-		return command.getArgument(0);
+		//get the argument with the label name.
+		String label = command.getArgument(0);
+
+		//make sure the label argument was found.
+		if (label == null)
+		{
+			//the \ref{} label argument is missing.
+
+			//set the start source to beginning of \ref{}
+			int startSource = command.getStartPosition();
+
+			// set the end source to the end of \ref{}
+			int endSource = command.getEndPosition();
+
+			// Fill out the source.
+			SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(startSource), uefCharHandler.
+					getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.getColumnNumber(endSource));
+
+			// add the file text to the source.
+			exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
+
+			// return the exception.
+			throw new RexParseException("\\ref command missing it's argument!", exceptionSource);
+		}
+
+		// return the label name.
+		return label;
 	}
 
 	/**
