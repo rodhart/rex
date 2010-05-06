@@ -2,7 +2,7 @@
 	<property file="build.properties" />
 	<property name="src" value="${basedir}/src" />
 	<property name="bin" value="${basedir}/bin" />
-        <property name="lib" value="${basedir}/lib" />
+    <property name="lib" value="${basedir}/lib" />
 	<property name="javadoc.dir" value="${basedir}/doc/javadoc" />
 	<property name="rex_bin" value="${bin}/edu/udel/cis/cisc475/rex" />
 	<property name="rex_src" value="${src}/edu/udel/cis/cisc475/rex" />
@@ -10,8 +10,6 @@
 	<property name="jar-path" value="${basedir}/${jar-name}" />
 	<property name="main-class" value="edu.udel.cis.cisc475.rex.main.Rex" />
 	<property name="64bit" value="-d64" />
-	<!-- this could be made to use antlr-runtime-3.2.jar to make the final jar about 1.6 Mb smaller -->
-	<property name="antlr3.runtime" value="${antlr3.name}" />
 
 	<!-- Junit: automated unit tester Properties  -->
 	<property name="test.bin.dir" location="${basedir}/bin-test" />
