@@ -178,7 +178,7 @@ public class VersionExamController
 		this.subset.putAll(this.mec.getRequiredProblems());
 	}
 	
-//	public void test()
+//	public void testOne()
 //	{
 //		System.out.println("The number of required problems is: " + this.subset.size());
 //		
@@ -227,17 +227,18 @@ public class VersionExamController
 		while (TOIterator.hasNext())
 		{
 			theTO = TOIterator.next();
+			
 			gccIterator = theTO.getGCCs().iterator();
 			
 			while (gccIterator.hasNext())
 			{
 				theGCC = gccIterator.next();
-				
+
 				this.mec.getOverlaps(theTO, theGCC);
 				superset.addAll(theGCC.getSet());
 				
 				while (!superset.isEmpty() && problemsAdded < theGCC.getConstraintValue())
-				{
+				{	
 					randomProblem = (ProblemIF) (this.theRandomizer.choose(1, superset.toArray()))[0];
 					identifier = (Integer) this.mec.getIdentifiers().get(randomProblem);
 					
@@ -257,12 +258,16 @@ public class VersionExamController
 							 							" within difficulty " + theGCC.getDifficultyInterval().low() +
 							 							" through " + theGCC.getDifficultyInterval().high() +
 														" is unsatisfiable.", theGCC.getSource());
+				
+				problemsAdded = 0;
 			}
 			
 			superset.clear();
-			problemsAdded = 0;
 		}
 	}
+
+	
+	
 	/**
 	 * Adds every problem to a FigureContainer, every
 	 * FigureContainer to a BlockContainer, and every
