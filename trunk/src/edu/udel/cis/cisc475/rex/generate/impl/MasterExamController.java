@@ -42,6 +42,7 @@ public class MasterExamController
 	{
 		this.master = master;
 		this.finalBlock = master.finalBlock();
+		
 		ExamElementIF[] allElements = (ExamElementIF[]) master.elements()
 				.toArray(new ExamElementIF[master.elements().size()]);
 

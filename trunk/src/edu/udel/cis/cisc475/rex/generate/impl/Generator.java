@@ -112,6 +112,10 @@ public class Generator implements GeneratorIF {
 		 * First, divide the ConstraintIFs into a RequiredProblemConstraintIFs
 		 * and GroupConstraintIFs.
 		 */
+		
+		if (config.versionStrings().length < this.numExams)
+			throw new RexParseException("The number of requested generated exams exceeds the number of version strings.", null);
+		
 
 		for (ConstraintIF theConstraint : theConstraints) {
 			/*
@@ -159,7 +163,7 @@ public class Generator implements GeneratorIF {
 		 */
 
 		for (int i = 0; i < this.numExams; i++) {
-			String theVersion = generatedExams[i].version();
+			String theVersion = config.versionStrings()[i];
 			generatedExams[i] = theExamFactory.newGeneratedExam(theVersion);
 			answerKeys[i] = theAKF.newAnswerKey(config.versionStrings()[i],
 					"examName", "date"); 
