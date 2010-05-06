@@ -144,6 +144,40 @@ public class MasterExamController
 		theTO.addConstraint(theGC, this.master);
 	}
 
+//	public void test()
+//	{
+//		System.out.println("The number of TopicOrganizers is: " + this.theTOs.size());
+//		
+//		Iterator<TopicOrganizer> topicIterator = this.theTOs.values().iterator();
+//		
+//		while (topicIterator.hasNext())
+//		{
+//			TopicOrganizer thisTO = topicIterator.next();
+//			
+//			System.out.println("The number of problems in TO of topic " + thisTO.getTopic() + " is " + thisTO.getGCCs().size());
+//			
+//			Iterator<GroupConstraintContainer> gccIterator = thisTO.getGCCs().iterator();
+//			
+//			while (gccIterator.hasNext())
+//			{
+//				GroupConstraintContainer theGCC = gccIterator.next();
+//				
+//				System.out.println("The number of problems in the GCC is " + theGCC.getSet().size());
+//				
+//				Iterator<ProblemIF> problemIterator = theGCC.getSet().iterator();
+//				
+//				while (problemIterator.hasNext())
+//				{
+//					ProblemIF theProblem = problemIterator.next();
+//					int i = 0;
+//					
+//					System.out.println("Problem " + i + " is " + theProblem.question().text());
+//					i++;
+//				}
+//			}
+//		}
+//	}
+	
 	/**
 	 * @param theTO
 	 *            -The TopicOrganizer in which overlapping

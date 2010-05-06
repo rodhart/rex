@@ -153,6 +153,8 @@ public class Generator implements GeneratorIF {
 		for (GroupConstraintIF theGC : theGCs)
 			mec.distributeGroupConstraint(theGC);
 
+		//mec.test();
+		
 		/*
 		 * For each generated ExamIF, create a VersionExamController.
 		 * 
