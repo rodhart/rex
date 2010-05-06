@@ -80,7 +80,9 @@ fact problemsInExamEqualsProblemsInElementList {
 // the difference.  Therefore I make them subclasses of Exam.
 sig MasterExam extends Exam {}
 
-sig GeneratedExam extends Exam {}
+sig GeneratedExam extends Exam {
+	groupConstraints: set GroupConstraint // ADDED SINCE BETA.  Each gets its own copy so that the selected problems may differ
+}
 
 
 
@@ -140,6 +142,13 @@ sig GroupConstraint extends Constraint {
 	interval: one Interval
 	// source
 }
+fact numProblemsInGroupConstraint {
+	all g: GroupConstraint | g.numProblems >= 1
+}
+fact {
+	all c: GroupConstraint | some g: GeneratedExam | c in g.groupConstraints
+}
+
 
 // A line in the ECF might require several problems, but they break down into individual requests.
 // That's all I model.
@@ -147,7 +156,9 @@ sig RequiredProblemConstraint extends Constraint {
 	problemName: one Label
 	// source
 }
-
+fact labelOfRequiredProblemConstraintIsAProblem {
+	all r: RequiredProblemConstraint | r.problemName in Problem.label
+}
 
 
 
@@ -233,9 +244,13 @@ fact categoryNotFreeFloating{
 // a problem that doesn't exist in the MasterExam.
 lone sig RexRequiredUnsatisfiableException {}
 fact requiredProblemUnsatisfiable {
-	one RexRequiredUnsatisfiableException iff some r: RequiredProblemConstraint | all m: MasterExam | r.problemName not in m.elements.*rest.element.label
-	// old attempt: //some RexUnsatisfiableException iff some r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
-		// TODO: OR there is a group constraint that is unsatisfiable
+	one RexRequiredUnsatisfiableException iff 
+
+	some r: RequiredProblemConstraint | all m: MasterExam | r.problemName 
+		not in m.elements.*rest.element.label and r.problemName in Problem.label
+
+//      beta bug: did not specify problems:
+//		some r: RequiredProblemConstraint | all m: MasterExam | r.problemName not in m.elements.*rest.element.labe
 }
 //fact forceUnsatisfiableExceptionToExist {
 //	all r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
@@ -267,7 +282,7 @@ fact usedBlockNotAppended {
 
 
 
-fact finalBlockSameForAll{
+fact finalBlockSameForAll {
 //TODO
 // attempts:
 //	all m: MasterExam | some m.finalBlock implies (all g: GeneratedExam | g.finalBlock = m.finalBlock)
@@ -419,10 +434,12 @@ assert validReqConstraintInAll { // if there is a valid RequiredProblemConstrain
 
 // if the Constraint is satisfiable from the MasterExam, then there exist satisfying problems in the generated exams
 assert constraintFulfilled {
-
-	
-
+	no RexRequiredUnsatisfiableException implies
+		(all r: RequiredProblemConstraint, g: GeneratedExam, p: Problem | p.label in r.problemName implies
+			p in g.elements.*rest.element)
 }
+
+//check constraintFulfilled for 5
 
 // if the constraint is possible to fill, there exists a RexUnsatisfiableException
 assert impossibleConstraintRejected {
@@ -441,6 +458,36 @@ assert impossibleConstraintRejected {
 //*********************************************************************
 
 
+//fact forceGroupUnsatisfiableExceptionToExist {
+//	all r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
+//}
+fact forceGroupUnsatisfiableExceptionNotToExist {
+	no RexGroupUnsatisfiableException
+}
+
+
+// I give each GeneratedExam *it's own copy* of the GroupConstraints to simulate the code
+// in fillExam() in the generator's VersionExamController.
+fact eachGeneratedOwnGroupConstraint {
+
+	// each GeneratedExam has its own seperate GroupConstraints
+	all ge, ge': GeneratedExam, gc: GroupConstraint | gc in ge.groupConstraints and ge != ge' implies gc not in ge'.groupConstraints
+
+	//the number of GroupConstraints in all GeneratedExams are equal
+	all ge, ge': GeneratedExam | #ge.groupConstraints = #ge'.groupConstraints
+
+	// all GeneratedExams have all 
+
+
+	// the GroupConstraints in all of the GeneratedExams have the same values for category, numProblems, and interval
+//	all ge, ge': GeneratedExam, gc, gc': GroupConstraint | gc in ge.groupConstraints implies
+//		some gc' in ge'.groupConstraints | gc.category = gc'.category and gc.numProblems = gc'.numProblems and gc.interval = gc'.interval
+
+}
+
+run show for 6 but exactly 2 GeneratedExam, exactly 4 GroupConstraint
+
+
 
 //  As in Java code, returns all problems that satisfy group constraint (category and interval)
 // without yet selecting randomly
@@ -455,17 +502,65 @@ lone sig RexGroupUnsatisfiableException {}
 // as in the function above
 fact sufficientNumberOfProblemsForGroupConstraint {
 	one RexGroupUnsatisfiableException iff
-	all gc: GroupConstraint, m: MasterExam | gc.numProblems > #allProblemsFromGroupConstraint[m, gc]
+	(some GroupConstraint) and 
+	(all gc: GroupConstraint, m: MasterExam | gc.numProblems > #allProblemsFromGroupConstraint[m, gc])
 }
+
+/*
+fact ifAllSatisfiableThenInGenerated {
+	all g: GeneratedExam | not some RexGroupUnsatisfiableException and not some RexRequiredUnsatisfiableException
+		implies all p: Problem | 
+}
+*/
+
+
+
+
+
+
 
 // for testing:
-fact boundsOnGroupConstraint {
-	all g: GroupConstraint | g.numProblems = 2
+//fact boundsOnGroupConstraint {
+//	all g: GroupConstraint | g.numProblems = 2
+//}
+
+
+//*********
+// attempt to handle overlapping difficulty ranges
+//**********
+
+
+// ONLY FOR setting up test for finding a solution with overlapping difficulties
+
+
+/*
+fact {
+	one Category
+	one gc: GroupConstraint | gc.interval.low = 1 and gc.interval.high = 2 and gc.numProblems = 1
+	one gc: GroupConstraint | gc.interval.low = 2 and gc.interval.high = 3 and gc.numProblems = 1
+
+	one p: Problem | p.difficulty = 1
+	one p: Problem | p.difficulty = 2
+	one p: Problem | p.difficulty = 3
 }
+*/
+
+
+/* not useful
+fun getProblemsFromGroupConstraintContainer[remaining: Problem, gc: GroupConstraint]: set Problem {
+
+}
+fact {
+	all ge: GeneratedExam | 
+}
+*/
+
 
 ///doesn't run, will fix:
-run show  for 8 but exactly 7 Problem, exactly 0 RequiredProblemConstraint,
-		exactly 1 GroupConstraint, exactly 2 Category
+//run show for 6 but exactly 2 GroupConstraint, exactly 3 Problem, 
+//	exactly 0 RequiredProblemConstraint, exactly 1 GeneratedExam
+
+
 
 
 
