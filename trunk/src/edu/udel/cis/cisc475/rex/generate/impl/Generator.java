@@ -149,13 +149,10 @@ public class Generator implements GeneratorIF {
 				theRPCs.add((RequiredProblemConstraintIF) theConstraint);
 
 			else
-			{
-				System.out.println("here?");
 				throw new RexParseException(
 						"Generator received a ConstraintIF that is not a "
 								+ "RequiredProblemConstraintIF or a GroupConstraintIF.",
 						theConstraint.source());
-			}
 		}
 		
 
