@@ -20,7 +20,9 @@ General:
 12 DONE PASS Test for big exam for the run time requirements.
 13 DONE FAIL (123) Test for error when ecf is empty.
 14 DONE FAIL (126) PDF option does not output a .PDF file
-15 NEW test if REX gives different exams on the same input but with different seeds. 
+15 NEW test if REX gives different exams on the same input but with different seeds.
+16 DONE FAIL (128) test UEF with problems without answers environment.
+17 DONE PASS test UEF with problems with answers environment but without any \answers  
 
 
 #For ECF specific issues
