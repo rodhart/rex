@@ -188,13 +188,8 @@ public class Generator implements GeneratorIF {
 
 			vec = new VersionExamController(mec, theRandomizer);
 			vec.addRequiredProblems();
-			
 			//vec.testOne();
-			
 			vec.satisfyConstraints();
-			
-			//vec.testTwo();
-			
 			vec.distributeProblems();
 			vec.fillExam(generatedExams[i], answerKeys[i]);
 		}
