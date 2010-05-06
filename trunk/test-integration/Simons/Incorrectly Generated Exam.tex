@@ -1,0 +1,81 @@
+\documentclass{exam}
+ 
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{comment}
+\usepackage{graphicx}
+
+
+\newcommand{\examversion}{1}
+\begin{document}
+
+
+%print header
+\examheader{CISC 106}{UEF Example}{Developed: 2010}
+
+%example of a block
+
+\begin{block}{logical}
+The following problems relate to logical situations.
+\end{block}
+\begin{problem}{function call}{5.0}
+Consider the function f:
+  \begin{verbatim}
+    function [] = f(x)
+    output = 7;
+    end
+  \end{verbatim}
+  What will be in x after the command:
+  \begin{verbatim}>> x = f(3);\end{verbatim}
+%:type function call
+\begin{answers}
+\answer ans
+\answer f(7)
+\answer 7
+\answer[fixed,correct] error %correct answer, fixed position
+\answer[fixed] none of these %fixed position
+\end{answers}
+\end{problem}
+\begin{problem}{function call}{15.0}
+Consider the function f:
+  \begin{verbatim}
+    function answer = f(a)
+    answer = a+2;
+    end
+  \end{verbatim}
+  What will be in x after the command:
+  \begin{verbatim}>> x = f(4);
+  \end{verbatim}
+%:type function call
+\begin{answers}
+\answer[correct] 6 %correct answer
+\answer f(4)
+\answer 4
+\answer[fixed] error %fixed position
+\answer[fixed] none of these %fixed position
+\end{answers}
+\end{problem}
+\begin{problem}{logical}{8.0}
+In MATLAB the value 1 is true, and true is:
+%:type logical
+\begin{answers}
+\answer[correct] any value that isn't zero %correct answer
+\answer 0
+\answer 1
+\answer there are no boolean types in MATLAB
+\answer[fixed] none of the above %fixed position
+\end{answers}
+\end{problem}
+\begin{problem}{logical}{5.0}
+Which of the following is a MATLAB expression for testing ``x is
+  outside the range from 3 to 5'' (the range includes 3 and 5)? 
+%:type logical
+\begin{answers}
+\answer[correct] \verb@3 > x | x > 5@ %correct answer
+\answer \verb@3 > x & x > 5@
+\answer \verb@3 > x | x < 5@
+\answer[fixed] cannot be expressed in MATLAB %fixed position
+\answer[fixed] none of the above %fixed position
+\end{answers}
+\end{problem}
+\end{document}
