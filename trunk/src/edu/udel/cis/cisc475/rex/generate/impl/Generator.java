@@ -159,7 +159,8 @@ public class Generator implements GeneratorIF {
 		 */
 
 		for (int i = 0; i < this.numExams; i++) {
-			generatedExams[i] = theExamFactory.newGeneratedExam();
+			String theVersion = generatedExams[i].version();
+			generatedExams[i] = theExamFactory.newGeneratedExam(theVersion);
 			answerKeys[i] = theAKF.newAnswerKey(config.versionStrings()[i],
 					"examName", "date"); // I have no idea what these are, or
 											// where they come from.
