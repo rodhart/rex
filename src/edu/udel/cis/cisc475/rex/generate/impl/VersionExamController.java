@@ -252,13 +252,22 @@ public class VersionExamController
 				}
 				
 				if (problemsAdded < theGCC.getConstraintValue())
+				{
+					//Temporary error message pending the resolution of Ticket #130.
+					System.out.println("The constraint requesting " + theGCC.getConstraintValue() +
+ 									" problem(s) from " + theGCC.getTopic() +
+ 									" of point value " + theGCC.getPointValue() +
+ 									" within difficulty " + theGCC.getDifficultyInterval().low() +
+ 									" through " + theGCC.getDifficultyInterval().high() +
+									" is unsatisfiable.");
+					
 					throw new RexUnsatisfiableException("The constraint requesting " + theGCC.getConstraintValue() +
 							 							" problem(s) from " + theGCC.getTopic() +
 							 							" of point value " + theGCC.getPointValue() +
 							 							" within difficulty " + theGCC.getDifficultyInterval().low() +
 							 							" through " + theGCC.getDifficultyInterval().high() +
 														" is unsatisfiable.", theGCC.getSource());
-				
+				}
 				problemsAdded = 0;
 			}
 			

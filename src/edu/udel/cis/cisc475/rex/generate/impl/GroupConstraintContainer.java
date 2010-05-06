@@ -69,6 +69,14 @@ public class GroupConstraintContainer
 			
 		if (this.set.size() < this.constraintValue)
 		{
+			//Temporary error message pending the resolution of Ticket #130.
+			System.out.println("The constraint requesting " + this.constraintValue +
+								" problem(s) from " + this.topic +
+								" of point value " + this.pointValue +
+								" within difficulty " + theGC.difficultyInterval().low() +
+								" through " + theGC.difficultyInterval().high() +
+								" is unsatisfiable.");
+			
 			throw new RexUnsatisfiableException("The constraint requesting " + this.constraintValue +
 					   							" problem(s) from " + this.topic +
 					   							" of point value " + this.pointValue +
