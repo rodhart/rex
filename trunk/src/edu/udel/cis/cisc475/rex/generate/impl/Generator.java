@@ -137,7 +137,7 @@ public class Generator implements GeneratorIF {
 
 			else
 				throw new RexParseException(
-						"Generator recieved a ConstraintIF that is not a "
+						"Generator received a ConstraintIF that is not a "
 								+ "RequiredProblemConstraintIF or a GroupConstraintIF.",
 						theConstraint.source());
 		}
@@ -162,8 +162,7 @@ public class Generator implements GeneratorIF {
 			String theVersion = generatedExams[i].version();
 			generatedExams[i] = theExamFactory.newGeneratedExam(theVersion);
 			answerKeys[i] = theAKF.newAnswerKey(config.versionStrings()[i],
-					"examName", "date"); // I have no idea what these are, or
-											// where they come from.
+					"examName", "date"); 
 
 			generatedExams[i].setFrontMatter(master.frontMatter());
 			generatedExams[i].setPreamble(master.preamble());
