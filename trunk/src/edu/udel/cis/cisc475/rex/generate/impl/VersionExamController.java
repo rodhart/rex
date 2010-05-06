@@ -178,6 +178,22 @@ public class VersionExamController
 		this.subset.putAll(this.mec.getRequiredProblems());
 	}
 	
+//	public void test()
+//	{
+//		System.out.println("The number of required problems is: " + this.subset.size());
+//		
+//		Iterator<ProblemIF> problemIterator = this.subset.values().iterator();
+//		
+//		int i = 0;
+//		
+//		while (problemIterator.hasNext())
+//		{
+//			ProblemIF theProblem = problemIterator.next();
+//			
+//			System.out.println("Problem " + i + " is " + theProblem.question().text());
+//			i++;
+//		}
+//	}
 
 	/**
 	 * Adds to the VersionExamController a number of problems from
