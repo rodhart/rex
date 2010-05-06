@@ -24,7 +24,7 @@ The REX software package assists in the creation of multiple choice exams.
 It is advantageous to create multiple versions of the same exam with varied
 questions to discourage cheating in packed lecture halls. This requires choosing
 questions, rearranging their order, and reordering their answer for several
-exams. The REX software reduces the effort required in this tedious process.
+exams. The REX software reduces the effort required in this tedious process by automating the question selection and randomization process.
 
 The REX software is cross-platform, open-source, and extendable. Standard 
 \LaTeX{} format is used for the questions and output exams to enable hand editing
@@ -39,8 +39,7 @@ The REX software package takes two input files: the Exam Configuration File
 (UEF) contains the question bank. From these inputs multiple versions of the
 exam are created. 
 
-The order of sections, questions, and answers are all randomized differently on each version. There is the capacity to add figures,
-blocks of text, and a front page to the exam. 
+The order of sections, questions, and answers are all randomized differently on each version. There is the capacity to add figures, blocks of text, and an introduction (Referred to as front matter) to the exam. 
 
 
 \section{Installation}
@@ -217,7 +216,7 @@ There are four defined commands for the ECF file.
 
 \subsection{Group Constraints}
 A group constraint is a command of the form \texttt{include \textcolor{blue}{int count}
-problems on "\textcolor{blue}{string topic}" with difficulty in \textcolor{blue}{interval\footnote{An interval is a pair of decimals separated by two periods, in between a pair of braces or parenthesis. A brace on an end indicates that edge is inclusive, and a parenthesis that the edge is exclusive. For example, \texttt{[3..5)} would be the range from 3 to 5, including 3 but not including 5.} difficulty} at \textcolor{blue}{int points} points;}.
+problems on "\textcolor{blue}{string topic}" with difficulty in \textcolor{blue}{interval\footnote{An interval is a pair of decimals separated by two periods, in between a pair of braces or parenthesis. A brace on an end indicates that edge is inclusive, and a parenthesis that the edge is exclusive. For example, \texttt{[3..5)} would be the range from 3 to 5, including 3 but not including 5.} difficulty} at \textcolor{blue}{int \\* points} points;}.
 
 The command will choose \textcolor{blue}{count} problems from \textcolor{blue}{topic} that fall in the \textcolor{blue}{difficulty} range, and assigns all of them \textcolor{blue}{points} points.
 
