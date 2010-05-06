@@ -9,8 +9,6 @@ import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
 import edu.udel.cis.cisc475.rex.err.RexException;
 import edu.udel.cis.cisc475.rex.err.RexParseException;
-import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
-import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
@@ -112,10 +110,11 @@ public class Generator implements GeneratorIF {
 		 * First, divide the ConstraintIFs into a RequiredProblemConstraintIFs
 		 * and GroupConstraintIFs.
 		 */
-		
+
 		if (config.versionStrings().length < this.numExams)
-			throw new RexParseException("The number of requested generated exams exceeds the number of version strings.", null);
-		
+			throw new RexParseException(
+					"The number of requested generated exams exceeds the number of version strings.",
+					null);
 
 		for (ConstraintIF theConstraint : theConstraints) {
 			/*
@@ -166,7 +165,7 @@ public class Generator implements GeneratorIF {
 			String theVersion = config.versionStrings()[i];
 			generatedExams[i] = theExamFactory.newGeneratedExam(theVersion);
 			answerKeys[i] = theAKF.newAnswerKey(config.versionStrings()[i],
-					"examName", "date"); 
+					"examName", "date");
 
 			generatedExams[i].setFrontMatter(master.frontMatter());
 			generatedExams[i].setPreamble(master.preamble());
