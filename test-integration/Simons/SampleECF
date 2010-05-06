@@ -1,0 +1,6 @@
+include 1 problems on "logical" with difficulty in [4, 6] at 3 points;
+include 1 problems on "logical" with difficulty in [7, 9] at 4 points;
+include 1 problems on "function call" with difficulty in [14, 16] at 1 points;
+include 1 problems on "function call" with difficulty in [4, 6] at 15 points;
+
+versions are "1", "2", "3", "4";
