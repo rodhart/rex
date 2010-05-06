@@ -60,6 +60,7 @@ public class Generator implements GeneratorIF {
 
 		// try
 		// {
+		
 		generate();
 		/*
 		 * }
@@ -98,7 +99,12 @@ public class Generator implements GeneratorIF {
 		RandomizerIF theRandomizer = theRandomizerFactory.newRandomizer(config
 				.seed());
 
+	
+		
 		MasterExamController mec = new MasterExamController(master);
+		
+	
+		
 		VersionExamController vec;
 
 		ConstraintIF[] theConstraints = (ConstraintIF[]) config.constraints()
@@ -106,6 +112,8 @@ public class Generator implements GeneratorIF {
 		Collection<RequiredProblemConstraintIF> theRPCs = new ArrayList<RequiredProblemConstraintIF>();
 		Collection<GroupConstraintIF> theGCs = new ArrayList<GroupConstraintIF>();
 
+	
+		
 		/*
 		 * First, divide the ConstraintIFs into a RequiredProblemConstraintIFs
 		 * and GroupConstraintIFs.
@@ -115,6 +123,8 @@ public class Generator implements GeneratorIF {
 			throw new RexParseException(
 					"The number of requested generated exams exceeds the number of version strings.",
 					null);
+		
+		
 
 		for (ConstraintIF theConstraint : theConstraints) {
 			/*
@@ -139,21 +149,28 @@ public class Generator implements GeneratorIF {
 				theRPCs.add((RequiredProblemConstraintIF) theConstraint);
 
 			else
+			{
+				System.out.println("here?");
 				throw new RexParseException(
 						"Generator received a ConstraintIF that is not a "
 								+ "RequiredProblemConstraintIF or a GroupConstraintIF.",
 						theConstraint.source());
+			}
 		}
+		
 
 		// Add all RequiredProblemConstraintIFs to the MasterExamController.
 		for (RequiredProblemConstraintIF theRPC : theRPCs)
 			mec.addRequiredProblem(theRPC);
-
+		
 		// Add all GroupConstraintIFs to the MasterExamController.
 		for (GroupConstraintIF theGC : theGCs)
 			mec.distributeGroupConstraint(theGC);
-
+		
+		
 		//mec.test();
+		
+
 		
 		/*
 		 * For each generated ExamIF, create a VersionExamController.

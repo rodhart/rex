@@ -220,16 +220,10 @@ public class MasterExamController
 				if (((yourLow <= myLow) && (myLow <= yourHigh))
 						|| ((yourLow <= myHigh) && (myHigh <= yourHigh))) 
 				{
-					System.err.println("Warning: The constraint requesting " + myConstraintValue +
-									   " problem(s) from " + theTO.getTopic() +
-									   " within difficulty " + myLow +
-									   " through " + myHigh +
-									   " conflicts with the constraint requesting " + yourConstraintValue +
-									   " problem(s) from " + theTO.getTopic() +
-									   " within difficulty " + yourLow +
-									   " through " + yourHigh +
-									   ". As a result, false-positive RexUnsatisfiableExceptions might occur " +
-									   "(Please refer to alloy for satisfiability.)");
+					System.err.println("Warning: the constraints <" + theGCC.getSource().text() +
+									   "> and <" + currentGCC.getSource().text() +
+									   "> conflict.\nAs a result, false-positive RexUnsatisfiableExceptions" +
+									   " might occur.\n");
 					returnSet.add(currentGCC);
 				}
 			}
