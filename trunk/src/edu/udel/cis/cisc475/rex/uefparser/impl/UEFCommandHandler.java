@@ -852,6 +852,33 @@ class UEFCommandHandler
 			throw new RexParseException("\\problem command missing it's difficulty argument!", exceptionSource);
 		}
 
+		double difficultyValue = 0;
+		//make sure the difficulty is actually a number.
+		try
+		{
+			difficultyValue = Double.valueOf(difficulty);
+		}
+		catch (NumberFormatException e)
+		{
+			//difficulty isn't a number -_-.
+
+			//set the start source to beginning of \begin{problem}
+			int startSource = command.getStartPosition();
+
+			// set the end source to the end of \begin{problem}
+			int endSource = command.getEndPosition();
+
+			// Fill out the source.
+			SourceIF exceptionSource = sourceFactory.newSource(uefCharHandler.getFileName(), uefCharHandler.getLineNumber(startSource), uefCharHandler.
+					getColumnNumber(startSource), uefCharHandler.getLineNumber(endSource), uefCharHandler.getColumnNumber(endSource));
+
+			// add the file text to the source.
+			exceptionSource.addText(uefCharHandler.getContent(startSource, endSource));
+
+			// return the exception.
+			throw new RexParseException("\\problem command's difficulty argument is not a number!", exceptionSource);
+		}
+
 		// get required block
 		String optionalArgument = command.getOptionalArgument();
 		if (optionalArgument != null)
@@ -1012,7 +1039,7 @@ class UEFCommandHandler
 					ProblemIF problem = examFactory.newProblem(topic, label, source, answers);
 
 					// add the difficulty.
-					problem.setDifficulty(Double.valueOf(difficulty));
+					problem.setDifficulty(difficultyValue);
 
 					// Add each reference found within this block to our list of
 					// references
