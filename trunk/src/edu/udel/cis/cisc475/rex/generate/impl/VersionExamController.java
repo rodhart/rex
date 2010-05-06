@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
+import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
@@ -142,7 +144,8 @@ public class VersionExamController
 			case 3: return "D"; 
 			case 4: return "E"; 
 			case 5: return "F"; 
-			case 6: return "G"; 
+			case 6: return "G";
+			case 7: return "Problem with no Answers";
 			default: return "?";
 		}
 	}
@@ -177,6 +180,10 @@ public class VersionExamController
 	{
 		this.subset.putAll(this.mec.getRequiredProblems());
 	}
+	
+	
+	/* Test to determine that addRequiredProblems (above) is working as intended.
+	 */
 	
 //	public void testOne()
 //	{
@@ -286,20 +293,26 @@ public class VersionExamController
 	public void distributeProblems()
 	{
 		Collection<ProblemIF> subsetCollection = this.subset.values();
-		TopicContainer theTC;
-		BlockContainer theBC;
+		TopicContainer theTC = null;
+		BlockContainer theBC = null;
 		FigureContainer theFC = null;
 		
 		for (ProblemIF currentProblem : subsetCollection)
 		{
 			theTC = this.getTC(currentProblem.topic());
-			theBC = theTC.getBC(currentProblem.requiredBlock());
+			
+			if (currentProblem.requiredBlock() == null)
+				theBC = theTC.getBC(null);
+			
+			else
+				theBC = theTC.getBC(currentProblem.requiredBlock());
 			
 			if (currentProblem.referencedFigures().isEmpty())
 			{
 				theFC = theBC.getFC(null);
 				theFC.addProblem(currentProblem);
 			}
+			
 			else
 				for (FigureIF currentFigure : currentProblem.referencedFigures())
 				{
@@ -308,6 +321,36 @@ public class VersionExamController
 				}
 		}
 	}
+	
+	/* Old distributeProblems; rewritten above.
+	 */
+	
+//	public void distributeProblems()
+//	{
+//		Collection<ProblemIF> subsetCollection = this.subset.values();
+//		TopicContainer theTC;
+//		BlockContainer theBC;
+//		FigureContainer theFC = null;
+//		
+//		for (ProblemIF currentProblem : subsetCollection)
+//		{
+//			theTC = this.getTC(currentProblem.topic());
+//			theBC = theTC.getBC(currentProblem.requiredBlock());
+//			
+//			if (currentProblem.referencedFigures().isEmpty())
+//			{
+//				theFC = theBC.getFC(null);
+//				theFC.addProblem(currentProblem);
+//			}
+//			
+//			else
+//				for (FigureIF currentFigure : currentProblem.referencedFigures())
+//				{
+//					theFC = theBC.getFC(currentFigure);
+//					theFC.addProblem(currentProblem);
+//				}
+//		}
+//	}
 	
 	/**
 	 * @param versionExam
@@ -319,40 +362,35 @@ public class VersionExamController
 	 * 				 to be randomized).
 	 * 
 	 * 1.) Randomly selects a TopicOrganizer, a BlockContainer within the TopicOrganizer,
-	 * 	   and a FigureContainer within the BlockContainer.
+	 * 	   a FigureContainer within the BlockContainer, and a Problem within the FigureConatiner.
 	 * 
-	 * 2.) Adds the FigureIF to the ExamIF (if it has not already been added), 
-	 * 	   adds the FigureIF to a blacklist of FigureIFs already added to the ExamIF 
-	 * 	   (since more than one ProblemIF can refer to a FigureIF), and randomly selects a 
-	 * 	   ProblemIF within the FigureContainer.
+	 * 2.) Adds the Block to the Exam, if it is not null. Adds the Figure to the Exam if it
+	 * 	   is not null, and has not already been added to the Exam.
 	 * 
-	 * 3.) If the ProblemIF is not in a blacklist of ProblemIFs already added to the ExamIF
-	 * 	   (since a ProblemIF can live in multiple FigureContainers), for each FigureIF
-	 * 	   the ProblemIF references, if it is not already in the FigureIF blacklist, add it to the ExamIF 
-	 * 	   then add it to the blacklist. Then, generate a new ProblemIF that
-	 *     contains all of the same information as the current ProblemIF, with a randomized
-	 *     answer set. Add the new ProblemIF to the ExamIF, its correct answers to the AnswerKeyIF,
-	 *     and then the ProblemIF to the problem blacklist.
+	 * 3.) If the Problem has not already been added to the Exam, for each Figure it references,
+	 *     add that Figure to the Exam if it has not already been added. If the Problem references
+	 *     no Figures, no element will be added to the Exam.
 	 *     
-	 * 4.) Continue this process for all ProblemIFs in the FigureContainer. Then remove the FigureContainer
-	 *     from the set of FigureContainers to be processed. Repeat until all FigureContainers
-	 *     in the BlockContainer have been processed, then remove the BlockContainer from the set
-	 *     of BlockContainers to be processed. Repeat until all BlockContainers in the TopicContainer
-	 *     have been processed, then remove the TopicContainer from the set of TopicContainers
-	 *     to be processed.
+	 * 4.) If the Problem has Answers, generate a new Problem with the same information, save
+	 *     a shuffled fixed answer set. Add the Problem to the Exam, and its correct Answers to 
+	 *     the AnswerKey (if applicable).
+	 *     
+	 * 5.) Continue this process for all other Answers in the FigureContainer, then all other
+	 * 	   FigureContainers in the BlockContainer, then all other BlockContainers in the
+	 * 	   TopicContainer, then all other TopicContainers.
+	 * 
+	 * The commented out print statements demonstrate the validity of this algorithm.
 	 */
 	
 	public void fillExam(ExamIF versionExam, AnswerKeyIF versionAnswerKey)
 	{
-		HashMap figureBlacklist = new HashMap();
-		HashMap problemBlacklist = new HashMap();
-		Integer identifier;
-		Integer otherFigureIdentifier;
+		Map figureBlacklist = new HashMap();
+		Map problemBlacklist = new HashMap();
+		Integer problemIdentifier;
+		Integer primaryFigureIdentifier;
+		Integer secondaryFigureIdentifier;
 		
 		Collection<TopicContainer> myTCs = new ArrayList<TopicContainer>();
-		
-		myTCs.addAll(this.theTCs.values());
-
 		TopicContainer theTC;
 		
 		Collection<BlockContainer> myBCs = new ArrayList<BlockContainer>();
@@ -361,71 +399,99 @@ public class VersionExamController
 		Collection<FigureContainer> myFCs = new ArrayList<FigureContainer>();
 		FigureContainer theFC;
 		
-		ProblemIF[] theProblemsArray;
+		Collection<ProblemIF> myProblems = new ArrayList<ProblemIF>();
+		ProblemIF theProblem;
+		
+		myTCs.addAll(this.theTCs.values());
+		
 		
 		while (!myTCs.isEmpty())
 		{
 			theTC = (TopicContainer) (this.theRandomizer.choose(1, myTCs.toArray(new TopicContainer[myTCs.size()])))[0];
-			
 			myBCs.addAll(theTC.getBCs().values());
 			
 			while (!myBCs.isEmpty())
 			{
 				theBC = (BlockContainer) (this.theRandomizer.choose(1, myBCs.toArray(new BlockContainer[myBCs.size()])))[0];
-				versionExam.addElement(theBC.getBlock());
-				
 				myFCs.addAll(theBC.getFCs().values());
+				
+				if (theBC.getBlock() != null)
+					versionExam.addElement(theBC.getBlock());
 				
 				while (!myFCs.isEmpty())
 				{
-					theFC = (FigureContainer) (this.theRandomizer.choose(1, myFCs.toArray(new FigureContainer[myFCs.size()])))[0];		
+					theFC = (FigureContainer) (this.theRandomizer.choose(1, myFCs.toArray(new FigureContainer[myFCs.size()])))[0];
+					myProblems.addAll(theFC.getProblems());
 					
-					identifier = (Integer) this.mec.getIdentifiers().get(theFC.getFigure());
+					primaryFigureIdentifier = (Integer) this.mec.getIdentifiers().get(theFC.getFigure());
 					
-					if (!figureBlacklist.containsKey(identifier))
+					if (theFC.getFigure() != null && !figureBlacklist.containsKey(primaryFigureIdentifier))
 					{
 						versionExam.addElement(theFC.getFigure());
-						figureBlacklist.put(identifier, theFC.getFigure());
+						figureBlacklist.put(primaryFigureIdentifier, theFC.getFigure());
 					}
 					
-					//Next 6 lines are maybe a fix to the problem we were having.  Certainly there is a better way.
-					Object[] array = this.theRandomizer.choose(theFC.getProblems().size(), theFC.getProblems().toArray());
-					theProblemsArray = new ProblemIF[array.length];
-					for(int i = 0; i < array.length; i++)
+					while (!myProblems.isEmpty())
 					{
-						theProblemsArray[i] = (ProblemIF)array[i];
-					}
-					
-					//The line that was causing the problem, fixed (maybe?) by the 6 lines above
-					//theProblemsArray = (ProblemIF[]) (this.theRandomizer.choose(theFC.getProblems().size(), theFC.getProblems().toArray(new ProblemIF[theFC.getProblems().size()])));
-					
-					for (int i = 0; i < theProblemsArray.length; i++)
-					{
-						identifier = (Integer) this.mec.getIdentifiers().get(theProblemsArray[i]);
+						theProblem = (ProblemIF) (this.theRandomizer.choose(1, myProblems.toArray(new ProblemIF[myProblems.size()])))[0];
 						
-						if (!problemBlacklist.containsKey(identifier))
+						problemIdentifier = (Integer) this.mec.getIdentifiers().get(theProblem);
+						
+						if (!problemBlacklist.containsKey(problemIdentifier))
 						{
-							for (FigureIF otherFigure : theProblemsArray[i].referencedFigures())
+							for (FigureIF secondaryFigure : theProblem.referencedFigures())
 							{
-								otherFigureIdentifier = (Integer) this.mec.getIdentifiers().get(otherFigure);
+								secondaryFigureIdentifier = (Integer) this.mec.getIdentifiers().get(secondaryFigure);
 								
-								if (!figureBlacklist.containsKey(otherFigureIdentifier))
+								if (!figureBlacklist.containsKey(secondaryFigureIdentifier))
 								{
-									versionExam.addElement(otherFigure);
-									figureBlacklist.put(otherFigureIdentifier, otherFigure);
+									versionExam.addElement(secondaryFigure);
+									figureBlacklist.put(secondaryFigureIdentifier, secondaryFigure);
 								}
 							}
 							
-							ProblemIF newProblem = this.theExamFactory.newProblem(theProblemsArray[i].topic(), 
-																			 	  theProblemsArray[i].label(), 
-																			 	  theProblemsArray[i].question(), 
-																			 	  randomizeAnswers(theProblemsArray[i]));
+							if (theProblem.answers().length != 0)
+							{
+//								System.out.println(theProblem.question().text() + ", ");
+//								
+//								if (theFC.getFigure() == null)
+//									System.out.println("no figure, ");
+//								
+//								else
+//									System.out.println(theFC.getFigure().source().text());
+//								
+//								if (theBC.getBlock() == null)
+//									System.out.println("no block, ");
+//								
+//								else
+//									System.out.println(theBC.getBlock().source().text());
+//								
+//								System.out.println(theTC.getTopic() + ".\n");
+								
+								
+								
+								ProblemIF newProblem = this.theExamFactory.newProblem(theProblem.topic(), 
+																					  theProblem.label(), 
+																					  theProblem.question(), 
+																					  randomizeAnswers(theProblem));
+								newProblem.setDifficulty(theProblem.difficulty());
+								versionExam.addElement(newProblem);
+								versionAnswerKey.addProblem(correctAnswers(newProblem));
+							}
 							
-							newProblem.setDifficulty(theProblemsArray[i].difficulty());
-							versionExam.addElement(newProblem);
-							versionAnswerKey.addProblem(correctAnswers(newProblem));
-							problemBlacklist.put(identifier, theProblemsArray[i]);
+							else
+							{
+								versionExam.addElement(theProblem);
+								
+								Collection<String> answerSet = new ArrayList<String>();
+								answerSet.add(answerChar(7));
+								versionAnswerKey.addProblem(answerSet);
+							}
+							
+							problemBlacklist.put(problemIdentifier, theProblem);
 						}
+						
+						myProblems.remove(theProblem);
 					}
 					
 					myFCs.remove(theFC);
@@ -440,7 +506,125 @@ public class VersionExamController
 		if (this.mec.getFinalBlock() != null)
 			versionExam.addElement(this.mec.getFinalBlock());
 		
+		
+//		for (int k = 0; k < versionExam.elements().size(); k++)
+//			if (versionExam.element(k) instanceof ProblemIF)
+//				System.out.println(((ProblemIF) versionExam.element(k)).question().text());
+//		
+//			else if (versionExam.element(k) instanceof FigureIF)
+//				System.out.println(((FigureIF) versionExam.element(k)).source().text());
+//		
+//			else if (versionExam.element(k) instanceof BlockIF)
+//				System.out.println(((BlockIF) versionExam.element(k)).source().text());
 	}
 }
+	
+/* Old fillExam, rewritten above.
+ */
+
+//	public void fillExam(ExamIF versionExam, AnswerKeyIF versionAnswerKey)
+//	{
+//		HashMap figureBlacklist = new HashMap();
+//		HashMap problemBlacklist = new HashMap();
+//		Integer identifier;
+//		Integer otherFigureIdentifier;
+//		
+//		Collection<TopicContainer> myTCs = new ArrayList<TopicContainer>();
+//		
+//		myTCs.addAll(this.theTCs.values());
+//
+//		TopicContainer theTC;
+//		
+//		Collection<BlockContainer> myBCs = new ArrayList<BlockContainer>();
+//		BlockContainer theBC;
+//		
+//		Collection<FigureContainer> myFCs = new ArrayList<FigureContainer>();
+//		FigureContainer theFC;
+//		
+//		ProblemIF[] theProblemsArray;
+//		
+//		while (!myTCs.isEmpty())
+//		{
+//			theTC = (TopicContainer) (this.theRandomizer.choose(1, myTCs.toArray(new TopicContainer[myTCs.size()])))[0];
+//			
+//			myBCs.addAll(theTC.getBCs().values());
+//			
+//			while (!myBCs.isEmpty())
+//			{
+//				theBC = (BlockContainer) (this.theRandomizer.choose(1, myBCs.toArray(new BlockContainer[myBCs.size()])))[0];
+//				
+//				if (theBC.getBlock() != null)
+//					versionExam.addElement(theBC.getBlock());
+//				
+//				myFCs.addAll(theBC.getFCs().values());
+//				
+//				while (!myFCs.isEmpty())
+//				{
+//					theFC = (FigureContainer) (this.theRandomizer.choose(1, myFCs.toArray(new FigureContainer[myFCs.size()])))[0];		
+//					
+//					identifier = (Integer) this.mec.getIdentifiers().get(theFC.getFigure());
+//					
+//					if (!figureBlacklist.containsKey(identifier))
+//					{
+//						if (theFC.getFigure() != null)
+//							versionExam.addElement(theFC.getFigure());
+//						
+//						figureBlacklist.put(identifier, theFC.getFigure());
+//					}
+//					
+//					//Next 6 lines are maybe a fix to the problem we were having.  Certainly there is a better way.
+//					Object[] array = this.theRandomizer.choose(theFC.getProblems().size(), theFC.getProblems().toArray());
+//					theProblemsArray = new ProblemIF[array.length];
+//					for(int i = 0; i < array.length; i++)
+//					{
+//						theProblemsArray[i] = (ProblemIF)array[i];
+//					}
+//					
+//					//The line that was causing the problem, fixed (maybe?) by the 6 lines above
+//					//theProblemsArray = (ProblemIF[]) (this.theRandomizer.choose(theFC.getProblems().size(), theFC.getProblems().toArray(new ProblemIF[theFC.getProblems().size()])));
+//					
+//					for (int i = 0; i < theProblemsArray.length; i++)
+//					{
+//						identifier = (Integer) this.mec.getIdentifiers().get(theProblemsArray[i]);
+//						
+//						if (!problemBlacklist.containsKey(identifier))
+//						{
+//							for (FigureIF otherFigure : theProblemsArray[i].referencedFigures())
+//							{
+//								otherFigureIdentifier = (Integer) this.mec.getIdentifiers().get(otherFigure);
+//								
+//								if (!figureBlacklist.containsKey(otherFigureIdentifier))
+//								{
+//									versionExam.addElement(otherFigure);
+//									figureBlacklist.put(otherFigureIdentifier, otherFigure);
+//								}
+//							}
+//							
+//							ProblemIF newProblem = this.theExamFactory.newProblem(theProblemsArray[i].topic(), 
+//																			 	  theProblemsArray[i].label(), 
+//																			 	  theProblemsArray[i].question(), 
+//																			 	  randomizeAnswers(theProblemsArray[i]));
+//							
+//							newProblem.setDifficulty(theProblemsArray[i].difficulty());
+//							versionExam.addElement(newProblem);
+//							versionAnswerKey.addProblem(correctAnswers(newProblem));
+//							problemBlacklist.put(identifier, theProblemsArray[i]);
+//						}
+//					}
+//					
+//					myFCs.remove(theFC);
+//				}
+//				
+//				myBCs.remove(theBC);
+//			}
+//			
+//			myTCs.remove(theTC);
+//		}
+//		
+//		if (this.mec.getFinalBlock() != null)
+//			versionExam.addElement(this.mec.getFinalBlock());
+//		
+//	}
+//}
 
 
