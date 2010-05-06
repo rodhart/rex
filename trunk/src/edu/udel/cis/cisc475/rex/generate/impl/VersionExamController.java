@@ -275,10 +275,10 @@ public class VersionExamController
 							 							" through " + theGCC.getDifficultyInterval().high() +
 														" is unsatisfiable.", theGCC.getSource());
 				}
+				
 				problemsAdded = 0;
+				superset.clear();
 			}
-			
-			superset.clear();
 		}
 	}
 
