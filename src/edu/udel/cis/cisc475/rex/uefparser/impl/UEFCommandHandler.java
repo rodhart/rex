@@ -997,10 +997,17 @@ class UEFCommandHandler
 				{
 					// found the endProblem command.
 
+					//if there is no answers environment, then the end of the question is the beginning of /end{problem}
+					if (answers == null)
+					{
+						//set the end of the source.
+						endSource = uefCommandQueue.peek().getStartPosition();
+					}
+
 					// pop the /end{problem command off the queue
 					uefCommandQueue.poll();
 
-					// get the file content from beginning of '/begin{block}' to the end of '/end{block}'.
+					// get the file content from beginning of '/begin{problem}' to the beginning of either /begin{answer} or /end{problem}.
 					content = uefCharHandler.getContent(startSource, endSource);
 
 					// Create the source object
