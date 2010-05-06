@@ -228,7 +228,7 @@ class UEFCommandHandler
 			exceptionSource.addText(uefCharHandler.getContent(command.getStartPosition(), command.getEndPosition()));
 
 			// throw the exception.
-			throw new RexParseException("No \\end{answer} after \\begin{answer}.", exceptionSource);
+			throw new RexParseException("No \\end{answer} after \\begin{answer}!", exceptionSource);
 		}
 
 		// set the end of the source to the position before
@@ -243,8 +243,7 @@ class UEFCommandHandler
 			endSource--;
 		}
 
-		// get the file content from beginning of '/answer'
-		// to beginning of next command.
+		// get the file content from beginning of '/answer' to beginning of next command.
 		content = uefCharHandler.getContent(startSource, endSource);
 
 		// Create the source object.
@@ -297,8 +296,7 @@ class UEFCommandHandler
 		//boolean to make sure atleast one answer is correct.
 		boolean foundCorrectAnswer = false;
 
-		// process until either the queue is empty or we hit an endAnswers
-		// command.
+		// process until either the queue is empty or we hit an endAnswers command.
 		while (!uefCommandQueue.isEmpty())
 		{
 			// check the command type.
@@ -326,11 +324,7 @@ class UEFCommandHandler
 				}
 				case ref:
 				{
-					// add the reference to list of references so we can
-					// later add USES relations for. We need to add these
-					// answer references for the particular problem we are
-					// creating. But, it can't be created until after we
-					// get every answer. :-(
+					//add an unmapped reference to our list references.
 					this.uefReferenceHandler.addUnmappedReferences(processRef());
 					break;
 				}
@@ -462,8 +456,7 @@ class UEFCommandHandler
 			{
 				case ref:
 				{
-					// add the reference to our local list of refences to later
-					// declareUses relationships for.
+					// add the reference to our local list of refences to later declareUses relationships for.
 					this.uefReferenceHandler.addUnmappedReferences(processRef());
 					break;
 				}
@@ -477,8 +470,7 @@ class UEFCommandHandler
 					// set the end of the block position, for the SourceIF.
 					endSource = nextCommand.getEndPosition();
 
-					// get the file content from beginning of '/begin{block}'
-					// to the end of '/end{block}'.
+					// get the file content from beginning of '/begin{block}' to the end of '/end{block}'.
 					content = uefCharHandler.getContent(startSource, endSource);
 
 					// Create the source object for the block environment.
@@ -492,11 +484,7 @@ class UEFCommandHandler
 					// create the actual block object.
 					BlockIF block = examFactory.newBlock(name, source);
 
-					// Add each reference found within this block to our list of
-					// references
-					// to later declareUses relationships for.
-					// Since our BlockIF object is created, we can add to the global
-					// list.
+					//map all references in our unmapped reference list to this block.
 					this.uefReferenceHandler.mapReferences(block);
 
 					// return our block object now.
@@ -709,8 +697,7 @@ class UEFCommandHandler
 				{
 					// found the ref command.
 
-					// add the reference to our local list of refences to later
-					// declareUses relationships for.
+					// add the reference to our unmapped list of refences to later declareUses relationships for.
 					this.uefReferenceHandler.addUnmappedReferences(processRef());
 					break;
 				}
@@ -739,11 +726,7 @@ class UEFCommandHandler
 					// create the figure object.
 					FigureIF figure = examFactory.newFigure(label, source);
 
-					// Add each reference found within this block to our list of
-					// references
-					// to later declareUses relationships for.
-					// Since our FigureIF object is created, we can add to the
-					// global list.
+					//map all unmapped references in our list of references to this figure.
 					this.uefReferenceHandler.mapReferences(figure);
 
 					// return our FigureIF.
@@ -810,10 +793,10 @@ class UEFCommandHandler
 		{
 			//topic argument is missing.
 
-			//set the start source to beginning of \begin{problem}
+			//set the start source to beginning of \begin{problem}.
 			int startSource = command.getStartPosition();
 
-			// set the end source to the end of \begin{problem}
+			// set the end source to the end of \begin{problem}.
 			int endSource = command.getEndPosition();
 
 			// Fill out the source.
@@ -835,10 +818,10 @@ class UEFCommandHandler
 		{
 			//difficulty argument missing.
 
-			//set the start source to beginning of \begin{problem}
+			//set the start source to beginning of \begin{problem}.
 			int startSource = command.getStartPosition();
 
-			// set the end source to the end of \begin{problem}
+			// set the end source to the end of \begin{problem}.
 			int endSource = command.getEndPosition();
 
 			// Fill out the source.
@@ -862,10 +845,10 @@ class UEFCommandHandler
 		{
 			//difficulty isn't a number -_-.
 
-			//set the start source to beginning of \begin{problem}
+			//set the start source to beginning of \begin{problem}.
 			int startSource = command.getStartPosition();
 
-			// set the end source to the end of \begin{problem}
+			// set the end source to the end of \begin{problem}.
 			int endSource = command.getEndPosition();
 
 			// Fill out the source.
@@ -879,7 +862,7 @@ class UEFCommandHandler
 			throw new RexParseException("\\problem command's difficulty argument is not a number!", exceptionSource);
 		}
 
-		// get required block
+		// get required block.
 		String optionalArgument = command.getOptionalArgument();
 		if (optionalArgument != null)
 		{
@@ -891,27 +874,25 @@ class UEFCommandHandler
 			{
 				if (split[0].equals("require"))
 				{
-					// check for typoed requires
+					// check for typoed requires.
 					this.uefReferenceHandler.addUnmappedReferences(split[1]);
 				}
 				else if (split[0].equals("requires"))
 				{
-					// check for correct requires
+					// check for correct requires.
 					this.uefReferenceHandler.addUnmappedReferences(split[1]);
 				}
 			}
 		}
 
-		// String to be filled with the source content
+		// String to be filled with the source content.
 		String content;
 
-		// Variables to hold the beginning and end of the source
-		int startSource = command.getEndPosition();// use the end of this
+		// Variables to hold the beginning and end of the source.
+		int startSource = command.getEndPosition();// use the end of this.
 		int endSource = 0;
 
-		// Ignore whitespaces and lines at the beginning of the question,
-		// because latex
-		// does.
+		// Ignore whitespaces and lines at the beginning of the question, because latex does.
 		while (uefCharHandler.read(startSource) == '\n' || uefCharHandler.read(startSource) == ' ' || uefCharHandler.read(startSource)
 																									  == '\t')
 		{
@@ -927,8 +908,7 @@ class UEFCommandHandler
 		//boolean to make sure we only ever find one answers environment within a problem.
 		boolean foundAnswerEnvironment = false;
 
-		// process until either the queue is empty or we hit an endProblem
-		// command.
+		// process until either the queue is empty or we hit an endProblem command.
 		while (!uefCommandQueue.isEmpty())
 		{
 			// check the command type.
@@ -967,8 +947,7 @@ class UEFCommandHandler
 					// use the beginning of the other command as the end source.
 					endSource = uefCommandQueue.peek().getStartPosition();
 
-					// Ignore whitespaces and lines at the end of question because
-					// latex does.
+					// Ignore whitespaces and lines at the end of question because latex does.
 					while (uefCharHandler.read(endSource - 1) == '\n' || uefCharHandler.read(endSource - 1) == ' ' || uefCharHandler.read(
 							endSource - 1) == '\t')
 					{
@@ -1010,8 +989,7 @@ class UEFCommandHandler
 				{
 					// found the ref command.
 
-					// add the reference to our local list of refences to later
-					// declareUses relationships for.
+					// add the reference to our list of unmapped references to later declareUses relationships for.
 					this.uefReferenceHandler.addUnmappedReferences(processRef());
 					break;
 				}
@@ -1022,8 +1000,7 @@ class UEFCommandHandler
 					// pop the /end{problem command off the queue
 					uefCommandQueue.poll();
 
-					// get the file content from beginning of '/begin{block}'
-					// to the end of '/end{block}'.
+					// get the file content from beginning of '/begin{block}' to the end of '/end{block}'.
 					content = uefCharHandler.getContent(startSource, endSource);
 
 					// Create the source object
@@ -1041,11 +1018,7 @@ class UEFCommandHandler
 					// add the difficulty.
 					problem.setDifficulty(difficultyValue);
 
-					// Add each reference found within this block to our list of
-					// references
-					// to later declareUses relationships for.
-					// Since our ProblemIF object is created, we can add to the
-					// global list.
+					//map all unmapped references contained in our list to this problem.
 					this.uefReferenceHandler.mapReferences(problem);
 
 					// return our problem.
@@ -1113,10 +1086,10 @@ class UEFCommandHandler
 		{
 			//class argument missing.
 
-			//set the start source to beginning of \documentclass{}
+			//set the start source to beginning of \documentclass{}.
 			int startSource = command.getStartPosition();
 
-			// set the end source to the end of \documentclass{}
+			// set the end source to the end of \documentclass{}.
 			int endSource = command.getEndPosition();
 
 			// Fill out the source.
@@ -1168,10 +1141,10 @@ class UEFCommandHandler
 		{
 			//the /label label argument is missing.
 
-			//set the start source to beginning of \label{}
+			//set the start source to beginning of \label{}.
 			int startSource = command.getStartPosition();
 
-			// set the end source to the end of \label{}
+			// set the end source to the end of \label{}.
 			int endSource = command.getEndPosition();
 
 			// Fill out the source.
@@ -1214,10 +1187,10 @@ class UEFCommandHandler
 		{
 			//the \ref{} label argument is missing.
 
-			//set the start source to beginning of \ref{}
+			//set the start source to beginning of \ref{}.
 			int startSource = command.getStartPosition();
 
-			// set the end source to the end of \ref{}
+			// set the end source to the end of \ref{}.
 			int endSource = command.getEndPosition();
 
 			// Fill out the source.
@@ -1261,8 +1234,7 @@ class UEFCommandHandler
 		int startOfPreamble = 0;
 		int endOfPreamble = 0;
 
-		// process until either the queue is empty or we hit an beginDocument
-		// command.
+		// process until either the queue is empty or we hit an beginDocument command.
 		while (!uefCommandQueue.isEmpty())
 		{
 			// check the command type.
