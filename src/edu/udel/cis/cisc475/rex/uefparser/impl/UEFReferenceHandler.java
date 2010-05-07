@@ -7,6 +7,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +44,7 @@ class UEFReferenceHandler
 	UEFReferenceHandler()
 	{
 		//initialize fields.
-		this.mappedReferences = new HashMap<String, List<ExamElementIF>>();
+		this.mappedReferences = new LinkedHashMap<String, List<ExamElementIF>>();
 		this.unmappedReferences = new ArrayList<String>();
 	}
 
