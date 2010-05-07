@@ -9,6 +9,8 @@ import edu.udel.cis.cisc475.rex.config.IF.GroupConstraintIF;
 import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
 import edu.udel.cis.cisc475.rex.err.RexException;
 import edu.udel.cis.cisc475.rex.err.RexParseException;
+import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
@@ -90,6 +92,13 @@ public class Generator implements GeneratorIF {
 	}
 
 	private void generate() throws RexException {
+		// addded by haley
+		if(config.finalBlock() != null){
+			ExamElementIF block = master.elementWithLabel(config.finalBlock());
+			if(block != null && block instanceof BlockIF){
+				master.setFinalBlock((BlockIF)block);
+			}
+		}
 		this.generatedExams = new ExamIF[this.numExams];
 		this.answerKeys = new AnswerKeyIF[this.numExams];
 
