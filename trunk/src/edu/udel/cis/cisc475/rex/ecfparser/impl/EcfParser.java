@@ -75,7 +75,7 @@ public class EcfParser implements EcfParserIF {
 			System.err.println("this isnt happening :[");
 			throw new RexParseException(e.getMessage(), errorSource);
     }
-    
+    config.setSeed(seed);
     return config;
   }
 
