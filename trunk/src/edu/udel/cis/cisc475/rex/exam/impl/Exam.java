@@ -16,6 +16,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
+import java.util.ArrayList;
 
 /**
  * The ExamIF specifies a container for a single version of the exam. The ExamIF
@@ -358,7 +359,7 @@ public class Exam implements ExamIF {
 	 * A collection of all problems stored in the exam
 	 */
 	public Collection<ProblemIF> problems() {
-		Set<ProblemIF> returnSet = new HashSet<ProblemIF>();
+		List<ProblemIF> returnSet = new ArrayList<ProblemIF>();
 
 		Iterator<Integer> i = problems.iterator();
 		while (i.hasNext()) {
