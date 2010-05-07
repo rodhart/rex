@@ -56,6 +56,11 @@ public class Generator implements GeneratorIF
 
 		this.numExams = config.numVersions();
 		
+		if (config.versionStrings() == null) {
+			throw new RexParseException("The ECF file doesn't specify any version strings.",
+					null);
+		}
+		
 		if (config.versionStrings().length < this.numExams)
 			throw new RexParseException("The number of requested generated exams " +
 										"exceeds the number of version strings.",
