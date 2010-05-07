@@ -14,6 +14,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -320,6 +321,22 @@ public class ExamTest {
 		assertNotNull(elements);
 
 		assertEquals(3, elements.size());
+		
+		Iterator<ExamElementIF> i = elements.iterator();
+		
+		ExamElementIF element = i.next();
+
+		assertEquals(problem, element);
+		
+		element = i.next();
+		
+		assertEquals(figure, element);
+		
+		element = i.next();
+		
+		assertEquals(block, element);
+		
+		
 	}
 
 	@Test
