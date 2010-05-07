@@ -129,25 +129,15 @@ public class VersionExamController
 	 * 			-An integer, assumed to be the index in an array of a
 	 * 			 ProblemIFs answer set.
 	 * @return
-	 * 			-A letter, A through G, depending on the index given
+	 * 			-A letter depending on the index given
 	 * 			 as input. Appears to match what the key module
 	 * 			 expects; subject to change.
 	 */
 	
 	public String answerChar(int input)
 	{
-		switch (input)
-		{
-			case 0: return "A"; 
-			case 1: return "B"; 
-			case 2: return "C"; 
-			case 3: return "D"; 
-			case 4: return "E"; 
-			case 5: return "F"; 
-			case 6: return "G";
-			case 7: return "Problem with no Answers";
-			default: return "?";
-		}
+		input += 65;
+		return String.valueOf((char) input);
 	}
 	
 	/**
@@ -281,8 +271,6 @@ public class VersionExamController
 			}
 		}
 	}
-
-	
 	
 	/**
 	 * Adds every problem to a FigureContainer, every
@@ -450,7 +438,7 @@ public class VersionExamController
 								}
 							}
 							
-							if (theProblem.answers().length != 0)
+							if (theProblem.answers() != null)
 							{
 //								System.out.println(theProblem.question().text() + ", ");
 //								
@@ -484,7 +472,7 @@ public class VersionExamController
 								versionExam.addElement(theProblem);
 								
 								Collection<String> answerSet = new ArrayList<String>();
-								answerSet.add(answerChar(7));
+								answerSet.add("Problem with no Answers.");
 								versionAnswerKey.addProblem(answerSet);
 							}
 							
