@@ -154,8 +154,7 @@ public class Rex {
 			theGenerator = theGeneratorFactory.newGenerator(theMaster,
 					theConfig);
 		} catch (RexException e) {
-			e.toString();
-			//e.printStackTrace();
+			e.printStackTrace();
 			return 1;
 
 		}
