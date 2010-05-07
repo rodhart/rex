@@ -3,6 +3,7 @@ package edu.udel.cis.cisc475.rex.generate.impl;
 import java.util.HashMap;
 
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
+import java.util.LinkedHashMap;
 
 /**
  * @author Greg Simons
@@ -15,7 +16,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 public class TopicContainer 
 {
 	private String topic;
-	private HashMap theBCs = new HashMap();
+	private HashMap theBCs = new LinkedHashMap();
 	
 	/**
 	 * @param topic

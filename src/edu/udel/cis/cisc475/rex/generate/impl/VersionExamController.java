@@ -19,6 +19,7 @@ import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
 import edu.udel.cis.cisc475.rex.exam.impl.Problem;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
+import java.util.LinkedHashMap;
 
 /**
  * @author Greg Simons
@@ -33,8 +34,8 @@ public class VersionExamController
 	private ExamFactoryIF theExamFactory = new ExamFactory();
 	private RandomizerIF theRandomizer;
 	
-	private HashMap subset = new HashMap();
-	private HashMap theTCs = new HashMap();
+	private HashMap subset = new LinkedHashMap();
+	private HashMap theTCs = new LinkedHashMap();
 	
 	/**
 	 * @param mec
@@ -372,8 +373,8 @@ public class VersionExamController
 	
 	public void fillExam(ExamIF versionExam, AnswerKeyIF versionAnswerKey)
 	{
-		Map figureBlacklist = new HashMap();
-		Map problemBlacklist = new HashMap();
+		Map figureBlacklist = new LinkedHashMap();
+		Map problemBlacklist = new LinkedHashMap();
 		Integer problemIdentifier;
 		Integer primaryFigureIdentifier;
 		Integer secondaryFigureIdentifier;

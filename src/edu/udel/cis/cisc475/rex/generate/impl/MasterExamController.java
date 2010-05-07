@@ -13,6 +13,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
+import java.util.LinkedHashMap;
 
 /**
  * @author Greg Simons
@@ -26,9 +27,9 @@ import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 public class MasterExamController
 {
 	private ExamIF master;
-	private HashMap identifiers = new HashMap();
-	private HashMap requiredProblems = new HashMap();
-	private HashMap theTOs = new HashMap();
+	private HashMap identifiers = new LinkedHashMap();
+	private HashMap requiredProblems = new LinkedHashMap();
+	private HashMap theTOs = new LinkedHashMap();
 	private BlockIF finalBlock;
 
 	/**

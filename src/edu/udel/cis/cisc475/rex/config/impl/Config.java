@@ -9,6 +9,7 @@ import edu.udel.cis.cisc475.rex.config.IF.RequiredProblemConstraintIF;
 import edu.udel.cis.cisc475.rex.err.RexParseException;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
+import java.util.LinkedHashSet;
 
 /**
  * The Config class handles the storage of the configuration options.
@@ -56,7 +57,7 @@ public class Config implements ConfigIF {
 	public Config(boolean pdf, int numVersions){
 		this.numVersions = numVersions;
 		this.pdfOption = pdf;
-		this.constraints = new HashSet<ConstraintIF>();
+		this.constraints = new LinkedHashSet<ConstraintIF>();
 	}
 	
 	/**
