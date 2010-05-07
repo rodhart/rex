@@ -89,7 +89,7 @@ public class Rex {
 			/*
 			 * Test for -seed option and set seed
 			 */
-			else if (seed == 1 && args[i].equals("-seed")) {
+			else if (args[i].equals("-seed")) {
 				seed = Long.parseLong(args[i + 1]);
 				i += 2;
 			}
