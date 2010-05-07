@@ -25,11 +25,11 @@ import edu.udel.cis.cisc475.rex.random.impl.RandomizerFactory;
 /**
  * @author Greg Simons, Zach Hine, Keith McLoughlin
  * 
- *         Generates randomized ExamIFs and their corresponding AnswerKeyIFs.
- * 
+ * Generates randomized ExamIFs and their corresponding AnswerKeyIFs.
  */
 
-public class Generator implements GeneratorIF {
+public class Generator implements GeneratorIF 
+{
 	private ExamIF master;
 	private ConfigIF config;
 
@@ -46,78 +46,73 @@ public class Generator implements GeneratorIF {
 	 *            -ConfigIF containing all of the ConstraintIFs used for each
 	 *            randomly generated ExamIF, as well as other information.
 	 * @throws RexException
-	 *             -If the ConfigIF contains a ConstraintIF that is not a
-	 *             RequiredProblemConstraintIF or a GroupConstraintIF, or if a
-	 *             ConstraintIF is not satisfiable.
-	 * @throws NullPointerException
-	 *             -If theRandomizer.choose() fails (or a logic error causes an
-	 *             invalid data set to be randomized).
+	 *             -If a parsing error or an unsatisfiable constraint occurs.
 	 */
 
-	Generator(ExamIF master, ConfigIF config) throws RexException {
+	Generator(ExamIF master, ConfigIF config) throws RexException 
+	{
 		this.master = master;
 		this.config = config;
 
 		this.numExams = config.numVersions();
-
-		// try
-		// {
+		
+		if (config.versionStrings().length < this.numExams)
+			throw new RexParseException("The number of requested generated exams " +
+										"exceeds the number of version strings.",
+										null);
+		
+		//Bug fix added by Haley Boyd
+		if(config.finalBlock() != null)
+		{
+			ExamElementIF block = master.elementWithLabel(config.finalBlock());
+			
+			if (block != null && block instanceof BlockIF)
+				master.setFinalBlock((BlockIF)block);
+		}
 		
 		generate();
-		/*
-		 * }
-		 * 
-		 * catch (Exception e) { e.printStackTrace(); }
-		 */
 	}
 
-	public ExamIF getMaster() {
+	public ExamIF getMaster() 
+	{
 		return this.master;
 	}
 
-	public ConfigIF getConfig() {
+	public ConfigIF getConfig() 
+	{
 		return this.config;
 	}
 
-	public ExamIF getGeneratedExam(int i) {
+	public ExamIF getGeneratedExam(int i) 
+	{
 		return this.generatedExams[i];
 	}
 
-	public AnswerKeyIF getAnswerKey(int i) {
+	public AnswerKeyIF getAnswerKey(int i) 
+	{
 		return this.answerKeys[i];
 	}
 
-	public int numGeneratedExams() {
+	public int numGeneratedExams() 
+	{
 		return this.numExams;
 	}
 
-	private void generate() throws RexException {
-		// addded by haley
-		if(config.finalBlock() != null){
-			ExamElementIF block = master.elementWithLabel(config.finalBlock());
-			if(block != null && block instanceof BlockIF){
-				master.setFinalBlock((BlockIF)block);
-			}
-		}
+	private void generate() throws RexException 
+	{
 		this.generatedExams = new ExamIF[this.numExams];
 		this.answerKeys = new AnswerKeyIF[this.numExams];
 
 		ExamFactoryIF theExamFactory = new ExamFactory();
 		AnswerKeyFactoryIF theAKF = new AnswerKeyFactory();
 		RandomizerFactoryIF theRandomizerFactory = new RandomizerFactory();
-		RandomizerIF theRandomizer = theRandomizerFactory.newRandomizer(config
-				.seed());
-
-	
+		RandomizerIF theRandomizer = theRandomizerFactory.newRandomizer(config.seed());
 		
-		MasterExamController mec = new MasterExamController(master);
-		
-	
-		
+		MasterExamController mec = new MasterExamController(master);	
 		VersionExamController vec;
 
 		ConstraintIF[] theConstraints = (ConstraintIF[]) config.constraints()
-				.toArray(new ConstraintIF[config.constraints().size()]);
+										.toArray(new ConstraintIF[config.constraints().size()]);
 		Collection<RequiredProblemConstraintIF> theRPCs = new ArrayList<RequiredProblemConstraintIF>();
 		Collection<GroupConstraintIF> theGCs = new ArrayList<GroupConstraintIF>();
 
@@ -127,41 +122,18 @@ public class Generator implements GeneratorIF {
 		 * First, divide the ConstraintIFs into a RequiredProblemConstraintIFs
 		 * and GroupConstraintIFs.
 		 */
-
-		if (config.versionStrings().length < this.numExams)
-			throw new RexParseException(
-					"The number of requested generated exams exceeds the number of version strings.",
-					null);
-		
-		
-
-		for (ConstraintIF theConstraint : theConstraints) {
-			/*
-			 * Replacing with .equals attempt for now if
-			 * (theConstraint.getClass().isInstance(GroupConstraintIF.class))
-			 * theGCs.add((GroupConstraintIF) theConstraint);
-			 * 
-			 * else if
-			 * (theConstraint.getClass().isInstance(RequiredProblemConstraintIF
-			 * .class)) theRPCs.add((RequiredProblemConstraintIF)
-			 * theConstraint);
-			 */
-
-			// if
-			// (theConstraint.getClass().getSimpleName().equals("GroupConstraint"))
+		for (ConstraintIF theConstraint : theConstraints) 
+		{
 			if (theConstraint instanceof GroupConstraintIF)
 				theGCs.add((GroupConstraintIF) theConstraint);
-
-			// else if
-			// (theConstraint.getClass().getSimpleName().equals("RequiredProblemConstraint"))
+			
 			else if (theConstraint instanceof RequiredProblemConstraintIF)
 				theRPCs.add((RequiredProblemConstraintIF) theConstraint);
 
 			else
-				throw new RexParseException(
-						"Generator received a ConstraintIF that is not a "
-								+ "RequiredProblemConstraintIF or a GroupConstraintIF.",
-						theConstraint.source());
+				throw new RexParseException("Generator received a ConstraintIF that is not a " + 
+											"RequiredProblemConstraintIF or a GroupConstraintIF.",
+											theConstraint.source());
 		}
 		
 
@@ -173,10 +145,7 @@ public class Generator implements GeneratorIF {
 		for (GroupConstraintIF theGC : theGCs)
 			mec.distributeGroupConstraint(theGC);
 		
-		
 		//mec.test();
-		
-
 		
 		/*
 		 * For each generated ExamIF, create a VersionExamController.
@@ -185,17 +154,19 @@ public class Generator implements GeneratorIF {
 		 * the vec, distribute all the problems within the vec, then fill out a
 		 * generated ExamIF and AnswerKeyIF.
 		 */
-
-		for (int i = 0; i < this.numExams; i++) {
+		for (int i = 0; i < this.numExams; i++) 
+		{
 			String theVersion = config.versionStrings()[i];
 			generatedExams[i] = theExamFactory.newGeneratedExam(theVersion);
 			answerKeys[i] = theAKF.newAnswerKey(config.versionStrings()[i],
-					"examName", "date");
+												"examName", 
+												"date");
 
 			generatedExams[i].setFrontMatter(master.frontMatter());
 			generatedExams[i].setPreamble(master.preamble());
 
 			vec = new VersionExamController(mec, theRandomizer);
+			
 			vec.addRequiredProblems();
 			//vec.testOne();
 			vec.satisfyConstraints();
