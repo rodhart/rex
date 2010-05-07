@@ -17,6 +17,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
 /**
  * The ExamIF specifies a container for a single version of the exam. The ExamIF
@@ -127,8 +128,8 @@ public class Exam implements ExamIF {
 		this.figures = new LinkedList<Integer>();
 		this.blocks = new LinkedList<Integer>();
 		this.problems = new LinkedList<Integer>();
-		this.labels = new HashSet<String>();
-		this.topics = new HashSet<String>();
+		this.labels = new LinkedHashSet<String>();
+		this.topics = new LinkedHashSet<String>();
 		this.uses = new LinkedHashMap<ExamElementIF, HashSet<ExamElementIF>>();
 		this.usedBy = new LinkedHashMap<ExamElementIF, HashSet<ExamElementIF>>();
 		this.labelToElement = new LinkedHashMap<String, ExamElementIF>();
@@ -154,7 +155,7 @@ public class Exam implements ExamIF {
 					topicToElements.get(((BlockIF) element).topic()).add(element);
 				}
 				else {
-					HashSet<ExamElementIF> newSet = new HashSet<ExamElementIF>();
+					HashSet<ExamElementIF> newSet = new LinkedHashSet<ExamElementIF>();
 					newSet.add(element);
 					topicToElements.put(((BlockIF) element).topic(), newSet);
 				}
@@ -165,7 +166,7 @@ public class Exam implements ExamIF {
 					topicToProblems.get(((ProblemIF) element).topic()).add((ProblemIF) element);
 				}
 				else {
-					HashSet<ProblemIF> newSet = new HashSet<ProblemIF>();
+					HashSet<ProblemIF> newSet = new LinkedHashSet<ProblemIF>();
 					newSet.add((ProblemIF) element);
 					topicToProblems.put(((ProblemIF) element).topic(), newSet);
 				}
@@ -173,7 +174,7 @@ public class Exam implements ExamIF {
 					topicToElements.get(((ProblemIF) element).topic()).add(element);
 				}
 				else {
-					HashSet<ExamElementIF> newSet = new HashSet<ExamElementIF>();
+					HashSet<ExamElementIF> newSet = new LinkedHashSet<ExamElementIF>();
 					newSet.add(element);
 					topicToElements.put(((ProblemIF) element).topic(), newSet);
 				}
@@ -188,8 +189,8 @@ public class Exam implements ExamIF {
 			labelToElement.put(element.label(), element);
 			
 			// Allocate a new HashSet for the uses map
-			HashSet<ExamElementIF> useesOfElement = new HashSet<ExamElementIF>();
-			HashSet<ExamElementIF> usersOfElement = new HashSet<ExamElementIF>();
+			HashSet<ExamElementIF> useesOfElement = new LinkedHashSet<ExamElementIF>();
+			HashSet<ExamElementIF> usersOfElement = new LinkedHashSet<ExamElementIF>();
 			uses.put(element, useesOfElement);
 			usedBy.put(element, usersOfElement);
 			return key;
@@ -277,7 +278,7 @@ public class Exam implements ExamIF {
 	 * are found, an empty collection will be returned
 	 */
 	public Collection<ExamElementIF> elementsUsingElement(ExamElementIF element) {
-		Set<ExamElementIF> emptySet = new HashSet<ExamElementIF>();
+		Set<ExamElementIF> emptySet = new LinkedHashSet<ExamElementIF>();
 		if (usedBy.get(element)==null) {
 			return emptySet;
 		}
@@ -288,7 +289,7 @@ public class Exam implements ExamIF {
 	 * Returns all elements that have a matching topic to the argument
 	 */	
 	public Collection<ExamElementIF> elementsWithTopic(String topic) {
-		Set<ExamElementIF> emptySet = new HashSet<ExamElementIF>();
+		Set<ExamElementIF> emptySet = new LinkedHashSet<ExamElementIF>();
 		if (topicToElements.get(topic) == null) {
 			return emptySet;
 		}
@@ -299,7 +300,7 @@ public class Exam implements ExamIF {
 	 * @return All figures stored in exam
 	 */
 	public Collection<FigureIF> figures() {
-		Set<FigureIF> returnSet = new HashSet<FigureIF>();
+		Set<FigureIF> returnSet = new LinkedHashSet<FigureIF>();
 
 		Iterator<Integer> i = figures.iterator();
 		while (i.hasNext()) {
@@ -359,7 +360,7 @@ public class Exam implements ExamIF {
 	 * A collection of all problems stored in the exam
 	 */
 	public Collection<ProblemIF> problems() {
-		Set<ProblemIF> returnSet = new HashSet<ProblemIF>();
+		Set<ProblemIF> returnSet = new LinkedHashSet<ProblemIF>();
 
 		Iterator<Integer> i = problems.iterator();
 		while (i.hasNext()) {
@@ -373,7 +374,7 @@ public class Exam implements ExamIF {
 	 * A collection of all problems in the exam with the specified topic
 	 */
 	public Collection<ProblemIF> problemsWithTopic(String topic) {
-		Set<ProblemIF> emptySet = new HashSet<ProblemIF>();
+		Set<ProblemIF> emptySet = new LinkedHashSet<ProblemIF>();
 		if (topicToElements.get(topic) == null) {
 			return emptySet;
 		}

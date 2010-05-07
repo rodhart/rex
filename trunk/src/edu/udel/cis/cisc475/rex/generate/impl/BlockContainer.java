@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
+import java.util.LinkedHashMap;
 
 /**
  * @author Greg Simons
@@ -19,7 +20,7 @@ import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 public class BlockContainer 
 {
 	private BlockIF theBlock;
-	private HashMap theFCs = new HashMap();
+	private HashMap theFCs = new LinkedHashMap();
 	
 	/**
 	 * @param theBlock
