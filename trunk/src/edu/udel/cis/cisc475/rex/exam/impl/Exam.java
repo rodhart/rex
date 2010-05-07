@@ -261,7 +261,7 @@ public class Exam implements ExamIF {
 	 * collection will return elements in the order element(0), element(1),
 	 */
 	public Collection<ExamElementIF> elements() {
-		Set<ExamElementIF> returnSet = new HashSet<ExamElementIF>();
+		List<ExamElementIF> returnSet = new ArrayList<ExamElementIF>();
 		Iterator<ExamElementIF> i = elements.values().iterator();
 		while (i.hasNext()) {
 			ExamElementIF element = i.next();
@@ -359,7 +359,7 @@ public class Exam implements ExamIF {
 	 * A collection of all problems stored in the exam
 	 */
 	public Collection<ProblemIF> problems() {
-		List<ProblemIF> returnSet = new ArrayList<ProblemIF>();
+		Set<ProblemIF> returnSet = new HashSet<ProblemIF>();
 
 		Iterator<Integer> i = problems.iterator();
 		while (i.hasNext()) {
