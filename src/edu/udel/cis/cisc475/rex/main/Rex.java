@@ -272,7 +272,7 @@ public class Rex {
 				Process p = null;
 				
 					p = Runtime.getRuntime().exec(
-							"pdflatex "+theLatexFiles[i].getName());
+							"pdflatex "+theLatexFiles[j].getName());
 				
 				
 				stdin = p.getOutputStream();
