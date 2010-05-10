@@ -5,8 +5,6 @@ import edu.udel.cis.cisc475.rex.err.RexParseException;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,12 +67,8 @@ class UEFReferenceHandler
 	void mapReferences(ExamElementIF examElement)
 	{
 		//for each unmapped reference
-		Iterator<String> iter = unmappedReferences.iterator();
-		while (iter.hasNext())
+		for (String reference : unmappedReferences)
 		{
-			//get the reference label.
-			String reference = iter.next();
-
 			//check to see if the referenced label is already in the mapped reference list.
 			if (this.mappedReferences.containsKey(reference))
 			{
@@ -106,12 +100,8 @@ class UEFReferenceHandler
 	void declareUses(ExamIF exam) throws RexParseException, RexException
 	{
 		//for each reference in the map.
-		Iterator<String> i = this.mappedReferences.keySet().iterator();
-		while (i.hasNext())
+		for (String label: this.mappedReferences.keySet())
 		{
-			//get the label of the reference.
-			String label = i.next();
-
 			//get the list of exam elements referencing the label.
 			List<ExamElementIF> elementList = this.mappedReferences.get(label);
 

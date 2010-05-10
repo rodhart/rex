@@ -4,7 +4,6 @@ import edu.udel.cis.cisc475.rex.err.RexException;
 import edu.udel.cis.cisc475.rex.err.RexParseException;
 import java.io.EOFException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -97,11 +96,8 @@ class UEFCommandHandler
 	private UEFCommand findMatchingCommand(Types types[])
 	{
 		// Iterate through all command until a matchin command is found.
-		for (Iterator<UEFCommand> iter = uefCommandQueue.iterator(); iter.hasNext();)
+		for (UEFCommand peekedCommand : uefCommandQueue)
 		{
-			// get the command located at the current iterator.
-			UEFCommand peekedCommand = iter.next();
-
 			// for each command we need to check in the array.
 			for (int i = 0; i < types.length; i++)
 			{
