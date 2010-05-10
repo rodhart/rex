@@ -102,7 +102,7 @@ public class Rex {
 				seed = Long.parseLong(args[i + 1]);
 				}
 				catch(Exception e){
-					System.err.println("A valid integer must follow -seed!");
+					System.err.println("A valid long must follow -seed!");
 					printUsage();
 					return -2;
 				}
@@ -174,12 +174,11 @@ public class Rex {
 		try {
 			theGenerator = theGeneratorFactory.newGenerator(theMaster,
 					theConfig);
-		} catch (RexException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return 1;
 
 		}
-		// TODO Write an appropriate error.
 
 		/*
 		 * Create the container for the generated exams and answer keys
