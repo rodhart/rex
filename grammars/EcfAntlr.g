@@ -1,7 +1,6 @@
 /**
  * @author cates
  */
-// TODO: accept only one includeall/append/versions
 grammar EcfAntlr;
 
 // Suppress a warning about ANTLR defaulting to this anyways
@@ -18,7 +17,8 @@ package edu.udel.cis.cisc475.rex.ecfparser.impl.parser;
 // tons of stuff to include
 @header {
 package edu.udel.cis.cisc475.rex.ecfparser.impl.parser; 
-import edu.udel.cis.cisc475.rex.ecfparser.impl.err.EcfParserHackException;
+import edu.udel.cis.cisc475.rex.ecfparser.impl.err.EcfParseHackException;
+import edu.udel.cis.cisc475.rex.ecfparser.impl.err.EcfUnsatisfiableHackException;
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalIF;
 import edu.udel.cis.cisc475.rex.interval.IF.IntervalFactoryIF;
@@ -40,9 +40,28 @@ import java.lang.Integer;
 	private ConfigIF config;
 	private IntervalFactoryIF intervalFactory = new IntervalFactory();
 	private SourceFactoryIF sourceFactory = new SourceFactory();
+	private boolean haveVersions = false;
+	private boolean haveAppend = false;
+	
+	@Override
+  protected Object recoverFromMismatchedToken(IntStream input, int ttype, BitSet follow) throws RecognitionException {
+    throw new MismatchedTokenException(ttype, input);
+  }
 }
 
+@rulecatch {
+    catch (RecognitionException e) {
+        throw e;
+    }
+}
 
+@lexer::members {
+    @Override
+    public void reportError(RecognitionException e) {
+        throw new RuntimeException(e);
+    }
+
+}    
 
 //------------------
 // parser
@@ -70,6 +89,7 @@ include
 		    mySource.setLastLine($SEMI.line);
 		    mySource.setLastColumn($SEMI.pos);
 		    mySource.addText($text);
+		    
 		    config.addGroupConstraint($topic.text, $interval.i, $n.value, $p.value, mySource);
 		}
 	;
@@ -79,7 +99,7 @@ interval returns [IntervalIF i]
 	:	l=leftBound COMMA r=rightBound
 	    {
 					if($l.value.compareTo($r.value) > 0) {
-						throw new EcfParserHackException("lower bound greater than upper bound", $text, input);
+						throw new EcfUnsatisfiableHackException("lower bound greater than upper bound", $text, input);
 					}
 	        $i = intervalFactory.interval($l.strict, $l.value, $r.strict, $r.value);
 	    }
@@ -87,22 +107,15 @@ interval returns [IntervalIF i]
 
 
 leftBound returns [boolean strict, Double value]
-	:	LEFT_CLOSED {$strict = true;}
-	    numDouble {$value = $numDouble.value;}
-	|	LEFT_OPEN {$strict = false;}
-	    NEG_INFTY {$value = Double.valueOf(Double.NEGATIVE_INFINITY);}
-	|	LEFT_OPEN {$strict = false;}
-	    numDouble {$value = $numDouble.value;}
+	:	   ( LEFT_CLOSED {$strict = true;} | LEFT_OPEN {$strict = false;} )
+	     numDouble {$value = $numDouble.value;}
 	;
 
 rightBound returns [boolean strict, Double value]
-	:	numDouble {$value = $numDouble.value;}
-	    RIGHT_CLOSED {$strict = true;}
-	|	INFTY {$value = Double.valueOf(Double.POSITIVE_INFINITY);}
-	    RIGHT_OPEN {$strict = false;}
-	|	numDouble {$value = $numDouble.value;}
-	    RIGHT_OPEN {$strict = false;}
+	:    numDouble {$value = $numDouble.value;}
+	     ( RIGHT_CLOSED {$strict = true;} | RIGHT_OPEN {$strict = false;} )
 	;
+
 
 // includeall statement
 includeall
@@ -112,28 +125,64 @@ includeall
 	    INCLUDEALL (COMMA? LABEL {labels.add($LABEL.text);})+
 	    AT numInt POINTS SEMI
 	    {
-	        for (String l : labels)
-	            config.addRequiredProblemConstraint(l, $numInt.value, sourceFactory.newSource(filename));
+	       SourceIF includeSource = sourceFactory.newSource(filename);
+          includeSource.setStartLine($INCLUDEALL.line);
+          includeSource.setStartColumn($INCLUDEALL.pos);
+          includeSource.setLastLine($SEMI.line);
+          includeSource.setLastColumn($SEMI.pos);
+          includeSource.addText($text);
+	        for (String l : labels) {
+	            config.addRequiredProblemConstraint(l, $numInt.value, includeSource);
+	        }
 	    }
 	;
 
 
 // append statement
 append
-	:	APPEND LABEL SEMI {config.setFinalBlock($LABEL.text);}
+	:	APPEND LABEL SEMI
+	{
+	   SourceIF appendSource = sourceFactory.newSource(filename);
+     appendSource.setStartLine($APPEND.line);
+     appendSource.setStartColumn($APPEND.pos);
+     appendSource.setLastLine($SEMI.line);
+     appendSource.setLastColumn($SEMI.pos);
+     appendSource.addText($text);
+     
+	   if(haveAppend) {
+	     throw new EcfParseHackException("Must have only one append block", $text, input, appendSource);
+	   } else {
+	     config.setFinalBlock($LABEL.text);
+	     haveAppend = true;
+	   }
+	}
 	;
 
 // versions statement
 versions
-	:	{
+	:	  {
 	        LinkedList<String> versions = new LinkedList<String>();
 	    }
 	    VERSIONS ARE (COMMA? STRING {versions.add($STRING.text);})+ SEMI
-	    {
-	        config.setVersionStrings(versions.toArray(new String[0]));
-	    }
+	{
+     SourceIF versionsSource = sourceFactory.newSource(filename);
+     versionsSource.setStartLine($VERSIONS.line);
+     versionsSource.setStartColumn($VERSIONS.pos);
+     versionsSource.setLastLine($SEMI.line);
+     versionsSource.setLastColumn($SEMI.pos);
+     versionsSource.addText($text);
+     
+     if(haveVersions) {
+       throw new EcfParseHackException("Only one set of version strings can be defined.", $text, input, versionsSource);
+     } else {
+       try {
+         config.setVersionStrings(versions.toArray(new String[0]));
+       } catch(RexParseException e) {
+         throw new EcfParseHackException(e.getMessage(), $text, input, versionsSource);
+       }
+     }
+  }
 	;
-	catch[RexParseException e] { throw new EcfParserHackException(e.getMessage(), $text, input); }
 
 numInt returns [int value]
     :   INT {$value = Integer.valueOf($INT.text);}
@@ -141,6 +190,8 @@ numInt returns [int value]
 
 numDouble returns [Double value]
     :   (n=FLOAT|n=INT) {$value = Double.valueOf($n.text);}
+    |   INFTY {$value = Double.valueOf(Double.POSITIVE_INFINITY);}
+    |   NEG_INFTY {$value = Double.valueOf(Double.NEGATIVE_INFINITY);}
     ;
 
 
