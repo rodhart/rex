@@ -912,13 +912,15 @@ public class UEFParser implements UEFParserIF
 	 */
 	public ExamIF parse(File file) throws RexException, IOException
 	{
-		// runs the UEF through pdflatex
-		String pdfatexMessage = uefPdflatex(file);	
-		if (pdfatexMessage != null)
-		{
-			System.out.println(pdfatexMessage);
-			System.exit(1);
-		}
+		// remove until it works:
+		
+//		// runs the UEF through pdflatex
+//		String pdfatexMessage = uefPdflatex(file);	
+//		if (pdfatexMessage != null)
+//		{
+//			System.out.println(pdfatexMessage);
+//			System.exit(1);
+//		}
 		
 		// completely parse the file.
 		parseForAllCommands(file);
