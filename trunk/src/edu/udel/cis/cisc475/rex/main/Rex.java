@@ -11,12 +11,11 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Date;
 
+
 import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.ecfparser.IF.EcfParserFactoryIF;
 import edu.udel.cis.cisc475.rex.ecfparser.IF.EcfParserIF;
 import edu.udel.cis.cisc475.rex.ecfparser.impl.EcfParserFactory;
-import edu.udel.cis.cisc475.rex.err.RexException;
-import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorFactoryIF;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
@@ -127,7 +126,6 @@ public class Rex {
 				return -2;
 			}
 		}
-
 		uef = new File(args[numArgs - 2]);
 		if(!uef.canRead()){
 			System.err.println("Could not read from the UEF file.");
