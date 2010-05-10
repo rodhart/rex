@@ -60,23 +60,40 @@ public class EcfParserTest {
 	/**
 	 * Negative test to try catching a RexParseException thrown by the parser.
 	 */
-	// TODO: figure out where the exceptions are going inside the parser.
-/*	@Test(expected = RexParseException.class)
+	@Test(expected = RexParseException.class)
 	public void negativeParseErrorTest() throws RexParseException {
 		ConfigIF config;
 		File file = new File("."+File.separator+"examples"+File.separator+"negativeParseErrorConfigTest.ecf");
 		EcfParser parser = new EcfParser(4);
 
 		try{
-			parser.parse(file);
+			config = parser.parse(file);
 		} catch(IOException e) {
 			fail("Something happened when reading the file. Sorry.");
 		} catch(RexUnsatisfiableException e) {
 			fail("Something went wrong. Check your test file.");
 		}
-	}*/
+	}
 
+	/**
+	 * Negative test to try catching a RexUnsatisfiableException thrown by the parser.
+	 */
+	@Test(expected = RexUnsatisfiableException.class)
+	public void negativeUnsatisfiableErrorTest() throws RexUnsatisfiableException {
+		ConfigIF config;
+		File file = new File("."+File.separator+"examples"+File.separator+"negativeUnsatisfiableConfigTest.ecf");
+		EcfParser parser = new EcfParser(4);
+
+		try{
+			config = parser.parse(file);
+		} catch(IOException e) {
+			fail("Something happened when reading the file. Sorry.");
+		} catch(RexParseException e) {
+			fail("Something went wrong. Check your test file.");
+		}
+	}
 		
+
   /**
 		* Test using text from the requirements document; Using both 
 		* 	inline string and equivalent file.

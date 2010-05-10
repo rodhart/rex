@@ -1,6 +1,5 @@
 package edu.udel.cis.cisc475.rex.ecfparser.impl.err;
 
-import edu.udel.cis.cisc475.rex.err.RexException;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.IntStream;
 
@@ -8,7 +7,7 @@ import org.antlr.runtime.IntStream;
  * Exception to get non RecognitionExceptions out of the parser.
  * @author Burke Cates (cates)
  */
-public class EcfParserHackException extends RecognitionException {
+public class EcfUnsatisfiableHackException extends RecognitionException {
 	private static final long serialVersionUID = 1L;
 
 	private String message;
@@ -19,7 +18,7 @@ public class EcfParserHackException extends RecognitionException {
 	 * @param input input stream of chars. the RecognitionException likes this.
 	 * 	alive.
 	 */
-	public EcfParserHackException(String message, String badInput, IntStream input) {
+	public EcfUnsatisfiableHackException(String message, String badInput, IntStream input) {
 		super(input);
 		this.message = "line " + super.line + ":" + super.charPositionInLine + " unsatisfiable input '" + badInput + "' " + message;
 	}
