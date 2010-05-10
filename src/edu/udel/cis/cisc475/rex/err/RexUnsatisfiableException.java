@@ -15,13 +15,10 @@ public class RexUnsatisfiableException extends RexException {
 
 	private static final long serialVersionUID = 1L;
 
-	private String message;
-
 	private SourceIF source;
 
 	public RexUnsatisfiableException(String message, SourceIF source) {
-		super(message);
-		this.message = message;
+		super(message);		
 		this.source = source;
 	}
 
@@ -38,7 +35,7 @@ public class RexUnsatisfiableException extends RexException {
 	}
 
 	public String toString() {
-		String result = "Request is not satisfiable.\n" + message + ":\n";
+		String result = "Request is not satisfiable.\n" + this.getMessage() + ":\n";
 
 		if (source != null) {
 			result += source.filename() + " line " + source.startLine() + "("

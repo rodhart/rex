@@ -14,13 +14,11 @@ public class RexParseException extends RexException {
 
 	private static final long serialVersionUID = 1L;
 
-	private String message;
 
 	private SourceIF source;
 
 	public RexParseException(String message, SourceIF source) {
 		super(message);
-		this.message = message;
 		this.source = source;
 	}
 
@@ -34,7 +32,7 @@ public class RexParseException extends RexException {
 	}
 
 	public String toString() {
-		String result = "A parsing error has occurred.\n" + message + ":\n";
+		String result = "A parsing error has occurred.\n" + this.getMessage() + ":\n";
 
 		if (source != null) {
 			result += source.filename() + " line " + source.startLine() + "("
