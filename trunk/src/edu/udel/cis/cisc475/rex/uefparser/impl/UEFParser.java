@@ -944,7 +944,7 @@ public class UEFParser implements UEFParserIF
 		
 		boolean latexFailed = false;		
 			
-		Process p = Runtime.getRuntime().exec(PDFLATEXCMD + " " + uefFilename);
+		Process p = Runtime.getRuntime().exec(PDFLATEXCMD + " -interation=nonstopmode " + uefFilename);
 		BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
 		
 		char previousChar = (char)input.read(),
