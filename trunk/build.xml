@@ -2,7 +2,6 @@
 	<property file="build.properties" />
 	<property name="src" value="${basedir}/src" />
 	<property name="bin" value="${basedir}/bin" />
-    <property name="lib" value="${basedir}/lib" />
 	<property name="javadoc.dir" value="${basedir}/doc/javadoc" />
 	<property name="rex_bin" value="${bin}/edu/udel/cis/cisc475/rex" />
 	<property name="rex_src" value="${src}/edu/udel/cis/cisc475/rex" />
@@ -10,12 +9,15 @@
 	<property name="jar-path" value="${basedir}/${jar-name}" />
 	<property name="main-class" value="edu.udel.cis.cisc475.rex.main.Rex" />
 	<property name="64bit" value="-d64" />
-
 	<!-- Junit: automated unit tester Properties  -->
 	<property name="test.bin.dir" location="${basedir}/bin-test" />
 	<property name="junit.dir" location="${basedir}/junit" />
 	<property name="junit.data.dir" location="${junit.dir}/data" />
 	<property name="junit.reports.dir" location="${junit.dir}/reports" />
+	
+	<condition property="runtime.check">
+		<available file="${antlr3.runtime}"/>
+	</condition>
 
 	<!-- Cobertura: test coverage analyzer Properties -->
 
@@ -109,7 +111,13 @@
 		</javac>
 	</target>
 
-	<target name="jar" depends="compile" description="Jar all class files into a single file.">
+
+	<target name="dependencycheck" unless="runtime.check">
+		<echo message="ANTLR runtime is unavailable, build will fail"/>
+	</target>
+
+	
+	<target name="jar" depends="compile,dependencycheck" description="Jar all class files into a single file."  if="runtime.check">
  		<jar destfile="${jar-path}">
 			<zipgroupfileset file="${antlr3.runtime}" />
 			<fileset dir="${bin}" />
@@ -120,6 +128,8 @@
     			</manifest>
   		</jar>
 	</target>
+
+
 
 	<target name="clean" description="Delete all generated files.">
 		<delete dir="${bin}" />
