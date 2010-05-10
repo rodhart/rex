@@ -961,7 +961,7 @@ public class UEFParser implements UEFParserIF
 			if (previousChar == PENULTIMATE_CHAR && currentChar == FINAL_CHAR)
 			{
 				latexFailed = true;
-				//p.destroy(); // kill process.  Does not seem necessary
+				p.destroy(); // kill process.  Does not seem necessary
 				break;
 			}
 			pdflatexMessage.append(currentChar);
