@@ -43,7 +43,8 @@ public class Rex {
 	public static void main(String[] args){
 		int retVal;
 		retVal = process(args);
-		switch(retVal){
+		switch(retVal){	
+			case -2: break;
 			case -1: break;
 			case 1: System.err.println("There was an error in generating the exams!");break;
 			case 2: System.err.println("File Not Found Error!");break;
@@ -83,14 +84,28 @@ public class Rex {
 			 * Test for -n option and set numExams
 			 */
 			if (numExams == 1 && args[i].equals("-n")) {
+				try{
 				numExams = Integer.parseInt(args[i + 1]);
+				}
+				catch(Exception e){
+					System.err.println("A valid integer must follow -n!");
+					printUsage();
+					return -2;
+				}
 				i += 2;
 			}
 			/*
 			 * Test for -seed option and set seed
 			 */
 			else if (args[i].equals("-seed")) {
+				try{
 				seed = Long.parseLong(args[i + 1]);
+				}
+				catch(Exception e){
+					System.err.println("A valid integer must follow -seed!");
+					printUsage();
+					return -2;
+				}
 				i += 2;
 			}
 			/*
@@ -114,9 +129,15 @@ public class Rex {
 		}
 
 		uef = new File(args[numArgs - 2]);
-
+		if(!uef.canRead()){
+			System.err.println("Could not read from the UEF file.");
+			return 2;
+		}
 		ecf = new File(args[numArgs - 1]);
-
+		if( !ecf.canRead()){
+			System.err.println("Could not read from the ECF file.");
+			return 2;
+		}
 		/*
 		 * Create an EcfParserFactory Get a new parser Parse the ECF to get
 		 * theConfig
@@ -198,8 +219,8 @@ public class Rex {
 			/*
 			 * create the File
 			 */
-			theLatexFiles[i] = new File("exam_" + (i+1)+"_"+ fileStamp + ".tex");
-			theKeyFiles[i] = new File("key_" + (i+1)+"_"+ fileStamp + ".txt");
+			theLatexFiles[i] = new File(fileStamp + "_" + "exam_" + (i+1) +".tex");
+			theKeyFiles[i] = new File(fileStamp + "_" + "key_" + (i+1)+ ".txt");
 			try {
 				/*
 				 * create the exam(i).tex file on the file system
@@ -320,12 +341,12 @@ public class Rex {
 
 	private static void printCompletionMessage(boolean pdf, long fileStamp) {
 		System.out.println("Rex has completed your request!");
-		System.out.println("The exam_(n)_"+fileStamp+".tex files hold your exams"
+		System.out.println("The "+fileStamp+"_exam_(n).tex files hold your exams"
 				+ " in latex format.");
-		System.out.println("The key_(n)_"+fileStamp+".txt files hold your answer keys"
+		System.out.println("The "+fileStamp+"_key_(n).txt files hold your answer keys"
 				+ " in plain text format.");
 		if (pdf)
-			System.out.println("The exam_(n)_"+fileStamp+".pdf files hold your exams"
+			System.out.println("The "+fileStamp+"_exam_(n).pdf files hold your exams"
 					+ " in PDF format.");
 	}
 }
