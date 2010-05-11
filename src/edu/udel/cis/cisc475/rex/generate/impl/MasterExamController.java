@@ -50,6 +50,11 @@ public class MasterExamController
 		for (int i = 0; i < allElements.length; i++)
 			this.identifiers.put(allElements[i], new Integer(i));
 	}
+	
+	public ExamIF getMaster()
+	{
+		return this.master;
+	}
 
 	public HashMap getIdentifiers()
 	{

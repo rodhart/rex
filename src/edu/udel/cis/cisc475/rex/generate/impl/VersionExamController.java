@@ -10,6 +10,7 @@ import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
+import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
@@ -378,6 +379,7 @@ public class VersionExamController
 		Integer problemIdentifier;
 		Integer primaryFigureIdentifier;
 		Integer secondaryFigureIdentifier;
+		Integer blockFigureIdentifier;
 		
 		Collection<TopicContainer> myTCs = new ArrayList<TopicContainer>();
 		TopicContainer theTC;
@@ -405,7 +407,22 @@ public class VersionExamController
 				myFCs.addAll(theBC.getFCs().values());
 				
 				if (theBC.getBlock() != null)
+				{
 					versionExam.addElement(theBC.getBlock());
+				
+					for (ExamElementIF theElement : this.mec.getMaster().elementsUsingElement(theBC.getBlock()))
+						if (theElement instanceof FigureIF)
+						{	
+							blockFigureIdentifier = (Integer) this.mec.getIdentifiers().get(theElement);
+						
+							if (!figureBlacklist.containsKey(blockFigureIdentifier))
+							{
+								versionExam.addElement(theElement);
+								figureBlacklist.put(blockFigureIdentifier, theElement);
+							}
+						
+						}
+				}				
 				
 				while (!myFCs.isEmpty())
 				{
