@@ -12,7 +12,7 @@ import java.io.PrintWriter;
  * The AnswerKeyWriter class outputs a formatted output of the answer key data 
  * which corresponds to an exam object.
  * 
- * There is also consideration for writing a scantron formatted file.
+ * There is also consideration for writing a Scantron formatted file.
  * 
  * @author cardona
  * @author jsong
@@ -30,7 +30,7 @@ public interface AnswerKeyWriterIF {
 	/**
 	 * Writes a scantron formatted file using the answer Key object.
 	 * 
-	 * @param file
+	 * @param file File to write Scantron output to
 	 */
 	void writeScantron(File file);
 }//end of interface 

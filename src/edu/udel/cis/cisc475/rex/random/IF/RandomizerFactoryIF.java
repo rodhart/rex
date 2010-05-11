@@ -13,7 +13,7 @@ public interface RandomizerFactoryIF {
 	/**
 	 * Method for creating a new instance of RandomizerIF.
 	 * 
-	 * @param Seed used to create the random numbers
+	 * @param seed Seed used to create the random numbers
 	 * @return A pointer to an instance of a random object chooser
 	 */ 
 	RandomizerIF newRandomizer(long seed);

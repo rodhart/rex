@@ -22,8 +22,8 @@ public class Randomizer implements RandomizerIF {
 	private Random randnum;
 
 	/**
-	 * class creates an instance of a random object chooser
-	 * when called it first creates the seed randomizer
+	 * Constructor creates an instance of a random object chooser.
+	 * When called it first creates the seed randomizer.
 	 * @param seed used to create the random numbers 
 	 */
 	public	Randomizer (long seed){
@@ -52,7 +52,7 @@ public class Randomizer implements RandomizerIF {
 
 		// If numItems == 0, return an empty array
 		if(numItems == 0){
-			Object emptyArray[] = {};
+			Object[] emptyArray = {};
 			return emptyArray;
 		}
 		
@@ -69,7 +69,7 @@ public class Randomizer implements RandomizerIF {
 
 		
 		
-		while(shuffledItems.size()!=numItems ){
+		while(shuffledItems.size() != numItems){
 			// Gets a random number in the array's range
 			index = randnum.nextInt(itemsArray.size());
 			// Adds that item to the shuffled list
