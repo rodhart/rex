@@ -20,11 +20,18 @@ import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
  */
 public class Key implements AnswerKeyIF {
 
+	//private variables
+	private String Version;
+	private String ExamName;	
+	private String OurDate;	
+	private int NumAnswers;
+	private ArrayList < Collection<String> > Answers;
+	
 	/**
-	 * constructor initializes the answer key
-	 * and sets all the initial variable
-	 * there are no answers loaded at this time
-	 * so the collection is initialized but is empty
+	 * Constructor initializes the answer key
+	 * and sets all the initial variables.
+	 * There are no answers loaded at this time
+	 * so the collection is initialized, but empty.
 	 * 
 	 * @param version describes the exam version that is set by user
 	 * @param examName describes the exam name that is set by user
@@ -41,7 +48,7 @@ public class Key implements AnswerKeyIF {
 
 
 	/**
-	 * simple getter that returns data about the answer key
+	 * Simple getter that returns the version of the answer key
 	 * @return the exam version that is set by user
 	 */
 	public String version()	{
@@ -49,7 +56,7 @@ public class Key implements AnswerKeyIF {
 	} 
 
 	/**
-	 * simple getter that returns data about the answer key
+	 * Simple getter that returns the name of the exam that the answer key goes to
 	 * @return the exam name that is set by user
 	 */
 	public String examName() {
@@ -57,7 +64,7 @@ public class Key implements AnswerKeyIF {
 	} 
 
 	/**
-	 * simple getter that returns data about the answer key
+	 * Simple getter that returns the date that the answer key was generated
 	 * @return the exam date that is set by user, may not be true date
 	 */
 	public String date() {
@@ -65,15 +72,15 @@ public class Key implements AnswerKeyIF {
 	} 
 
 	/**
-	 * simple getter that returns data about the answer key
-	 * @return the number of problems that have been inputted 
+	 * Simple getter that returns the number of problems in the answer key
+	 * @return the number of problems that have been inputed 
 	 */
 	public int numProblems() {
 		return NumAnswers;
 	} 
 
 	/**
-	 * getter that returns answer(s) given a problem index
+	 * Getter that returns answer(s) given a problem index
 	 * @param index the problem number that we want answers for
 	 * @return a collection of correct answers (maybe just one)
 	 * @throws IndexOutOfBoundsException Throws exception when index > number of answers 
@@ -88,8 +95,8 @@ public class Key implements AnswerKeyIF {
 
 	//setters
 	/**
-	 * setter that adds answer(s) 
-	 * it is assumed that the problem answers will be given in order
+	 * Setter that adds answer(s) 
+	 * It is assumed that the problem answers will be given in order
 	 * so the index is merely incremented
 	 * 
 	 * @param nextAnswer collection of answers (maybe just one) 
@@ -99,10 +106,4 @@ public class Key implements AnswerKeyIF {
 		NumAnswers ++;
 	}
 
-	//private vars
-	private String Version;
-	private String ExamName;	
-	private String OurDate;	
-	private int NumAnswers;
-	private ArrayList < Collection<String> > Answers;
 }//end of class 

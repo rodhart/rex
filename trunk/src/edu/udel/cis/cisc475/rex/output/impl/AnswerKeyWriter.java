@@ -25,11 +25,13 @@ import edu.udel.cis.cisc475.rex.output.IF.AnswerKeyWriterIF;
  */
 public class AnswerKeyWriter implements AnswerKeyWriterIF {
 
-	public static String newline = System.getProperty("line.separator");
+	//private vars
+	private static String newline = System.getProperty("line.separator");
+	private AnswerKeyIF K;
 
 	/**
 	 * 
-	 * constructor, establishes a pointer to the answer key object
+	 * Constructor that establishes a pointer to the answer key object.
 	 * 
 	 * @param K pointer to answer key object
 	 */
@@ -38,8 +40,7 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 	}//end of constructor
 
 	/**
-	 * writes the answer key
-	 * data is written to whichever printWriter is specified by the caller
+	 * Writes the answer key. Data is written to whichever printWriter is specified by the caller.
 	 * 
 	 * @param out a pointer to where the user wants the output to go
 	 */
@@ -49,19 +50,10 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 		Calendar now = Calendar.getInstance(zone);
 		Date day = new Date(now.getTimeInMillis());
 		
-		// <UEF filename>, <ECF filename>, and <integer> are placeholders for now
 		out.print("Answer Key for " + K.examName() + " version " +
 				K.version() + " generated on " + day.toString() + newline);
 		out.print("Total points: " + "<integer>" + newline);
-		/*		out.printf("Exam version :   %s\n", K.version() ); 
-		out.printf("Exam Name :      %s\n", K.examName() );
-		out.printf("Date :           %s\n", K.date() ); 
-		out.printf("\n"); 
-		out.printf("This Exam contains %d problems.\n", K.numProblems() ); 
-		out.printf("\n"); 
-		out.printf("        Answer Key\n"); 
-*/
-		for (int i = 0; i < K.numProblems(); i ++) {
+		for (int i = 0; i < K.numProblems(); i++) {
 			out.printf("%d. %s%s", i+1, K.answers(i), newline );
 			
 		}
@@ -69,15 +61,13 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 
 
 	/**
-	 * writes the answer key data to a scantron
+	 * Writes the answer key data to a Scantron
 	 * 
-	 * not implemented yet because optional
+	 * Not yet implemented
 	 * 
-	 * @param file pointer to a file
+	 * @param file File to output Scantron to
 	 */
 	public void writeScantron(File file){
 	}//end of writeScantron(File file)
 
-	//private vars
-	private AnswerKeyIF K;
 }//end of class
