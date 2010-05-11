@@ -22,16 +22,15 @@ import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
  */
 public class Source implements SourceIF {
 
-	public static String newline = System.getProperty("line.separator");
-
 	//private variables
 	private String fileName;
 	private String Text;	
-	private int startline;
-	private int startcolumn;
-	private int lastline;
-	private int lastcolumn;	
+	private int startLine;
+	private int startColumn;
+	private int lastLine;
+	private int lastColumn;	
 	private StringBuffer myText;
+	private static String newline = System.getProperty("line.separator");
 
 	/**
 	 * Basic constructor for the class, requires only a file name
@@ -40,7 +39,10 @@ public class Source implements SourceIF {
 	 */
 	public Source(String filename) {
 		//initialize private variables
-		startline = startcolumn = lastline = lastcolumn = 0;	
+		startLine = 0;
+		startColumn = 0;
+		lastLine = 0;
+		lastColumn = 0;	
 		Text = ""; 
 		fileName = filename;	
 		myText = new StringBuffer();
@@ -58,10 +60,10 @@ public class Source implements SourceIF {
 	 
 	public Source(String filename, int startLine, int startColumn,
 			int lastLine, int lastColumn) {
-		startline = startLine;
-		startcolumn = startColumn;
-		lastline = lastLine;
-		lastcolumn = lastColumn;
+		this.startLine = startLine;
+		this.startColumn = startColumn;
+		this.lastLine = lastLine;
+		this.lastColumn = lastColumn;
 		fileName = filename;
 		Text = "";
 		myText = new StringBuffer();
@@ -89,7 +91,7 @@ public class Source implements SourceIF {
 	 * @return An integer line to start on
 	 */
 	public int startLine() {
-		return startline;
+		return startLine;
 	} 
 	
 	/**
@@ -97,7 +99,7 @@ public class Source implements SourceIF {
 	 * @return An integer column to start on
 	 */
 	public int startColumn() {
-		return startcolumn;
+		return startColumn;
 	}
 	
 	/** 
@@ -105,7 +107,7 @@ public class Source implements SourceIF {
 	 * @return An integer line to end on
 	 */
 	public int lastLine() {
-		return lastline;
+		return lastLine;
 	}
 	
 	/**
@@ -113,7 +115,7 @@ public class Source implements SourceIF {
 	 * @return An integer column to end on
 	 */
 	public int lastColumn()	{
-		return lastcolumn;
+		return lastColumn;
 	} 
 
 	/** 
@@ -121,7 +123,7 @@ public class Source implements SourceIF {
 	 * @param line Line to set startLine to
 	 */
 	public void setStartLine(int line) {
-		startline=line;
+		startLine=line;
 	} 
 	
 	/** 
@@ -129,7 +131,7 @@ public class Source implements SourceIF {
 	 * @param column Column to set startColumn to
 	 */
 	public void setStartColumn(int column) {
-		startcolumn=column;
+		startColumn=column;
 	}
 	
 	/**
@@ -137,7 +139,7 @@ public class Source implements SourceIF {
 	 * @param line Line to set lastLine to
 	 */
 	public void setLastLine(int line) {
-		lastline=line;
+		lastLine=line;
 	}
 	
 	/**
@@ -145,13 +147,14 @@ public class Source implements SourceIF {
 	 * @param column Column to set lastColumn to
 	 */
 	public void setLastColumn(int column) {
-		lastcolumn=column;
+		lastColumn=column;
 	}
 
 	/**
 	 * Writes Text to the PrintWriter object
 	 * 
 	 * @param out PrintWriter object to output to
+	 * @throws IOException
 	 */
 	public void write(PrintWriter out) throws IOException {
 		// Throw an IOException if out is null
