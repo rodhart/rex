@@ -96,12 +96,14 @@ public class ExamWriter implements ExamWriterIF {
 				out.println("\\begin{problem}{" + tempProblem.topic() + "}{" + tempProblem.difficulty()+"}");
 				tempProblem.question().write(out);
 				
-				// Prints all the answers
-				out.println("\\begin{answers}");
-				for (int index = 0; index < tempProblem.answers().length; index++) {
-					tempProblem.answers()[index].source().write(out);
-				}// end of for loop
-				out.println("\\end{answers}");
+				if (tempProblem.answers() != null) {
+					// Prints all the answers
+					out.println("\\begin{answers}");
+					for (int index = 0; index < tempProblem.answers().length; index++) {
+						tempProblem.answers()[index].source().write(out);
+					}// end of for loop
+					out.println("\\end{answers}");
+				}
 				out.println("\\end{problem}");
 			}// end of if(temp instanceof Problem)
 			out.flush();
