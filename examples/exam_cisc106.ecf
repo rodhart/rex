@@ -1,0 +1,12 @@
+include 4 problems on "MatrixMatlab" with difficulty in [1,4] at 3 points;
+include 2 problems on "FunctionsCalls" with difficulty in [0,3] at 2 points;
+include 3 problems on "Logic" with difficulty in [0,3] at 2 points;
+include 3 problems on "Unix" with difficulty in [0,3] at 2 points;
+include 1 problems on "Array" with difficulty in [0,13] at 12 points;
+include 1 problems on "Tolerance" with difficulty in [0,13] at 12 points;
+include 1 problems on "ShowCallsAdd" with difficulty in [0,16] at 15 points;
+include 1 problems on "Area" with difficulty in [0,16] at 12 points;
+
+append block:GoodbyeMessage; # this block will be added at end
+
+versions are "1/21/2010", "Jan.\ 21, 2010", "21-jan-2010", "JAN.\ 21 2010";

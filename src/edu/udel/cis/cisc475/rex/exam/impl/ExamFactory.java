@@ -122,9 +122,11 @@ public class ExamFactory implements ExamFactoryIF {
 			throw new NullPointerException("The argument topic cannot be null");
 		if(question == null)   
 			throw new NullPointerException("The argument question cannot be null");
-		for(int i = 0; i < answers.length; i++)
-			if(answers[i] == null)
-			throw new NullPointerException("The argument answers cannot contain null values");
+		if (answers != null) {
+			for(int i = 0; i < answers.length; i++)
+				if(answers[i] == null)
+				throw new NullPointerException("The argument answers cannot contain null values");
+		}
 		return new Problem(topic, label, question, answers);
 	}
 }
