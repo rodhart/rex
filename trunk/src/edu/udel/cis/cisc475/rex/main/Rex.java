@@ -149,6 +149,7 @@ public class Rex {
 			theConfig = theEcfParser.parse(ecf);
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.err.println(e.getMessage());
 			return 3;
 		}
 		/*
@@ -162,6 +163,7 @@ public class Rex {
 			theMaster = theUefParser.parse(uef);
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.err.println(e.getMessage());
 			return 4;
 		}
 		/*
@@ -174,6 +176,7 @@ public class Rex {
 					theConfig);
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.err.println(e.getMessage());
 			return 1;
 
 		}
@@ -227,7 +230,7 @@ public class Rex {
 			} catch (Exception e) {
 				System.err.println("Error creating "
 						+ theLatexFiles[i].getAbsolutePath());
-				e.toString();
+				System.err.println(e.getMessage());
 				return 5;
 			}
 			/*
@@ -239,7 +242,7 @@ public class Rex {
 			} catch (Exception e) {
 				System.err.println("Error creating "
 						+ theKeyFiles[i].getAbsolutePath());
-				e.toString();
+				System.err.println(e.getMessage());
 				return 6;
 			}
 			/*
@@ -251,6 +254,7 @@ public class Rex {
 				theKeyWriters[i] = new PrintWriter(new FileOutputStream(
 						theKeyFiles[i]));
 			} catch (FileNotFoundException e) {
+				System.err.println(e.getMessage());
 				e.printStackTrace();
 			}
 
@@ -271,6 +275,8 @@ public class Rex {
 			catch(IOException e){
 				System.err.println("IOException while writing"+
 						" the exam files.");
+				System.err.println(e.getMessage());
+				return -1;
 			}
 			theAnswerKeyWriters[i].write(theKeyWriters[i]);
 			/*
@@ -313,6 +319,7 @@ public class Rex {
 			      brCleanUp.close();
 				} catch (IOException e) {
 					e.printStackTrace();
+					System.err.println(e.getMessage());
 					return 7;
 				}
 			}
