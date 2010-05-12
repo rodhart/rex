@@ -1,0 +1,525 @@
+% Sample exam derived from Dr. Harvy sample exam given for CISC106 class
+
+%include exam documentclass
+\documentclass[master]{exam}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{comment}
+\usepackage{graphicx}
+
+\begin{document}
+
+%print header
+\examheader{CISC 106}{CISC 106 Fall 2009}{Developed: 2010}
+
+
+\vspace{14pt}
+
+
+\section*{General Instructions} 
+
+\begin{itemize}
+%\footnotesize
+\item On the brown multiple choice form, put your UdelNetID 
+  where it says ``last name''; put as much as will fit of your last
+  name into the space marked ``first name''.
+\item Only write your name on the \emph{first} page of this document, in the
+  blank provided.
+\item Turn off any noise making device, especially \textbf{CELL
+  PHONES}. You may lose up to one letter grade if your device disturbs
+  the peace of the exam.
+
+\item You have 50 minutes. {\bf Pace yourself,}
+and pay attention to the point values.  
+
+\item The exam is \% multiple choice, and \% programming and short
+answer.
+ 
+\item \textbf{Do not add features} that are not required by the problem. For
+example, if the instructions don't say anything about user input, then
+your program should not take user input. If you aren't sure, raise
+your hand so that you can \emph{quietly} ask the professor.
+
+\item Do problems you are confident about first. If you finish the
+problems you know, write what you do know about other problems to gain
+partial credit; but erroneous information may detract from that
+credit or irritate the grader, so don't make stuff up. 
+
+\item Read {\em all} the directions {\em carefully} on each problem.
+
+\item Often writing a fast, rough version of a program in English or
+pseudocode will make your coding faster and more accurate. It also
+enables me to give partial credit in some circumstances.
+
+\item You may assume that input will not produce errors for the
+code described, unless the questions say otherwise. 
+ 
+\item Do not do unnecessary testing. For example, testing for both
+\verb+x < 0+ and \verb+x >= 0+ instead of using one test and then
+\verb+else+ would be considered unnecessary
+testing.
+
+\item Have fun!
+
+\end{itemize}
+
+\newpage
+
+
+\begin{problem}{MatrixMatlab}{3}
+    Suppose you have a matrix x = \footnotesize
+    $\begin{array}{cccc}1 & 2 & 3 & 4\\3 & 4 & 5 & 6\end{array}$
+    \normalsize. Which of the following will evaluate to \footnotesize
+    $\begin{array}{c}3 \\ 5\end{array}$\normalsize?
+    
+  \begin{answers}
+    \answer x(3)
+    \answer x(3,:)
+    \answer x[:,3]
+    \answer[correct] x(:,3)
+    \answer[fixed] none of these
+  \end{answers}
+\end{problem}
+
+
+\begin{problem}{MatrixMatlab}{3}
+    Which of the following will extract \texttt{[5 6 7]} from the matrix m
+      shown?\\
+    \texttt{>> m = [3 4 5 6 7 8];
+    }
+    
+    \begin{answers}
+        \answer[correct] m(3:5)
+        \answer m(5:end-1)
+        \answer m(end-1:5)
+        \answer m[5, 7]
+        \answer[fixed] none of these 
+    \end{answers}
+\end{problem}
+
+
+\begin{problem}{MatrixMatlab}{3}
+    Suppose you have a matrix x = \footnotesize
+    $\begin{array}{cccccc}1 & 2 & 3 & 4 & 5 & 6 \end{array}$
+    \normalsize. Which of the following will evaluate to \footnotesize
+    $\begin{array}{cccccc}1 & 2 & 3 & 4 & 5 \end{array}$\normalsize?
+    
+    \begin{answers}
+        \answer x(1,end)
+        \answer x(end-1)
+        \answer x(1,end-1)
+        \answer x(1,1-end)
+        \answer[correct, fixed] none of these 
+    \end{answers}
+\end{problem}
+
+\begin{problem}{MatrixMatlab}{3}
+    Suppose you have a matrix x = \footnotesize
+    $\begin{array}{ccc}1 & 2 & 3 \\4 & 5 & 6 \end{array}$
+    \normalsize. Which of the following will evaluate to 6?
+    
+    \begin{answers}
+        \answer x(3,2)
+        \answer x(1,2)
+        \answer x[2,2]
+        \answer x[2,3]
+        \answer[correct,fixed] none of these 
+    \end{answers}
+\end{problem}
+
+\begin{problem}{FunctionsCalls}{2}
+    Consider the function f:
+    \begin{verbatim}
+    function answer = f(a)
+       answer = a+2;
+    end
+    \end{verbatim}
+    What will be in x after the command:
+    \begin{verbatim}>> x = f(4);
+    \end{verbatim}
+    %:type function call
+    
+    \begin{answers}
+        \answer[correct] 6
+        \answer 4
+        \answer f(4)
+        \answer error
+        \answer[fixed] none of these 
+    \end{answers}
+\end{problem}
+
+\begin{problem}{FunctionsCalls}{2}
+    Consider the function f:
+    \begin{verbatim}
+    function [] = f(x)
+       output = 7;
+    end
+    \end{verbatim}
+    What will be in x after the command:
+    \begin{verbatim}>> x = f(3);\end{verbatim}
+    %:type function call
+    
+    \begin{answers}
+        \answer 7
+        \answer f(7)
+        \answer ans
+        \answer[correct] error
+        \answer[fixed] none of these 
+    \end{answers}
+\end{problem}
+
+\begin{problem}{Logic}{2}
+    Which expression tests whether
+    variable x is between (but not the same as) the values 5 and 10.
+    
+    \begin{answers}
+        \answer \verb+5 < x < 10+
+        \answer \verb+5 <= x <= 10+
+        \answer \verb+5 < x & x > 10 +
+        \answer[correct] \verb+x < 10 & 5 < x+
+        \answer[fixed] none of these 
+    \end{answers}
+\end{problem}
+
+\begin{problem}{Logic}{2}
+    Which of the following is a MATLAB expression for testing ``x is
+    outside the range from 3 to 5'' (the range includes 3 and 5)? 
+    
+    \begin{answers}
+        \answer \verb@3 > x & x > 5@
+        \answer \verb@3 > x | x < 5@
+        \answer[correct] \verb@3 > x | x > 5@
+        \answer[fixed] cannot be expressed in MATLAB
+        \answer[fixed] none of the above 
+    \end{answers}
+\end{problem}
+
+\begin{problem}{Logic}{2}
+    In MATLAB the value 1 is true, and true is:
+    
+    \begin{answers}
+        \answer there are no boolean types in MATLAB
+        \answer[correct] any value that isn't zero
+        \answer \verb@3 > x | x > 5@
+        \answer 1
+        \answer 0
+        \answer[fixed] none of the above 
+    \end{answers}
+\end{problem}
+
+\begin{problem}{Unix}{2}
+    Suppose you have two directories in your home directory, Lab01 and
+    Lab02. You are currently in Lab01. What command would move the file
+    spam.m from Lab01 into your home directory?
+    
+    \begin{answers}
+        \answer \verb+cp spam.m home+
+        \answer[correct] \verb+mv spam.m ..+
+        \answer \verb+mv Lab01/spam.m ~/+
+        \answer \verb+cp spam.m Lab01/..+
+        \answer[fixed] none of these  
+    \end{answers}
+\end{problem}
+
+\begin{problem}{Unix}{2}
+    Suppose you have two directories in your home directory, Lab01 and
+    Lab02. You are currently in Lab01. What command would make a directory
+    Lab03 in your home directory?
+    
+    \begin{answers}
+        \answer \verb+mkdir ../Lab03+
+        \answer \verb+mkdir ~/Lab03+
+        \answer[correct] both a and b
+        \answer have to switch to home directory first
+        \answer[fixed] none of these  
+    \end{answers}
+\end{problem}
+
+\begin{problem}{Unix}{2}
+    Suppose you have two directories in your home directory, Lab01 and
+    Lab02. You are currently in Lab01. What command would copy the file
+    spam.m from Lab01 into Lab02?
+    
+    \begin{answers}
+        \answer \verb+cp spam.m home/Lab02+
+        \answer \verb+cp Lab01/spam.m ~/Lab02+
+        \answer \verb+mv Lab01/spam.m ~/Lab02+
+        \answer \verb+cp spam.m Lab02/..+
+        \answer[correct, fixed] none of these
+    \end{answers}
+\end{problem}
+
+\begin{problem}{Array}{12}
+    Complete this function. Use the code framework provided and fill in
+    the blanks. Do not change the code provided. 
+
+    \begin{verbatim}
+    %Description: Replaces all numbers less than zero in the values
+    %vector with the value zero.
+    %Example:  replaceLessThanZero([-1 5 -8 4]) -> [0 5 0 4]
+    function result = replaceLessThanZero(values)
+      % copies all values to results
+      result = values;
+
+      for ______________________________________
+
+        if (_____________________________________)
+
+          ____________________________________
+
+        end
+
+    end
+    \end{verbatim}
+\end{problem}
+
+\begin{problem}{Array}{12}
+    Complete this function. Use the code framework provided and fill in
+    the blanks. Do not change the code provided. You may \textbf{not} use the
+    built-in MATLAB functions mean or sum.
+
+    \begin{verbatim}
+    %Description: Calculates the average of all numbers in the values
+    % vector. Average is the sum divided by the number of values.
+    %Example:  average([1 4 6 10]) -> 10.5
+    function result = average(values)
+      
+      sum =  ____________________________
+     
+      for ________________________________________
+       
+        __________________________________________
+       
+      end
+     
+      result = _________________________________
+             
+    \end{verbatim}
+\end{problem}
+
+\begin{problem}{Tolerance}{10}
+    Complete this test function. Use the code framework provided and fill
+    in the blanks. Do not change the code provided. You \textbf{should}
+    use the built-in MATLAB function \textbf{abs} to write an arithmetic
+    expression that calculates whether the result of
+    calling \textbf{circleArea} is within the tolerance. Your code should
+    correspond to the two examples given. 
+
+    \begin{verbatim}
+    %Description: 
+    %  Tests the circleArea function that takes a radius and returns an area.
+    %Example (circleArea):
+    %  circleArea(3) -> 28.2743
+    %  circleArea(4) -> 50.2655
+    function [] = testCircleArea()
+      tolerance = 0.01;
+
+      if (___________________________________________________)
+        disp('error calculating circleArea(3)');
+
+      elseif (__________________________________________________)
+        disp('error calculating circleArea(4)');
+      else
+        disp('All tests executed successfully.');
+      end         
+    \end{verbatim}
+\end{problem}
+
+
+\begin{block}{careful}
+    Read carefully, this is \textbf{not} identical to a problem on the
+    review exam.
+\end{block}
+
+\begin{problem}[require=careful]{ShowCallsAdd}{15}
+    This problem is about tracing function calls. In the blanks provided,
+    \textbf{show what is printed by the function} after the call shown in the
+    command line. The first printed line is shown to get you started. (Do not count spaces for this problem, but do pay attention to newlines.) You may not need all of the blanks.
+    \begin{verbatim}
+    function result = f(a, b)
+      
+      fprintf('%f %f \n', a, b);
+      
+      if (a > b)
+        result = a;
+      else\end{verbatim}
+    \ \ \ \ result = f(a+2, b-1);
+    \begin{verbatim}
+      end
+    \end{verbatim}
+
+    at the command line:
+
+    \texttt{>> f(1, 10)\\
+    \\%
+    \ \ 1 \ 10\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <- This is the first line printed;}
+    \begin{verbatim}
+                         Show the rest in the blanks provided.
+    _________
+
+    _________
+
+    _________
+
+    _________
+
+    _________
+
+    _________
+
+    _________
+
+    _________
+
+    _________
+    \end{verbatim}
+\end{problem}
+
+\begin{problem}[require=careful]{ShowCallsAdd}{15}
+    This problem is about tracing function calls. In the blanks provided,
+    \textbf{show what is printed by the function} after the call shown in the
+    command line. The first printed line is shown to get you started. (Do not count spaces for this problem, but do pay attention to newlines.) You may not need all of the blanks.
+    \begin{verbatim}
+    function result = f(a, b)
+      
+      fprintf('%f %f \n', a, b);
+      
+      if (a > b)
+        result = a;
+      else\end{verbatim}
+    \ \ \ \ result = f(a+1, b-2);
+    \begin{verbatim}
+      end
+    \end{verbatim}
+
+    at the command line:
+
+    \texttt{>> f(2, 11)\\
+    \\%
+    \ \ 2 \ 11\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <- This is the first line printed;}
+    \begin{verbatim}
+                         Show the rest in the blanks provided.
+    _________
+
+    _________
+
+    _________
+
+    _________
+
+    _________
+
+    _________
+
+    _________
+
+    _________
+
+    _________
+    \end{verbatim}
+\end{problem}
+
+\begin{problem}[require=careful]{ShowCallsAdd}{15}
+
+    This problem is about tracing function calls. In the blanks provided,
+    \textbf{show what is printed by the function} after the call shown in the
+    command line. The first printed line is shown to get you started. (Do not count spaces for this problem, but do pay attention to newlines.) You may not need all of the blanks.
+    \begin{verbatim}
+    function result = f(a, b)
+      
+      fprintf('%f %f \n', a, b);
+      
+      if (a > b)
+        result = a;
+      else\end{verbatim}
+    \ \ \ \ result = f(a+2, b-2);
+    \begin{verbatim}
+      end
+    \end{verbatim}
+
+    at the command line:
+
+    \texttt{>> f(0, 12)\\
+    \\%
+    \ \ 0 \ 12\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <- This is the first line printed;}
+    \begin{verbatim}
+                         Show the rest in the blanks provided.
+    _________
+
+    _________
+
+    _________
+
+    _________
+
+    _________
+
+    _________
+
+    _________
+
+    _________
+
+    _________
+    \end{verbatim}
+\end{problem}
+
+
+\begin{problem}{Area}{12}
+    \label{ca} Write a function that
+    calculates and returns the area of
+    a square,
+    called calcSquareArea. You
+    are given the formula for the area as side times
+    side. You may not
+    need all the lines provided.
+
+    \%Description:\\
+    \%\ \ Calculates the area of a square
+    \begin{verbatim}function _________________________________________________________
+
+      _________________________________________________________
+
+      _________________________________________________________
+    \end{verbatim}
+\end{problem}
+
+
+\begin{problem}{Area}{12}
+    \label{ca} Write a function that
+    calculates and returns the area of
+    a rectangle,
+    called calcRectangleArea. You
+    are given the formula for the area as height times width. You may not
+    need all the lines provided.
+
+   
+    \%Description:\\
+    \%\ \ Calculates the area of a rectangle
+    \begin{verbatim}function _________________________________________________________
+
+      _________________________________________________________
+
+      _________________________________________________________
+    \end{verbatim}
+\end{problem}
+
+
+\begin{problem}{Area}{12}
+    \label{ca} Write a function that
+    calculates and returns the area of
+    a triangle,
+    called calcTriangleArea. You
+    are given the formula for the area as 0.5 times base times height. You may not
+    need all the lines provided.
+
+    \%Description:\\
+    \%\ \ Calculates the area of a triangle
+    \begin{verbatim}function _________________________________________________________
+
+      _________________________________________________________
+
+      _________________________________________________________
+    \end{verbatim}
+\end{problem}
+\end{document}
