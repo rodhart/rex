@@ -148,7 +148,7 @@ public class Rex {
 			theEcfParser.setSeed(seed);
 			theConfig = theEcfParser.parse(ecf);
 		} catch (Exception e) {
-			e.printStackTrace();
+		
 			System.err.println(e.getMessage());
 			return 3;
 		}
@@ -162,7 +162,7 @@ public class Rex {
 		try {
 			theMaster = theUefParser.parse(uef);
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			System.err.println(e.getMessage());
 			return 4;
 		}
@@ -175,7 +175,7 @@ public class Rex {
 			theGenerator = theGeneratorFactory.newGenerator(theMaster,
 					theConfig);
 		} catch (Exception e) {
-			e.printStackTrace();
+		
 			System.err.println(e.getMessage());
 			return 1;
 
@@ -255,7 +255,7 @@ public class Rex {
 						theKeyFiles[i]));
 			} catch (FileNotFoundException e) {
 				System.err.println(e.getMessage());
-				e.printStackTrace();
+			
 			}
 
 			/*
@@ -318,7 +318,7 @@ public class Rex {
 			      }
 			      brCleanUp.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					
 					System.err.println(e.getMessage());
 					return 7;
 				}
