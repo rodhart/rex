@@ -124,7 +124,6 @@
    			<manifest>
      				<attribute name="Built-By" value="${user.name}"/>
               			<attribute name="Main-Class" value="${main-class}"/>
-				<!--<attribute name="Class-Path" value="antlr-3.2.jar"/>-->
     			</manifest>
   		</jar>
 	</target>
@@ -140,6 +139,16 @@
 		<delete dir="${antlr.ecf.gen.dir}" />
 		<delete file="${manifest-file}"/>
 		
+	</target>
+
+	<target name="package" description="Create a zip file with the .jar, examples, and document class">
+		<zip destfile="REX.zip">
+			<fileset dir="." includes="${jarname}"/>
+			<fileset dir="examples" includes="exam.tex"/>
+			<fileset dir="examples" includes="exam.ecf"/>
+			<fileset dir="usersmanual" includes="UsersManual.pdf"/>
+			<fileset dir="tex" includes="exam.cls"/>
+		</zip>
 	</target>
 
 
