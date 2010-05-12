@@ -2,9 +2,10 @@
 
 # Perl script to do automatic testing and coverage analysis of REX project
 
-$home = "/usa/siegel/tmp";
+$home = "/tmp";
 $ant = "/usr/local/ant/bin/ant";
 $svn = "/usr/local/bin/svn";
+$svndigest = "/usr/local/bin/svndigest";
 
 $out = "$home/build.out";
 $err = "$home/build.err";
@@ -21,6 +22,12 @@ if (-e $maindir) {
 $cmd = "$svn checkout file:///home/www/repos/cisc475/trunk $maindir";
 system("$cmd >>$out 2>$err");
 chdir("$home/$maindir") || die "Could not chdir $home/maindir";
+
+$cmd = "$svndigest";
+system("$cmd >>$out 2>$err");
+system("rm -rf /home/www/cisc475/htdocs/rex-digest");
+system("cp -r rex-digest /home/www/cisc475/htdocs/");
+
 system("cp build-configs/build.properties-cisc475 build.properties");
 
 system("$ant test >>$out 2>>$err");
