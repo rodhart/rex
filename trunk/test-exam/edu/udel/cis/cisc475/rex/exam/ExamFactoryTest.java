@@ -241,9 +241,8 @@ public class ExamFactoryTest {
 		}
 		try{
 			examFactory.newProblem("test Problem Topic", "test Label", problemSource, null);
-			fail("Expected Exceptions not Thrown.");
 		} catch (Exception e) {
-			
+			fail("Not Expected Exception is Thrown.");
 		}
 	}
 	
