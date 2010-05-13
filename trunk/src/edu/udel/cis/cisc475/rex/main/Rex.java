@@ -1,6 +1,7 @@
 package edu.udel.cis.cisc475.rex.main;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.Date;
 
@@ -285,12 +287,14 @@ public class Rex {
 			theLatexWriters[i].close();
 			theKeyWriters[i].close();
 		}
+		int exitVal = 0;
 		if (pdfOpt) {
 			// call pdflatex on each exam
 			String line;
 			OutputStream stdin = null;
 			InputStream stdout = null;
 			InputStream stderr = null;
+			
 			for(int j = 0; j < numExams; j++){
 				try {
 				Process p = null;
@@ -302,14 +306,25 @@ public class Rex {
 				stdin = p.getOutputStream();
 				stdout = p.getInputStream();
 				stderr = p.getErrorStream();
+				
 				// clean up if any output in stdout
 			      BufferedReader brCleanUp = 
 			        new BufferedReader (new InputStreamReader (stdout));
+			   
 			      while ((line = brCleanUp.readLine ()) != null) {
-			        //System.out.println ("[Stdout] " + line);
+			    	if(line.contains("! LaTeX Error")){
+			    		System.out.println ("pdflatex found error: \"" + line + "\"");
+			    		p.destroy();
+			    		exitVal = -1;
+			    		brCleanUp.close();
+			    		break;
+			    	}
 			      }
 			      brCleanUp.close();
-			      
+			     
+			      if(exitVal == -1){
+			    	  break;
+			      }
 			      // clean up if any output in stderr
 			      brCleanUp = 
 			        new BufferedReader (new InputStreamReader (stderr));
@@ -317,15 +332,21 @@ public class Rex {
 			        //System.out.println ("[Stderr] " + line);
 			      }
 			      brCleanUp.close();
+			      
 				} catch (IOException e) {
-					
+					e.printStackTrace();
 					System.err.println(e.getMessage());
 					return 7;
 				}
 			}
 
 		}
-		printCompletionMessage(pdfOpt, fileStamp);
+		if(exitVal == -1) {
+			printCompletionMessage(false, fileStamp);
+		}
+		else{
+			printCompletionMessage(pdfOpt, fileStamp);
+		}
 		return 0;
 	}
 
