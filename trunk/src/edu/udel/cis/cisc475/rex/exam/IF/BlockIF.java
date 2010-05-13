@@ -1,24 +1,23 @@
 package edu.udel.cis.cisc475.rex.exam.IF;
 
-import edu.udel.cis.cisc475.rex.source.IF.*;
+import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /**
  * The block interface!
+ * 
  * @author fxfitz
- *
+ * 
  */
 public interface BlockIF extends ExamElementIF {
-	
+
 	/**
-	 * @return topic
+	 * The topic of the block as inferred by what problems it is related to
 	 */
 	String topic();
-	
+
 	/**
-	 * Reference to where in the UEF the particular block
-	 * is referenced.
-	 * from \\\begin\{figure\} to \\\end\{figure\}
-	 * @return 
+	 * 
+	 * Reference to where in the UEF the particular block is referenced.
 	 */
-	SourceIF source();  /* from \\\begin\{block\} to \\\end\{block\} */
+	SourceIF source();
 }

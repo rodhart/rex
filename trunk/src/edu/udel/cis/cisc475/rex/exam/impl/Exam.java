@@ -31,9 +31,16 @@ import java.util.LinkedHashSet;
  */
 public class Exam implements ExamIF {
 
-	
+	/**
+	 * True if master. The "master" version of the class implementing ExamIF
+	 * contains all of the data held in the UEF, and non-master exams are a
+	 * subset of this.
+	 */
 	private boolean isMaster;
-	
+
+	/**
+	 * Version string, "master" if master
+	 */
 	private String versionID;
 
 	/**
@@ -58,14 +65,14 @@ public class Exam implements ExamIF {
 	private List<Integer> problems;
 
 	/**
-	 * TODO: What is the difference between the preamble and front matter?
+	 * The preamble.
 	 */
 	private SourceIF preamble;
 
 	/**
 	 * The first page(s) of an exam
 	 */
-	private SourceIF frontmatter;
+	private SourceIF frontMatter;
 
 	/**
 	 * The last page(s) of an exam
@@ -83,26 +90,24 @@ public class Exam implements ExamIF {
 	private Set<String> labels;
 
 	/**
-	 *  Set representing the uses relationship between elements.
-	 *  uses[user] = { the set of usees}
-	 *  If Element A uses soley Element B, then
-	 *  uses[A] = {B}
+	 * Set representing the uses relationship between elements. uses[user] = {
+	 * the set of usees} If Element A uses soley Element B, then uses[A] = {B}
 	 */
 	private Map<ExamElementIF, HashSet<ExamElementIF>> uses;
-	
+
 	private Map<ExamElementIF, HashSet<ExamElementIF>> usedBy;
-	
+
 	/**
 	 * Mapping from label (String) to the Exam element that uses this label
 	 */
 	private Map<String, ExamElementIF> labelToElement;
-	
+
 	/**
 	 * Mapping from topic (String) to all Exam elements described by this topic.
 	 * Only Blocks and Problems have topics.
 	 */
 	private Map<String, HashSet<ExamElementIF>> topicToElements;
-	
+
 	/**
 	 * Mapping from topic (String) to problems that are described by this topic.
 	 */
@@ -110,13 +115,14 @@ public class Exam implements ExamIF {
 
 	/**
 	 * Deprecated, do not use
+	 * 
 	 * @param isMaster
 	 * @deprecated
 	 */
 	public Exam(boolean isMaster) {
 		this(isMaster, "null");
 	}
-	
+
 	/**
 	 * Default constructor
 	 */
@@ -151,10 +157,10 @@ public class Exam implements ExamIF {
 				figures.add(key);
 			} else if (element instanceof BlockIF) {
 				blocks.add(key);
-				if(topicToElements.containsKey(((BlockIF) element).topic())) {
-					topicToElements.get(((BlockIF) element).topic()).add(element);
-				}
-				else {
+				if (topicToElements.containsKey(((BlockIF) element).topic())) {
+					topicToElements.get(((BlockIF) element).topic()).add(
+							element);
+				} else {
 					HashSet<ExamElementIF> newSet = new LinkedHashSet<ExamElementIF>();
 					newSet.add(element);
 					topicToElements.put(((BlockIF) element).topic(), newSet);
@@ -162,32 +168,32 @@ public class Exam implements ExamIF {
 			} else if (element instanceof ProblemIF) {
 				problems.add(key);
 				topics.add(((ProblemIF) element).topic());
-				if(topicToProblems.containsKey(((ProblemIF) element).topic())) {
-					topicToProblems.get(((ProblemIF) element).topic()).add((ProblemIF) element);
-				}
-				else {
+				if (topicToProblems.containsKey(((ProblemIF) element).topic())) {
+					topicToProblems.get(((ProblemIF) element).topic()).add(
+							(ProblemIF) element);
+				} else {
 					HashSet<ProblemIF> newSet = new LinkedHashSet<ProblemIF>();
 					newSet.add((ProblemIF) element);
 					topicToProblems.put(((ProblemIF) element).topic(), newSet);
 				}
-				if(topicToElements.containsKey(((ProblemIF) element).topic())) {
-					topicToElements.get(((ProblemIF) element).topic()).add(element);
-				}
-				else {
+				if (topicToElements.containsKey(((ProblemIF) element).topic())) {
+					topicToElements.get(((ProblemIF) element).topic()).add(
+							element);
+				} else {
 					HashSet<ExamElementIF> newSet = new LinkedHashSet<ExamElementIF>();
 					newSet.add(element);
 					topicToElements.put(((ProblemIF) element).topic(), newSet);
 				}
-		
-			} 
-		
+
+			}
+
 			// put into linked hash set
-			elements.put(key,element);
+			elements.put(key, element);
 			// also need to make some kind of record of whether it is
 			// a problem, a block, or a figure.
 			labels.add(element.label());
 			labelToElement.put(element.label(), element);
-			
+
 			// Allocate a new HashSet for the uses map
 			HashSet<ExamElementIF> useesOfElement = new LinkedHashSet<ExamElementIF>();
 			HashSet<ExamElementIF> usersOfElement = new LinkedHashSet<ExamElementIF>();
@@ -197,15 +203,15 @@ public class Exam implements ExamIF {
 		} else {
 			return -1;
 		}
-		
+
 	}
 
 	/**
 	 * Allow one element to use another element. For example a problem can
 	 * depend on a figure, so the problem will be the user and the figure will
 	 * be the usee. Multiple users can be associated with a usee. Both elements
-	 * should be added to the exam BEFORE this method is called using the addElementIF
-	 * method
+	 * should be added to the exam BEFORE this method is called using the
+	 * addElementIF method
 	 * 
 	 * 
 	 * @param user
@@ -213,28 +219,31 @@ public class Exam implements ExamIF {
 	 * @param usee
 	 *            - singular element others are connected with
 	 */
-	public void declareUse(ExamElementIF user, ExamElementIF usee) throws RexException{
+	public void declareUse(ExamElementIF user, ExamElementIF usee)
+			throws RexException {
 		if (elements.containsValue(user) && elements.containsValue(usee)) {
 			uses.get(user).add(usee);
 			usedBy.get(usee).add(user);
-			if(user instanceof ProblemIF && usee instanceof FigureIF) {
+			if (user instanceof ProblemIF && usee instanceof FigureIF) {
 				((Problem) user).addReferencedFigure((FigureIF) usee);
 			}
-			if(user instanceof ProblemIF && usee instanceof BlockIF){
+			if (user instanceof ProblemIF && usee instanceof BlockIF) {
 				((Problem) user).setRequiredBlock((BlockIF) usee);
-				
-				if ( ((BlockIF) usee).topic() == null || 
-						((BlockIF) usee).topic().equals(((ProblemIF) user).topic())){
-					((Block) usee).setTopic( ((ProblemIF) user).topic());
+
+				if (((BlockIF) usee).topic() == null
+						|| ((BlockIF) usee).topic().equals(
+								((ProblemIF) user).topic())) {
+					((Block) usee).setTopic(((ProblemIF) user).topic());
 				} else {
-					throw new RexException("Cannot change a blocks topic once it is set!");
+					throw new RexException(
+							"Cannot change a blocks topic once it is set!");
 				}
 			}
 		} else {
-			throw new RexException("error calling exam.DeclareUse(user, usee), must add elements to the exam before declaring a relationship");
+			throw new RexException(
+					"error calling exam.DeclareUse(user, usee), must add elements to the exam before declaring a relationship");
 		}
-		
-		
+
 	}
 
 	/**
@@ -250,8 +259,9 @@ public class Exam implements ExamIF {
 	}
 
 	/**
-	 * Returns the element with a matching label to the argument, there should be only one element
-	 * with the given label specified in the UEF but this is not guaranteed.
+	 * Returns the element with a matching label to the argument, there should
+	 * be only one element with the given label specified in the UEF but this is
+	 * not guaranteed.
 	 */
 	public ExamElementIF elementWithLabel(String label) {
 		return labelToElement.get(label);
@@ -279,7 +289,7 @@ public class Exam implements ExamIF {
 	 */
 	public Collection<ExamElementIF> elementsUsingElement(ExamElementIF element) {
 		Set<ExamElementIF> emptySet = new LinkedHashSet<ExamElementIF>();
-		if (usedBy.get(element)==null) {
+		if (usedBy.get(element) == null) {
 			return emptySet;
 		}
 		return usedBy.get(element);
@@ -287,7 +297,7 @@ public class Exam implements ExamIF {
 
 	/**
 	 * Returns all elements that have a matching topic to the argument
-	 */	
+	 */
 	public Collection<ExamElementIF> elementsWithTopic(String topic) {
 		Set<ExamElementIF> emptySet = new LinkedHashSet<ExamElementIF>();
 		if (topicToElements.get(topic) == null) {
@@ -321,7 +331,7 @@ public class Exam implements ExamIF {
 	 * @return First page intro to exam
 	 */
 	public SourceIF frontMatter() {
-		return this.frontmatter;
+		return this.frontMatter;
 	}
 
 	/**
@@ -351,7 +361,7 @@ public class Exam implements ExamIF {
 
 	/**
 	 * @return Intro to the exam as SourceIF object
-	 */	
+	 */
 	public SourceIF preamble() {
 		return this.preamble;
 	}
@@ -392,7 +402,7 @@ public class Exam implements ExamIF {
 	 * Sets the exam front matter
 	 */
 	public void setFrontMatter(SourceIF frontMatter) {
-		this.frontmatter = frontMatter;
+		this.frontMatter = frontMatter;
 	}
 
 	/**
