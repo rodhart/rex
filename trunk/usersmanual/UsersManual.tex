@@ -281,14 +281,62 @@ java -jar REX.jar [-n numExams] [-seed seed] [-pdf] UEF-file ECF-file
 \subsection{Description}
 REX will parse through the UEF and ECF files and generate the appropriate number
 of output exams, as specified in the ECF file or on the command line.
-\\
-\\
+
 \noindent Below are the options:\\
 \indent \textbf{-n numExams} will generate \textbf{numExams} different exams\\
 \indent \textbf{-seed seed} will generate the exams based on the specific \textbf{seed}\\
 \indent \textbf{-pdf} will create a PDF file from the generatex \LaTeX{} files\\
 
-\noindent \textbf{NOTE:} The PDF option requires a \LaTeX{} interpreter to be installed.
+\noindent \textbf{NOTE:} The PDF option requires a \LaTeX{} interpreter to be installed. See next section.
+
+\subsection{Using the PDF option}
+In order for the exams to be output in a pdf format the file \verb|"Exam.cls"| must
+be in the location from which the java -jar REX command is being run. If this file is not given
+and the -pdf option is used an error such as the one below will display on the command line.
+If the file is accidentally deleted copy from below
+\\
+\verb|pdflatex found error: "! LaTeX Error: Environment block undefined."|
+
+\begin{figure}[H]
+\begin{verbatim}
+%Author: Lucero Carmona Exam.cls
+\NeedsTeXFormat{LaTeX2e}
+\LoadClass{article}
+\RequirePackage{ifthen}
+\newif\ifprintanswers
+\printanswersfalse
+\DeclareOption{master}{\printanswerstrue}
+\ProcessOptions
+\newcommand{\examheader}[3]{
+\vskip .1in
+\noindent
+{\large  #1 \hfill #2 \hfill #3 \\}
+\vskip 0.05in
+\vspace{.6in}
+Name \rule{3in}{1pt} 
+Login name \rule{2in}{1pt} 
+\vspace{.4in}
+Lecture Section:   \rule{.5in}{1pt}\rule{.25in}{0pt} Lab Section:   \rule{.5in}{
+1pt}  \rule{.5in}{0pt} TA \rule{.8in}{1pt}
+\vspace{14pt}
+} 
+\newenvironment{block}[1]{}{}
+\newcounter{probnum}
+\setcounter{probnum}{1}
+\newenvironment{problem}[3][]{\begin{enumerate} \item[] \arabic{probnum}. \stepcounter{probnum} }{\end{enumerate}}
+\newenvironment{answers}{\begin{enumerate}}{\end{enumerate}}
+ \ifprintanswers %if master option present
+   \ifthenelse{\equal{#1}{correct}}{\item $\star$}{ %if correct, mark w/star
+   \ifthenelse{\equal{#1}{correct,fixed}}{\item $\star$}{ %if correct,fixed
+   \ifthenelse{\equal{#1}{fixed,correct}}{\item $\star$}{\item}}} %if fixed,correct
+ \else %not master option
+   \item
+ \fi
+}
+\end{verbatim}
+\caption{ Exam.cls}
+\label{fig:Examcls}
+\end{figure}
 
 \section{Troubleshooting}
 Because of the requirements that REX places upon the input it parses, REX may present the user with a variety of errors. Additionally, it's possible that REX might process the request without any errors or warnings, but will provide an undesired output.
