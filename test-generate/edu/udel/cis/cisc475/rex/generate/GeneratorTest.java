@@ -109,7 +109,7 @@ public class GeneratorTest {
 		answerProb1.add("G");
 		generatedkey.addProblem(answerProb1);
 		answerProb2 = new ArrayList<String>();
-		answerProb2.add("A");
+		answerProb2.add("B");
 		generatedkey.addProblem(answerProb2);
 		// All answers are correct so ? should appear in answer sheet as of now 
 		answerProb3 = new ArrayList<String>();
@@ -230,8 +230,8 @@ public class GeneratorTest {
 		// after being randomized exam1.elements(0) corresponds to exam2.elements(1)
 		// after being randomized exam2.elements(0) corresponds to exam1.elements(0)
 		assertEquals(2,exam.numElements());
-		assertEquals(exam2.element(1).label(), exam.element(0).label());
-		assertEquals(exam2.element(0).label(), exam.element(1).label());
+		assertEquals(exam2.element(0).label(), exam.element(0).label());
+		assertEquals(exam2.element(1).label(), exam.element(1).label());
 	}
 
 	@Test
@@ -251,8 +251,8 @@ public class GeneratorTest {
 		assertEquals(generatedkey.examName(), key.examName());
 		assertEquals(generatedkey.date(), key.date());
 		
-		assertEquals(answerProb1, key.answers(1));
-		assertEquals(answerProb2, key.answers(0));
+		assertEquals(answerProb1, key.answers(0));
+		assertEquals(answerProb2, key.answers(1));
 	}
 	
 	
