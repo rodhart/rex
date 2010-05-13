@@ -323,7 +323,8 @@ Lecture Section:   \rule{.5in}{1pt}\rule{.25in}{0pt} Lab Section:   \rule{.5in}{
 \newenvironment{block}[1]{}{}
 \newcounter{probnum}
 \setcounter{probnum}{1}
-\newenvironment{problem}[3][]{\begin{enumerate} \item[] \arabic{probnum}. \stepcounter{probnum} }{\end{enumerate}}
+\newenvironment{problem}[3][]{\begin{enumerate} \item
+\arabic{probnum}. \stepcounter{probnum} }{\end{enumerate}}
 \newenvironment{answers}{\begin{enumerate}}{\end{enumerate}}
  \ifprintanswers %if master option present
    \ifthenelse{\equal{#1}{correct}}{\item $\star$}{ %if correct, mark w/star
