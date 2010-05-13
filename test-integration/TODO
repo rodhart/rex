@@ -8,7 +8,11 @@
 General:
 01 DONE FIXED (125) Usability (Command line, etc)
 02 DONE PASS UEF \examversion
-03 NEW Randomization of generated exams
+03 DONE Randomization of generated exams
+	I ran the same uef and ecf over and over without a provided seed
+	and eventually all the questions that fit the ecf criteria were
+	chosen and none of the tests were the same. This indicates a pretty
+	good chance that randomization is occuring correctly. 
 04 NEW Probability of questions
 05 DONE FIXED (124) Test if the same exams are generated for the same seed number
 06 DONE FIXED (117) Test if REX gives an error if no answer is marked as correct for a specific problem
