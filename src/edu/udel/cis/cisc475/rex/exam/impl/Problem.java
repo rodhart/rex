@@ -10,9 +10,9 @@ import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
 
 /**
- *
+ * 
  * @author fxfitz
- *
+ * 
  */
 public class Problem implements ProblemIF {
 	private Integer points;
@@ -23,7 +23,7 @@ public class Problem implements ProblemIF {
 	private AnswerIF[] answers;
 	private HashSet<FigureIF> referencedFigures;
 	private BlockIF requiredBlock;
-	
+
 	protected Problem(String topic, String label, SourceIF question,
 			AnswerIF[] answers) {
 		this.topic = topic;
@@ -31,7 +31,7 @@ public class Problem implements ProblemIF {
 		this.question = question;
 		this.answers = answers;
 		this.referencedFigures = new HashSet<FigureIF>();
-		
+
 	}
 
 	public AnswerIF[] answers() {
@@ -41,9 +41,9 @@ public class Problem implements ProblemIF {
 	public AnswerIF[] correctAnswers() {
 		Collection<AnswerIF> correct = new HashSet<AnswerIF>();
 		int i = 0;
-		
-		for(i=0;i<this.answers.length;i++){
-			if (this.answers[i].isCorrect() == true){
+
+		for (i = 0; i < this.answers.length; i++) {
+			if (this.answers[i].isCorrect() == true) {
 				correct.add(this.answers[i]);
 			}
 		}
@@ -64,32 +64,31 @@ public class Problem implements ProblemIF {
 	}
 
 	public Collection<FigureIF> referencedFigures() {
-		return (Collection<FigureIF>)this.referencedFigures;
+		return (Collection<FigureIF>) this.referencedFigures;
 	}
-	
-	void addReferencedFigure(FigureIF fig){
+
+	void addReferencedFigure(FigureIF fig) {
 		referencedFigures.add(fig);
 	}
 
 	public BlockIF requiredBlock() {
 		return this.requiredBlock;
 	}
-	
-	void setRequiredBlock(BlockIF block){
+
+	void setRequiredBlock(BlockIF block) {
 		this.requiredBlock = block;
 	}
 
 	public void setPoints(int points) {
 		// TODO: not sure if we should throw exception here
-		if(points < 0) {
+		if (points < 0) {
 			this.points = 0;
-		}
-		else {
+		} else {
 			this.points = points;
 		}
 	}
-	
-	public void setDifficulty(double difficulty){
+
+	public void setDifficulty(double difficulty) {
 		this.difficulty = difficulty;
 	}
 

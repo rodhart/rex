@@ -26,17 +26,17 @@ public interface ExamIF {
 	boolean isMaster();
 
 	/**
-	 * @return Intro to the exam as SourceIF object
+	 * Intro to the exam as SourceIF object
 	 */
 	SourceIF preamble();
 
 	/**
-	 * @return First page intro to exam as SourceIF object
+	 * First page intro to exam as SourceIF object
 	 */
 	SourceIF frontMatter();
 
 	/**
-	 * @return Closing section of the exam as BlockIF object
+	 * Closing section of the exam as BlockIF object
 	 */
 	BlockIF finalBlock();
 
