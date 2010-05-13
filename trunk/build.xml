@@ -14,9 +14,9 @@
 	<property name="junit.dir" location="${basedir}/junit" />
 	<property name="junit.data.dir" location="${junit.dir}/data" />
 	<property name="junit.reports.dir" location="${junit.dir}/reports" />
-	
+
 	<condition property="runtime.check">
-		<available file="${antlr3.runtime}"/>
+		<available file="${antlr3.runtime}" />
 	</condition>
 
 	<!-- Cobertura: test coverage analyzer Properties -->
@@ -38,33 +38,27 @@
 	<property name="antlr.ecf.grammar.path" value="${antlr.grammars.dir}/EcfAntlr.g" />
 	<property name="antlr.ecf.gen.lexer.path" value="${antlr.ecf.gen.dir}/EcfAntlrLexer.java" />
 	<property name="antlr.ecf.gen.parser.path" value="${antlr.ecf.gen.dir}/EcfAntlrParser.java" />
-	
+
 
 	<path id="antlr.classpath">
 		<pathelement location="${antlr3-task.name}" />
 	</path>
 
 	<taskdef classpathref="antlr.classpath" resource="org/apache/tools/ant/antlr/antlib.xml" />
-	
+
 
 	<macrodef name="myantlr">
-	    <attribute name="target"/>
-	    <attribute name="outputdirectory"/>
-	    <sequential>
-	           <echo message="antlr @{target}" />
-	           <antlr3 
-	               target="@{target}" 
-	               outputdirectory="@{outputdirectory}"
-	               libdirectory="@{outputdirectory}"
-	               multithreaded="true"
-	               report="false"
-	               profile="false">
-						<classpath>
-							<pathelement location="${antlr3.name}" />
-						</classpath>
-	           </antlr3>
-	     </sequential>
-	 </macrodef>
+		<attribute name="target" />
+		<attribute name="outputdirectory" />
+		<sequential>
+			<echo message="antlr @{target}" />
+			<antlr3 target="@{target}" outputdirectory="@{outputdirectory}" libdirectory="@{outputdirectory}" multithreaded="true" report="false" profile="false">
+				<classpath>
+					<pathelement location="${antlr3.name}" />
+				</classpath>
+			</antlr3>
+		</sequential>
+	</macrodef>
 
 	<target name="antlr.ecf.prepare">
 		<mkdir dir="${antlr.ecf.gen.dir}" />
@@ -72,21 +66,18 @@
 			<and>
 				<available file="${antlr.ecf.gen.lexer.path}" />
 				<available file="${antlr.ecf.gen.parser.path}" />
-				<uptodate  srcfile="${antlr.ecf.grammar.path}"
-					targetfile="${antlr.ecf.gen.lexer.path}" />
-				<uptodate  srcfile="${antlr.ecf.grammar.path}"
-					targetfile="${antlr.ecf.gen.parser.path}" />
+				<uptodate srcfile="${antlr.ecf.grammar.path}" targetfile="${antlr.ecf.gen.lexer.path}" />
+				<uptodate srcfile="${antlr.ecf.grammar.path}" targetfile="${antlr.ecf.gen.parser.path}" />
 			</and>
 		</condition>
 	</target>
 
-	<target name="antlr.ecf.gen" unless="antlr.ecf.prepared" depends="antlr.ecf.prepare"
-		description="Generate the parser for ECF format.">
+	<target name="antlr.ecf.gen" unless="antlr.ecf.prepared" depends="antlr.ecf.prepare" description="Generate the parser for ECF format.">
 		<myantlr target="${antlr.ecf.grammar.path}" outputdirectory="${antlr.ecf.gen.dir}" />
 	</target>
-	
+
 	<!-- ANTLR: Parser Generator *END* -->
-	
+
 
 	<path id="cobertura.classpath">
 		<fileset dir="${cobertura.lib.dir}">
@@ -104,8 +95,7 @@
 		<pathelement location="${antlr3.runtime}" />
 	</path>
 
-	<target name="compile" description="Compile all java source files."
-		depends="antlr.ecf.gen">
+	<target name="compile" description="Compile all java source files." depends="antlr.ecf.gen">
 		<mkdir dir="${bin}" />
 		<javac debug="true" srcdir="${src}" destdir="${bin}" includes="edu/udel/cis/cisc475/rex/**" classpathref="classpath">
 		</javac>
@@ -113,19 +103,19 @@
 
 
 	<target name="dependencycheck" unless="runtime.check">
-		<echo message="ANTLR runtime is unavailable, build will fail"/>
+		<echo message="ANTLR runtime is unavailable, build will fail" />
 	</target>
 
-	
-	<target name="jar" depends="compile,dependencycheck" description="Jar all class files into a single file."  if="runtime.check">
- 		<jar destfile="${jar-path}">
+
+	<target name="jar" depends="compile,dependencycheck" description="Jar all class files into a single file." if="runtime.check">
+		<jar destfile="${jar-path}">
 			<zipgroupfileset file="${antlr3.runtime}" />
 			<fileset dir="${bin}" />
-   			<manifest>
-     				<attribute name="Built-By" value="${user.name}"/>
-              			<attribute name="Main-Class" value="${main-class}"/>
-    			</manifest>
-  		</jar>
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Main-Class" value="${main-class}" />
+			</manifest>
+		</jar>
 	</target>
 
 
@@ -137,17 +127,17 @@
 		<delete file="${cob.ser.file}" />
 		<delete file="${cob.log.file}" />
 		<delete dir="${antlr.ecf.gen.dir}" />
-		<delete file="${manifest-file}"/>
-		
+		<delete file="${manifest-file}" />
+
 	</target>
 
 	<target name="package" description="Create a zip file with the .jar, examples, and document class">
 		<zip destfile="REX.zip">
-			<fileset dir="." includes="${jarname}"/>
-			<fileset dir="examples" includes="exam.tex"/>
-			<fileset dir="examples" includes="exam.ecf"/>
-			<fileset dir="usersmanual" includes="UsersManual.pdf"/>
-			<fileset dir="tex" includes="exam.cls"/>
+			<fileset dir="." includes="${jarname}" />
+			<fileset dir="examples" includes="exam.tex" />
+			<fileset dir="examples" includes="exam.ecf" />
+			<fileset dir="usersmanual" includes="UsersManual.pdf" />
+			<fileset dir="tex" includes="exam.cls" />
 		</zip>
 	</target>
 
@@ -238,17 +228,22 @@
 	<target name="cobertura-instrument" depends="cobertura-init">
 		<cobertura-instrument todir="${cob.instrumented.dir}">
 			<ignore regex="org.apache.log4j.*" />
-			<fileset dir="${basedir}">
-				<include name="${jar-name}" />
+			<fileset dir="${bin}">
+				<include name="**/*.class" />
+				<exclude name="**/EcfAntlrLexer*" />
 			</fileset>
 		</cobertura-instrument>
 	</target>
 
+
+	<!-- This is the classpath for running the Cobertura tests.   You want
+	the instrumented classes to appear first so they will be chosen over the
+	uninstrumented versions. -->
 	<path id="instrumented.classpath">
-		<pathelement location="${cob.instrumented.dir}/${jar-name}" />
+		<pathelement location="${cob.instrumented.dir}" />
 		<pathelement location="${test.bin.dir}" />
 		<pathelement location="${junit.name}" />
-		<pathelement location="${antlr3.name}" />
+		<pathelement location="${jar-path}" />
 	</path>
 
 	<target name="cobertura-test" depends="cobertura-instrument">
