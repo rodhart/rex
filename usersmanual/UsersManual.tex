@@ -215,6 +215,7 @@ with comments being all text that follows after a pound symbol
 There are four defined commands for the ECF file.
 
 \subsection{Group Constraints}
+\label{GroupConstraints}
 A group constraint is a command of the form \texttt{include \textcolor{blue}{int count}
 problems on "\textcolor{blue}{string topic}" with difficulty in \textcolor{blue}{interval\footnote{An interval is a pair of decimals separated by two periods, in between a pair of braces or parenthesis. A brace on an end indicates that edge is inclusive, and a parenthesis that the edge is exclusive. For example, \texttt{[3..5)} would be the range from 3 to 5, including 3 but not including 5.} difficulty} at \textcolor{blue}{int \\* points} points;}.
 
@@ -223,6 +224,7 @@ The command will choose \textcolor{blue}{count} problems from \textcolor{blue}{t
 For overlapping constraints, REX will attempt find the largest set of questions that resolves all constraints. That is, if there exist two identical constraints for 5 problems each, REX will attempt to find 10 questions total. If REX cannot accomplish this, the request will result in an \hyperref[RexUnsatisfiableException]{RexUnsatisfiableException}. 
 
 \subsection{Required Problem Constraints}
+\label{RequiredProblemConstraints}
 A required problem constraint is a command of the form \texttt{includeall "\textcolor{blue}{string label}" at \textcolor{blue}{int points} points;}.
 
 This will ensure the the question with the \textcolor{blue}{label} given is included in every
