@@ -912,7 +912,7 @@ public class UEFParser implements UEFParserIF
 	public ExamIF parse(File file) throws RexException, IOException
 	{	
 		// runs the UEF through pdflatex
-		uefPdflatex(file);
+		// uefPdflatex(file);
 
 		// completely parse the file.
 		parseForAllCommands(file);
