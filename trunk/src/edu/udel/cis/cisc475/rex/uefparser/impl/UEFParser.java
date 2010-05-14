@@ -11,6 +11,8 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 
 /**
@@ -46,15 +48,12 @@ public class UEFParser implements UEFParserIF
 	 * @see UEFParserFactoryIF
 	 */
 	
-	private static final String PDFLATEXCMD = "pdflatex";
-	
-	/** 
-	 * If pdflatex finds an error in the Latex, its message ends with "? " as a prompt.
-	 * rex detects an error message by finding these characters.  TODO: slightly
-	 * more robustly.
+	/**
+	 * The command line command to run the UEF through pdflatex.  nonstopmode means
+	 * that on an invalid file, pdflatex terminates and does not give a prompt
+	 * as it usually would.
 	 */
-	private static final char PENULTIMATE_CHAR = '?'; 
-	private static final char FINAL_CHAR = ' ';
+	private static final String[] PDFLATEXCMD = {"pdflatex", "-interaction", "nonstopmode"};
 	
 	public UEFParser()
 	{
@@ -911,17 +910,10 @@ public class UEFParser implements UEFParserIF
 	 *             if the file cannot be open or read.
 	 */
 	public ExamIF parse(File file) throws RexException, IOException
-	{
-		// remove until it works:
-		
-//		// runs the UEF through pdflatex
-//		String pdfatexMessage = uefPdflatex(file);	
-//		if (pdfatexMessage != null)
-//		{
-//			System.out.println(pdfatexMessage);
-//			System.exit(1);
-//		}
-		
+	{	
+		// runs the UEF through pdflatex
+		uefPdflatex(file);
+
 		// completely parse the file.
 		parseForAllCommands(file);
 
@@ -930,56 +922,94 @@ public class UEFParser implements UEFParserIF
 	}
 	
 	/**
-	 * Runs the UEF through pdflatex to detect Latex errors
+	 * Runs the UEF through pdflatex to detect Latex errors.  If there is an error,
+	 * gives pdflatex's output.  Otherwise continues with rex as normal.  Generates
+	 * .aux and .log files, and a .pdf file when it can, upon every run of rex.
 	 * 
 	 * @author Tim Armstrong
 	 * @param uef - the UEF file
-	 * @return - a String representing the pdflatex error message, or null if the Latex is valid
-	 * @throws IOException - if the file cannot be open or read, or if rex cannot read from the
+	 * @throws IOException - if the file cannot be opened or read, or if rex cannot read from the
 	 * 						 pdflatex input stream
+	 * @throws RexParseException - if the Latex isn't valid
+	 * @throws RexException - if there is a system error executing pdflatex 
 	 */
-	private String uefPdflatex(File uef) throws IOException
-	{	
+	void uefPdflatex(File uef) throws IOException, RexException
+	{				
 		String uefFilename = uef.getName();
+		String uefPath = uef.getCanonicalPath();
 		
+		// directory of the UEF file
+		File uefDirectory = new File(uefPath.substring(0, uefPath.lastIndexOf(System.getProperty("file.separator"))));
+		
+				
+		// create command for pdflatex.  A little awkward so that the main command can be a constant
+		// at the top of the file.
+		List<String> cmd = new ArrayList<String>();		
+		for (String s : PDFLATEXCMD)
+		{
+			cmd.add(s);
+		}
+		cmd.add(uefFilename);
+		
+		
+		// set up for executing command
+		ProcessBuilder pb = new ProcessBuilder(cmd);
+		
+		// Run pdflatex from uef's directory.  Problems arise otherwise!
+		pb.directory(uefDirectory);
+		
+		
+		// Run pdflatex first time. Sometimes it needs to run twice.
+		
+		Process pdfLatexProcess = pb.start();		
+		try
+		{
+			pdfLatexProcess.waitFor(); // wait for it to end
+		}
+		catch (InterruptedException e)
+		{
+			throw new RexException("Error in running the UEF through pdflatex");
+		}
+		
+		
+		// Run pdflatex the second time
+		
+		pdfLatexProcess = pb.start();
+		
+		// pdflatex's command line output
+		BufferedReader pdfLatexInput = new BufferedReader(new InputStreamReader(pdfLatexProcess.getInputStream()));
+
+		// to store the message pdflatex gives
 		StringBuffer pdflatexMessage = new StringBuffer();	
 		
-		boolean latexFailed = false;		
-			
-		Process p = Runtime.getRuntime().exec(PDFLATEXCMD + " -interation=nonstopmode " + uefFilename);
-		BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		String newline = System.getProperty("line.separator");		
+		String line;		
 		
-		char previousChar = (char)input.read(),
-			 currentChar;// = (char)input.read();
-		
-		pdflatexMessage.append(previousChar);
-		
-		int readChar;
-		
-		while ((readChar = input.read()) != -1) // it == -1 when pdflatex finishes compiling the Latex successfully					
-		{			
-			currentChar = (char)readChar;
-			
-			if (previousChar == PENULTIMATE_CHAR && currentChar == FINAL_CHAR)
-			{
-				latexFailed = true;
-				p.destroy(); // kill process.  Does not seem necessary
-				break;
-			}
-			pdflatexMessage.append(currentChar);
-			
-			previousChar = currentChar;
+		// until reach end of command line output:
+		while ((line = pdfLatexInput.readLine()) != null)			
+		{		
+			// add the line
+			pdflatexMessage.append(line + newline);
 		}			
+		pdfLatexInput.close();			
 		
-		input.close();			
 		
-		if (latexFailed)
+		// waits for the process to terminate and get its exit status
+		int exitStatus;
+		try
 		{
-			return pdflatexMessage.append(System.getProperty("line.separator") + "REX: " + uefFilename + " is not valid Latex.").toString();
+			exitStatus = pdfLatexProcess.waitFor();
 		}
-		else
+		catch (InterruptedException e)
 		{
-			return null;
+			throw new RexException("Error in running the UEF through pdflatex");
+		}
+
+		
+		if (exitStatus != 0) // i.e., if pdflatex cannot produce the pdf file because of invalid Latex
+		{			
+			throw new RexParseException(pdflatexMessage.append
+					(newline + "REX: " + uefFilename + " is not valid Latex.").toString(), null);
 		}
 	}
 }
