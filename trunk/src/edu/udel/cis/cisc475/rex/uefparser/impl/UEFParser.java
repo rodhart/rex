@@ -961,7 +961,9 @@ public class UEFParser implements UEFParserIF
 		
 		// Run pdflatex first time. Sometimes it needs to run twice.
 		
-		Process pdfLatexProcess = pb.start();		
+		Process pdfLatexProcess = pb.start();
+		pdfLatexProcess.getInputStream().close();
+		pdfLatexProcess.getErrorStream().close();
 		try
 		{
 			pdfLatexProcess.waitFor(); // wait for it to end
@@ -992,7 +994,7 @@ public class UEFParser implements UEFParserIF
 			pdflatexMessage.append(line + newline);
 		}			
 		pdfLatexInput.close();			
-		
+		pdfLatexProcess.getErrorStream().close();
 		
 		// waits for the process to terminate and get its exit status
 		int exitStatus;
