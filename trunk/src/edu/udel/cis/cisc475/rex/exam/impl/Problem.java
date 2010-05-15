@@ -34,10 +34,18 @@ public class Problem implements ProblemIF {
 
 	}
 
+	/**
+	 * array of answers (correct and incorrect) to the question
+	 */
 	public AnswerIF[] answers() {
 		return this.answers;
 	}
 
+
+	/**
+	 * 
+	 * @return array of correct answers to the question
+	 */
 	public AnswerIF[] correctAnswers() {
 		Collection<AnswerIF> correct = new HashSet<AnswerIF>();
 		int i = 0;
@@ -51,34 +59,45 @@ public class Problem implements ProblemIF {
 		return (AnswerIF[]) correct.toArray(new AnswerIF[correct.size()]);
 	}
 
+	/**
+	 * difficulty of the problem
+	 */
 	public double difficulty() {
 		return this.difficulty;
 	}
 
+	/**
+	 * the number of points a problem is worth
+	 */
 	public Integer points() {
 		return this.points;
 	}
 
+	/**
+	 * reference to question in the source UEF file
+	 */
 	public SourceIF question() {
 		return this.question;
 	}
 
+	/**
+	 * Collection of FigureIF.
+	 */
 	public Collection<FigureIF> referencedFigures() {
 		return (Collection<FigureIF>) this.referencedFigures;
 	}
-
-	void addReferencedFigure(FigureIF fig) {
-		referencedFigures.add(fig);
-	}
-
+	
+	/**
+	 * If the problem referrences a block, this will return that block,
+	 * otherwise it will be null
+	 */
 	public BlockIF requiredBlock() {
 		return this.requiredBlock;
 	}
 
-	void setRequiredBlock(BlockIF block) {
-		this.requiredBlock = block;
-	}
-
+	/**
+	 * points set amount of points the problem is worth
+	 */
 	public void setPoints(int points) {
 		// TODO: not sure if we should throw exception here
 		if (points < 0) {
@@ -88,16 +107,27 @@ public class Problem implements ProblemIF {
 		}
 	}
 
+	/**
+	 * sets the difficulty of the problems
+	 */
 	public void setDifficulty(double difficulty) {
 		this.difficulty = difficulty;
 	}
 
+	/**
+	 * problem topic
+	 */
 	public String topic() {
 		return this.topic;
 	}
-
+	
+	void addReferencedFigure(FigureIF fig) {
+		referencedFigures.add(fig);
+	}
 	public String label() {
 		return this.label;
 	}
-
+	void setRequiredBlock(BlockIF block) {
+		this.requiredBlock = block;
+	}
 }
