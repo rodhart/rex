@@ -2,6 +2,9 @@
 
 /*
 
+Final version comments:
+
+
 Beta comments:
 
 I have the core of the model implemented, and the skeleton of a more detailed model.  I have
@@ -26,15 +29,25 @@ pointing to the same figure.  (We don't want any kind of ExamElement duplicated.
 
 */
 
+
 pred show{}
 
 
-// for Beta:
+
+// FOR FINAL:
+
+run show for 7 but exactly 2 GeneratedExam, exactly 2 Problem, exactly 6 GroupConstraint
+
+
+
+
+// FOR BETA:
 //run show for 6 but exactly 1 GeneratedExam, exactly 2 Problem
 //run show for 4 but exactly 2 RequiredProblemConstraint,  exactly 2 Problem
 //check noDuplicatesInGenerated for 5
 
 //run show for 5 but exactly 0 GeneratedExam, exactly 3 Problem
+
 
 
 
@@ -140,6 +153,7 @@ sig GroupConstraint extends Constraint {
 	numProblems: one Int,
 	category: one Category,
 	interval: one Interval
+	satisfiedProblems: set Problem
 	// source
 }
 fact numProblemsInGroupConstraint {
@@ -250,7 +264,7 @@ fact requiredProblemUnsatisfiable {
 		not in m.elements.*rest.element.label and r.problemName in Problem.label
 
 //      beta bug: did not specify problems:
-//		some r: RequiredProblemConstraint | all m: MasterExam | r.problemName not in m.elements.*rest.element.labe
+//		some r: RequiredProblemConstraint | all m: MasterExam | r.problemName not in m.elements.*rest.element.label
 }
 //fact forceUnsatisfiableExceptionToExist {
 //	all r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
@@ -281,15 +295,25 @@ fact usedBlockNotAppended {
 }
 
 
-
+// if one Exam has a final block, it is the final block for all Exams
 fact finalBlockSameForAll {
-//TODO
-// attempts:
-//	all m: MasterExam | some m.finalBlock implies (all g: GeneratedExam | g.finalBlock = m.finalBlock)
-//	all m: MasterExam | no m.finalBlock implies (all g: GeneratedExam | no g.finalBlock)
+	all m: MasterExam, g: GeneratedExam, b: Block | b in g.finalBlock iff b in m.finalBlock
 }
 
 
+fact finalBlockNotInElementList {
+//TODO
+//	all b: Block, e: Exam | b in e.finalBlock implies b not in e.elements.*rest.element
+}
+
+
+
+/*
+fact blockLabels {
+	all e: Exam, b: Block | b in e.finalBlock implies no b.label
+	all e: Exam, b: Block | b not in e.finalBlock implies some b.label
+}
+*/
 
 // If a block is not required by any problem occurring in the generated exam, 
 // and it is not appended, then that block will not occur in the exam.
@@ -458,13 +482,6 @@ assert impossibleConstraintRejected {
 //*********************************************************************
 
 
-//fact forceGroupUnsatisfiableExceptionToExist {
-//	all r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
-//}
-fact forceGroupUnsatisfiableExceptionNotToExist {
-	no RexGroupUnsatisfiableException
-}
-
 
 // I give each GeneratedExam *it's own copy* of the GroupConstraints to simulate the code
 // in fillExam() in the generator's VersionExamController.
@@ -474,9 +491,12 @@ fact eachGeneratedOwnGroupConstraint {
 	all ge, ge': GeneratedExam, gc: GroupConstraint | gc in ge.groupConstraints and ge != ge' implies gc not in ge'.groupConstraints
 
 	//the number of GroupConstraints in all GeneratedExams are equal
-	all ge, ge': GeneratedExam | #ge.groupConstraints = #ge'.groupConstraints
+	// NOT necessary
+	//all ge, ge': GeneratedExam | #ge.groupConstraints = #ge'.groupConstraints
 
-	// all GeneratedExams have all 
+	// all GeneratedExams have all GroupConstaints
+//	all ge: GeneratedExam, gc: GroupConstraint | gc in ge.groupConstaints
+	all gc: GroupConstraint, c: Config | gc in c.constraints implies all ge: GeneratedExam | gc in ge.groupConstraints
 
 
 	// the GroupConstraints in all of the GeneratedExams have the same values for category, numProblems, and interval
@@ -485,7 +505,7 @@ fact eachGeneratedOwnGroupConstraint {
 
 }
 
-run show for 6 but exactly 2 GeneratedExam, exactly 4 GroupConstraint
+
 
 
 
@@ -505,6 +525,16 @@ fact sufficientNumberOfProblemsForGroupConstraint {
 	(some GroupConstraint) and 
 	(all gc: GroupConstraint, m: MasterExam | gc.numProblems > #allProblemsFromGroupConstraint[m, gc])
 }
+
+fact forceGroupUnsatisfiableExceptionToExist {
+	//some RexGroupUnsatisfiableException
+	//some ge: GeneratedExam | some g: GroupConstraint | g in ge.groupConstraints     some p: Problem | r.problemName = p.label
+}
+//fact forceGroupUnsatisfiableExceptionNotToExist {
+//	all r: RequiredProblemConstraint | some p: Problem | r.problemName = p.label
+//}
+
+
 
 /*
 fact ifAllSatisfiableThenInGenerated {
