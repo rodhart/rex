@@ -36,7 +36,7 @@ pred show{}
 
 // FOR FINAL:
 
-run show for 7 but exactly 2 GeneratedExam, exactly 2 Problem, exactly 6 GroupConstraint
+run show for 7 but exactly 2 GeneratedExam, exactly 2 Problem, exactly 4 GroupConstraint, exactly 2 Category
 
 
 
@@ -134,7 +134,7 @@ fact allElementsInMaster { // the MasterExam contains all elements
 // fields not complete
 one sig Config {
 	// seed: one Int
-	constraints: set Constraint
+	requiredConstraints: set RequiredProblemConstraint
 }
 
 
@@ -144,16 +144,17 @@ abstract sig Constraint {
 	//source: one Source,
 	//points: one Int  // maybe would want real number?
 }
-fact { // all constraints are in the Config
-	all c: Constraint | some conf: Config | c in conf.constraints
+fact { // all RequiredProblemConstraints are in the Config
+	all c: RequiredProblemConstraint | some conf: Config | c in conf.requiredConstraints
 }
 
 
 sig GroupConstraint extends Constraint {
 	numProblems: one Int,
 	category: one Category,
-	interval: one Interval
-	satisfiedProblems: set Problem
+	interval: one Interval,
+
+	satisfiedProblems: set Problem  // should be equal to numProblems
 	// source
 }
 fact numProblemsInGroupConstraint {
@@ -249,8 +250,8 @@ sig Category {} // a Java string
 fact categoryNotFreeFloating{
 	all c: Category |
 	(some b: Block | c in b.category) or
-	(some p: Problem | c in p.category) or
-	(some g: GroupConstraint | c in g.category)
+	(some p: Problem | c in p.category) //or
+	//(some g: GroupConstraint | c in g.category)
 }
 
 
@@ -494,9 +495,10 @@ fact eachGeneratedOwnGroupConstraint {
 	// NOT necessary
 	//all ge, ge': GeneratedExam | #ge.groupConstraints = #ge'.groupConstraints
 
+
 	// all GeneratedExams have all GroupConstaints
 //	all ge: GeneratedExam, gc: GroupConstraint | gc in ge.groupConstaints
-	all gc: GroupConstraint, c: Config | gc in c.constraints implies all ge: GeneratedExam | gc in ge.groupConstraints
+//	all gc: GroupConstraint, c: Config | gc in c.constraints implies all ge: GeneratedExam | gc in ge.groupConstraints
 
 
 	// the GroupConstraints in all of the GeneratedExams have the same values for category, numProblems, and interval
@@ -506,6 +508,19 @@ fact eachGeneratedOwnGroupConstraint {
 }
 
 
+
+//	numProblems: one Int,
+//	category: one Category,
+//	interval: one Interval,
+
+fact generatedExamGroupConstraintsHaveIdenticalValues {
+	all ge, ge': GeneratedExam, gc: GroupConstraint | gc in ge.groupConstraints
+		 implies one gc': GroupConstraint | gc' in ge'.groupConstraints and
+			gc.numProblems = gc'.numProblems and gc.category = gc'.category and gc.interval = gc'.interval
+}
+
+
+// no overlapping difficulties
 
 
 
