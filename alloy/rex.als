@@ -564,6 +564,8 @@ and
 
 
 
+// POSSIBLY GOOD FUNCTION:
+
 //  As in Java code, returns all problems that satisfy group constraint (category and interval)
 // without yet selecting randomly
 fun allProblemsFromGroupConstraint[m: MasterExam, gc: GroupConstraint]: set Problem { 
@@ -572,14 +574,29 @@ fun allProblemsFromGroupConstraint[m: MasterExam, gc: GroupConstraint]: set Prob
 }
  
 
+
+
+
 lone sig RexGroupUnsatisfiableException {}
 // produces an error iff the GroupConstraint requires more problems than are taken from the MasterExam
 // as in the function above
 fact sufficientNumberOfProblemsForGroupConstraint {
+//	one RexGroupUnsatisfiableException iff
+//	(some GroupConstraint) and 
+//	(all gc: GroupConstraint, m: MasterExam | gc.numProblems > #allProblemsFromGroupConstraint[m, gc])
 	one RexGroupUnsatisfiableException iff
 	(some GroupConstraint) and 
+
+	
+
 	(all gc: GroupConstraint, m: MasterExam | gc.numProblems > #allProblemsFromGroupConstraint[m, gc])
 }
+
+
+
+
+
+
 
 fact forceGroupUnsatisfiableExceptionToExist {
 	//some RexGroupUnsatisfiableException
