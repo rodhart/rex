@@ -36,7 +36,18 @@ pred show{}
 
 // FOR FINAL:
 
-run show for 7 but exactly 2 GeneratedExam, exactly 2 Problem, exactly 4 GroupConstraint, exactly 2 Category
+run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem,
+ exactly 4 GroupConstraint,
+	exactly 1 Category,
+ exactly 0 RequiredProblemConstraint
+
+//run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem,
+// exactly 4 GroupConstraint,
+//	exactly 2 Category,
+// exactly 0 RequiredProblemConstraint
+
+
+
 
 
 
@@ -244,6 +255,9 @@ sig Figure extends ExamElement {}
 
 
 sig Label {}
+fact allLabelsInExamElements {
+	all l: Label | some ee: ExamElement | l in ee.label
+}
 
 
 sig Category {} // a Java string
@@ -508,27 +522,53 @@ fact eachGeneratedOwnGroupConstraint {
 }
 
 
+// Each GeneratedExam has it's own GroupConstraints, but all GeneratedExams have GroupConstraints with the same values for
+// numProblems, category, and  -- JUST NOT the problems each GroupConstraint picks to satisfy it.
 
-//	numProblems: one Int,
-//	category: one Category,
-//	interval: one Interval,
+//fact generatedExamGroupConstraintsHaveIdenticalValues {
+//	all ge, ge': GeneratedExam, gc: GroupConstraint | ge' != ge implies gc in ge.groupConstraints
+//		 implies one gc': GroupConstraint | gc' in ge'.groupConstraints and
+//			gc.numProblems = gc'.numProblems and gc.category = gc'.category and gc.interval = gc'.interval
 
 fact generatedExamGroupConstraintsHaveIdenticalValues {
+
+//	all ge, ge': GeneratedExam, gc: GroupConstraint | gc in ge.groupConstraints
+//		 implies one gc': GroupConstraint | gc' in ge'.groupConstraints and
+//			gc.numProblems = gc'.numProblems and gc.category = gc'.category and gc.interval = gc'.interval
+
 	all ge, ge': GeneratedExam, gc: GroupConstraint | gc in ge.groupConstraints
 		 implies one gc': GroupConstraint | gc' in ge'.groupConstraints and
 			gc.numProblems = gc'.numProblems and gc.category = gc'.category and gc.interval = gc'.interval
 }
 
 
+
+
+
 // no overlapping difficulties
+fact noOverlappingDifficulties {
+
+//	all gc, gc': GroupConstraint | gc != gc' and gc.category = gc'.category implies 
+//		gc'.interval.low > gc.interval.high or gc'.interval.high < gc.interval.low
+
+	all ge: GeneratedExam, gc: GroupConstraint | gc in ge.groupConstraints
+		implies not some gc': GroupConstraint | gc' in ge.groupConstraints and gc != gc' and gc'.category = gc.category 
+and 
+	gc'.interval = gc.interval 
+	//	 gc'.interval.low <= gc.interval.high or gc'.interval.high >= gc.interval.low)
+
+}
+
+
+
 
 
 
 //  As in Java code, returns all problems that satisfy group constraint (category and interval)
 // without yet selecting randomly
-fun allProblemsFromGroupConstraint[m: MasterExam, g: GroupConstraint]: set Problem { 
-	{p: Problem | p in m.problems and p.category = g.category 
-			and p.difficulty >= g.interval.low and p.difficulty <= g.interval.high}
+fun allProblemsFromGroupConstraint[m: MasterExam, gc: GroupConstraint]: set Problem { 
+	{p: Problem | p in m.problems and p.category = gc.category 
+			and p.difficulty >= gc.interval.low and p.difficulty <= gc.interval.high}
 }
  
 
@@ -551,7 +591,17 @@ fact forceGroupUnsatisfiableExceptionToExist {
 
 
 
+
+
+
+
+
+
+
+
 /*
+
+
 fact ifAllSatisfiableThenInGenerated {
 	all g: GeneratedExam | not some RexGroupUnsatisfiableException and not some RexRequiredUnsatisfiableException
 		implies all p: Problem | 
