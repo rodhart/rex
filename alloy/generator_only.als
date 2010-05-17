@@ -1,7 +1,7 @@
 one sig Generator
 {
-	master: one UniversalExamFile,
-	config: one ExamConfigurationFile,
+	uef: one UniversalExamFile,
+	ecf: one ExamConfigurationFile,
 	generated: set GeneratedExam
 }
 
@@ -14,10 +14,10 @@ sig GeneratedExam {}
 
 
 fact masterInGenerator {
-	all m: UniversalExamFile | some g: Generator | m in g.master
+	all m: UniversalExamFile | some g: Generator | m in g.uef
 }
 fact configInGenerator { 
-	all c: ExamConfigurationFile | some g: Generator | c in g.config
+	all c: ExamConfigurationFile | some g: Generator | c in g.ecf
 }
 fact generatedInGenerator {
 	all ge: GeneratedExam | some g: Generator | ge in g.generated
