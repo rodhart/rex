@@ -5,6 +5,9 @@
 Final version comments:
 
 
+
+
+
 Beta comments:
 
 I have the core of the model implemented, and the skeleton of a more detailed model.  I have
@@ -37,18 +40,7 @@ pred show{}
 // FOR FINAL:
 
 run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem,
- exactly 4 GroupConstraint,
-	exactly 1 Category,
- exactly 0 RequiredProblemConstraint
-
-//run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem,
-// exactly 4 GroupConstraint,
-//	exactly 2 Category,
-// exactly 0 RequiredProblemConstraint
-
-
-
-
+	exactly 4 GroupConstraint, exactly 1 Category, exactly 0 RequiredProblemConstraint
 
 
 
@@ -367,12 +359,6 @@ fact seedDeterminesOutput {
 }
 
 
-
-
-
-
-
-
 // Answer-oriented (I have not yet modeled Answers):
 
 //At least one answer must be labeled as correct.
@@ -384,10 +370,6 @@ fact atLeastOneCorrect {
 fact fixedAtCorrectPosition {
 //TODO
 }
-
-
-
-
 
 
 // Says that in the generated exams, problems group into categories.  If our model included a Category class
@@ -585,10 +567,7 @@ fact sufficientNumberOfProblemsForGroupConstraint {
 //	(some GroupConstraint) and 
 //	(all gc: GroupConstraint, m: MasterExam | gc.numProblems > #allProblemsFromGroupConstraint[m, gc])
 	one RexGroupUnsatisfiableException iff
-	(some GroupConstraint) and 
-
-	
-
+	(some GroupConstraint) and
 	(all gc: GroupConstraint, m: MasterExam | gc.numProblems > #allProblemsFromGroupConstraint[m, gc])
 }
 
