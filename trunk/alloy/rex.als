@@ -41,14 +41,14 @@ pred show{}
 
 // Shows the case of a GroupUnsatisfiableException
 
-//run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 RangeRequest, exactly 1 Category, exactly 0 RequiredProblemRequest
+run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 RangeRequest, exactly 1 Category, exactly 0 RequiredProblemRequest
 
 
 // Shows the case without such an exception
 // Specifying there is not one is not cheating, it just shows what everything else
 // will be like if there is not one
 
-run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 RangeRequest, exactly 1 Category, exactly 0 RequiredProblemRequest,	exactly 0 RangeUnsatisfiableError
+//run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 RangeRequest, exactly 1 Category, exactly 0 RequiredProblemRequest,	exactly 0 RangeUnsatisfiableError
 
 
 
