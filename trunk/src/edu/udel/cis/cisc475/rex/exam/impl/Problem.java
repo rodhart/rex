@@ -99,7 +99,6 @@ public class Problem implements ProblemIF {
 	 * points set amount of points the problem is worth
 	 */
 	public void setPoints(int points) {
-		// TODO: not sure if we should throw exception here
 		if (points < 0) {
 			this.points = 0;
 		} else {
