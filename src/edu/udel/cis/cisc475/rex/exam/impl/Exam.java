@@ -95,6 +95,11 @@ public class Exam implements ExamIF {
 	 */
 	private Map<ExamElementIF, HashSet<ExamElementIF>> uses;
 
+	/**
+	 * The map of uses relationships between elements. Elements such as figures are set as keys, each key 
+	 * is paired with a hashset of other elements. The hashset defines elements that rely on the element that 
+	 * is the key. 
+	 */
 	private Map<ExamElementIF, HashSet<ExamElementIF>> usedBy;
 
 	/**
@@ -250,9 +255,6 @@ public class Exam implements ExamIF {
 	 * Returns the element specified by the key i, use elements().iterator() to
 	 * get the key, the order of the elements in ExamIF is specified to be the
 	 * same
-	 * 
-	 * @param i
-	 * @return
 	 */
 	public ExamElementIF element(int i) {
 		return elements.get(i);
@@ -307,7 +309,7 @@ public class Exam implements ExamIF {
 	}
 
 	/**
-	 * @return All figures stored in exam
+	 * All figures stored in exam
 	 */
 	public Collection<FigureIF> figures() {
 		Set<FigureIF> returnSet = new LinkedHashSet<FigureIF>();
@@ -321,14 +323,14 @@ public class Exam implements ExamIF {
 	}
 
 	/**
-	 * @return Closing block of the exam
+	 * Closing block of the exam
 	 */
 	public BlockIF finalBlock() {
 		return this.finalblock;
 	}
 
 	/**
-	 * @return First page intro to exam
+	 * First page intro to exam
 	 */
 	public SourceIF frontMatter() {
 		return this.frontMatter;
@@ -360,7 +362,7 @@ public class Exam implements ExamIF {
 	}
 
 	/**
-	 * @return Intro to the exam as SourceIF object
+	 * Intro to the exam as SourceIF object
 	 */
 	public SourceIF preamble() {
 		return this.preamble;
