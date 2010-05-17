@@ -16,13 +16,13 @@ to be simpler.
 
 The three commands to run are the two shows and the check just below.
 
-The first show predicate just illustrates, in the first instance, the MasterExam having a linked list
+The first show predicate just illustrates, in the first instance, the UniversalExamFile having a linked list
 of Problem1, Problem0, and Block, while the GeneratedExam just has the Block.
 
 The second show predicate, in the first two instances, illustrates the functionality
 of my saying that there exists a RexUnsatisfiableException iff a required problem constraint is 
 unsatisfiable.  (I have not gotten to group constraints.)  See the fact requiredProblemUnsatisfiable
-below.  To navigate the diagrams, follow the links between the RequiredProblemConstraints, their labels,
+below.  To navigate the diagrams, follow the links between the RequiredProblemRequests, their labels,
 and their associated ExamElements.
 
 check noDuplicatesInGenerated is an assertion that there are no repeats of an ExamElement in any
@@ -41,14 +41,14 @@ pred show{}
 
 // Shows the case of a GroupUnsatisfiableException
 
-run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 GroupConstraint, exactly 1 Category, exactly 0 RequiredProblemConstraint
+//run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 RangeRequest, exactly 1 Category, exactly 0 RequiredProblemRequest
 
 
 // Shows the case without such an exception
 // Specifying there is not one is not cheating, it just shows what everything else
 // will be like if there is not one
 
-//run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 GroupConstraint, exactly 1 Category, exactly 0 RequiredProblemConstraint,	exactly 0 RexGroupUnsatisfiableException
+run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 RangeRequest, exactly 1 Category, exactly 0 RequiredProblemRequest,	exactly 0 RangeUnsatisfiableError
 
 
 
@@ -57,7 +57,7 @@ run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 GroupCo
 
 // FOR BETA:
 //run show for 6 but exactly 1 GeneratedExam, exactly 2 Problem
-//run show for 4 but exactly 2 RequiredProblemConstraint,  exactly 2 Problem
+//run show for 4 but exactly 2 RequiredProblemRequest,  exactly 2 Problem
 //check noDuplicatesInGenerated for 5
 
 //run show for 5 but exactly 0 GeneratedExam, exactly 3 Problem
@@ -69,19 +69,19 @@ run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 GroupCo
 //** Data structures and related facts **
 //*******************************
 
-one sig Generator // aka MasterExamController
+one sig Generator // aka UniversalExamFileController
 {
-	master: one MasterExam,
-	config: one Config,
+	master: one UniversalExamFile,
+	config: one ExamConfigurationFile,
 	generated: set GeneratedExam
 	//answer keys
 }
-// These facts say that all MasterExams, Configs, and GeneratedExams belong to the Generator.
+// These facts say that all UniversalExamFiles, ExamConfigurationFiles, and GeneratedExams belong to the Generator.
 fact masterInGenerator {
-	all m: MasterExam | some g: Generator | m in g.master
+	all m: UniversalExamFile | some g: Generator | m in g.master
 }
 fact configInGenerator { 
-	all c: Config | some g: Generator | c in g.config
+	all c: ExamConfigurationFile | some g: Generator | c in g.config
 }
 fact generatedInGenerator {
 	all ge: GeneratedExam | some g: Generator | ge in g.generated
@@ -105,10 +105,10 @@ fact problemsInExamEqualsProblemsInElementList {
 
 // We do not have different classes for the master and generated exams, but we can always tell
 // the difference.  Therefore I make them subclasses of Exam.
-sig MasterExam extends Exam {}
+sig UniversalExamFile extends Exam {}
 
 sig GeneratedExam extends Exam {
-	groupConstraints: set GroupConstraint // ADDED SINCE BETA.  Each gets its own copy so that the selected problems may differ
+	groupConstraints: set RangeRequest // ADDED SINCE BETA.  Each gets its own copy so that the selected problems may differ
 }
 
 
@@ -138,17 +138,17 @@ fact listsHaveOwnNodes { // each Exam has its completely own list nodes
 
 
 
-fact allElementsInMaster { // the MasterExam contains all elements
-	all e: ExamElement | some m: MasterExam | e in m.elements.*rest.element
+fact allElementsInMaster { // the UniversalExamFile contains all elements
+	all e: ExamElement | some m: UniversalExamFile | e in m.elements.*rest.element
 }
 
 
 
 
 // fields not complete
-one sig Config {
+one sig ExamConfigurationFile {
 	// seed: one Int
-	requiredConstraints: set RequiredProblemConstraint
+	requiredConstraints: set RequiredProblemRequest
 }
 
 
@@ -158,12 +158,12 @@ abstract sig Constraint {
 	//source: one Source,
 	//points: one Int  // maybe would want real number?
 }
-fact { // all RequiredProblemConstraints are in the Config
-	all c: RequiredProblemConstraint | some conf: Config | c in conf.requiredConstraints
+fact { // all RequiredProblemRequests are in the ExamConfigurationFile
+	all c: RequiredProblemRequest | some conf: ExamConfigurationFile | c in conf.requiredConstraints
 }
 
 
-sig GroupConstraint extends Constraint {
+sig RangeRequest extends Constraint {
 	numProblems: one Int,
 	category: one Category,
 	interval: one Interval,
@@ -171,22 +171,22 @@ sig GroupConstraint extends Constraint {
 	satisfiedProblems: set Problem  // should be equal to numProblems
 	// source
 }
-fact numProblemsInGroupConstraint {
-	all g: GroupConstraint | g.numProblems >= 1
+fact numProblemsInRangeRequest {
+	all g: RangeRequest | g.numProblems >= 1
 }
 fact {
-	all c: GroupConstraint | some g: GeneratedExam | c in g.groupConstraints
+	all c: RangeRequest | some g: GeneratedExam | c in g.groupConstraints
 }
 
 
 // A line in the ECF might require several problems, but they break down into individual requests.
 // That's all I model.
-sig RequiredProblemConstraint extends Constraint {
+sig RequiredProblemRequest extends Constraint {
 	problemName: one Label
 	// source
 }
-fact labelOfRequiredProblemConstraintIsAProblem {
-	all r: RequiredProblemConstraint | r.problemName in Problem.label
+fact labelOfRequiredProblemRequestIsAProblem {
+	all r: RequiredProblemRequest | r.problemName in Problem.label
 }
 
 
@@ -199,7 +199,7 @@ sig Interval {
 	high: one Int
 }
 fact {
-	all i: Interval | some g: GroupConstraint | i in g.interval
+	all i: Interval | some g: RangeRequest | i in g.interval
 }
 fact {
 	all i: Interval | i.low <= i.high
@@ -268,27 +268,27 @@ fact categoryNotFreeFloating{
 	all c: Category |
 	(some b: Block | c in b.category) or
 	(some p: Problem | c in p.category) //or
-	//(some g: GroupConstraint | c in g.category)
+	//(some g: RangeRequest | c in g.category)
 }
 
 
-// Says that there is a RexUnsatisfiableException iff a RequiredProblemConstraint requests by label
-// a problem that doesn't exist in the MasterExam.
-lone sig RexRequiredUnsatisfiableException {}
+// Says that there is a RexUnsatisfiableException iff a RequiredProblemRequest requests by label
+// a problem that doesn't exist in the UniversalExamFile.
+lone sig RequiredProblemUnsatisfiableError {}
 fact requiredProblemUnsatisfiable {
-	one RexRequiredUnsatisfiableException iff 
+	one RequiredProblemUnsatisfiableError iff 
 
-	some r: RequiredProblemConstraint | all m: MasterExam | r.problemName 
+	some r: RequiredProblemRequest | all m: UniversalExamFile | r.problemName 
 		not in m.elements.*rest.element.label and r.problemName in Problem.label
 
 //      beta bug: did not specify problems:
-//		some r: RequiredProblemConstraint | all m: MasterExam | r.problemName not in m.elements.*rest.element.label
+//		some r: RequiredProblemRequest | all m: UniversalExamFile | r.problemName not in m.elements.*rest.element.label
 }
 //fact forceUnsatisfiableExceptionToExist {
-//	all r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
+//	all r:RequiredProblemRequest | not some p: Problem | r.problemName = p.label
 //}
 //fact forceUnsatisfiableExceptionNotToExist {
-//	all r: RequiredProblemConstraint | some p: Problem | r.problemName = p.label
+//	all r: RequiredProblemRequest | some p: Problem | r.problemName = p.label
 //}
 
 
@@ -315,7 +315,7 @@ fact usedBlockNotAppended {
 
 // if one Exam has a final block, it is the final block for all Exams
 fact finalBlockSameForAll {
-	all m: MasterExam, g: GeneratedExam, b: Block | b in g.finalBlock iff b in m.finalBlock
+	all m: UniversalExamFile, g: GeneratedExam, b: Block | b in g.finalBlock iff b in m.finalBlock
 }
 
 
@@ -399,7 +399,7 @@ fact blockWithQuestions {
 // Says front matter in document environment must appear before anything else.
 fact frontMatterFirst {
 //TODO
-// need to test: all g: GeneratedExam, m: MasterExam | g.elements.element = m.frontMatter
+// need to test: all g: GeneratedExam, m: UniversalExamFile | g.elements.element = m.frontMatter
 
 }
 
@@ -423,7 +423,7 @@ fact elementsDoNotHaveIdenticalLabels
 // Just assume we have this check implemented
 fact doNotRequestSameProblemTwice
 {
-	all r, r': RequiredProblemConstraint | r != r' implies r.problemName != r'.problemName
+	all r, r': RequiredProblemRequest | r != r' implies r.problemName != r'.problemName
 }
 
 
@@ -451,9 +451,9 @@ assert finalBlockForAll {
 
 
 
-assert validReqConstraintInAll { // if there is a valid RequiredProblemConstraint. this problem is in all GeneratedExams
+assert validReqConstraintInAll { // if there is a valid RequiredProblemRequest. this problem is in all GeneratedExams
 	// TODO: need to test
-//	all r: RequiredProblemConstraint, m: MasterExam | r.problemName in m.elements.*rest.element.label
+//	all r: RequiredProblemRequest, m: UniversalExamFile | r.problemName in m.elements.*rest.element.label
 //		implies all g: GeneratedExam | r.problemName in g.elements.*rest.element.label
 }
 
@@ -464,10 +464,10 @@ assert validReqConstraintInAll { // if there is a valid RequiredProblemConstrain
 //** MAIN CODE TO DO **
 //********************
 
-// if the Constraint is satisfiable from the MasterExam, then there exist satisfying problems in the generated exams
+// if the Constraint is satisfiable from the UniversalExamFile, then there exist satisfying problems in the generated exams
 assert constraintFulfilled {
-	no RexRequiredUnsatisfiableException implies
-		(all r: RequiredProblemConstraint, g: GeneratedExam, p: Problem | p.label in r.problemName implies
+	no RequiredProblemUnsatisfiableError implies
+		(all r: RequiredProblemRequest, g: GeneratedExam, p: Problem | p.label in r.problemName implies
 			p in g.elements.*rest.element)
 }
 
@@ -491,58 +491,58 @@ assert impossibleConstraintRejected {
 
 
 
-// I give each GeneratedExam *it's own copy* of the GroupConstraints to simulate the code
+// I give each GeneratedExam *it's own copy* of the RangeRequests to simulate the code
 // in fillExam() in the generator's VersionExamController.
-fact eachGeneratedOwnGroupConstraint {
+fact eachGeneratedOwnRangeRequest {
 
-	// each GeneratedExam has its own seperate GroupConstraints
-	all ge, ge': GeneratedExam, gc: GroupConstraint | gc in ge.groupConstraints and ge != ge' implies gc not in ge'.groupConstraints
+	// each GeneratedExam has its own seperate RangeRequests
+	all ge, ge': GeneratedExam, gc: RangeRequest | gc in ge.groupConstraints and ge != ge' implies gc not in ge'.groupConstraints
 
-	//the number of GroupConstraints in all GeneratedExams are equal
+	//the number of RangeRequests in all GeneratedExams are equal
 	// NOT necessary
 	//all ge, ge': GeneratedExam | #ge.groupConstraints = #ge'.groupConstraints
 
 
 	// all GeneratedExams have all GroupConstaints
-//	all ge: GeneratedExam, gc: GroupConstraint | gc in ge.groupConstaints
-//	all gc: GroupConstraint, c: Config | gc in c.constraints implies all ge: GeneratedExam | gc in ge.groupConstraints
+//	all ge: GeneratedExam, gc: RangeRequest | gc in ge.groupConstaints
+//	all gc: RangeRequest, c: ExamConfigurationFile | gc in c.constraints implies all ge: GeneratedExam | gc in ge.groupConstraints
 
 
-	// the GroupConstraints in all of the GeneratedExams have the same values for category, numProblems, and interval
-//	all ge, ge': GeneratedExam, gc, gc': GroupConstraint | gc in ge.groupConstraints implies
+	// the RangeRequests in all of the GeneratedExams have the same values for category, numProblems, and interval
+//	all ge, ge': GeneratedExam, gc, gc': RangeRequest | gc in ge.groupConstraints implies
 //		some gc' in ge'.groupConstraints | gc.category = gc'.category and gc.numProblems = gc'.numProblems and gc.interval = gc'.interval
 
 }
 
 
-// Each GeneratedExam has it's own GroupConstraints, but all GeneratedExams have GroupConstraints with the same values for
-// numProblems, category, and  -- JUST NOT the problems each GroupConstraint picks to satisfy it.
+// Each GeneratedExam has it's own RangeRequests, but all GeneratedExams have RangeRequests with the same values for
+// numProblems, category, and  -- JUST NOT the problems each RangeRequest picks to satisfy it.
 
-//fact generatedExamGroupConstraintsHaveIdenticalValues {
-//	all ge, ge': GeneratedExam, gc: GroupConstraint | ge' != ge implies gc in ge.groupConstraints
-//		 implies one gc': GroupConstraint | gc' in ge'.groupConstraints and
+//fact generatedExamRangeRequestsHaveIdenticalValues {
+//	all ge, ge': GeneratedExam, gc: RangeRequest | ge' != ge implies gc in ge.groupConstraints
+//		 implies one gc': RangeRequest | gc' in ge'.groupConstraints and
 //			gc.numProblems = gc'.numProblems and gc.category = gc'.category and gc.interval = gc'.interval
 
-fact generatedExamGroupConstraintsHaveIdenticalValues {
+fact generatedExamRangeRequestsHaveIdenticalValues {
 
-//	all ge, ge': GeneratedExam, gc: GroupConstraint | gc in ge.groupConstraints
-//		 implies one gc': GroupConstraint | gc' in ge'.groupConstraints and
+//	all ge, ge': GeneratedExam, gc: RangeRequest | gc in ge.groupConstraints
+//		 implies one gc': RangeRequest | gc' in ge'.groupConstraints and
 //			gc.numProblems = gc'.numProblems and gc.category = gc'.category and gc.interval = gc'.interval
 
-	all ge, ge': GeneratedExam, gc: GroupConstraint | gc in ge.groupConstraints
-		 implies one gc': GroupConstraint | gc' in ge'.groupConstraints and
+	all ge, ge': GeneratedExam, gc: RangeRequest | gc in ge.groupConstraints
+		 implies one gc': RangeRequest | gc' in ge'.groupConstraints and
 			gc.numProblems = gc'.numProblems and gc.category = gc'.category and gc.interval = gc'.interval
 }
 
 
 
 
-// Alloy just likes to use a single interval, but the general case is that each GroupConstraint
+// Alloy just likes to use a single interval, but the general case is that each RangeRequest
 // has its own interval.  This fact still allows them to have the same values
 fact intervalsOfSameCategoryAreDistinct {
 
-	all ge: GeneratedExam, gc: GroupConstraint | gc in ge.groupConstraints
-		implies not some gc': GroupConstraint | gc' in ge.groupConstraints and gc != gc'
+	all ge: GeneratedExam, gc: RangeRequest | gc in ge.groupConstraints
+		implies not some gc': RangeRequest | gc' in ge.groupConstraints and gc != gc'
 			and 	gc'.interval = gc.interval 
 }
 
@@ -550,11 +550,11 @@ fact intervalsOfSameCategoryAreDistinct {
 // no overlapping difficulties -- couldn't get working, but it's not part ot the software anyway!
 fact noOverlappingDifficulties {
 
-//	all gc, gc': GroupConstraint | gc != gc' and gc.category = gc'.category implies 
+//	all gc, gc': RangeRequest | gc != gc' and gc.category = gc'.category implies 
 //		gc'.interval.low > gc.interval.high or gc'.interval.high < gc.interval.low
 
-//	all ge: GeneratedExam, gc: GroupConstraint | gc in ge.groupConstraints
-//		implies not some gc': GroupConstraint | gc' in ge.groupConstraints and gc != gc' and gc'.category = gc.category 
+//	all ge: GeneratedExam, gc: RangeRequest | gc in ge.groupConstraints
+//		implies not some gc': RangeRequest | gc' in ge.groupConstraints and gc != gc' and gc'.category = gc.category 
 //and 
 //	gc'.interval = gc.interval 
 //		 (gc'.interval.low <= gc.interval.high or gc'.interval.high >= gc.interval.low)
@@ -570,7 +570,7 @@ fact noOverlappingDifficulties {
 
 //  As in Java code, returns all problems that satisfy group constraint (category and interval)
 // without yet selecting randomly
-fun allProblemsFromGroupConstraint[m: MasterExam, gc: GroupConstraint]: set Problem { 
+fun allProblemsFromRangeRequest[m: UniversalExamFile, gc: RangeRequest]: set Problem { 
 	{p: Problem | p in m.problems and p.category = gc.category 
 			and p.difficulty >= gc.interval.low and p.difficulty <= gc.interval.high}
 }
@@ -579,40 +579,40 @@ fun allProblemsFromGroupConstraint[m: MasterExam, gc: GroupConstraint]: set Prob
 
 
 
-lone sig RexGroupUnsatisfiableException {}
-// produces an error iff the GroupConstraint requires more problems than are taken from the MasterExam
+lone sig RangeUnsatisfiableError {}
+// produces an error iff the RangeRequest requires more problems than are taken from the UniversalExamFile
 // as in the function above
-fact sufficientNumberOfProblemsForGroupConstraint {
-//	one RexGroupUnsatisfiableException iff
-//	(some GroupConstraint) and 
-//	(all gc: GroupConstraint, m: MasterExam | gc.numProblems > #allProblemsFromGroupConstraint[m, gc])
+fact sufficientNumberOfProblemsForRangeRequest {
+//	one RangeUnsatisfiableError iff
+//	(some RangeRequest) and 
+//	(all gc: RangeRequest, m: UniversalExamFile | gc.numProblems > #allProblemsFromRangeRequest[m, gc])
 
 
 //good:
-//	one RexGroupUnsatisfiableException iff
-//	(some GroupConstraint) and
-//	(all gc: GroupConstraint, m: MasterExam | gc.numProblems > #allProblemsFromGroupConstraint[m, gc])
+//	one RangeUnsatisfiableError iff
+//	(some RangeRequest) and
+//	(all gc: RangeRequest, m: UniversalExamFile | gc.numProblems > #allProblemsFromRangeRequest[m, gc])
 
-	one RexGroupUnsatisfiableException iff
-//	(some GroupConstraint) and
-	(some gc: GroupConstraint | all m: MasterExam | gc.numProblems > #allProblemsFromGroupConstraint[m, gc])
+	one RangeUnsatisfiableError iff
+//	(some RangeRequest) and
+	(some gc: RangeRequest | all m: UniversalExamFile | gc.numProblems > #allProblemsFromRangeRequest[m, gc])
 }
 
 fact forceGroupUnsatisfiableExceptionToExist {
-	//some RexGroupUnsatisfiableException
-	//some ge: GeneratedExam | some g: GroupConstraint | g in ge.groupConstraints     some p: Problem | r.problemName = p.label
+	//some RangeUnsatisfiableError
+	//some ge: GeneratedExam | some g: RangeRequest | g in ge.groupConstraints     some p: Problem | r.problemName = p.label
 }
 //fact forceGroupUnsatisfiableExceptionNotToExist {
-//	all r: RequiredProblemConstraint | some p: Problem | r.problemName = p.label
+//	all r: RequiredProblemRequest | some p: Problem | r.problemName = p.label
 //}
 
 
-fact eachGroupConstraintContainsAllSatisfied{
-	all gc: GroupConstraint, m: MasterExam | gc.satisfiedProblems = allProblemsFromGroupConstraint[m, gc]
+fact eachRangeRequestContainsAllSatisfied{
+	all gc: RangeRequest, m: UniversalExamFile | gc.satisfiedProblems = allProblemsFromRangeRequest[m, gc]
 }
 
-fact noRepeatedProblemsInGroupConstraintAnswers{
-	all ge: GeneratedExam, gc, gc': GroupConstraint |
+fact noRepeatedProblemsInRangeRequestAnswers{
+	all ge: GeneratedExam, gc, gc': RangeRequest |
 		gc in ge.groupConstraints and gc' in ge.groupConstraints and gc != gc' implies
 			no p: Problem | p in gc.satisfiedProblems and p in gc'.satisfiedProblems
 }
@@ -626,7 +626,7 @@ fact noRepeatedProblemsInGroupConstraintAnswers{
 
 
 fact ifAllSatisfiableThenInGenerated {
-	all g: GeneratedExam | not some RexGroupUnsatisfiableException and not some RexRequiredUnsatisfiableException
+	all g: GeneratedExam | not some RangeUnsatisfiableError and not some RequiredProblemUnsatisfiableError
 		implies all p: Problem | 
 }
 */
@@ -638,8 +638,8 @@ fact ifAllSatisfiableThenInGenerated {
 
 
 // for testing:
-//fact boundsOnGroupConstraint {
-//	all g: GroupConstraint | g.numProblems = 2
+//fact boundsOnRangeRequest {
+//	all g: RangeRequest | g.numProblems = 2
 //}
 
 
@@ -654,8 +654,8 @@ fact ifAllSatisfiableThenInGenerated {
 /*
 fact {
 	one Category
-	one gc: GroupConstraint | gc.interval.low = 1 and gc.interval.high = 2 and gc.numProblems = 1
-	one gc: GroupConstraint | gc.interval.low = 2 and gc.interval.high = 3 and gc.numProblems = 1
+	one gc: RangeRequest | gc.interval.low = 1 and gc.interval.high = 2 and gc.numProblems = 1
+	one gc: RangeRequest | gc.interval.low = 2 and gc.interval.high = 3 and gc.numProblems = 1
 
 	one p: Problem | p.difficulty = 1
 	one p: Problem | p.difficulty = 2
@@ -665,7 +665,7 @@ fact {
 
 
 /* not useful
-fun getProblemsFromGroupConstraintContainer[remaining: Problem, gc: GroupConstraint]: set Problem {
+fun getProblemsFromRangeRequestContainer[remaining: Problem, gc: RangeRequest]: set Problem {
 
 }
 fact {
@@ -675,8 +675,8 @@ fact {
 
 
 ///doesn't run, will fix:
-//run show for 6 but exactly 2 GroupConstraint, exactly 3 Problem, 
-//	exactly 0 RequiredProblemConstraint, exactly 1 GeneratedExam
+//run show for 6 but exactly 2 RangeRequest, exactly 3 Problem, 
+//	exactly 0 RequiredProblemRequest, exactly 1 GeneratedExam
 
 
 
@@ -695,30 +695,30 @@ fact {
 
 
 /*
-lone sig RexGroupUnsatisfiableException {}
+lone sig RangeUnsatisfiableError {}
 fact groupProblemUnsatisfiable {
-	one RexGroupUnsatisfiableException iff
-		some gc: GroupConstraint | all m: MasterExam | all gc. not some 
+	one RangeUnsatisfiableError iff
+		some gc: RangeRequest | all m: UniversalExamFile | all gc. not some 
 
 
 
-		all g, g': GroupConstraint | some p: Problem | p.difficulty >= g.interval.low or p.difficulty <= g.interval.low
+		all g, g': RangeRequest | some p: Problem | p.difficulty >= g.interval.low or p.difficulty <= g.interval.low
 								and g != g' implies not g.problems in 
 		
 
  r.problemName not in m.elements.*rest.element.label
-	// old attempt: //some RexUnsatisfiableException iff some r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
+	// old attempt: //some RexUnsatisfiableException iff some r:RequiredProblemRequest | not some p: Problem | r.problemName = p.label
 		// TODO: OR there is a group constraint that is unsatisfiable
 }
 //fact forceUnsatisfiableExceptionToExist {
-//	all r:RequiredProblemConstraint | not some p: Problem | r.problemName = p.label
+//	all r:RequiredProblemRequest | not some p: Problem | r.problemName = p.label
 //}
 //fact forceUnsatisfiableExceptionNotToExist {
-//	all r: RequiredProblemConstraint | some p: Problem | r.problemName = p.label
+//	all r: RequiredProblemRequest | some p: Problem | r.problemName = p.label
 //}
 
 fact {
-	all ge: GeneratedExam, gc: GroupConstraint, p: Problem, m: MasterExam | 
+	all ge: GeneratedExam, gc: RangeRequest, p: Problem, m: UniversalExamFile | 
 		
 
 
@@ -729,21 +729,21 @@ satisfiableTogether [gc, m] and
 
 sig TopicOrganizer {
 	one category: Category,
-	set GroupConstraint
+	set RangeRequest
 }
 
 
 
 
 
-one sig MasterExamController {
+one sig UniversalExamFileController {
 	topicOrganizers: set TopicOrganizer
 }
 
 
 
 one 
-all gcc: GroupConstraintContainer | 
+all gcc: RangeRequestContainer | 
 */
 
 
@@ -773,7 +773,7 @@ sig SatisfiedContainer {
 	groupConstraints: set ConstraintContainer
 }
 
-sig GroupConstraintContainer {
+sig RangeRequestContainer {
 	numProblems: one Int,
 	satisfiedProblems: one ElementList
 }
@@ -785,7 +785,7 @@ pred isProblemAlreadyIncluded [p: Problem, s: SatisfiedContainer] {
 }
 
 
-pred generateExams (g, g': GeneratedExam, r: RequiredProblemConstraint, m, m': MasterExam) {
+pred generateExams (g, g': GeneratedExam, r: RequiredProblemRequest, m, m': UniversalExamFile) {
 	#g.elements.*rest.element = 0
 
 //	(set all p | some r | p.label = r.problemName) in m.elements.*rest.element
