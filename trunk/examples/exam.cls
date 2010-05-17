@@ -76,3 +76,5 @@ Lecture Section:   \rule{.5in}{1pt}\rule{.25in}{0pt} Lab Section:   \rule{.5in}{
    \item
  \fi
 }
+
+\newcommand{\examversion}{}
