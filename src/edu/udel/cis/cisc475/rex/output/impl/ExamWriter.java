@@ -60,7 +60,7 @@ public class ExamWriter implements ExamWriterIF {
 		}
 		
 		// Declares a LaTeX command to handle the printing of the exam version
-		out.println("\\newcommand{\\examversion}{" + E.version() + "}");
+		out.println("\\renewcommand{\\examversion}{" + E.version() + "}");
 		out.println("\\begin{document}");
 		
 		// Prints the front matter if it exists
