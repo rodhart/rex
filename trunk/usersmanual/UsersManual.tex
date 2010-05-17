@@ -194,8 +194,9 @@ These are floating environments expressed in the usual \LaTeX way, using the fig
     \end{figure}
 
     \begin{block}{Goodbye Message}
-      Did you remember to write your name on the first page?  
-      Did you attempt to answer every question? Have a good holiday.
+      Did you remember to write your name on the first page?
+      Did you attempt to answer every question?
+      Have a good holiday.
     \end{block}
 
     \end{document}
@@ -238,7 +239,7 @@ An append text command is a command of the form \texttt{append "\textcolor{blue}
 This will take the text contained in the block with the given \textcolor{blue}{label}, and append it to the end of the exam.
 
 \subsection{Version Definition}
-A version definition of a command of the form \texttt{versions are "\textcolor{blue}{string versions}";}
+A version definition of a command of the form \texttt{versions are "\textcolor{blue}{string\\ versions}";}
 
 \textcolor{blue}{Versions} are a list of strings, separated by commas, used to distinguish the different exams generated. Each generated exam will use one item in the list, and so there must be at least as many items as there will be exams generated. 
 
@@ -298,48 +299,6 @@ and the -pdf option is used an error such as the one below will display on the c
 If the file is accidentally deleted copy from below
 \\
 \verb|pdflatex found error: "! LaTeX Error: Environment block undefined."|
-
-\begin{figure}[H]
-\begin{verbatim}
-%Author: Lucero Carmona Exam.cls
-\NeedsTeXFormat{LaTeX2e}
-\LoadClass{article}
-\RequirePackage{ifthen}
-\newif\ifprintanswers
-\printanswersfalse
-\DeclareOption{master}{\printanswerstrue}
-\ProcessOptions
-\newcommand{\examheader}[3]{
-\vskip .1in
-\noindent
-{\large  #1 \hfill #2 \hfill #3 \\}
-\vskip 0.05in
-\vspace{.6in}
-Name \rule{3in}{1pt} 
-Login name \rule{2in}{1pt} 
-\vspace{.4in}
-Lecture Section:   \rule{.5in}{1pt}\rule{.25in}{0pt} Lab Section:   \rule{.5in}{
-1pt}  \rule{.5in}{0pt} TA \rule{.8in}{1pt}
-\vspace{14pt}
-} 
-\newenvironment{block}[1]{}{}
-\newcounter{probnum}
-\setcounter{probnum}{1}
-\newenvironment{problem}[3][]{\begin{enumerate} \item
-\arabic{probnum}. \stepcounter{probnum} }{\end{enumerate}}
-\newenvironment{answers}{\begin{enumerate}}{\end{enumerate}}
- \ifprintanswers %if master option present
-   \ifthenelse{\equal{#1}{correct}}{\item $\star$}{ %if correct, mark w/star
-   \ifthenelse{\equal{#1}{correct,fixed}}{\item $\star$}{ %if correct,fixed
-   \ifthenelse{\equal{#1}{fixed,correct}}{\item $\star$}{\item}}} %if fixed,correct
- \else %not master option
-   \item
- \fi
-}
-\end{verbatim}
-\caption{ Exam.cls}
-\label{fig:Examcls}
-\end{figure}
 
 \section{Troubleshooting}
 Because of the requirements that REX places upon the input it parses, REX may present the user with a variety of errors. Additionally, it's possible that REX might process the request without any errors or warnings, but will provide an undesired output.
