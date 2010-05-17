@@ -9,7 +9,10 @@ import edu.udel.cis.cisc475.rex.err.RexParseException;
 
 /**
  * Interface to the ECF parser, which will parse an ECF file into a ConfigIF object.
- * @author cates
+ * A class implementing this interface must be able to create a ConfigIF object from
+ * some input ECF file.
+ *
+ * @author Burke Cates
  *
  */
 public interface EcfParserIF {
