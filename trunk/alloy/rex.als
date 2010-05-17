@@ -37,10 +37,21 @@ pred show{}
 
 
 
-// FOR FINAL:
+// FOR FINAL *comment out one of these*
 
-run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem,
-	exactly 4 GroupConstraint, exactly 1 Category, exactly 0 RequiredProblemConstraint
+// Shows the case of a GroupUnsatisfiableException
+
+run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 GroupConstraint, exactly 1 Category, exactly 0 RequiredProblemConstraint
+
+
+// Shows the case without such an exception
+// Specifying there is not one is not cheating, it just shows what everything else
+// will be like if there is not one
+
+//run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 GroupConstraint, exactly 1 Category, exactly 0 RequiredProblemConstraint,	exactly 0 RexGroupUnsatisfiableException
+
+
+
 
 
 
@@ -526,19 +537,28 @@ fact generatedExamGroupConstraintsHaveIdenticalValues {
 
 
 
+// Alloy just likes to use a single interval, but the general case is that each GroupConstraint
+// has its own interval.  This fact still allows them to have the same values
+fact intervalsOfSameCategoryAreDistinct {
 
-// no overlapping difficulties
+	all ge: GeneratedExam, gc: GroupConstraint | gc in ge.groupConstraints
+		implies not some gc': GroupConstraint | gc' in ge.groupConstraints and gc != gc'
+			and 	gc'.interval = gc.interval 
+}
+
+
+// no overlapping difficulties -- couldn't get working, but it's not part ot the software anyway!
 fact noOverlappingDifficulties {
 
 //	all gc, gc': GroupConstraint | gc != gc' and gc.category = gc'.category implies 
 //		gc'.interval.low > gc.interval.high or gc'.interval.high < gc.interval.low
 
-	all ge: GeneratedExam, gc: GroupConstraint | gc in ge.groupConstraints
-		implies not some gc': GroupConstraint | gc' in ge.groupConstraints and gc != gc' and gc'.category = gc.category 
-and 
-	gc'.interval = gc.interval 
-	//	 gc'.interval.low <= gc.interval.high or gc'.interval.high >= gc.interval.low)
-
+//	all ge: GeneratedExam, gc: GroupConstraint | gc in ge.groupConstraints
+//		implies not some gc': GroupConstraint | gc' in ge.groupConstraints and gc != gc' and gc'.category = gc.category 
+//and 
+//	gc'.interval = gc.interval 
+//		 (gc'.interval.low <= gc.interval.high or gc'.interval.high >= gc.interval.low)
+//	bad:	 (gc'.interval.low > gc.interval.high or gc'.interval.high < gc.interval.low)
 }
 
 
@@ -566,16 +586,17 @@ fact sufficientNumberOfProblemsForGroupConstraint {
 //	one RexGroupUnsatisfiableException iff
 //	(some GroupConstraint) and 
 //	(all gc: GroupConstraint, m: MasterExam | gc.numProblems > #allProblemsFromGroupConstraint[m, gc])
+
+
+//good:
+//	one RexGroupUnsatisfiableException iff
+//	(some GroupConstraint) and
+//	(all gc: GroupConstraint, m: MasterExam | gc.numProblems > #allProblemsFromGroupConstraint[m, gc])
+
 	one RexGroupUnsatisfiableException iff
-	(some GroupConstraint) and
-	(all gc: GroupConstraint, m: MasterExam | gc.numProblems > #allProblemsFromGroupConstraint[m, gc])
+//	(some GroupConstraint) and
+	(some gc: GroupConstraint | all m: MasterExam | gc.numProblems > #allProblemsFromGroupConstraint[m, gc])
 }
-
-
-
-
-
-
 
 fact forceGroupUnsatisfiableExceptionToExist {
 	//some RexGroupUnsatisfiableException
@@ -586,9 +607,15 @@ fact forceGroupUnsatisfiableExceptionToExist {
 //}
 
 
+fact eachGroupConstraintContainsAllSatisfied{
+	all gc: GroupConstraint, m: MasterExam | gc.satisfiedProblems = allProblemsFromGroupConstraint[m, gc]
+}
 
-
-
+fact noRepeatedProblemsInGroupConstraintAnswers{
+	all ge: GeneratedExam, gc, gc': GroupConstraint |
+		gc in ge.groupConstraints and gc' in ge.groupConstraints and gc != gc' implies
+			no p: Problem | p in gc.satisfiedProblems and p in gc'.satisfiedProblems
+}
 
 
 
