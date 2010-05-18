@@ -2,9 +2,9 @@ package udel.edu.cis.cisc475.rex.err;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import org.junit.Test;
 
-import edu.udel.cis.cisc475.rex.err.RexParseException;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
@@ -13,7 +13,7 @@ import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 public class RexUnsatisfiableExceptionTest {
 
 	/**
-	 * @author Daniel Krapf
+	 * @author Daniel Krapf & Keith McLoughlin
 	 */
 	
 	private static SourceFactoryIF sourceFactory = new SourceFactory();
@@ -48,7 +48,7 @@ public class RexUnsatisfiableExceptionTest {
 	public void testDefaultMessage(){
 		String message1 = ex.getMessage();
 		String message2 = ex2.getMessage();
-		assertEquals(message1,message2);
+		assertEquals(message1,ex2.toString());
 	}
 	
 	@Test
@@ -85,8 +85,9 @@ public class RexUnsatisfiableExceptionTest {
 	public void testNullSource()
 	{
 		
-		SourceIF s1 = new RexParseException("test",null).source();
+		SourceIF s1 = new RexUnsatisfiableException("test",null).source();
 		SourceIF s2 = ex4.source();
+		
 		assertNotEquals(s1,s2);
 	}
 }
