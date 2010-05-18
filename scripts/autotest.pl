@@ -23,10 +23,10 @@ $cmd = "$svn checkout file:///home/www/repos/cisc475/trunk $maindir";
 system("$cmd >>$out 2>$err");
 chdir("$home/$maindir") || die "Could not chdir $home/maindir";
 
-$cmd = "$svndigest";
-system("$cmd >>$out 2>$err");
-system("rm -rf /home/www/cisc475/htdocs/rex-digest");
-system("cp -r rex-test /home/www/cisc475/htdocs/rex-digest");
+# $cmd = "$svndigest";
+# system("$cmd >>$out 2>$err");
+# system("rm -rf /home/www/cisc475/htdocs/rex-digest");
+# system("cp -r rex-test /home/www/cisc475/htdocs/rex-digest");
 
 system("cp build-configs/build.properties-cisc475 build.properties");
 
