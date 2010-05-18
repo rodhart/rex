@@ -85,8 +85,8 @@ public class RexParseExceptionTest {
 	{
 		
 		SourceIF s1 = new RexParseException("test",null).source();
-		SourceIF s2 = ex4.source();
-		assertNotEquals(s1,s2);
+		SourceIF s2 = new RexParseException("test",null).source();
+		assertEquals(s1,s2);
 	}
 }
 

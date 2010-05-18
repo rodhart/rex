@@ -2,7 +2,6 @@ package udel.edu.cis.cisc475.rex.err;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import org.junit.Test;
 
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
@@ -86,9 +85,9 @@ public class RexUnsatisfiableExceptionTest {
 	{
 		
 		SourceIF s1 = new RexUnsatisfiableException("test",null).source();
-		SourceIF s2 = ex4.source();
+		SourceIF s2 = new RexUnsatisfiableException("test",null).source();
 		
-		assertNotEquals(s1,s2);
+		assertEquals(s1,s2);
 	}
 }
 
