@@ -21,7 +21,7 @@
         %example:
         %       \examheader{CISC 106 Fall 2009}{First Midterm Learning Experience}{Date}
         %prints header on page, includes sections for students to enter information
-        %options allow for instructor to initiate Course, Exam, Date/Version
+        %options allow for instructor to initiate Left Header, Center Header, Right Header
 \newcommand{\examheader}[3]{
 \vskip .1in
 \noindent
@@ -77,4 +77,7 @@ Lecture Section:   \rule{.5in}{1pt}\rule{.25in}{0pt} Lab Section:   \rule{.5in}{
  \fi
 }
 
+        %example
+        %\examversion
+        %used by output module to print exam versions
 \newcommand{\examversion}{}
