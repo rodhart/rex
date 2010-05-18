@@ -45,9 +45,8 @@ public class RexUnsatisfiableExceptionTest {
 	
 	@Test
 	public void testDefaultMessage(){
-		String message1 = ex.getMessage();
-		String message2 = ex2.getMessage();
-		assertEquals(message1,ex2.toString());
+		
+		assertEquals(ex.toString(),ex2.toString());
 	}
 	
 	@Test
