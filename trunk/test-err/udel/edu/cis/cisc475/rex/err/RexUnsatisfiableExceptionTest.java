@@ -3,6 +3,8 @@ package udel.edu.cis.cisc475.rex.err;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+
+import edu.udel.cis.cisc475.rex.err.RexParseException;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.source.IF.SourceFactoryIF;
 import edu.udel.cis.cisc475.rex.source.IF.SourceIF;
@@ -78,5 +80,15 @@ public class RexUnsatisfiableExceptionTest {
 		SourceIF s2 = ex4.source();
 		assertEquals(s1,s2);
 	}
+
+	@Test
+	public void testNullSource()
+	{
+		
+		SourceIF s1 = new RexParseException("test",null).source();
+		SourceIF s2 = ex4.source();
+		assertNotEquals(s1,s2);
+	}
 }
+
 
