@@ -194,6 +194,7 @@
 
 	<target name="test" depends="test-compile">
 		<junit printsummary="false" errorProperty="test.failed" failureProperty="test.failed" fork="true" timeout="300000">
+		  <env key="PATH" path="${env.PATH}:/usr/local/bin"/>
 			<jvmarg value="-ea" />
 			<classpath refid="test.execute.classpath" />
 			<formatter type="brief" usefile="false" />
