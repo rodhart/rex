@@ -1,15 +1,11 @@
 package edu.udel.cis.cisc475.rex.main;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+
 import java.io.PrintWriter;
 import java.util.Date;
 
@@ -18,6 +14,7 @@ import edu.udel.cis.cisc475.rex.config.IF.ConfigIF;
 import edu.udel.cis.cisc475.rex.ecfparser.IF.EcfParserFactoryIF;
 import edu.udel.cis.cisc475.rex.ecfparser.IF.EcfParserIF;
 import edu.udel.cis.cisc475.rex.ecfparser.impl.EcfParserFactory;
+import edu.udel.cis.cisc475.rex.err.RexException;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorFactoryIF;
 import edu.udel.cis.cisc475.rex.generate.IF.GeneratorIF;
@@ -29,14 +26,16 @@ import edu.udel.cis.cisc475.rex.output.IF.OutputFactoryIF;
 import edu.udel.cis.cisc475.rex.output.impl.OutputFactory;
 import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserFactoryIF;
 import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserIF;
+import edu.udel.cis.cisc475.rex.uefparser.impl.UEFParser;
 import edu.udel.cis.cisc475.rex.uefparser.impl.UEFParserFactory;
 
 /**
- * @author Keith McLoughlin
- * 
  *         Main class of Rex program; takes and parses input given on the
  *         command line. Tailors the use of the program to the user's specified
  *         request (see printUsage() below).
+ *
+ * @author Keith McLoughlin
+ *
  */
 
 public class Rex {
@@ -48,7 +47,7 @@ public class Rex {
 			case -2: break;
 			case -1: break;
 			case 1: System.err.println("There was an error in generating the exams!");break;
-			case 2: System.err.println("File Not Found Error!");break;
+			case 2: break;
 			case 3: System.err.println("There was an error parsing the ECF file !");break;
 			case 4: System.err.println("There was an error parsing the UEF file !");break;
 			case 5: System.err.println("There was an error creating an exam file !");break;
@@ -63,7 +62,10 @@ public class Rex {
 		Date date = new Date();
 		long fileStamp = date.getTime();
 		long seed = fileStamp;
-		boolean pdfOpt = false;
+		boolean pdfOpt = false, 
+			seedflag = true,
+			nflag = true,
+			pdfflag = true;
 		int numExams = 1;
 		File ecf = null;
 		File uef = null;
@@ -85,12 +87,19 @@ public class Rex {
 			 * Test for -n option and set numExams
 			 */
 			if (numExams == 1 && args[i].equals("-n")) {
+				if(nflag){
 				try{
 				numExams = Integer.parseInt(args[i + 1]);
+				nflag = false;
 				}
 				catch(Exception e){
 					System.err.println("A valid integer must follow -n!");
 					printUsage();
+					return -2;
+				}
+				}
+				else{
+					System.err.println("Please only declare -n <int> once!");
 					return -2;
 				}
 				i += 2;
@@ -99,12 +108,19 @@ public class Rex {
 			 * Test for -seed option and set seed
 			 */
 			else if (args[i].equals("-seed")) {
+				if(seedflag){
 				try{
 				seed = Long.parseLong(args[i + 1]);
+				seedflag = false;
 				}
 				catch(Exception e){
 					System.err.println("A valid long must follow -seed!");
 					printUsage();
+					return -2;
+				}
+				}
+				else{
+					System.err.println("Please only declare -seed <long> once!");
 					return -2;
 				}
 				i += 2;
@@ -113,8 +129,15 @@ public class Rex {
 			 * Test for -pdf option and set boolean pdfOpt
 			 */
 
-			else if (!pdfOpt && args[i].equals("-pdf")) {
+			else if (args[i].equals("-pdf")) {
+				if(pdfflag){
 				pdfOpt = true;
+				pdfflag = false;
+				}
+				else{
+					System.err.println("Please only declare -pdf once!");
+					return -2;
+				}
 				i++;
 			}
 			/*
@@ -128,13 +151,26 @@ public class Rex {
 				return -2;
 			}
 		}
+		if ((i+2) != numArgs 
+				|| args[numArgs-2].equals("-pdf") 
+				|| args[numArgs-2].equals("-seed") 
+				|| args[numArgs-2].equals("-n")
+				|| args[numArgs-1].equals("-pdf") 
+				|| args[numArgs-1].equals("-seed") 
+				|| args[numArgs-1].equals("-n")){
+			System.err.println("You must include the UEF and ECF File paths!");
+			printUsage();
+			return 2;
+		}
 		uef = new File(args[numArgs - 2]);
 		if(!uef.canRead()){
+			printUsage();
 			System.err.println("Could not read from the UEF file.");
 			return 2;
 		}
 		ecf = new File(args[numArgs - 1]);
 		if( !ecf.canRead()){
+			printUsage();
 			System.err.println("Could not read from the ECF file.");
 			return 2;
 		}
@@ -150,8 +186,8 @@ public class Rex {
 			theEcfParser.setSeed(seed);
 			theConfig = theEcfParser.parse(ecf);
 		} catch (Exception e) {
-		
 			System.err.println(e.getMessage());
+			System.err.println(e.toString());
 			return 3;
 		}
 		/*
@@ -164,8 +200,8 @@ public class Rex {
 		try {
 			theMaster = theUefParser.parse(uef);
 		} catch (Exception e) {
-			
 			System.err.println(e.getMessage());
+			System.err.println(e.toString());
 			return 4;
 		}
 		/*
@@ -177,8 +213,8 @@ public class Rex {
 			theGenerator = theGeneratorFactory.newGenerator(theMaster,
 					theConfig);
 		} catch (Exception e) {
-		
 			System.err.println(e.getMessage());
+			System.err.println(e.toString());
 			return 1;
 
 		}
@@ -290,52 +326,57 @@ public class Rex {
 		int exitVal = 0;
 		if (pdfOpt) {
 			// call pdflatex on each exam
-			String line;
-			OutputStream stdin = null;
-			InputStream stdout = null;
-			InputStream stderr = null;
+			//String line;
+			//OutputStream stdin = null;
+			//InputStream stdout = null;
+			//InputStream stderr = null;
 			
 			for(int j = 0; j < numExams; j++){
 				try {
-				Process p = null;
-				
-					p = Runtime.getRuntime().exec(
-							"pdflatex "+theLatexFiles[j].getName());
-				
-				
-				stdin = p.getOutputStream();
-				stdout = p.getInputStream();
-				stderr = p.getErrorStream();
-				
-				// clean up if any output in stdout
-			      BufferedReader brCleanUp = 
-			        new BufferedReader (new InputStreamReader (stdout));
-			   
-			      while ((line = brCleanUp.readLine ()) != null) {
-			    	if(line.contains("! LaTeX Error")){
-			    		System.out.println ("pdflatex found error: \"" + line + "\"");
-			    		p.destroy();
-			    		exitVal = -1;
-			    		brCleanUp.close();
-			    		break;
-			    	}
-			      }
-			      brCleanUp.close();
-			     
-			      if(exitVal == -1){
-			    	  break;
-			      }
-			      // clean up if any output in stderr
-			      brCleanUp = 
-			        new BufferedReader (new InputStreamReader (stderr));
-			      while ((line = brCleanUp.readLine ()) != null) {
-			        //System.out.println ("[Stderr] " + line);
-			      }
-			      brCleanUp.close();
+					UEFParser.uefPdflatex(theLatexFiles[j]);
+//				Process p = null;
+//				
+//					p = Runtime.getRuntime().exec(
+//							"pdflatex -interaction nonstopmode "+theLatexFiles[j].getName());
+//				
+//				
+//				stdin = p.getOutputStream();
+//				stdout = p.getInputStream();
+//				stderr = p.getErrorStream();
+//				
+//				// clean up if any output in stdout
+//			      BufferedReader brCleanUp = 
+//			        new BufferedReader (new InputStreamReader (stdout));
+//			   
+//			      while ((line = brCleanUp.readLine ()) != null) {
+//			    	if(line.contains("! LaTeX Error")){
+//			    		System.out.println ("pdflatex found error: \"" + line + "\"");
+//			    		p.destroy();
+//			    		exitVal = -1;
+//			    		brCleanUp.close();
+//			    		break;
+//			    	}
+//			      }
+//			      brCleanUp.close();
+//			     
+//			      if(exitVal == -1){
+//			    	  break;
+//			      }
+//			      // clean up if any output in stderr
+//			      brCleanUp = 
+//			        new BufferedReader (new InputStreamReader (stderr));
+//			      while ((line = brCleanUp.readLine ()) != null) {
+//			        //System.out.println ("[Stderr] " + line);
+//			      }
+//			      brCleanUp.close();
 			      
 				} catch (IOException e) {
 					e.printStackTrace();
 					System.err.println(e.getMessage());
+					return 7;
+				}
+				catch (RexException e){
+					System.err.println(e.toString());
 					return 7;
 				}
 			}
