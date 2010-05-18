@@ -19,5 +19,10 @@ public class RexException extends Exception {
 	public RexException(String message) {
 		super(message);
 	}
-
+	
+	public String toString() {
+		String result = "A error has occurred.\n" + this.getMessage() + ":\n";
+		
+		return result;
+	}
 }
