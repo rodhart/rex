@@ -156,6 +156,8 @@
 		<pathelement location="${basedir}/test-random" />
 		<pathelement location="${basedir}/test-source" />
 		<pathelement location="${basedir}/test-uefparser" />
+		<pathelement location="${basedir}/test-err" />
+		<pathelement location="${basedir}/test-main" />
 		<pathelement location="${bin}" />
 		<pathelement location="${junit.name}" />
 		<pathelement location="${antlr3.name}" />
@@ -189,6 +191,8 @@
 			<src path="${basedir}/test-random" />
 			<src path="${basedir}/test-source" />
 			<src path="${basedir}/test-uefparser" />
+			<src path="${basedir}/test-err" />
+			<src path="${basedir}/test-main" />
 		</javac>
 	</target>
 
