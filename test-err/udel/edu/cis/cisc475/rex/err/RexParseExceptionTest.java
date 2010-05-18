@@ -11,7 +11,7 @@ import edu.udel.cis.cisc475.rex.source.impl.SourceFactory;
 public class RexParseExceptionTest {
 
 	/**
-	 * @author Daniel Krapf
+	 * @author Daniel Krapf & Keith McLoughlin
 	 */
 	
 	private static SourceFactoryIF sourceFactory = new SourceFactory();
@@ -44,6 +44,7 @@ public class RexParseExceptionTest {
 	
 	@Test
 	public void testDefaultMessage(){
+		ex2 = new RexParseException();
 		String message1 = ex.getMessage();
 		String message2 = ex2.getMessage();
 		assertEquals(message1,message2);
@@ -66,11 +67,17 @@ public class RexParseExceptionTest {
 	
 	@Test
 	public void testDefaultvCustomMessage(){
-		String message1 = ex.getMessage();
-		String message2 = ex5.getMessage();
+		String message1 = ex.toString();
+		String message2 = ex5.toString();
 		boolean result = message1.equals(message2);
 		assertFalse(result);
 	}
-
+	@Test
+	public void testSourceEquals()
+	{
+		SourceIF s1 = ex3.source();
+		SourceIF s2 = ex4.source();
+		assertEquals(s1,s2);
+	}
 }
 

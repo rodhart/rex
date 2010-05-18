@@ -66,11 +66,17 @@ public class RexUnsatisfiableExceptionTest {
 	
 	@Test
 	public void testDefaultvCustomMessage(){
-		String message1 = ex.getMessage();
-		String message2 = ex5.getMessage();
+		String message1 = ex.toString();
+		String message2 = ex5.toString();
 		boolean result = message1.equals(message2);
 		assertFalse(result);
 	}
-
+	@Test
+	public void testSourceEquals()
+	{
+		SourceIF s1 = ex3.source();
+		SourceIF s2 = ex4.source();
+		assertEquals(s1,s2);
+	}
 }
 
