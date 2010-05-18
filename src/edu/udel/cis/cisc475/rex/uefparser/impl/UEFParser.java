@@ -933,7 +933,7 @@ public class UEFParser implements UEFParserIF
 	 * @throws RexParseException - if the Latex isn't valid
 	 * @throws RexException - if there is a system error executing pdflatex 
 	 */
-	void uefPdflatex(File uef) throws IOException, RexException
+	public static void uefPdflatex(File uef) throws IOException, RexException
 	{				
 		String uefFilename = uef.getName();
 		String uefPath = uef.getCanonicalPath();
@@ -970,7 +970,7 @@ public class UEFParser implements UEFParserIF
 		}
 		catch (InterruptedException e)
 		{
-			throw new RexException("Error in running the UEF through pdflatex");
+			throw new RexException("Error in running the File through pdflatex");
 		}
 		
 		
@@ -1004,7 +1004,7 @@ public class UEFParser implements UEFParserIF
 		}
 		catch (InterruptedException e)
 		{
-			throw new RexException("Error in running the UEF through pdflatex");
+			throw new RexException("Error in running the File through pdflatex");
 		}
 
 		
