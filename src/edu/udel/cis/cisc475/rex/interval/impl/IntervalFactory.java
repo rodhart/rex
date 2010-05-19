@@ -31,9 +31,6 @@ public class IntervalFactory implements IntervalFactoryIF
 		{
 			return new Interval(strictLow, low, strictHigh, high);
 		}
-
-		//return null;
-
 		
 	}
 
