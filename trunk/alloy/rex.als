@@ -1,12 +1,28 @@
 // Author: Tim Armstrong
 
-/*
 
+/*
 Final version comments:
 
+The major addition since Beta is accounting for GroupConstraints that cannot be fulfilled.  Comment out one of these:
+
+Shows the case of a GroupUnsatisfiableException:
+*/
+
+run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 GroupConstraint, exactly 1 Category, exactly 0 RequiredProblemRequest
+
+
+// Shows the case without such an exception.  Specifying there is not one is not cheating, it just shows what
+// everything else will be like if there is not one:
+
+//run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 GroupConstraint, exactly 1 Category, exactly 0 RequiredProblemRequest,	exactly 0 RangeUnsatisfiableError
 
 
 
+
+
+
+/*
 
 Beta comments:
 
@@ -33,28 +49,6 @@ pointing to the same figure.  (We don't want any kind of ExamElement duplicated.
 */
 
 
-pred show{}
-
-
-
-// FOR FINAL *comment out one of these*
-
-// Shows the case of a GroupUnsatisfiableException
-
-run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 GroupConstraint, exactly 1 Category, exactly 0 RequiredProblemRequest
-
-
-// Shows the case without such an exception
-// Specifying there is not one is not cheating, it just shows what everything else
-// will be like if there is not one
-
-//run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 GroupConstraint, exactly 1 Category, exactly 0 RequiredProblemRequest,	exactly 0 RangeUnsatisfiableError
-
-
-
-
-
-
 // FOR BETA:
 //run show for 6 but exactly 1 GeneratedExam, exactly 2 Problem
 //run show for 4 but exactly 2 RequiredProblemRequest,  exactly 2 Problem
@@ -63,6 +57,7 @@ run show for 8 but exactly 2 GeneratedExam, exactly 4 Problem, exactly 4 GroupCo
 //run show for 5 but exactly 0 GeneratedExam, exactly 3 Problem
 
 
+pred show{}
 
 
 //*******************************
@@ -677,125 +672,3 @@ fact {
 ///doesn't run, will fix:
 //run show for 6 but exactly 2 GroupConstraint, exactly 3 Problem, 
 //	exactly 0 RequiredProblemRequest, exactly 1 GeneratedExam
-
-
-
-
-
-//**************************
-//** scratch space (don't read) **
-//**************************
-
-
-/*	gc.interval
-	gc.numProblems
-	m.problems
-	m.problems.difficulty
-*/
-
-
-/*
-lone sig RangeUnsatisfiableError {}
-fact groupProblemUnsatisfiable {
-	one RangeUnsatisfiableError iff
-		some gc: GroupConstraint | all m: UniversalExamFile | all gc. not some 
-
-
-
-		all g, g': GroupConstraint | some p: Problem | p.difficulty >= g.interval.low or p.difficulty <= g.interval.low
-								and g != g' implies not g.problems in 
-		
-
- r.problemName not in m.elements.*rest.element.label
-	// old attempt: //some RexUnsatisfiableException iff some r:RequiredProblemRequest | not some p: Problem | r.problemName = p.label
-		// TODO: OR there is a group constraint that is unsatisfiable
-}
-//fact forceUnsatisfiableExceptionToExist {
-//	all r:RequiredProblemRequest | not some p: Problem | r.problemName = p.label
-//}
-//fact forceUnsatisfiableExceptionNotToExist {
-//	all r: RequiredProblemRequest | some p: Problem | r.problemName = p.label
-//}
-
-fact {
-	all ge: GeneratedExam, gc: GroupConstraint, p: Problem, m: UniversalExamFile | 
-		
-
-
-
-satisfiableTogether [gc, m] and 
-}
-
-
-sig TopicOrganizer {
-	one category: Category,
-	set GroupConstraint
-}
-
-
-
-
-
-one sig UniversalExamFileController {
-	topicOrganizers: set TopicOrganizer
-}
-
-
-
-one 
-all gcc: GroupConstraintContainer | 
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//assert correctNumProblems {
-//	all g: GeneratedExam,  | #g.problems = 
-//}
-
-
-/*
-sig SatisfiedContainer {
-	category: one Category,
-	requiredProblems: one ProblemList,
-	groupConstraints: set ConstraintContainer
-}
-
-sig GroupConstraintContainer {
-	numProblems: one Int,
-	satisfiedProblems: one ElementList
-}
-
-
-
-pred isProblemAlreadyIncluded [p: Problem, s: SatisfiedContainer] {
-	p in s.requiredProblems.*rest.element or p in s.groupConstraints.satisfiedProblems.*rest.element
-}
-
-
-pred generateExams (g, g': GeneratedExam, r: RequiredProblemRequest, m, m': UniversalExamFile) {
-	#g.elements.*rest.element = 0
-
-//	(set all p | some r | p.label = r.problemName) in m.elements.*rest.element
-
-//	m'.elements.*rest.element = m.elements.*rest.element - r.
-
-// something like this:	g'.elements.*rest.element =     r.problemName   m.elements.*rest.element.label
-
-//	#g'.elements.*rest.element = 2
-//	(#g'.elements.*rest.element = g'.elements.*rest.element + (r.)
-}
-
-*/
