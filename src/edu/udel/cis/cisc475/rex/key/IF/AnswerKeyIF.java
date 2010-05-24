@@ -61,7 +61,7 @@ public interface AnswerKeyIF {
 	 * it is assumed that the problem answers will be given in order
 	 * so the index is merely incremented
 	 * 
-	 * @param problem collection of answers (maybe just one) 
+	 * @param Problem collection of answers (maybe just one)
 	 */
 	void addProblem( Collection <String> Problem);
 }//end of interface 

@@ -50,8 +50,8 @@ public class AnswerKeyWriter implements AnswerKeyWriterIF {
 		Calendar now = Calendar.getInstance(zone);
 		Date day = new Date(now.getTimeInMillis());
 		
-		out.print("Answer Key for " + K.examName() + " version " +
-				K.version() + " generated on " + day.toString() + newline);
+		out.print("Answer Key for " + K.examName() + " version '" +
+				K.version() + "' generated on " + day.toString() + newline);
 		out.print("Total points: " + "<integer>" + newline);
 		for (int i = 0; i < K.numProblems(); i++) {
 			out.printf("%d. %s%s", i+1, K.answers(i), newline );
