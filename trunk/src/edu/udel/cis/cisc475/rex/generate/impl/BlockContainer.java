@@ -20,7 +20,7 @@ import java.util.LinkedHashMap;
 public class BlockContainer 
 {
 	private BlockIF theBlock;
-	private HashMap theFCs = new LinkedHashMap();
+	private HashMap<FigureIF, FigureContainer> theFCs = new LinkedHashMap<FigureIF, FigureContainer>();
 	
 	/**
 	 * @param theBlock
@@ -37,7 +37,7 @@ public class BlockContainer
 		return this.theBlock;
 	}
 	
-	public HashMap getFCs()
+	public HashMap<FigureIF, FigureContainer> getFCs()
 	{
 		return this.theFCs;
 	}

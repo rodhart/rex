@@ -27,9 +27,9 @@ import java.util.LinkedHashMap;
 public class MasterExamController
 {
 	private ExamIF master;
-	private HashMap identifiers = new LinkedHashMap();
-	private HashMap requiredProblems = new LinkedHashMap();
-	private HashMap theTOs = new LinkedHashMap();
+	private HashMap<ExamElementIF, Integer> identifiers = new LinkedHashMap<ExamElementIF, Integer>();
+	private HashMap<Integer, ProblemIF> requiredProblems = new LinkedHashMap<Integer, ProblemIF>();
+	private HashMap<String, TopicOrganizer> theTOs = new LinkedHashMap<String, TopicOrganizer>();
 	private BlockIF finalBlock;
 
 	/**
@@ -56,17 +56,17 @@ public class MasterExamController
 		return this.master;
 	}
 
-	public HashMap getIdentifiers()
+	public HashMap<ExamElementIF, Integer> getIdentifiers()
 	{
 		return this.identifiers;
 	}
 
-	public HashMap getRequiredProblems()
+	public HashMap<Integer, ProblemIF> getRequiredProblems()
 	{
 		return this.requiredProblems;
 	}
 
-	public HashMap getTheTOs()
+	public HashMap<String, TopicOrganizer> getTheTOs()
 	{
 		return this.theTOs;
 	}
@@ -205,11 +205,11 @@ public class MasterExamController
 		Iterator<GroupConstraintContainer> gccIterator = theTO.getGCCs().iterator();
 		GroupConstraintContainer currentGCC;
 
-		int myConstraintValue = theGCC.getConstraintValue();
+		//int myConstraintValue = theGCC.getConstraintValue();
 		double myLow = theGCC.getDifficultyInterval().low();
 		double myHigh = theGCC.getDifficultyInterval().high();
 
-		int yourConstraintValue;
+		//int yourConstraintValue;
 		double yourLow;
 		double yourHigh;
 
@@ -219,7 +219,7 @@ public class MasterExamController
 
 			if (!currentGCC.equals(theGCC)) 
 			{
-				yourConstraintValue = currentGCC.getConstraintValue();
+				//yourConstraintValue = currentGCC.getConstraintValue();
 				yourLow = currentGCC.getDifficultyInterval().low();
 				yourHigh = currentGCC.getDifficultyInterval().high();
 

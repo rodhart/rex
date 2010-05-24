@@ -6,10 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import edu.udel.cis.cisc475.rex.config.IF.ConstraintIF;
 import edu.udel.cis.cisc475.rex.err.RexUnsatisfiableException;
 import edu.udel.cis.cisc475.rex.exam.IF.AnswerIF;
-import edu.udel.cis.cisc475.rex.exam.IF.BlockIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamElementIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamFactoryIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ExamIF;
@@ -17,7 +15,6 @@ import edu.udel.cis.cisc475.rex.exam.IF.FigureIF;
 import edu.udel.cis.cisc475.rex.exam.IF.FixedAnswerIF;
 import edu.udel.cis.cisc475.rex.exam.IF.ProblemIF;
 import edu.udel.cis.cisc475.rex.exam.impl.ExamFactory;
-import edu.udel.cis.cisc475.rex.exam.impl.Problem;
 import edu.udel.cis.cisc475.rex.key.IF.AnswerKeyIF;
 import edu.udel.cis.cisc475.rex.random.IF.RandomizerIF;
 import java.util.LinkedHashMap;
@@ -35,8 +32,8 @@ public class VersionExamController
 	private ExamFactoryIF theExamFactory = new ExamFactory();
 	private RandomizerIF theRandomizer;
 	
-	private HashMap subset = new LinkedHashMap();
-	private HashMap theTCs = new LinkedHashMap();
+	private HashMap<Integer, ProblemIF> subset = new LinkedHashMap<Integer, ProblemIF>();
+	private HashMap<String, TopicContainer> theTCs = new LinkedHashMap<String, TopicContainer>();
 	
 	/**
 	 * @param mec
@@ -374,8 +371,8 @@ public class VersionExamController
 	
 	public void fillExam(ExamIF versionExam, AnswerKeyIF versionAnswerKey)
 	{
-		Map figureBlacklist = new LinkedHashMap();
-		Map problemBlacklist = new LinkedHashMap();
+		Map<Integer, ExamElementIF> figureBlacklist = new LinkedHashMap<Integer, ExamElementIF>();
+		Map<Integer, ProblemIF> problemBlacklist = new LinkedHashMap<Integer, ProblemIF>();
 		Integer problemIdentifier;
 		Integer primaryFigureIdentifier;
 		Integer secondaryFigureIdentifier;

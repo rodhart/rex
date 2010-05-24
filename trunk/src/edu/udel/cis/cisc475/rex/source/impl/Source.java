@@ -30,7 +30,6 @@ public class Source implements SourceIF {
 	private int lastLine;
 	private int lastColumn;	
 	private StringBuffer myText;
-	private static String newline = System.getProperty("line.separator");
 
 	/**
 	 * Basic constructor for the class, requires only a file name

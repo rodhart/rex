@@ -46,9 +46,9 @@ public class Randomizer implements RandomizerIF {
 
 		int index;
 		// Holds the original list
-		ArrayList itemsArray = new ArrayList();
+		ArrayList<Object> itemsArray = new ArrayList<Object>();
 		// Holds the shuffled list
-		ArrayList shuffledItems  = new ArrayList();
+		ArrayList<Object> shuffledItems  = new ArrayList<Object>();
 
 		// If numItems == 0, return an empty array
 		if(numItems == 0){
