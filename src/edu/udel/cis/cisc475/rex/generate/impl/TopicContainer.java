@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 public class TopicContainer 
 {
 	private String topic;
-	private HashMap theBCs = new LinkedHashMap();
+	private HashMap<BlockIF, BlockContainer> theBCs = new LinkedHashMap<BlockIF, BlockContainer>();
 	
 	/**
 	 * @param topic
@@ -33,7 +33,7 @@ public class TopicContainer
 		return this.topic;
 	}
 	
-	public HashMap getBCs()
+	public HashMap<BlockIF, BlockContainer> getBCs()
 	{
 		return this.theBCs;
 	}
