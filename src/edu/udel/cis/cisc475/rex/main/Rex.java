@@ -26,6 +26,8 @@ import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserFactoryIF;
 import edu.udel.cis.cisc475.rex.uefparser.IF.UEFParserIF;
 import edu.udel.cis.cisc475.rex.uefparser.impl.UEFParser;
 import edu.udel.cis.cisc475.rex.uefparser.impl.UEFParserFactory;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  * Main class of Rex program; takes and parses input given on the command line.
@@ -73,8 +75,9 @@ public class Rex {
 
 		int numArgs = args.length;
 		Date date = new Date();
-		long fileStamp = date.getTime();
-		long seed = fileStamp;
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+		String fileStamp = simpleDateFormat.format(date);
+		long seed = date.getTime();
 		boolean pdfOpt = false, seedflag = true, nflag = true, pdfflag = true;
 		int numExams = 1;
 		File ecf = null;
@@ -365,7 +368,7 @@ public class Rex {
 				+ " as .tex files.");
 	}
 
-	private static void printCompletionMessage(boolean pdf, long fileStamp) {
+	private static void printCompletionMessage(boolean pdf, String fileStamp) {
 		System.out.println("Rex has completed your request!");
 		System.out.println("The " + fileStamp
 				+ "_exam_(n).tex files hold your exams" + " in latex format.");
