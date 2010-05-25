@@ -198,7 +198,7 @@
 
 	<target name="test" depends="test-compile">
 		<junit printsummary="false" errorProperty="test.failed" failureProperty="test.failed" fork="true" timeout="300000">
-		  <env key="PATH" path="${env.PATH}:/usr/local/bin"/>
+			<env key="PATH" path="${env.PATH}:/usr/local/bin" />
 			<jvmarg value="-ea" />
 			<classpath refid="test.execute.classpath" />
 			<formatter type="brief" usefile="false" />
@@ -254,6 +254,7 @@
 	<target name="cobertura-test" depends="cobertura-instrument">
 		<junit fork="yes" dir="${basedir}" failureProperty="test.failed">
 			<jvmarg value="-Djava.library.path=${jni-lib.dir}" />
+			<env key="PATH" path="${env.PATH}:/usr/local/bin" />
 			<jvmarg value="-ea" />
 			<classpath refid="instrumented.classpath" />
 			<classpath refid="cobertura.classpath" />
